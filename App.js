@@ -7,6 +7,7 @@ import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font' 
 
 function App() {
+  
 
 
   const [loaded] = useFonts({
