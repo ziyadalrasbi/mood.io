@@ -9,7 +9,6 @@ import Navbar from '../../components/navbar/Navbar';
 function Home({ navigation }) {
 
   const [loaded] = useFonts({
-
     InconsolataBold: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
     InconsolataLight: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
     InconsolataMedium: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
