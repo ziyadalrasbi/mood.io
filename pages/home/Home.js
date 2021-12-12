@@ -1,11 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import HomeStyles from './HomeStyles';
-import hamburger from '../../assets/icons/home/hamburger.png';
-import scan from '../../assets/icons/home/scan.png';
+import Navbar from '../../components/navbar/Navbar';
 
 function Home({ navigation }) {
 
@@ -24,13 +23,7 @@ function Home({ navigation }) {
   return (
     <View style={HomeStyles.mainContainer}>
       <View style={HomeStyles.topContainer}>
-        <View style={HomeStyles.topBar}>
-          <Image style={HomeStyles.hamburger} source={hamburger} />
-          <TouchableOpacity onPress={() => navigation.navigate('Upload')}>
-          <Image style={HomeStyles.scan} source={scan}  />
-            </TouchableOpacity>
-          
-        </View>
+        <Navbar scan={true} navigation={navigation}/>
         <Text style={HomeStyles.welcome}>
           welcome, user!
         </Text>

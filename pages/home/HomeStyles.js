@@ -11,22 +11,6 @@ export default StyleSheet.create({
       justifyContent: 'center',
       backgroundColor: '#2e41b3',
     },
-    topBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    hamburger: {
-        width: 30,
-        height: 40,
-        backgroundColor:'transparent',
-        marginLeft: 10
-    },
-    scan: {
-        width: 30,
-        height: 40,
-        backgroundColor:'transparent',
-        marginRight: 10
-    },
     subTop: {
       position: 'relative',
       top: 0,
