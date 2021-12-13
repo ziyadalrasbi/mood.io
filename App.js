@@ -6,6 +6,7 @@ import Upload from './pages/upload/Upload';
 
 function App() {
 
+
     const Stack = createNativeStackNavigator();
 
     return (
