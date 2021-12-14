@@ -1,25 +1,17 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './pages/home/Home';
-import Upload from './pages/upload/Upload';
+import React, {Component} from 'react';
 
-function App() {
+import {Provider} from 'react-redux';
+import {store} from './redux/store/store';
 
+import EntryScreen from './pages/entry/EntryScreen';
 
-    const Stack = createNativeStackNavigator();
-
+class App extends Component {
+  render() {
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName='Home'
-                screenOptions={{ headerShown: false }}
-            >
-                <Stack.Screen name='Home' component={Home} />
-                <Stack.Screen name='Upload' component={Upload} />
-            </Stack.Navigator>
-        </NavigationContainer>
+      <Provider store={store}>
+        <EntryScreen />
+      </Provider>
     );
+  }
 }
-
 export default App;

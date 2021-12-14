@@ -10,5 +10,6 @@ npm-debug.*
 *.orig.*
 web-build/
 yarn.lock
+service-account.json
 # macOS
 .DS_Store

@@ -2,6 +2,7 @@
   "expo": {
     "name": "mood.io",
     "slug": "mood.io",
+    "scheme": "moodio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,7 +20,10 @@
     "ios": {
       "bundleIdentifier": "com.app.moodio",
       "buildNumber": "1.0.0",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "manifestPlaceHolders" : [
+
+      ]
     },
     "android": {
       "package": "com.app.moodio",
