@@ -1,9 +1,9 @@
-var SpotifyWebApi = require("spotify-web-api-node");
-
+var SpotifyWebApi = require('spotify-web-api-node');
+import * as SpotifyConstants from '../../../backend/spotify/SpotifyConstants'
 const spotifyConfig = {
-    clientId: "481af46969f2416e95e9196fa60d808d",
-    clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-    redirectUrl: "com.moodio://oauthredirect"
+    clientId: SpotifyConstants.CLIENT_ID,
+    clientSecret: SpotifyConstants.CLIENT_SECRET,
+    redirectUrl: SpotifyConstants.REDIRECT_URL
 };
 
 var spotifyApi = new SpotifyWebApi(spotifyConfig);
@@ -22,6 +22,7 @@ async function proxySpotifyToken(_req, res){
         spotifyApi.refreshAccessToken()
         .then((data) => {
             data.body.refreshToken = refreshToken;
+            console.log(res.json(data.body));
             return res.json(data.body);
         },
         (err) => {
@@ -35,6 +36,7 @@ async function proxySpotifyToken(_req, res){
     if (code) {
         spotifyApi.authorizationCodeGrant(code)
         .then((data) => {
+            console.log(res.json(data.body));
             return res.json(data.body);
         },
         (err) => {

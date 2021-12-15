@@ -13,3 +13,4 @@ yarn.lock
 service-account.json
 # macOS
 .DS_Store
+SpotifyConstants.js

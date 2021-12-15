@@ -17,6 +17,8 @@ import {
 import LoggedinNavigation from '../navigation/loggedInNavigation';
 import GuestNavigation from '../navigation/guestNavigation';
 
+import * as SpotifyConstants from '../../backend/spotify/SpotifyConstants';
+
 class EntryScreen extends Component {
   state = {refreshToken: ''};
 
@@ -31,15 +33,13 @@ class EntryScreen extends Component {
 
   tryAutoLogin = async () => {
       this.props.setLoadingTrue();
-      const authenticationObject = await authHandler.refreshLogin(
-        this.props.refreshToken,
-      );
+      const authenticationObject = authHandler;
 
       this.props.setAccessToken({
-        accessToken: authenticationObject.accessToken,
+        accessToken: SpotifyConstants.ACCESS_TOKEN,
       });
       this.props.setRefreshToken({
-        refreshToken: authenticationObject.refreshToken,
+        refreshToken: SpotifyConstants.ACCESS_TOKEN,
       });
 
       this.props.setLoadingFalse();
@@ -52,7 +52,7 @@ class EntryScreen extends Component {
       return <Text>Loading</Text>;
     }
 
-    if (accessToken) {
+    if (SpotifyConstants.ACCESS_TOKEN != null) {
       return <LoggedinNavigation />;
     }
 

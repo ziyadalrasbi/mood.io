@@ -20,10 +20,7 @@
     "ios": {
       "bundleIdentifier": "com.app.moodio",
       "buildNumber": "1.0.0",
-      "supportsTablet": true,
-      "manifestPlaceHolders" : [
-
-      ]
+      "supportsTablet": true
     },
     "android": {
       "package": "com.app.moodio",

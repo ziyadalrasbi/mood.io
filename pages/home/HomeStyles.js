@@ -63,6 +63,7 @@ export default StyleSheet.create({
       alignSelf: 'flex-start'
     },
     secondContainer: {
+      marginTop: 15,
       position: 'relative',
       left: 0,
       right: 0,
@@ -91,7 +92,7 @@ export default StyleSheet.create({
       flexDirection: 'column',
       alignItems: 'center',
       display: 'flex',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
     },
     mainFont: {
       fontFamily: 'InconsolataMedium',
