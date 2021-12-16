@@ -92,6 +92,7 @@ function Login({ navigation }) {
                 getUserData(token)
                     .then(res => res.json())
                     .then(data => {
+                        console.log('data is: ' + data);
                         loginUser(data.id)
                             .then(user => {
                                 navigation.navigate('Home', { navigation: navigation })

@@ -50,6 +50,30 @@ class SpotifyHomeFunctions {
     return artistNames;
   }
 
+  getTopTracks = async () => {
+    var topTracks = [];
+    var api = new SpotifyWebApi({
+      clientId: "481af46969f2416e95e9196fa60d808d",
+      clientSecret: "830caf99293c4da0a262ce0ea53009b5",
+      redirectUri: "moodio://oauthredirect"
+    });
+    await api.setAccessToken(SpotifyConstants.ACCESS_TOKEN);
+    await api.getMyTopTracks()
+    .then((data) => {
+      for (let i=0; i<4; i++) {
+        let tempTrack = [];
+        tempTrack.push(data.body.items[i].name);
+        tempTrack.push(data.body.items[i].artists[0].name);
+        tempTrack.push(data.body.items[i].album.images[0].url);
+        tempTrack.push(data.body.items[i].external_urls);
+        topTracks.push(tempTrack);
+      }
+      return topTracks;
+    }), function (err) {
+      console.log('There was an error getting the top tracks, please try again.', err);
+    }
+    return topTracks;
+  }
 
 
 }

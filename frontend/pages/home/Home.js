@@ -11,10 +11,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 function Home({ navigation }) {
 
   const [loading, setLoading] = useState(true);
+
   const [name, setName] = useState("");
+
   const [topArtists, setTopArtists] = useState([]);
   const [topArtistsOne, setTopArtistsOne] = useState([]);
   const [topArtistsTwo, setTopArtistsTwo] = useState([]);
+
+  const [topTracks, setTopTracks] = useState([]);
+  const [topTracksOne, setTopTracksOne] = useState([]);
+  const [topTracksTwo, setTopTracksTwo] = useState([]);
+  
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
@@ -27,23 +34,34 @@ function Home({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const getName = await spotifyHomeFunctions.getName();
-        const getTopArtists = await spotifyHomeFunctions.getTopArtists();
-        setName(getName);
-        setTopArtists(getTopArtists);
-        const half = Math.ceil(topArtists.length / 2);
-        setTopArtistsOne(topArtists.slice(0, half));
-        setTopArtistsTwo(topArtists.slice(-half));
+        const getName = await spotifyHomeFunctions.getTopArtists()
+        .then((res) => {
+          setTopArtists(res);
+          const half = Math.ceil(topArtists.length / 2);
+          setTopArtistsOne(topArtists.slice(0, half));
+          setTopArtistsTwo(topArtists.slice(-half));
+          const getTopArtists = spotifyHomeFunctions.getName()
+          .then((res) => {
+            setName(res);
+            const getTopTracks = spotifyHomeFunctions.getTopTracks()
+            .then((res) => {
+              setTopTracks(res);
+              const half = Math.ceil(topTracks.length / 2);
+              setTopTracksOne(topTracks.slice(0, half));
+              setTopTracksTwo(topTracks.slice(-half));
+            })
+          })
+        })
       } catch (err) {
         console.log(err);
       }
     }
-    fetchData();
-    setLoading(false);
+    fetchData().then(() => setLoading(false));
+    return () => topArtistsTwo;
 
   }, [loading]);
 
-  if (!loaded) {
+  if (!loaded || loading) {
     return null;
   }
 
@@ -94,7 +112,7 @@ function Home({ navigation }) {
               your top artists in the past 6 months
             </Text>
             <View style={HomeStyles.topArtistsContainer}>
-              {!loading && topArtistsOne.map((artist) =>
+              {topArtistsOne.length > 0 ? topArtistsOne.map((artist) =>
                 <View>
                   <Text style ={HomeStyles.topArtistText}>{artist[0]}</Text>
                   <Image
@@ -102,10 +120,10 @@ function Home({ navigation }) {
                     source={{ uri: artist[1] }}
                   />
                 </View>
-              )}
+              ) : <Text style ={HomeStyles.topArtistText}>Loading...</Text>}
             </View>
             <View style={HomeStyles.topArtistsContainer}>
-              {!loading && topArtistsTwo.map((artist) =>
+              {topArtistsTwo.length > 0 ? topArtistsTwo.map((artist) =>
                 <View>
                   <Text style={HomeStyles.topArtistText}>{artist[0]}</Text>
                   <Image
@@ -113,16 +131,46 @@ function Home({ navigation }) {
                     source={{ uri: artist[1] }}
                   />
                 </View>
-              )}
+              ) : <Text style ={HomeStyles.topArtistText}>Loading...</Text>}
+            </View>
+            <View style={{height:20}}/> 
+          </View>
+          <View style={HomeStyles.fourthContainer}>
+          <Text style={HomeStyles.thirdHeader}>
+              your top tracks
+            </Text>
+            <Text style={HomeStyles.thirdSubHeader}>
+              your top tracks in the past 6 months
+            </Text>
+            <View style={HomeStyles.topTracksContainer}>
+              {topTracksOne.length > 0 ? topTracksOne.map((track) =>
+                <View>
+                  <Text style ={HomeStyles.topTrackText}>{track[0]}</Text>
+                  <Text style ={HomeStyles.topTrackArtistText}>by {track[1]}</Text>
+                  <Image
+                    style={{ width: 150, height: 150 }}
+                    source={{ uri: track[2] }}
+                  />
+                </View>
+              ) : <Text style ={HomeStyles.topTrackText}>Loading...</Text>}
+            </View>
+            <View style={HomeStyles.topTracksContainer}>
+              {topTracksTwo.length > 0 ? topTracksTwo.map((track) =>
+                <View>
+                  <Text style ={HomeStyles.topTrackText}>{track[0]}</Text>
+                  <Text style ={HomeStyles.topTrackArtistText}>by {track[1]}</Text>
+                  <Image
+                    style={{ width: 150, height: 150 }}
+                    source={{ uri: track[2] }}
+                  />
+                </View>
+              ) : <Text style ={HomeStyles.topTrackText}>Loading...</Text>}
             </View>
             <View style={{height:20}}/> 
           </View>
           <StatusBar style="auto" /> 
           </View>
-      </ScrollView>  
-      
-
-    
+      </ScrollView> 
   );
 }
 

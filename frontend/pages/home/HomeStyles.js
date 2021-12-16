@@ -37,7 +37,7 @@ export default StyleSheet.create({
       left: 0,
       right: 0,
       top: 0,
-      height: 190,
+      marginBottom: 25,
       width: '100%',
       justifyContent: 'flex-start',
     },
@@ -66,7 +66,7 @@ export default StyleSheet.create({
       left: 0,
       right: 0,
       top: 0,
-      height: 190,
+      marginBottom: 25,
       width: '100%',
       justifyContent: 'flex-start',
     },
@@ -102,6 +102,7 @@ export default StyleSheet.create({
       right: 0,
       top: 0,
       width: '100%',
+      marginBottom: 25,
       justifyContent: 'flex-start',
     },
     thirdHeader: {
@@ -122,7 +123,7 @@ export default StyleSheet.create({
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
-      justifyContent: 'space-between'
+      justifyContent: 'space-evenly'
     },
     topArtistText: {
       fontFamily: 'InconsolataSemiExpanded',
@@ -133,9 +134,62 @@ export default StyleSheet.create({
       fontStyle: 'italic',
       maxWidth: 130
     },
+    fourthContainer: {
+      position: 'relative',
+      left: 0,
+      right: 0,
+      top: 0,
+      width: '100%',
+      justifyContent: 'flex-start',
+    },
+    fourthHeader: {
+      marginTop: 5,
+      marginBottom: -10,
+      fontFamily: 'InconsolataBlack',
+      fontSize: 22,
+      padding: 10,
+    },
+    fourthSubHeader: {
+      fontFamily: 'InconsolataMedium',
+      fontSize: 18,
+      padding: 10,
+      color: 'grey'
+    },
+    topSongsContainer: {
+      padding: 10,
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between'
+    },
+    topTracksContainer: {
+      padding: 10,
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-evenly'
+    },
+    topTrackText: {
+      fontFamily: 'InconsolataSemiExpanded',
+      color: 'red',
+      alignSelf: 'center',
+      marginBottom: 5,
+      fontSize: 15,
+      fontStyle: 'italic',
+      maxWidth: 200
+    },
+    topTrackArtistText: {
+      fontFamily: 'InconsolataSemiExpanded',
+      color: 'grey',
+      alignSelf: 'center',
+      marginBottom: 5,
+      fontSize: 15,
+      fontStyle: 'italic',
+      maxWidth: 200
+    },
     mainContainer: {
       flex: 1,
-      backgroundColor: 'rgba(100,200,300,0.2)',
+      backgroundColor: 'white',
       flexDirection: 'column',
       alignItems: 'center',
       display: 'flex',
