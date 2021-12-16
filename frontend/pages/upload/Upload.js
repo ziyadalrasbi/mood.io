@@ -7,14 +7,14 @@ import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 
 
-function Upload() {
+function Upload({ navigation }) {
 
-    const [loaded] = useFonts({
-        InconsolataBold: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-        InconsolataLight: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-        InconsolataMedium: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-        InconsolataBlack: require('../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
-      });
+  const [loaded] = useFonts({
+    InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
+    InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
+    InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
+    InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
+  });
     
       if (!loaded) {
         return null;

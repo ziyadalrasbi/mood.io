@@ -1,5 +1,5 @@
-import hamburger from '../../assets/icons/home/hamburger.png';
-import scanimg from '../../assets/icons/home/scan.png';
+import hamburger from '../../../assets/icons/home/hamburger.png';
+import scanimg from '../../../assets/icons/home/scan.png';
 import NavbarStyles from './NavbarStyles';
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';

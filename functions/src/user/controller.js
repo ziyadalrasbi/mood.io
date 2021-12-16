@@ -1,9 +1,8 @@
 var SpotifyWebApi = require('spotify-web-api-node');
-import * as SpotifyConstants from '../../../backend/spotify/SpotifyConstants'
 const spotifyConfig = {
-    clientId: SpotifyConstants.CLIENT_ID,
-    clientSecret: SpotifyConstants.CLIENT_SECRET,
-    redirectUrl: SpotifyConstants.REDIRECT_URL
+    clientId: "481af46969f2416e95e9196fa60d808d",
+    clientSecret: "830caf99293c4da0a262ce0ea53009b5",
+    redirectUrl: "moodio://oauthredirect"
 };
 
 var spotifyApi = new SpotifyWebApi(spotifyConfig);
