@@ -67,6 +67,19 @@ app.post("/signIn", function(req, res) {
     })
 })
 
+app.post("/initUser", function(req, res) {
+    const response = fbApp.firestore().collection('users').doc(JSON.stringify(req.body.user));
+    response.set({
+        username: JSON.stringify(req.body.user),
+        refreshToken: JSON.stringify(req.body.refreshToken)
+    })
+    .catch((error) => {
+        console.log(error);
+        throw error;
+    })
+    res.send('Operation completed');
+})
+
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)
 })

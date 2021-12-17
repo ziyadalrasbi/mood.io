@@ -17,6 +17,9 @@ function Login({ navigation }) {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
     };
 
+    const [refreshToken, setRefreshToken] = React.useState(null);
+    const [userName, setUserName] = React.useState(null);
+
     var api = new SpotifyWebApi({
         clientId: "481af46969f2416e95e9196fa60d808d",
         clientSecret: "830caf99293c4da0a262ce0ea53009b5",
@@ -28,6 +31,7 @@ function Login({ navigation }) {
             responseType: ResponseType.Token,
             clientId: "481af46969f2416e95e9196fa60d808d",
             scopes: ['user-read-email', 'playlist-modify-public'],
+            usePKCE: false,
             redirectUri: makeRedirectUri({
                 native: "moodio://oauthredirect"
             }),
@@ -72,6 +76,31 @@ function Login({ navigation }) {
         }
     }
 
+    const initUser = async(user, refreshToken) => {
+        try {
+            await fetch("http://192.168.0.65:19001/initUser", {
+                method: 'post',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user : user,
+                    refreshToken: refreshToken
+                })
+            })
+                .then((res) => res.json())
+                .then(data => {
+                    console.log('success initializing user');
+                })
+                
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    
+
     function getUserData(token) {
         return fetch(
             'https://api.spotify.com/v1/me',
@@ -83,7 +112,9 @@ function Login({ navigation }) {
         await promptAsync();
             if (response && response.type === 'success') {
                 const token = response.params.access_token;
+                console.log(response);
                 const refreshToken = response.params.refresh_token;
+                setRefreshToken(response.params.access_token);
                 SpotifyConstants.ACCESS_TOKEN = token;
                 api.setAccessToken(token);
                 console.log(token);
@@ -92,15 +123,18 @@ function Login({ navigation }) {
                 getUserData(token)
                     .then(res => res.json())
                     .then(data => {
-                        console.log('data is: ' + data);
+                        initUser(data.id, response.params.access_token)
+                        .then(() => {
                         loginUser(data.id)
                             .then(user => {
-                                navigation.navigate('Home', { navigation: navigation })
+                                console.log('token is '+ refreshToken);
+                                console.log('user is '+ userName);
                             })
                             .catch((error) => {
                                 console.log(error);
                                 throw error;
                             })
+                        })
                     });
             }
   

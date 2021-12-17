@@ -34,18 +34,18 @@ function Home({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const getName = await spotifyHomeFunctions.getTopArtists()
-        .then((res) => {
-          setTopArtists(res);
+        await spotifyHomeFunctions.getTopArtists()
+        .then((artists) => {
+          setTopArtists(artists);
           const half = Math.ceil(topArtists.length / 2);
           setTopArtistsOne(topArtists.slice(0, half));
           setTopArtistsTwo(topArtists.slice(-half));
-          const getTopArtists = spotifyHomeFunctions.getName()
-          .then((res) => {
-            setName(res);
+          spotifyHomeFunctions.getName()
+          .then((name) => {
+            setName(name);
             const getTopTracks = spotifyHomeFunctions.getTopTracks()
-            .then((res) => {
-              setTopTracks(res);
+            .then((tracks) => {
+              setTopTracks(tracks);
               const half = Math.ceil(topTracks.length / 2);
               setTopTracksOne(topTracks.slice(0, half));
               setTopTracksTwo(topTracks.slice(-half));

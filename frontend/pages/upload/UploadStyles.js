@@ -36,11 +36,16 @@ export default StyleSheet.create({
         position: 'relative',
         height: '40%',
         width: '90%',
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10
     },
+    selectedImage: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain'
+    }, 
     buttonContainer: {
         position: 'relative',
         flexDirection: 'row',
