@@ -8,10 +8,12 @@ import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import HomeStyles from '../home/HomeStyles';
 import { height } from 'dom-helpers';
+var RNFS = require('react-native-fs');
 
 function Upload({ navigation }) {
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [formattedImage, setFormattedImage] = useState(null);
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
@@ -39,6 +41,24 @@ function Upload({ navigation }) {
     }
 
     setSelectedImage({ localUri: picker.uri });
+
+
+    if (selectedImage != null) {
+      await fetch("http://192.168.0.65:19001/detectFace", {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          img: selectedImage.localUri
+        })
+      })
+        .then((res) => res.json())
+        .then(data => {
+          setFormattedImage({ localUri: data.image })
+        })
+    }
   }
 
   return (
@@ -54,10 +74,10 @@ function Upload({ navigation }) {
       </View>
       <View style={UploadStyles.subTop} />
       <View style={UploadStyles.uploadContainer}>
-        {selectedImage != null &&
+        {formattedImage != null &&
           <Image
             style={UploadStyles.selectedImage}
-            source={{ uri: selectedImage.localUri }}
+            source={{ uri: formattedImage.localUri }}
           />
         }
       </View>

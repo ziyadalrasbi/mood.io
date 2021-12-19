@@ -30,8 +30,10 @@ function Login({ navigation }) {
         {
             responseType: ResponseType.Token,
             clientId: "481af46969f2416e95e9196fa60d808d",
-            scopes: ['user-read-email', 'playlist-modify-public'],
-            usePKCE: false,
+            scopes: [
+                'user-read-email',
+                'user-read-private',
+            ],
             redirectUri: makeRedirectUri({
                 native: "moodio://oauthredirect"
             }),
@@ -76,7 +78,7 @@ function Login({ navigation }) {
         }
     }
 
-    const initUser = async(user, refreshToken) => {
+    const initUser = async (user, refreshToken) => {
         try {
             await fetch("http://192.168.0.65:19001/initUser", {
                 method: 'post',
@@ -85,7 +87,7 @@ function Login({ navigation }) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user : user,
+                    user: user,
                     refreshToken: refreshToken
                 })
             })
@@ -93,59 +95,56 @@ function Login({ navigation }) {
                 .then(data => {
                     console.log('success initializing user');
                 })
-                
+
         } catch (error) {
             console.log(error);
             throw error;
         }
     }
-    
+
 
     function getUserData(token) {
-        return fetch(
-            'https://api.spotify.com/v1/me',
-            { 'headers': { 'Authorization': 'Bearer ' + token } }
-        );
+        try {
+            return fetch(
+                'https://api.spotify.com/v1/me',
+                { 'headers': { 'Authorization': 'Bearer ' + token } }
+            );
+        } catch (error) {
+            console.log('Error getting user data, please try again. \n' + error);
+            throw error;
+        }
+
     }
 
     const onPressLogin = async () => {
         await promptAsync();
-            if (response && response.type === 'success') {
-                const token = response.params.access_token;
-                console.log(response);
-                const refreshToken = response.params.refresh_token;
-                setRefreshToken(response.params.access_token);
-                SpotifyConstants.ACCESS_TOKEN = token;
-                api.setAccessToken(token);
-                console.log(token);
-                api.setRefreshToken(refreshToken);
-                AsyncStorage.setItem('access_token', JSON.stringify(token));
-                getUserData(token)
-                    .then(res => res.json())
-                    .then(data => {
-                        initUser(data.id, response.params.access_token)
-                        .then(() => {
-                        loginUser(data.id)
-                            .then(user => {
-                                console.log('token is '+ refreshToken);
-                                console.log('user is '+ userName);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                                throw error;
-                            })
-                        })
-                    });
-            }
-  
+        if (response && response.type === 'success') {
+            const token = response.params.access_token;
+            setRefreshToken(response.params.access_token);
+            console.log(token);
+            SpotifyConstants.ACCESS_TOKEN = token;
+            api.setAccessToken(token);
+            AsyncStorage.setItem('access_token', JSON.stringify(token));
+            await getUserData(token)
+                .then(res => res.json())
+                .then(data => {
+                    initUser(data.id, response.params.access_token);
+                    loginUser(data.id)
+                    navigation.navigate('Home', { navigation: navigation })
+                })
+                .catch((error) => {
+                    console.log('Error logging in, please try again. \n' + error);
+                    throw error;
+                });
+        }
+
     }
 
     return (
         <View style={LoginStyles.topContainer}>
-            <Button onPress={SpotifyConstants.ACCESS_TOKEN != null ? navigation.navigate('Home') : onPressLogin} title="Login" />
+            <Button onPress={onPressLogin} title="Login" />
         </View>
 
     );
 }
 export default Login;
-

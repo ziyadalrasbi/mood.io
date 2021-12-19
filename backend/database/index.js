@@ -9,6 +9,12 @@ import 'firebase/compat/firestore';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { applicationDefault } from 'firebase-admin/app';
+import { createRequire } from "module"; // Bring in the ability to create the 'require' method
+const require = createRequire(import.meta.url);
+const serviceAccount = require('./service-account.json');
+import * as faceApi from 'face-api.js';
+import { canvas } from '../detection/commons/Env.js';
+import { faceDetectionNet, faceDetectionOptions } from '../detection/commons/FaceDetection.js';
 
 
 const PORT = process.env.PORT || 19001;
@@ -43,14 +49,14 @@ app.get('/*', function(req, res) {
 app.use(bodyParser.json());
 
 app.post("/createToken", function(req, res) {
-    admin.initializeApp({ credential: applicationDefault() });
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount)  });
     var id = req.body.id;
     admin.auth().createCustomToken(id)
     .then((customToken) => {
         res.json({token: customToken});
     })
     .catch((error) => {
-        console.log(error);
+        console.log('Error creating the token, please try again. \n' + error);
         throw error;
     })
 })
@@ -62,7 +68,7 @@ app.post("/signIn", function(req, res) {
         res.json({user: user});
     })
     .catch((error) => {
-        console.log(error);
+        console.log('Error signing in user for the first time, please try again. \n' + error);
         throw error;
     })
 })
@@ -74,10 +80,27 @@ app.post("/initUser", function(req, res) {
         refreshToken: JSON.stringify(req.body.refreshToken)
     })
     .catch((error) => {
-        console.log(error);
+        console.log('Error initializing the user for the first time, please try again. \n' + error);
         throw error;
     })
     res.send('Operation completed');
+})
+
+app.post("/detectFace", async function(req, res) {
+    await faceDetectionNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
+    await faceApi.nets.faceLandmark68Net.loadFromDisk(path.join(__dirname, '../detection/weights'));
+    await faceApi.nets.faceExpressionNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
+    
+    const img = await canvas.loadImage(req.body.img);
+    const results = await faceApi.detectAllFaces(img, faceDetectionOptions)
+    .withFaceLandmarks()
+    .withFaceExpressions()
+
+    const out = faceApi.createCanvasFromMedia(img);
+    faceApi.draw.drawDetections(out, results.map(res => results.detection));
+    faceApi.draw.drawFaceExpressions(out, results);
+
+    res.json({ image: out.toBuffer('image/jpeg') });
 })
 
 app.listen(PORT, () => {
