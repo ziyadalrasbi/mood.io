@@ -6,15 +6,23 @@ import admin from 'firebase-admin';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { applicationDefault } from 'firebase-admin/app';
 import { createRequire } from "module"; // Bring in the ability to create the 'require' method
 const require = createRequire(import.meta.url);
 const serviceAccount = require('./service-account.json');
-import * as faceApi from 'face-api.js';
+import * as faceApi from '@vladmandic/face-api';
 import { canvas } from '../detection/commons/Env.js';
-import { faceDetectionNet, faceDetectionOptions } from '../detection/commons/FaceDetection.js';
+// import { faceDetectionNet, faceDetectionOptions } from '../detection/commons/FaceDetection.js';
+
+import tf from '@tensorflow/tfjs-node';
+import '@tensorflow/tfjs-node';
+// const faceApi = require('@vladmandic/face-api');
+// const tf = require('@tensorflow/tfjs');
+// require('@tensorflow/tfjs-node');
+const fs = require('fs');
 
 
 const PORT = process.env.PORT || 19001;
@@ -37,70 +45,107 @@ const firebaseConfig = {
 
 const fbApp = firebase.initializeApp(firebaseConfig);
 
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../../web/index.html'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../../web/index.html'), function (err) {
+        if (err) {
+            res.status(500).send(err)
+        }
     })
-  })
+})
 
-  app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 
-app.post("/createToken", function(req, res) {
-    admin.initializeApp({ credential: admin.credential.cert(serviceAccount)  });
+app.post("/createToken", function (req, res) {
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
     var id = req.body.id;
     admin.auth().createCustomToken(id)
-    .then((customToken) => {
-        res.json({token: customToken});
-    })
-    .catch((error) => {
-        console.log('Error creating the token, please try again. \n' + error);
-        throw error;
-    })
+        .then((customToken) => {
+            res.json({ token: customToken });
+        })
+        .catch((error) => {
+            console.log('Error creating the token, please try again. \n' + error);
+            throw error;
+        })
 })
 
-app.post("/signIn", function(req, res) {
+app.post("/signIn", function (req, res) {
     fbApp.auth().signInWithCustomToken(JSON.stringify(req.body.token))
-    .then((userCredential) => {
-        var user = userCredential.user;
-        res.json({user: user});
-    })
-    .catch((error) => {
-        console.log('Error signing in user for the first time, please try again. \n' + error);
-        throw error;
-    })
+        .then((userCredential) => {
+            var user = userCredential.user;
+            res.json({ user: user });
+        })
+        .catch((error) => {
+            console.log('Error signing in user for the first time, please try again. \n' + error);
+            throw error;
+        })
 })
 
-app.post("/initUser", function(req, res) {
+app.post("/initUser", function (req, res) {
     const response = fbApp.firestore().collection('users').doc(JSON.stringify(req.body.user));
     response.set({
         username: JSON.stringify(req.body.user),
         refreshToken: JSON.stringify(req.body.refreshToken)
     })
-    .catch((error) => {
-        console.log('Error initializing the user for the first time, please try again. \n' + error);
-        throw error;
-    })
+        .catch((error) => {
+            console.log('Error initializing the user for the first time, please try again. \n' + error);
+            throw error;
+        })
     res.send('Operation completed');
 })
 
-app.post("/detectFace", async function(req, res) {
-    await faceDetectionNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
+app.post("/uploadImage", function (req, res) {
+    var storageRef = fbApp.storage().ref('images/' + req.body.uri);
+    var message = req.body.base64;
+    storageRef.putString(message, 'base64')
+        .then((snapshot) => {
+
+        });
+})
+
+app.post("/downloadImage", function (req, res) {
+    fbApp.storage().ref().child('images/' + req.body.uri).getDownloadURL()
+        .then((url) => {
+
+        })
+})
+
+const ssdOptions = { minConfidence: 0.1, maxResults: 10 };
+const optionsSSDMobileNet = new faceApi.SsdMobilenetv1Options(ssdOptions);
+
+app.post("/detectFace", async function (req, res) {
+
+    var bitmap = new Buffer.from(req.body.base64, 'base64');
+    const fileName = 'img_' + Math.random(5000) + '.jpg';
+    const image = fs.writeFileSync(fileName, bitmap);
+    var buffer = fs.readFileSync(fileName);
+    const tensor = tf.tidy(() => {
+        const decode = faceApi.tf.node.decodeImage(buffer, 3)
+        let expand;
+        if (decode.shape[2] == 4) {
+            const channels = faceApi.tf.split(decode, 4, 2);
+            const rgb = faceApi.tf.stack([channels[0], channels[1], channels[2]], 2);
+            expand = faceApi.tf.reshape(rgb, [1, decode.shape[0], decode.shape[1], 3]);
+        } else {
+            expand = faceApi.tf.expandDims(decode, 0);
+        }
+        const cast = faceApi.tf.cast(expand, 'float32');
+        return cast;
+    })
+
     await faceApi.nets.faceLandmark68Net.loadFromDisk(path.join(__dirname, '../detection/weights'));
     await faceApi.nets.faceExpressionNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
-    
-    const img = await canvas.loadImage(req.body.img);
-    const results = await faceApi.detectAllFaces(img, faceDetectionOptions)
-    .withFaceLandmarks()
-    .withFaceExpressions()
+    await faceApi.nets.faceRecognitionNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
+    await faceApi.nets.ssdMobilenetv1.loadFromDisk(path.join(__dirname, '../detection/weights'));
+    await faceApi.nets.ageGenderNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
 
-    const out = faceApi.createCanvasFromMedia(img);
-    faceApi.draw.drawDetections(out, results.map(res => results.detection));
-    faceApi.draw.drawFaceExpressions(out, results);
+    const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
+        .withFaceLandmarks()
+        .withFaceExpressions();
 
-    res.json({ image: out.toBuffer('image/jpeg') });
+    fs.unlinkSync(fileName);
+
+    res.json({ image: results });
 })
 
 app.listen(PORT, () => {

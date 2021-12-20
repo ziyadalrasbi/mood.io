@@ -7,6 +7,7 @@ import Home from './frontend/pages/home/Home';
 import Upload from './frontend/pages/upload/Upload';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import Results from './frontend/pages/results/Results';
 
 function App({ navigation }) {
 
@@ -45,6 +46,7 @@ function App({ navigation }) {
                 <Stack.Screen name='Login' component={Login} />
                 <Stack.Screen name='Home' component={Home} />
                 <Stack.Screen name='Upload' component={Upload} />
+                <Stack.Screen name='Results' component={Results} />
             </Stack.Navigator>
         </NavigationContainer>
 

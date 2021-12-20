@@ -8,12 +8,11 @@ import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import HomeStyles from '../home/HomeStyles';
 import { height } from 'dom-helpers';
-var RNFS = require('react-native-fs');
 
 function Upload({ navigation }) {
 
   const [selectedImage, setSelectedImage] = useState(null);
-  const [formattedImage, setFormattedImage] = useState(null);
+  const [moodAnalysis, setMoodAnalysis] = useState(null);
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
@@ -34,13 +33,13 @@ function Upload({ navigation }) {
       alert('Camera roll permission is required!');
     }
 
-    let picker = await ImagePicker.launchImageLibraryAsync();
+    let picker = await ImagePicker.launchImageLibraryAsync({ base64: true });
 
     if (picker.cancelled === true) {
       return;
     }
 
-    setSelectedImage({ localUri: picker.uri });
+    setSelectedImage({ base64: picker.base64, uri: picker.uri });
 
 
     if (selectedImage != null) {
@@ -51,12 +50,14 @@ function Upload({ navigation }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          img: selectedImage.localUri
+          base64: selectedImage.base64
         })
       })
         .then((res) => res.json())
         .then(data => {
-          setFormattedImage({ localUri: data.image })
+          console.log(JSON.stringify(data.image[0].expressions));
+          setMoodAnalysis(data.image[0].expressions);
+          console.log('mood analysis is '+ moodAnalysis);
         })
     }
   }
@@ -74,10 +75,10 @@ function Upload({ navigation }) {
       </View>
       <View style={UploadStyles.subTop} />
       <View style={UploadStyles.uploadContainer}>
-        {formattedImage != null &&
+        {selectedImage != null &&
           <Image
             style={UploadStyles.selectedImage}
-            source={{ uri: formattedImage.localUri }}
+            source={{ uri: selectedImage.uri }}
           />
         }
       </View>
@@ -96,6 +97,8 @@ function Upload({ navigation }) {
           uppercase={false}
           mode="contained"
           labelStyle={UploadStyles.mainFont}
+          disabled={moodAnalysis != null ? false : true}
+          onPress={() => navigation.navigate('Results', { params: { navigation: navigation, results: JSON.stringify(moodAnalysis) }})}
         >
           continue
         </Button>
