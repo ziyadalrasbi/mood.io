@@ -78,7 +78,7 @@ class SpotifyHomeFunctions {
               tempTrack.push(data.body.items[i].name);
               tempTrack.push(data.body.items[i].artists[0].name);
               tempTrack.push(data.body.items[i].album.images[0].url);
-              tempTrack.push(data.body.items[i].external_urls);
+              tempTrack.push(data.body.items[i].external_urls.spotify);
               topTracks.push(tempTrack);
             }
           }
@@ -88,7 +88,6 @@ class SpotifyHomeFunctions {
         }
     } catch (error) {
       console.log('There was an error getting the top tracks, please try again.', err);
-      return topTracks;
     }
     return topTracks;
   }

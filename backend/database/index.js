@@ -114,7 +114,7 @@ const ssdOptions = { minConfidence: 0.1, maxResults: 10 };
 const optionsSSDMobileNet = new faceApi.SsdMobilenetv1Options(ssdOptions);
 
 app.post("/detectFace", async function (req, res) {
-
+    try {
     var bitmap = new Buffer.from(req.body.base64, 'base64');
     const fileName = 'img_' + Math.random(5000) + '.jpg';
     const image = fs.writeFileSync(fileName, bitmap);
@@ -139,6 +139,7 @@ app.post("/detectFace", async function (req, res) {
     await faceApi.nets.ssdMobilenetv1.loadFromDisk(path.join(__dirname, '../detection/weights'));
     await faceApi.nets.ageGenderNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
 
+    
     const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
         .withFaceLandmarks()
         .withFaceExpressions();
@@ -146,6 +147,10 @@ app.post("/detectFace", async function (req, res) {
     fs.unlinkSync(fileName);
 
     res.json({ image: results });
+    } catch(error) {
+        console.log(error);
+        throw error;
+    }
 })
 
 app.listen(PORT, () => {

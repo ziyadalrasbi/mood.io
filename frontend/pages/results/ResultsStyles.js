@@ -34,13 +34,34 @@ export default StyleSheet.create({
     },
     mainContainer: {
       flex: 1,
-      backgroundColor: '#fff',
       flexDirection: 'column',
       alignItems: 'center',
       display: 'flex',
       justifyContent: 'flex-start',
-      backgroundColor: 'rgba(41, 67, 227, 0.3)'
+      backgroundColor: 'transparent'
     },
+    firstContainer: {
+        position: 'relative',
+        left: 0,
+        right: 0,
+        top: 0,
+        marginBottom: 25,
+        width: '100%',
+        justifyContent: 'flex-start',
+      },
+      firstHeader: {
+        marginTop: 5,
+        fontFamily: 'InconsolataBlack',
+        fontSize: 22,
+        padding: 10,
+        marginBottom: -10
+      },
+      firstSubHeader: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: 18,
+        padding: 10,
+        color: 'grey'
+      },
     moodAnalysis: {
       position: 'relative',
       left: 0,

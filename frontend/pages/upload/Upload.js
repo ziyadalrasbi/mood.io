@@ -13,6 +13,7 @@ function Upload({ navigation }) {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [moodAnalysis, setMoodAnalysis] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
@@ -24,6 +25,7 @@ function Upload({ navigation }) {
   if (!loaded) {
     return null;
   }
+
 
 
   const openImagePicker = async () => {
@@ -39,27 +41,31 @@ function Upload({ navigation }) {
       return;
     }
 
-    setSelectedImage({ base64: picker.base64, uri: picker.uri });
+    setSelectedImage({ base64: picker.base64, uri: picker.uri })
 
+  }
 
-    if (selectedImage != null) {
-      await fetch("http://192.168.0.65:19001/detectFace", {
-        method: 'post',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          base64: selectedImage.base64
+  const analyseImage = () => {
+    openImagePicker();
+
+      if (selectedImage != null) {
+        fetch("http://192.168.0.65:19001/detectFace", {
+          method: 'post',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            base64: selectedImage.base64
+          })
         })
-      })
-        .then((res) => res.json())
-        .then(data => {
-          console.log(JSON.stringify(data.image[0].expressions));
-          setMoodAnalysis(data.image[0].expressions);
-          console.log('mood analysis is '+ moodAnalysis);
-        })
-    }
+          .then((res) => res.json())
+          .then(data => {
+            const item = data.image[0].expressions;
+            setMoodAnalysis(item);
+            setLoading(false);
+          })
+      }
   }
 
   return (
@@ -88,7 +94,7 @@ function Upload({ navigation }) {
           uppercase={false}
           mode="contained"
           labelStyle={UploadStyles.mainFont}
-          onPress={() => openImagePicker()}
+          onPress={analyseImage}
         >
           upload image
         </Button>
@@ -97,8 +103,8 @@ function Upload({ navigation }) {
           uppercase={false}
           mode="contained"
           labelStyle={UploadStyles.mainFont}
-          disabled={moodAnalysis != null ? false : true}
-          onPress={() => navigation.navigate('Results', { params: { navigation: navigation, results: JSON.stringify(moodAnalysis) }})}
+          disabled={loading != true ? false : true}
+          onPress={() => navigation.navigate('Results', { navigation: navigation, results: moodAnalysis })}
         >
           continue
         </Button>
