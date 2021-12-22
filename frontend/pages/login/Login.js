@@ -33,6 +33,7 @@ function Login({ navigation }) {
             scopes: [
                 'user-read-email',
                 'user-read-private',
+                'user-top-read'
             ],
             redirectUri: makeRedirectUri({
                 native: "moodio://oauthredirect"
@@ -117,18 +118,19 @@ function Login({ navigation }) {
     }
 
     const onPressLogin = async () => {
-        await promptAsync();
-        if (response && response.type === 'success') {
-            const token = response.params.access_token;
-            setRefreshToken(response.params.access_token);
+        await promptAsync()
+        .then((res) => {
+        if (res && res.type === 'success') {
+            const token = res.params.access_token;
+            setRefreshToken(res.params.access_token);
             console.log(token);
             SpotifyConstants.ACCESS_TOKEN = token;
             api.setAccessToken(token);
             AsyncStorage.setItem('access_token', JSON.stringify(token));
-            await getUserData(token)
+            getUserData(token)
                 .then(res => res.json())
                 .then(data => {
-                    initUser(data.id, response.params.access_token);
+                    initUser(data.id, res.params.access_token);
                     loginUser(data.id)
                     navigation.navigate('Home', { navigation: navigation })
                 })
@@ -136,8 +138,8 @@ function Login({ navigation }) {
                     console.log('Error logging in, please try again. \n' + error);
                     throw error;
                 });
-        }
-
+            };
+        });
     }
 
     return (

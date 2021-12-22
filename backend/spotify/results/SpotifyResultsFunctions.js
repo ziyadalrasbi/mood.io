@@ -28,7 +28,7 @@ class SpotifyResultsFunctions {
         }
         return recommendations;
       }, function (err) {
-        console.log('There was an error getting ID, please try again.', err);
+        console.log('There was an error getting an ID, please try again.', err);
       });
     return recommendations;
   }

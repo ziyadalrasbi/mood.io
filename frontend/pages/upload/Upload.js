@@ -11,8 +11,8 @@ import { height } from 'dom-helpers';
 
 function Upload({ navigation }) {
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [moodAnalysis, setMoodAnalysis] = useState(null);
+  const [selectedImage, setSelectedImage] = useState({base64: "", uri: ""});
+  const [moodAnalysis, setMoodAnalysis] = useState({moodAnalysis: []});
   const [loading, setLoading] = useState(true);
 
   const [loaded] = useFonts({
@@ -25,7 +25,6 @@ function Upload({ navigation }) {
   if (!loaded) {
     return null;
   }
-
 
 
   const openImagePicker = async () => {
@@ -41,14 +40,17 @@ function Upload({ navigation }) {
       return;
     }
 
-    setSelectedImage({ base64: picker.base64, uri: picker.uri })
+    const data = {base64: picker.base64, uri: picker.uri};
 
+    setSelectedImage({ base64: picker.base64, uri: picker.uri });
+
+    return data;
   }
 
-  const analyseImage = () => {
-    openImagePicker();
-
-      if (selectedImage != null) {
+  const analyseImage = async () => {
+    openImagePicker()
+    .then((res) => {
+      if (res.base64 != "") {
         fetch("http://192.168.0.65:19001/detectFace", {
           method: 'post',
           headers: {
@@ -56,16 +58,15 @@ function Upload({ navigation }) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            base64: selectedImage.base64
+            base64: res.base64
           })
         })
           .then((res) => res.json())
           .then(data => {
-            const item = data.image[0].expressions;
-            setMoodAnalysis(item);
-            setLoading(false);
+            setMoodAnalysis({moodAnalysis: data.image[0].expressions});
           })
       }
+    })
   }
 
   return (
@@ -94,7 +95,7 @@ function Upload({ navigation }) {
           uppercase={false}
           mode="contained"
           labelStyle={UploadStyles.mainFont}
-          onPress={analyseImage}
+          onPress={() => analyseImage()}
         >
           upload image
         </Button>
@@ -103,8 +104,8 @@ function Upload({ navigation }) {
           uppercase={false}
           mode="contained"
           labelStyle={UploadStyles.mainFont}
-          disabled={loading != true ? false : true}
-          onPress={() => navigation.navigate('Results', { navigation: navigation, results: moodAnalysis })}
+          disabled={Object.keys(moodAnalysis.moodAnalysis).length > 0 ? false : true}
+          onPress={() => navigation.navigate('Results', { navigation: navigation, results: moodAnalysis.moodAnalysis })}
         >
           continue
         </Button>

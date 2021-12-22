@@ -114,7 +114,6 @@ const ssdOptions = { minConfidence: 0.1, maxResults: 10 };
 const optionsSSDMobileNet = new faceApi.SsdMobilenetv1Options(ssdOptions);
 
 app.post("/detectFace", async function (req, res) {
-    try {
     var bitmap = new Buffer.from(req.body.base64, 'base64');
     const fileName = 'img_' + Math.random(5000) + '.jpg';
     const image = fs.writeFileSync(fileName, bitmap);
@@ -146,11 +145,8 @@ app.post("/detectFace", async function (req, res) {
 
     fs.unlinkSync(fileName);
 
+    console.log('results are '+ results);
     res.json({ image: results });
-    } catch(error) {
-        console.log(error);
-        throw error;
-    }
 })
 
 app.listen(PORT, () => {

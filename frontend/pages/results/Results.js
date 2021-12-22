@@ -9,13 +9,12 @@ import MoodGraph from '../../components/moodgraph/MoodGraph';
 
 function Results({ navigation, route }) {
 
-    const [maxProp, setMaxProp] = useState(null);
-    const [maxValue, setMaxValue] = useState(null);
+    const [maxProp, setMaxProp] = useState({maxProp: "", found: 0});
+    const [maxValue, setMaxValue] = useState({maxValue: ""});
 
-    const [moodHeader, setMoodHeader] = useState(null);
-    const [moodDescription, setMoodDescription] = useState(null);
+    const [moodHeader, setMoodHeader] = useState({moodHeader: ""});
+    const [moodDescription, setMoodDescription] = useState({moodDescription: ""});
 
-    const [total, setTotal] = useState(null);
     const [moods, setMoods] = useState([]);
     const [values, setValues] = useState([]);
     const [averages, setAverages] = useState([]);
@@ -24,28 +23,28 @@ function Results({ navigation, route }) {
     const { results } = route.params;
 
     useEffect(() => {
-        var jsonText = JSON.stringify(results);
-        var data = JSON.parse(jsonText);
-        var getTotal = 0;
-        var getValues = [];
-        var getMoods = [];
-        for (var prop in data) {
-            var value = data[prop];
-            getTotal += value;
-            getValues.push(value);
-            getMoods.push(prop);
-            if (value > maxValue) {
-                setMaxProp(prop);
-                setMaxValue(value);
+        const getMood = async() => {
+            var jsonText = JSON.stringify(results);
+            var data = JSON.parse(jsonText);
+            var getValues = [];
+            var getMoods = [];
+            var tempMax;
+            var tempProp;
+            for (var prop in data) {
+                var value = data[prop];
+                getValues.push(value);
+                getMoods.push(prop);
+                if (value > maxValue.maxValue) {
+                    tempMax = value;
+                    tempProp = prop;
+                }
             }
+            setMaxProp({maxProp: tempProp});
+            setMaxValue({maxValue: tempMax});
+            setValues(getValues);
+            setMoods(getMoods);
+            await getAnalysisStatement();
         }
-        setTotal(getTotal);
-        setValues(getValues);
-        setMoods(getMoods);
-
-        console.log('total is'+ total);
-        console.log(averages);
-        console.log(moods);
 
         const parseAverages = async() => {
             var tempAverages = [];
@@ -61,41 +60,40 @@ function Results({ navigation, route }) {
                 tempAverages.push(getAverages);
             }
             setAverages(tempAverages);
-            console.log('averages are \n' + JSON.stringify(averages));
         }
 
         const getAnalysisStatement = async() => {
-            if (maxValue != null && maxProp != null) {
-                if (maxProp === 'happy') {
-                    setMoodHeader('that you are feeling happy. that makes us happy too!');
-                    setMoodDescription('be sure to spread the happiness with others around you :)')
-                } else if (maxProp === 'sad') {
-                    setMoodHeader('that you are feeling down. we\'re sorry to hear that.');
-                    setMoodDescription('it will get better, keep your head up high!')
-                } else if (maxProp === 'angry') {
-                    setMoodHeader('that you seem tempered and fully of energy!');
-                    setMoodDescription('try to harness your thoughts and energy into something positive!');
-                } else if (maxProp === 'fearful') {
-                    setMoodHeader('that you seem fearful. stay safe!');
-                    setMoodDescription('surround yourself around people that make you feel safe.');
-                } else if (maxProp === 'disgusted') {
-                    setMoodHeader('that something may be putting you off. let\'s change that!');
-                    setMoodDescription('engage in activities that put you in your comfort zone.');
-                } else if (maxProp === 'surprised') {
-                    setMoodHeader('that somthing may have caught you off guard recently!');
-                    setMoodDescription('there may be something that is surprising you. we hope it is something positive!');
-                } else if (maxProp === 'neutral') {
-                    setMoodHeader('that everything seems normal!')
-                    setMoodDescription('being in a neutral state of mind is always good!');
+            if (maxValue.maxValue != "" && maxProp.maxProp != "") {
+                if (maxProp.maxProp  == 'happy') {
+                    setMoodHeader({moodHeader: 'that you are feeling happy. that makes us happy too!'});
+                    setMoodDescription({moodDescription: 'be sure to spread the happiness with others around you :)'});
+                } else if (maxProp.maxProp  == 'sad') {
+                    setMoodHeader({moodHeader: 'that you are feeling down. we\'re sorry to hear that.'});
+                    setMoodDescription({moodDescription: 'it will get better, keep your head up high!'})
+                } else if (maxProp.maxProp  == 'angry') {
+                    setMoodHeader({moodHeader: 'that you seem tempered and fully of energy!'});
+                    setMoodDescription({moodDescription: 'try to harness your thoughts and energy into something positive!'});
+                } else if (maxProp.maxProp  == 'fearful') {
+                    setMoodHeader({moodHeader: 'that you seem fearful. stay safe!'});
+                    setMoodDescription({moodDescription: 'surround yourself around people that make you feel safe.'});
+                } else if (maxProp.maxProp  == 'disgusted') {
+                    setMoodHeader({moodHeader: 'that something may be putting you off. let\'s change that!'});
+                    setMoodDescription({moodDescription: 'engage in activities that put you in your comfort zone.'});
+                } else if (maxProp.maxProp  == 'surprised') {
+                    setMoodHeader({moodHeader: 'that somthing may have caught you off guard recently!'});
+                    setMoodDescription({moodDescription: 'there may be something that is surprising you. we hope it is something positive!'});
+                } else if (maxProp.maxProp  == 'neutral') {
+                    setMoodHeader({moodHeader: 'that everything seems normal!'})
+                    setMoodDescription({moodDescription: 'being in a neutral state of mind is always good!'});
                 }
             }
         }
 
 
-
-        getAnalysisStatement();
+        getMood();
         parseAverages();
         setLoading(false);
+
     }, [loading])
 
     
@@ -126,10 +124,10 @@ function Results({ navigation, route }) {
             <View style={ResultsStyles.subTop} />
             <View style={ResultsStyles.firstContainer}>
                 <Text style={ResultsStyles.firstHeader}>
-                    your result analysis showed {moodHeader}
+                    your result analysis showed {moodHeader.moodHeader != "" && moodHeader.moodHeader}
                 </Text>
                 <Text style={ResultsStyles.firstSubHeader}>
-                    {moodDescription}
+                    {moodDescription.moodDescription != "" && moodDescription.moodDescription}
                 </Text>
                 {/* {averages != null ? <MoodGraph data={JSON.stringify(averages)}/> : null} */}
             </View>
