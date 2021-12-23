@@ -138,14 +138,11 @@ app.post("/detectFace", async function (req, res) {
     await faceApi.nets.ssdMobilenetv1.loadFromDisk(path.join(__dirname, '../detection/weights'));
     await faceApi.nets.ageGenderNet.loadFromDisk(path.join(__dirname, '../detection/weights'));
 
-    
     const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
         .withFaceLandmarks()
         .withFaceExpressions();
 
     fs.unlinkSync(fileName);
-
-    console.log('results are '+ results);
     res.json({ image: results });
 })
 

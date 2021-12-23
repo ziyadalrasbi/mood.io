@@ -123,7 +123,6 @@ function Login({ navigation }) {
         if (res && res.type === 'success') {
             const token = res.params.access_token;
             setRefreshToken(res.params.access_token);
-            console.log(token);
             SpotifyConstants.ACCESS_TOKEN = token;
             api.setAccessToken(token);
             AsyncStorage.setItem('access_token', JSON.stringify(token));

@@ -74,5 +74,9 @@ export default StyleSheet.create({
     mainFont: {
       fontFamily: 'InconsolataMedium',
       fontSize: 22
+    },
+    scroll: {
+      flex: 1,
+      height: '100%'
     }
 });
