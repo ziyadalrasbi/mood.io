@@ -25,16 +25,16 @@ function App({ navigation }) {
     };
 
     firebase.initializeApp(firebaseConfig);
-    
+
     React.useEffect(() => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log('user is '+ user);
-              setUser(user);
+                console.log('user is ' + user);
+                setUser(user);
             }
-          });
-          setLoading(false);
-    },[loading])
+        });
+        setLoading(false);
+    }, [loading])
 
     return (
 

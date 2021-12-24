@@ -119,26 +119,26 @@ function Login({ navigation }) {
 
     const onPressLogin = async () => {
         await promptAsync()
-        .then((res) => {
-        if (res && res.type === 'success') {
-            const token = res.params.access_token;
-            setRefreshToken(res.params.access_token);
-            SpotifyConstants.ACCESS_TOKEN = token;
-            api.setAccessToken(token);
-            AsyncStorage.setItem('access_token', JSON.stringify(token));
-            getUserData(token)
-                .then(res => res.json())
-                .then(data => {
-                    initUser(data.id, res.params.access_token);
-                    loginUser(data.id)
-                    navigation.navigate('Home', { navigation: navigation })
-                })
-                .catch((error) => {
-                    console.log('Error logging in, please try again. \n' + error);
-                    throw error;
-                });
-            };
-        });
+            .then((res) => {
+                if (res && res.type === 'success') {
+                    const token = res.params.access_token;
+                    setRefreshToken(res.params.access_token);
+                    SpotifyConstants.ACCESS_TOKEN = token;
+                    api.setAccessToken(token);
+                    AsyncStorage.setItem('access_token', JSON.stringify(token));
+                    getUserData(token)
+                        .then(res => res.json())
+                        .then(data => {
+                            initUser(data.id, res.params.access_token);
+                            loginUser(data.id)
+                            navigation.navigate('Home', { navigation: navigation })
+                        })
+                        .catch((error) => {
+                            console.log('Error logging in, please try again. \n' + error);
+                            throw error;
+                        });
+                };
+            });
     }
 
     return (

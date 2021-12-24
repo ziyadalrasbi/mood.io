@@ -18,13 +18,13 @@ export default StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         backgroundColor: 'transparent',
-      },
+    },
     mainFont: {
-      fontFamily: 'InconsolataMedium',
-      fontSize: 22
+        fontFamily: 'InconsolataMedium',
+        fontSize: 22
     },
     scroll: {
-      flex: 1,
-      height: '100%'
+        flex: 1,
+        height: '100%'
     }
 });

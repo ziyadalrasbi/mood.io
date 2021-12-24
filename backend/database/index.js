@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import admin from 'firebase-admin';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -9,19 +8,11 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { applicationDefault } from 'firebase-admin/app';
 import { createRequire } from "module"; // Bring in the ability to create the 'require' method
 const require = createRequire(import.meta.url);
 const serviceAccount = require('./service-account.json');
 import * as faceApi from '@vladmandic/face-api';
-import { canvas } from '../detection/commons/Env.js';
-// import { faceDetectionNet, faceDetectionOptions } from '../detection/commons/FaceDetection.js';
-
-import tf from '@tensorflow/tfjs-node';
-import '@tensorflow/tfjs-node';
-// const faceApi = require('@vladmandic/face-api');
-// const tf = require('@tensorflow/tfjs');
-// require('@tensorflow/tfjs-node');
+const tf = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 
 
@@ -94,21 +85,6 @@ app.post("/initUser", function (req, res) {
     res.send('Operation completed');
 })
 
-app.post("/uploadImage", function (req, res) {
-    var storageRef = fbApp.storage().ref('images/' + req.body.uri);
-    var message = req.body.base64;
-    storageRef.putString(message, 'base64')
-        .then((snapshot) => {
-
-        });
-})
-
-app.post("/downloadImage", function (req, res) {
-    fbApp.storage().ref().child('images/' + req.body.uri).getDownloadURL()
-        .then((url) => {
-
-        })
-})
 
 const ssdOptions = { minConfidence: 0.1, maxResults: 10 };
 const optionsSSDMobileNet = new faceApi.SsdMobilenetv1Options(ssdOptions);

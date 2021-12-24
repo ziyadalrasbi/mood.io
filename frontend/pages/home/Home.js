@@ -117,7 +117,7 @@ function Home({ navigation }) {
             {topArtistsOne != null ? Object.keys(topArtistsOne).map((artist, index) =>
               <View>
                 {topArtistsOne[artist].map((artist2, i) =>
-                artist2[1] != null &&
+                  artist2[1] != null &&
                   <View>
                     <Text style={HomeStyles.topArtistText}>{artist2[0]}</Text>
                     <Image
@@ -134,7 +134,7 @@ function Home({ navigation }) {
             {topArtistsTwo != null ? Object.keys(topArtistsTwo).map((artist, index) =>
               <View>
                 {topArtistsTwo[artist].map((artist2, i) =>
-                artist2[1] != null &&
+                  artist2[1] != null &&
                   <View>
                     <Text style={HomeStyles.topArtistText}>{artist2[0]}</Text>
                     <Image
@@ -159,7 +159,7 @@ function Home({ navigation }) {
             {topTracksOne != null ? Object.keys(topTracksOne).map((track) =>
               <View>
                 {topTracksOne[track].map((track2, i) =>
-                track2[2] != null &&
+                  track2[2] != null &&
                   <View>
                     <Text style={HomeStyles.topTrackText}>{track2[0]}</Text>
                     <Text style={HomeStyles.topTrackArtistText}>by {track2[1]}</Text>
@@ -176,7 +176,7 @@ function Home({ navigation }) {
             {topTracksTwo != null ? Object.keys(topTracksTwo).map((track) =>
               <View>
                 {topTracksTwo[track].map((track2, i) =>
-                track2[2] != null &&
+                  track2[2] != null &&
                   <View>
                     <Text style={HomeStyles.topTrackText}>{track2[0]}</Text>
                     <Text style={HomeStyles.topTrackArtistText}>by {track2[1]}</Text>

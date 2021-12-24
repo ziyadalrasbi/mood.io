@@ -8,13 +8,13 @@ export default StyleSheet.create({
     hamburger: {
         width: 30,
         height: 40,
-        backgroundColor:'transparent',
+        backgroundColor: 'transparent',
         marginLeft: 10
     },
     scan: {
         width: 30,
         height: 40,
-        backgroundColor:'transparent',
+        backgroundColor: 'transparent',
         marginRight: 10
     }
 })

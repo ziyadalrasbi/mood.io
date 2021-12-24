@@ -65,16 +65,16 @@ function Results({ navigation, route }) {
                     if (maxProp.maxProp == 'happy') {
                         setMoodHeader({ moodHeader: 'that you are feeling happy. that makes us happy too!' });
                         setMoodDescription({ moodDescription: 'be sure to spread the happiness with others around you :)' });
-                    } 
+                    }
                     if (maxProp.maxProp == 'sad') {
                         setMoodHeader({ moodHeader: 'that you are feeling down. we\'re sorry to hear that.' });
                         setMoodDescription({ moodDescription: 'it will get better, keep your head up high!' })
                     }
-                     if (maxProp.maxProp == 'angry') {
+                    if (maxProp.maxProp == 'angry') {
                         setMoodHeader({ moodHeader: 'that you seem tempered and fully of energy!' });
                         setMoodDescription({ moodDescription: 'try to harness your thoughts and energy into something positive!' });
                     }
-                     if (maxProp.maxProp == 'fearful') {
+                    if (maxProp.maxProp == 'fearful') {
                         setMoodHeader({ moodHeader: 'that you seem fearful. stay safe!' });
                         setMoodDescription({ moodDescription: 'surround yourself around people that make you feel safe.' });
                     }
@@ -90,7 +90,7 @@ function Results({ navigation, route }) {
                         setMoodHeader({ moodHeader: 'that everything seems normal!' })
                         setMoodDescription({ moodDescription: 'being in a neutral state of mind is always good!' });
                     }
-                }    
+                }
             }
         }
 
@@ -115,28 +115,28 @@ function Results({ navigation, route }) {
 
     return (
         <ScrollView style={ResultsStyles.scroll}>
-        <View style={ResultsStyles.mainContainer}>
-            <View style={ResultsStyles.topContainer}>
-                <Navbar scan={false} />
-                <Text style={ResultsStyles.title}>
-                    results
-                </Text>
-                <Text style={ResultsStyles.subText}>
-                    your mood analysis can be found below!
-                </Text>
+            <View style={ResultsStyles.mainContainer}>
+                <View style={ResultsStyles.topContainer}>
+                    <Navbar scan={false} />
+                    <Text style={ResultsStyles.title}>
+                        results
+                    </Text>
+                    <Text style={ResultsStyles.subText}>
+                        your mood analysis can be found below!
+                    </Text>
+                </View>
+                <View style={ResultsStyles.subTop} />
+                <View style={ResultsStyles.firstContainer}>
+                    <Text style={ResultsStyles.firstHeader}>
+                        your result analysis showed {maxProp.maxProp != "" && moodHeader.moodHeader}
+                    </Text>
+                    <Text style={ResultsStyles.firstSubHeader}>
+                        {maxProp.maxProp != "" && moodDescription.moodDescription}
+                    </Text>
+                    {averages.averages.length > 1 ? <MoodGraph data={averages.averages} /> : null}
+                </View>
+                <StatusBar style="auto" />
             </View>
-            <View style={ResultsStyles.subTop} />
-            <View style={ResultsStyles.firstContainer}>
-                <Text style={ResultsStyles.firstHeader}>
-                    your result analysis showed {maxProp.maxProp != "" && moodHeader.moodHeader}
-                </Text>
-                <Text style={ResultsStyles.firstSubHeader}>
-                    {maxProp.maxProp  != "" && moodDescription.moodDescription}
-                </Text>
-                {averages.averages.length > 1 ? <MoodGraph data={averages.averages} /> : null}
-            </View>
-            <StatusBar style="auto" />
-        </View>
         </ScrollView>
     );
 }

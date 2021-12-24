@@ -11,8 +11,8 @@ import { height } from 'dom-helpers';
 
 function Upload({ navigation }) {
 
-  const [selectedImage, setSelectedImage] = useState({base64: "", uri: ""});
-  const [moodAnalysis, setMoodAnalysis] = useState({moodAnalysis: []});
+  const [selectedImage, setSelectedImage] = useState({ base64: "", uri: "" });
+  const [moodAnalysis, setMoodAnalysis] = useState({ moodAnalysis: [] });
   const [loading, setLoading] = useState(true);
 
   const [loaded] = useFonts({
@@ -40,7 +40,7 @@ function Upload({ navigation }) {
       return;
     }
 
-    const data = {base64: picker.base64, uri: picker.uri};
+    const data = { base64: picker.base64, uri: picker.uri };
 
     setSelectedImage({ base64: picker.base64, uri: picker.uri });
 
@@ -49,24 +49,24 @@ function Upload({ navigation }) {
 
   const analyseImage = async () => {
     openImagePicker()
-    .then((res) => {
-      if (res.base64 != "") {
-        fetch("http://192.168.0.65:19001/detectFace", {
-          method: 'post',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            base64: res.base64
+      .then((res) => {
+        if (res.base64 != "") {
+          fetch("http://192.168.0.65:19001/detectFace", {
+            method: 'post',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              base64: res.base64
+            })
           })
-        })
-          .then((res) => res.json())
-          .then(data => {
-            setMoodAnalysis({moodAnalysis: data.image[0].expressions});
-          })
-      }
-    })
+            .then((res) => res.json())
+            .then(data => {
+              setMoodAnalysis({ moodAnalysis: data.image[0].expressions });
+            })
+        }
+      })
   }
 
   return (
