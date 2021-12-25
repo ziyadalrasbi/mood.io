@@ -1,43 +1,43 @@
-import React from 'react';
-import { Component } from 'react';
-import * as SpotifyConstants from '../SpotifyConstants';
+'use strict';
+
 var SpotifyWebApi = require('spotify-web-api-node');
 
+const getName = async (req, res, next) => {
+    try {
+        var name;
+        var api = new SpotifyWebApi({
+            clientId: "481af46969f2416e95e9196fa60d808d",
+            clientSecret: "830caf99293c4da0a262ce0ea53009b5",
+            redirectUri: "moodio://oauthredirect"
+        });
+        await api.setAccessToken(req.body.token);
+        await api.getMe()
+            .then((data) => {
+                try {
+                    let fullName = data.body.display_name;
+                    let tmp = fullName.split(' ');
+                    name = tmp[0].toString();
+                    res.json({ name: name });
+                } catch (error) {
+                    return;
+                }
+            }, function (err) {
+                console.log('There was an error getting username, please try again.', err);
+            });
+    } catch (error) {
+        console.log('Error getting user\'s Spotify name, please try again. \n' + error);
+        res.status(400).send(error.message);
+    }
+}
 
-class SpotifyHomeFunctions {
-
-  getName = async () => {
-    var name;
-    var api = new SpotifyWebApi({
-      clientId: "481af46969f2416e95e9196fa60d808d",
-      clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-      redirectUri: "moodio://oauthredirect"
-    });
-    await api.setAccessToken(SpotifyConstants.ACCESS_TOKEN);
-    await api.getMe()
-      .then((data) => {
-        try {
-          let fullName = data.body.display_name;
-          let tmp = fullName.split(' ');
-          name = tmp[0].toString();
-          return name;
-        } catch (error) {
-          return;
-        }
-      }, function (err) {
-        console.log('There was an error getting username, please try again.', err);
-      });
-    return name;
-  }
-
-  getTopArtists = async () => {
+const getTopArtists = async (req, res, next) => {
     var artistNames = [];
     var api = new SpotifyWebApi({
       clientId: "481af46969f2416e95e9196fa60d808d",
       clientSecret: "830caf99293c4da0a262ce0ea53009b5",
       redirectUri: "moodio://oauthredirect"
     });
-    await api.setAccessToken(SpotifyConstants.ACCESS_TOKEN);
+    await api.setAccessToken(req.body.token);
     try {
       await api.getMyTopArtists({ limit: 6, time_range: 'medium_term' })
         .then((data) => {
@@ -50,25 +50,23 @@ class SpotifyHomeFunctions {
               artistNames.push(tempArtist);
             }
           }
-          return artistNames;
+          res.json({ artistNames: artistNames });
         }), function (err) {
           console.log('There was an error getting the top artists, please try again.', err);
         }
     } catch (error) {
       console.log('There was an error getting the top artists, please try again.', err);
-      return artistNames;
     }
-    return artistNames;
   }
 
-  getTopTracks = async () => {
+  const getTopTracks = async (req, res, next) => {
     var topTracks = [];
     var api = new SpotifyWebApi({
       clientId: "481af46969f2416e95e9196fa60d808d",
       clientSecret: "830caf99293c4da0a262ce0ea53009b5",
       redirectUri: "moodio://oauthredirect"
     });
-    await api.setAccessToken(SpotifyConstants.ACCESS_TOKEN);
+    await api.setAccessToken(req.body.token);
     try {
       await api.getMyTopTracks({ limit: 4, time_range: 'medium_term' })
         .then((data) => {
@@ -82,20 +80,17 @@ class SpotifyHomeFunctions {
               topTracks.push(tempTrack);
             }
           }
-          return topTracks;
+          res.json({ topTracks: topTracks });
         }), function (err) {
           console.log('There was an error getting the top tracks, please try again.', err);
         }
     } catch (error) {
       console.log('There was an error getting the top tracks, please try again.', err);
     }
-    return topTracks;
   }
 
-
+module.exports = {
+    getName,
+    getTopArtists,
+    getTopTracks
 }
-
-
-
-const spotifyHomeFunctions = new SpotifyHomeFunctions();
-export default spotifyHomeFunctions;

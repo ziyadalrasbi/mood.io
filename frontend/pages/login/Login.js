@@ -2,11 +2,6 @@ import * as React from 'react';
 import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
 import { View, Button } from 'react-native';
 import LoginStyles from './LoginStyles';
-import * as SpotifyConstants from '../../../backend/spotify/SpotifyConstants';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import 'firebase/compat/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -44,7 +39,7 @@ function Login({ navigation }) {
 
     const loginUser = async (id) => {
         try {
-            await fetch("http://192.168.0.65:19001/createToken", {
+            await fetch("http://192.168.0.65:19001/admin/createToken", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -57,7 +52,7 @@ function Login({ navigation }) {
                 .then((res) => res.json())
                 .then(data => {
                     const tempToken = data.token;
-                    return fetch("http://192.168.0.65:19001/signIn", {
+                    return fetch("http://192.168.0.65:19001/admin/signIn", {
                         method: 'post',
                         headers: {
                             Accept: 'application/json',
@@ -81,7 +76,7 @@ function Login({ navigation }) {
 
     const initUser = async (user, refreshToken) => {
         try {
-            await fetch("http://192.168.0.65:19001/initUser", {
+            await fetch("http://192.168.0.65:19001/admin/initUser", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -104,17 +99,22 @@ function Login({ navigation }) {
     }
 
 
-    function getUserData(token) {
+    const getUserData = async (token) => {
         try {
-            return fetch(
-                'https://api.spotify.com/v1/me',
-                { 'headers': { 'Authorization': 'Bearer ' + token } }
-            );
+            return fetch("http://192.168.0.65:19001/spotify/getUserId", {
+                method: 'post',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token
+                })
+            })
         } catch (error) {
-            console.log('Error getting user data, please try again. \n' + error);
+            console.log(error);
             throw error;
         }
-
     }
 
     const onPressLogin = async () => {
@@ -123,9 +123,8 @@ function Login({ navigation }) {
                 if (res && res.type === 'success') {
                     const token = res.params.access_token;
                     setRefreshToken(res.params.access_token);
-                    SpotifyConstants.ACCESS_TOKEN = token;
                     api.setAccessToken(token);
-                    AsyncStorage.setItem('access_token', JSON.stringify(token));
+                    AsyncStorage.setItem('access_token', token);
                     getUserData(token)
                         .then(res => res.json())
                         .then(data => {

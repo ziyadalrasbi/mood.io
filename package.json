@@ -2,7 +2,7 @@
   "name": "mood.io",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -33,6 +33,7 @@
     "crypto-js": "^4.1.1",
     "dns.js": "^1.0.1",
     "domain-browser": "^1.1.1",
+    "dotenv": "^10.0.0",
     "emotion": "^11.0.0",
     "events": "^1.0.0",
     "expo": "~43.0.2",

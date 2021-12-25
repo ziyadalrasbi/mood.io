@@ -1,12 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, SafeAreaView, ScrollView, Linking } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import HomeStyles from './HomeStyles';
 import Navbar from '../../components/navbar/Navbar';
-import spotifyHomeFunctions from '../../../backend/spotify/home/SpotifyHomeFunctions';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Home({ navigation }) {
 
@@ -32,31 +31,64 @@ function Home({ navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        await spotifyHomeFunctions.getTopArtists()
-          .then((artists) => {
-            if (artists != null) {
-              setTopArtists(artists);
-              const half = Math.ceil(Object.entries(topArtists).length / 2);
-              setTopArtistsOne(Object.entries(topArtists).slice(0, half));
-              setTopArtistsTwo(Object.entries(topArtists).slice(-half));
-            }
+      const token = await AsyncStorage.getItem('access_token');
+      if (token != null) {
+        try {
+          await fetch("http://192.168.0.65:19001/spotify/getTopArtists", {
+            method: 'post',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              token: token
+            })
           })
-        await spotifyHomeFunctions.getName()
-          .then((name) => {
-            setName(name);
+            .then((res) => res.json())
+            .then(data => {
+              if (data != null) {
+                setTopArtists(data.artistNames);
+                const half = Math.ceil(Object.entries(topArtists).length / 2);
+                setTopArtistsOne(Object.entries(topArtists).slice(0, half));
+                setTopArtistsTwo(Object.entries(topArtists).slice(-half));
+              }
+            })
+          await fetch("http://192.168.0.65:19001/spotify/getName", {
+            method: 'post',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              token: token
+            })
           })
-        await spotifyHomeFunctions.getTopTracks()
-          .then((tracks) => {
-            if (tracks != null) {
-              setTopTracks(tracks);
-              const half = Math.ceil(Object.keys(topTracks).length / 2);
-              setTopTracksOne(Object.entries(topTracks).slice(0, half));
-              setTopTracksTwo(Object.entries(topTracks).slice(-half));
-            }
+            .then((res) => res.json())
+            .then(data => {
+              setName(data.name);
+            })
+          await fetch("http://192.168.0.65:19001/spotify/getTopTracks", {
+            method: 'post',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              token: token
+            })
           })
-      } catch (err) {
-        console.log('Error fetching home data, please try again. \n' + err);
+            .then((res) => res.json())
+            .then(data => {
+              if (data != null) {
+                setTopTracks(data.topTracks);
+                const half = Math.ceil(Object.keys(topTracks).length / 2);
+                setTopTracksOne(Object.entries(topTracks).slice(0, half));
+                setTopTracksTwo(Object.entries(topTracks).slice(-half));
+              }
+            })
+        } catch (error) {
+          console.log('Error fetching home data, please try again. \n' + error);
+        }
       }
     }
     fetchData().then(() => setLoading(false));
@@ -64,7 +96,15 @@ function Home({ navigation }) {
   }, [loading]);
 
   if (!loaded || loading) {
-    return <Text>Loading</Text>;
+    return (
+      <View style={HomeStyles.mainContainer}>
+        <View style={HomeStyles.topContainer}>
+          <Text style={HomeStyles.welcome}>
+            Loading...
+          </Text>
+        </View>
+      </View>
+    );
   }
 
   return (

@@ -51,7 +51,7 @@ function Upload({ navigation }) {
     openImagePicker()
       .then((res) => {
         if (res.base64 != "") {
-          fetch("http://192.168.0.65:19001/detectFace", {
+          fetch("http://192.168.0.65:19001/detect/detectFace", {
             method: 'post',
             headers: {
               Accept: 'application/json',
