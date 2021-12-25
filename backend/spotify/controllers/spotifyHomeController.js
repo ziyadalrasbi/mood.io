@@ -1,15 +1,11 @@
 'use strict';
 
-var SpotifyWebApi = require('spotify-web-api-node');
+const api = require('../api.js');
+const config = require('../config.js');
 
 const getName = async (req, res, next) => {
     try {
         var name;
-        var api = new SpotifyWebApi({
-            clientId: "481af46969f2416e95e9196fa60d808d",
-            clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-            redirectUri: "moodio://oauthredirect"
-        });
         await api.setAccessToken(req.body.token);
         await api.getMe()
             .then((data) => {
@@ -32,11 +28,6 @@ const getName = async (req, res, next) => {
 
 const getTopArtists = async (req, res, next) => {
     var artistNames = [];
-    var api = new SpotifyWebApi({
-      clientId: "481af46969f2416e95e9196fa60d808d",
-      clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-      redirectUri: "moodio://oauthredirect"
-    });
     await api.setAccessToken(req.body.token);
     try {
       await api.getMyTopArtists({ limit: 6, time_range: 'medium_term' })
@@ -61,11 +52,6 @@ const getTopArtists = async (req, res, next) => {
 
   const getTopTracks = async (req, res, next) => {
     var topTracks = [];
-    var api = new SpotifyWebApi({
-      clientId: "481af46969f2416e95e9196fa60d808d",
-      clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-      redirectUri: "moodio://oauthredirect"
-    });
     await api.setAccessToken(req.body.token);
     try {
       await api.getMyTopTracks({ limit: 4, time_range: 'medium_term' })

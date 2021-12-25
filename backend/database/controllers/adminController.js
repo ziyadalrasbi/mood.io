@@ -2,8 +2,6 @@
 
 const firebase = require('../db.js');
 const admin = require('firebase-admin');
-const User = require('../models/user.js');
-const firestore = firebase.firestore();
 const serviceAccount = require('../service-account.json');
 
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
