@@ -25,5 +25,5 @@ module.exports = {
         messagingSenderId: "159561548589",
         appId: "1:159561548589:web:9148d9531100bcc6d609a4",
         measurementId: "G-R0QQ53XLDE"
-      }
+    }
 }

@@ -21,10 +21,10 @@ const createToken = async (req, res, next) => {
 const signIn = async (req, res, next) => {
     try {
         firebase.auth().signInWithCustomToken(JSON.stringify(req.body.token))
-        .then((userCredential) => {
-            var user = userCredential.user;
-            res.json({ user: user });
-        })
+            .then((userCredential) => {
+                var user = userCredential.user;
+                res.json({ user: user });
+            })
     } catch (error) {
         console.log('Error signing in user, please try again. \n' + error);
         res.status(400).send(error.message);
@@ -46,7 +46,7 @@ const addUser = async (req, res, next) => {
 }
 
 module.exports = {
-    addUser,
     createToken,
-    signIn
+    signIn,
+    addUser
 }

@@ -21,6 +21,10 @@ function Home({ navigation }) {
   const [topTracksOne, setTopTracksOne] = useState({ topTracksOne: [] });
   const [topTracksTwo, setTopTracksTwo] = useState({ topTracksTwo: [] });
 
+  const [trackIds, setTrackIds] = useState({ trackIds: [] });
+  const [habits, setHabits] = useState({ habits: [] });
+
+
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
     InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
@@ -81,6 +85,7 @@ function Home({ navigation }) {
             .then(data => {
               if (data != null) {
                 setTopTracks(data.topTracks);
+                setTrackIds(data.trackIds);
                 const half = Math.ceil(Object.keys(topTracks).length / 2);
                 setTopTracksOne(Object.entries(topTracks).slice(0, half));
                 setTopTracksTwo(Object.entries(topTracks).slice(-half));

@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const config = require('./config.js');
-const adminRoutes = require('./routes/admin-routes.js');
-const detectionRoutes = require('../detection/routes/detection-routes.js');
-const spotifyRoutes = require('../spotify/routes/spotify-routes.js');
+const config = require('./database/config.js');
+const adminRoutes = require('./database/routes/admin-routes.js');
+const detectionRoutes = require('./detection/routes/detection-routes.js');
+const spotifyRoutes = require('./spotify/routes/spotify-routes.js');
 
 const PORT = process.env.PORT || 19001;
 const app = express();
