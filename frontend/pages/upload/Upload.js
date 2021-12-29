@@ -6,14 +6,11 @@ import { useFonts } from 'expo-font'
 import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
-import HomeStyles from '../home/HomeStyles';
-import { height } from 'dom-helpers';
 
 function Upload({ navigation }) {
 
   const [selectedImage, setSelectedImage] = useState({ base64: "", uri: "" });
   const [moodAnalysis, setMoodAnalysis] = useState({ moodAnalysis: [] });
-  const [loading, setLoading] = useState(true);
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),

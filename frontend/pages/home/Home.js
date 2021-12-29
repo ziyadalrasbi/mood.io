@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font'
 import HomeStyles from './HomeStyles';
 import Navbar from '../../components/navbar/Navbar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 
 function Home({ navigation }) {
 
@@ -91,6 +92,24 @@ function Home({ navigation }) {
                 setTopTracksTwo(Object.entries(topTracks).slice(-half));
               }
             })
+            .then(() => {
+          fetch("http://192.168.0.65:19001/spotify/getListeningHabits", {
+            method: 'post',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              token: token,
+              tracks: trackIds
+            })
+          })
+            .then((res) => res.json())
+            .then(data => {
+              setHabits({habits: data.habits});
+              console.log(habits);
+            })
+          })
         } catch (error) {
           console.log('Error fetching home data, please try again. \n' + error);
         }
@@ -151,6 +170,9 @@ function Home({ navigation }) {
             songs recommended to you in the past week
           </Text>
         </View>
+        <View>
+          <HabitsGraph/>
+          </View>
         <View style={HomeStyles.thirdContainer}>
           <Text style={HomeStyles.thirdHeader}>
             your top artists

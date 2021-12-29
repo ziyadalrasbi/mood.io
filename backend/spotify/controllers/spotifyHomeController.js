@@ -74,14 +74,28 @@ const getTopTracks = async (req, res, next) => {
 }
 
 const getListeningHabits = async (req, res, next) => {
-    var listeningHabits = [];
     await api.setAccessToken(req.body.token);
     try {
         await api.getAudioFeaturesForTracks(req.body.tracks)
             .then((data) => {
-                console.log(data.body);
-                listeningHabits.push(data.body);
-                res.json({ habits: listeningHabits });
+                var getHabits = { danceability: 0, energy: 0, loudness: 0, liveness: 0, valence: 0 };
+                for (var i = 0; i < data.body.audio_features.length; i++) {
+                    getHabits = {
+                        danceability: getHabits.danceability + data.body.audio_features[i].danceability,
+                        energy: getHabits.energy + data.body.audio_features[i].energy,
+                        loudness: getHabits.loudness + data.body.audio_features[i].loudness,
+                        liveness: getHabits.liveness + data.body.audio_features[i].liveness,
+                        valence: getHabits.valence + data.body.audio_features[i].valence
+                    };
+                }
+                getHabits = {
+                    danceability: getHabits.danceability / 4,
+                    energy: getHabits.energy / 4,
+                    loudness: getHabits.loudness / 4,
+                    liveness: getHabits.liveness / 4,
+                    valence: getHabits.valence / 4
+                }
+                res.json({ habits: getHabits });
             })
 
     } catch (error) {
