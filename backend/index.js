@@ -17,7 +17,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5000
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../../web/index.html'), function (err) {
         if (err) {
-            res.status(500).send(err)
+            res.status(500).send(err);
         }
     })
 })

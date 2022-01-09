@@ -85,7 +85,7 @@ export default StyleSheet.create({
     },
     mainContainer: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: 'transparent',
       flexDirection: 'column',
       alignItems: 'center',
       display: 'flex',
@@ -189,7 +189,7 @@ export default StyleSheet.create({
     },
     mainContainer: {
       flex: 1,
-      backgroundColor: 'white',
+      backgroundColor: 'transparent',
       flexDirection: 'column',
       alignItems: 'center',
       display: 'flex',

@@ -107,7 +107,6 @@ function Home({ navigation }) {
             .then((res) => res.json())
             .then(data => {
               setHabits({habits: data.habits});
-              console.log(habits);
             })
           })
         } catch (error) {
@@ -170,9 +169,6 @@ function Home({ navigation }) {
             songs recommended to you in the past week
           </Text>
         </View>
-        <View>
-          <HabitsGraph/>
-          </View>
         <View style={HomeStyles.thirdContainer}>
           <Text style={HomeStyles.thirdHeader}>
             your top artists
