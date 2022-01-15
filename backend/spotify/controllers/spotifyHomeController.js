@@ -28,7 +28,7 @@ const getTopArtists = async (req, res, next) => {
     try {
         await api.getMyTopArtists({ limit: 6, time_range: 'medium_term' })
             .then((data) => {
-                if (data != null) {
+                if (data.body.items[0] != null) {
                     for (let i = 0; i < 6; i++) {
                         let tempArtist = [];
                         tempArtist.push(data.body.items[i].name);
@@ -53,7 +53,7 @@ const getTopTracks = async (req, res, next) => {
     try {
         await api.getMyTopTracks({ limit: 4, time_range: 'medium_term' })
             .then((data) => {
-                if (data != null) {
+                if (data.body.items[0] != null) {
                     for (let i = 0; i < 4; i++) {
                         let tempTrack = [];
                         tempTrack.push(data.body.items[i].name);

@@ -24,13 +24,13 @@ export default StyleSheet.create({
       padding: 10,
       fontFamily: 'InconsolataBold',
       color: 'white',
-      fontSize: 50
+      fontSize: 35
     },
     subWelcome: {
       padding: 10,
       fontFamily: 'InconsolataLight',
       color: 'white',
-      fontSize: 26
+      fontSize: 22
     },
     firstContainer: {
       position: 'relative',
@@ -44,13 +44,13 @@ export default StyleSheet.create({
     firstHeader: {
       marginTop: 5,
       fontFamily: 'InconsolataBlack',
-      fontSize: 22,
+      fontSize: 17,
       padding: 10,
       marginBottom: -10
     },
     firstSubHeader: {
       fontFamily: 'InconsolataMedium',
-      fontSize: 18,
+      fontSize: 15,
       padding: 10,
       color: 'grey'
     },
@@ -73,13 +73,13 @@ export default StyleSheet.create({
     secondHeader: {
       marginTop: 5,
       fontFamily: 'InconsolataBlack',
-      fontSize: 22,
+      fontSize: 17,
       padding: 10,
       marginBottom: -10
     },
     secondSubHeader: {
       fontFamily: 'InconsolataMedium',
-      fontSize: 18,
+      fontSize: 15,
       padding: 10,
       color: 'grey'
     },
@@ -94,7 +94,7 @@ export default StyleSheet.create({
     },
     mainFont: {
       fontFamily: 'InconsolataMedium',
-      fontSize: 22
+      fontSize: 17
     },
     thirdContainer: {
       position: 'relative',
@@ -109,12 +109,12 @@ export default StyleSheet.create({
       marginTop: 5,
       marginBottom: -10,
       fontFamily: 'InconsolataBlack',
-      fontSize: 22,
+      fontSize: 17,
       padding: 10,
     },
     thirdSubHeader: {
       fontFamily: 'InconsolataMedium',
-      fontSize: 18,
+      fontSize: 15,
       padding: 10,
       color: 'grey'
     },
@@ -129,8 +129,9 @@ export default StyleSheet.create({
       fontFamily: 'InconsolataSemiExpanded',
       color: 'blue',
       alignSelf: 'center',
+      textAlign: 'center',
       marginBottom: 5,
-      fontSize: 15,
+      fontSize: 12,
       fontStyle: 'italic',
       maxWidth: 130
     },
@@ -146,12 +147,12 @@ export default StyleSheet.create({
       marginTop: 5,
       marginBottom: -10,
       fontFamily: 'InconsolataBlack',
-      fontSize: 22,
+      fontSize: 17,
       padding: 10,
     },
     fourthSubHeader: {
       fontFamily: 'InconsolataMedium',
-      fontSize: 18,
+      fontSize: 15,
       padding: 10,
       color: 'grey'
     },
@@ -174,7 +175,7 @@ export default StyleSheet.create({
       color: 'red',
       alignSelf: 'center',
       marginBottom: 5,
-      fontSize: 15,
+      fontSize: 12,
       fontStyle: 'italic',
       maxWidth: 200
     },
@@ -182,10 +183,11 @@ export default StyleSheet.create({
       fontFamily: 'InconsolataSemiExpanded',
       color: 'grey',
       alignSelf: 'center',
+      textAlign: 'center',
       marginBottom: 5,
-      fontSize: 15,
+      fontSize: 12,
       fontStyle: 'italic',
-      maxWidth: 200
+      maxWidth: 150
     },
     mainContainer: {
       flex: 1,
@@ -197,7 +199,7 @@ export default StyleSheet.create({
     },
     mainFont: {
       fontFamily: 'InconsolataMedium',
-      fontSize: 22
+      fontSize: 17
     },
     scroll: {
       flex: 1,

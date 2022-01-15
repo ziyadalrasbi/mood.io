@@ -27,11 +27,11 @@ function Home({ navigation }) {
 
 
   const [loaded] = useFonts({
-    InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-    InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-    InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-    InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf'),
-    InconsolataSemiExpanded: require('../../../assets/fonts/Inconsolata/static/Inconsolata_SemiExpanded/Inconsolata_SemiExpanded-Black.ttf')
+    InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+    InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
+    InconsolataMedium:  require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
+    InconsolataBlack:  require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
+    InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
   });
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function Home({ navigation }) {
       const token = await AsyncStorage.getItem('access_token');
       if (token != null) {
         try {
-          await fetch("http://192.168.0.65:19001/spotify/getTopArtists", {
+          await fetch("http://192.168.0.14:19001/spotify/home/getTopArtists", {
             method: 'post',
             headers: {
               Accept: 'application/json',
@@ -58,7 +58,7 @@ function Home({ navigation }) {
                 setTopArtistsTwo(Object.entries(topArtists).slice(-half));
               }
             })
-          await fetch("http://192.168.0.65:19001/spotify/getName", {
+          await fetch("http://192.168.0.14:19001/spotify/home/getName", {
             method: 'post',
             headers: {
               Accept: 'application/json',
@@ -72,7 +72,7 @@ function Home({ navigation }) {
             .then(data => {
               setName(data.name);
             })
-          await fetch("http://192.168.0.65:19001/spotify/getTopTracks", {
+          await fetch("http://192.168.0.14:19001/spotify/home/getTopTracks", {
             method: 'post',
             headers: {
               Accept: 'application/json',
@@ -93,7 +93,7 @@ function Home({ navigation }) {
               }
             })
             .then(() => {
-          fetch("http://192.168.0.65:19001/spotify/getListeningHabits", {
+          fetch("http://192.168.0.14:19001/spotify/home/getListeningHabits", {
             method: 'post',
             headers: {
               Accept: 'application/json',

@@ -2,9 +2,14 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const config = require('./database/config.js');
+/*------------ DATABASE ROUTES ------------*/
 const adminRoutes = require('./database/routes/admin-routes.js');
+const loginRoutes = require('./database/routes/login-routes.js');
+/*------------ DETECTION ROUTES ------------*/
 const detectionRoutes = require('./detection/routes/detection-routes.js');
-const spotifyRoutes = require('./spotify/routes/spotify-routes.js');
+/*------------ SPOTIFY ROUTES ------------*/
+const spotifyLoginRoutes = require('./spotify/routes/login-routes.js');
+const spotifyHomeRoutes = require('./spotify/routes/home-routes.js');
 
 const PORT = process.env.PORT || 19001;
 const app = express();
@@ -23,10 +28,11 @@ app.get('/*', function (req, res) {
 })
 
 /*------------ ROUTES ------------*/
-app.use('/admin', adminRoutes.routes);
-app.use('/detect', detectionRoutes.routes);
-app.use('/spotify', spotifyRoutes.routes);
-
+app.use('/database/admin', adminRoutes.routes);
+app.use('/database/login', loginRoutes.routes);
+app.use('/detection/detect', detectionRoutes.routes);
+app.use('/spotify/login', spotifyLoginRoutes.routes);
+app.use('/spotify/home', spotifyHomeRoutes.routes);
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)

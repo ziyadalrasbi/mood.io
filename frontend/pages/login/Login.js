@@ -18,7 +18,7 @@ function Login({ navigation }) {
     var api = new SpotifyWebApi({
         clientId: "481af46969f2416e95e9196fa60d808d",
         clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-        redirectUri: "moodio://oauthredirect"
+        redirectUri: "exp://192.168.0.14:19000"
     });
 
     const [request, response, promptAsync] = useAuthRequest(
@@ -30,16 +30,14 @@ function Login({ navigation }) {
                 'user-read-private',
                 'user-top-read'
             ],
-            redirectUri: makeRedirectUri({
-                native: "moodio://oauthredirect"
-            }),
+            redirectUri: "exp://192.168.0.14:19000"
         },
         discovery
     );
 
     const loginUser = async (id) => {
         try {
-            await fetch("http://192.168.0.65:19001/admin/createToken", {
+            await fetch("http://192.168.0.65:19001/database/admin/createToken", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -52,7 +50,7 @@ function Login({ navigation }) {
                 .then((res) => res.json())
                 .then(data => {
                     const tempToken = data.token;
-                    return fetch("http://192.168.0.65:19001/admin/signIn", {
+                    return fetch("http://192.168.0.65:19001/database/admin/signIn", {
                         method: 'post',
                         headers: {
                             Accept: 'application/json',
@@ -76,7 +74,7 @@ function Login({ navigation }) {
 
     const initUser = async (user, refreshToken) => {
         try {
-            await fetch("http://192.168.0.65:19001/admin/initUser", {
+            await fetch("http://192.168.0.14:19001/database/admin/initUser", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -101,7 +99,7 @@ function Login({ navigation }) {
 
     const getUserData = async (token) => {
         try {
-            return fetch("http://192.168.0.65:19001/spotify/getUserId", {
+            return fetch("http://192.168.0.14:19001/spotify/login/getUserId", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -117,6 +115,43 @@ function Login({ navigation }) {
         }
     }
 
+    const getUserGenres = async (token) => {
+        try {
+            return fetch("http://192.168.0.14:19001/spotify/login/getUserTopGenres", {
+                method: 'post',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token
+                })
+            })
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    const saveUserGenres = async (user, genres) => {
+        try {
+            return fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
+                method: 'post',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user: user,
+                    genres: genres
+                })
+            })
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     const onPressLogin = async () => {
         await promptAsync()
             .then((res) => {
@@ -124,13 +159,20 @@ function Login({ navigation }) {
                     const token = res.params.access_token;
                     setRefreshToken(res.params.access_token);
                     api.setAccessToken(token);
+                    console.log(token);
                     AsyncStorage.setItem('access_token', token);
                     getUserData(token)
                         .then(res => res.json())
                         .then(data => {
-                            initUser(data.id, res.params.access_token);
-                            loginUser(data.id)
-                            navigation.navigate('Home', { navigation: navigation })
+                            const userId = data.id;
+                            initUser(userId, res.params.access_token);
+                            loginUser(userId);
+                            getUserGenres(token)
+                            .then((res) => res.json())
+                            .then(data => {
+                                saveUserGenres(userId, data.topGenres);
+                                navigation.navigate('Home', { navigation: navigation });
+                            })
                         })
                         .catch((error) => {
                             console.log('Error logging in, please try again. \n' + error);
