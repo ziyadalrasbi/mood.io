@@ -10,34 +10,32 @@ function Login({ navigation }) {
     // Endpoint
     const discovery = {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
+        tokenEndpoint: 'https://accounts.spotify.com/api/token',
     };
 
     const [refreshToken, setRefreshToken] = React.useState(null);
     const [userName, setUserName] = React.useState(null);
 
-    var api = new SpotifyWebApi({
-        clientId: "481af46969f2416e95e9196fa60d808d",
-        clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-        redirectUri: "exp://192.168.0.14:19000"
-    });
-
     const [request, response, promptAsync] = useAuthRequest(
         {
-            responseType: ResponseType.Token,
+            responseType: 'code',
             clientId: "481af46969f2416e95e9196fa60d808d",
             scopes: [
                 'user-read-email',
                 'user-read-private',
                 'user-top-read'
             ],
-            redirectUri: "exp://192.168.0.14:19000"
+            usePKCE: false,
+            redirectUri: makeRedirectUri({
+                native: "moodio://oauthredirect"
+            })
         },
         discovery
     );
 
     const loginUser = async (id) => {
         try {
-            await fetch("http://192.168.0.65:19001/database/admin/createToken", {
+            await fetch("http://192.168.0.14:19001/database/admin/createToken", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -50,7 +48,8 @@ function Login({ navigation }) {
                 .then((res) => res.json())
                 .then(data => {
                     const tempToken = data.token;
-                    return fetch("http://192.168.0.65:19001/database/admin/signIn", {
+                    AsyncStorage.setItem('database_access_token', tempToken);
+                    return fetch("http://192.168.0.14:19001/database/login/signIn", {
                         method: 'post',
                         headers: {
                             Accept: 'application/json',
@@ -74,7 +73,7 @@ function Login({ navigation }) {
 
     const initUser = async (user, refreshToken) => {
         try {
-            await fetch("http://192.168.0.14:19001/database/admin/initUser", {
+            await fetch("http://192.168.0.14:19001/database/login/initUser", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -152,31 +151,50 @@ function Login({ navigation }) {
         }
     }
 
+    const requestAccessToken = async (code) => {
+        try {
+            return fetch("http://192.168.0.14:19001/spotify/login/requestAccessToken", {
+                method: 'post',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    code: code
+                })
+            })
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     const onPressLogin = async () => {
         await promptAsync()
             .then((res) => {
                 if (res && res.type === 'success') {
-                    const token = res.params.access_token;
-                    setRefreshToken(res.params.access_token);
-                    api.setAccessToken(token);
-                    console.log(token);
-                    AsyncStorage.setItem('access_token', token);
-                    getUserData(token)
+                    requestAccessToken(res.params.code)
                         .then(res => res.json())
                         .then(data => {
-                            const userId = data.id;
-                            initUser(userId, res.params.access_token);
-                            loginUser(userId);
-                            getUserGenres(token)
-                            .then((res) => res.json())
-                            .then(data => {
-                                saveUserGenres(userId, data.topGenres);
-                                navigation.navigate('Home', { navigation: navigation });
-                            })
-                        })
-                        .catch((error) => {
-                            console.log('Error logging in, please try again. \n' + error);
-                            throw error;
+                            const token = data.accessToken;
+                            AsyncStorage.setItem('spotify_access_token', token);
+                            getUserData(token)
+                                .then(res => res.json())
+                                .then(data => {
+                                    const userId = data.id;
+                                    initUser(userId, token);
+                                    loginUser(userId);
+                                    getUserGenres(token)
+                                        .then((res) => res.json())
+                                        .then(data => {
+                                            saveUserGenres(userId, data.topGenres);
+                                            navigation.navigate('Home', { navigation: navigation });
+                                        })
+                                })
+                                .catch((error) => {
+                                    console.log('Error logging in, please try again. \n' + error);
+                                    throw error;
+                                });
                         });
                 };
             });

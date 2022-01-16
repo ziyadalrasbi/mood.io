@@ -36,7 +36,7 @@ function Home({ navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = await AsyncStorage.getItem('access_token');
+      const token = await AsyncStorage.getItem('spotify_access_token');
       if (token != null) {
         try {
           await fetch("http://192.168.0.14:19001/spotify/home/getTopArtists", {

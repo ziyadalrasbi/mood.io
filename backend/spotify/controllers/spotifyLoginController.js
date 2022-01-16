@@ -1,7 +1,19 @@
 'use strict';
 
 const api = require('../api.js');
-const config = require('../config.js');
+var SpotifyWebApi = require('spotify-web-api-node');
+
+const requestAccessToken = async (req, res, next) => {
+    let spotifyApi = new SpotifyWebApi({
+        clientId: "481af46969f2416e95e9196fa60d808d",
+        clientSecret: "830caf99293c4da0a262ce0ea53009b5",
+        redirectUri: "exp://192.168.0.14:19000"
+    })
+    await spotifyApi.authorizationCodeGrant(req.body.code)
+    .then((data) => {
+        res.json({accessToken: data.body.access_token, refreshToken: data.body.refresh_token});
+    })
+}
 
 const getUserId = async (req, res, next) => {
     var id;
@@ -42,6 +54,7 @@ const getUserTopGenres = async (req, res, next) => {
 }
 
 module.exports = {
+    requestAccessToken,
     getUserId,
     getUserTopGenres
 }
