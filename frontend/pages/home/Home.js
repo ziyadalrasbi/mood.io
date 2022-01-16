@@ -29,8 +29,8 @@ function Home({ navigation }) {
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
     InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
-    InconsolataMedium:  require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
-    InconsolataBlack:  require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
+    InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
+    InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
     InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
   });
 
@@ -93,22 +93,22 @@ function Home({ navigation }) {
               }
             })
             .then(() => {
-          fetch("http://192.168.0.14:19001/spotify/home/getListeningHabits", {
-            method: 'post',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              token: token,
-              tracks: trackIds
+              fetch("http://192.168.0.14:19001/spotify/home/getListeningHabits", {
+                method: 'post',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  token: token,
+                  tracks: trackIds
+                })
+              })
+                .then((res) => res.json())
+                .then(data => {
+                  setHabits({ habits: data.habits });
+                })
             })
-          })
-            .then((res) => res.json())
-            .then(data => {
-              setHabits({habits: data.habits});
-            })
-          })
         } catch (error) {
           console.log('Error fetching home data, please try again. \n' + error);
         }
@@ -128,6 +128,28 @@ function Home({ navigation }) {
         </View>
       </View>
     );
+  }
+
+  const signOut = async () => {
+    try {
+      await AsyncStorage.removeItem('spotify_access_token');
+      await AsyncStorage.removeItem('spotify_refresh_token');
+      await AsyncStorage.removeItem('database_access_token');
+      await AsyncStorage.removeItem('database_refresh_token');
+      await fetch("http://192.168.0.14:19001/database/login/signOut", {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(() => {
+        navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+      })
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   return (
@@ -159,6 +181,15 @@ function Home({ navigation }) {
             onPress={() => navigation.navigate('Upload', { navigation: navigation })}
           >
             get started
+          </Button>
+          <Button
+            style={HomeStyles.startButton}
+            uppercase={false}
+            mode="contained"
+            labelStyle={HomeStyles.mainFont}
+            onPress={() => signOut()}
+          >
+            sign out
           </Button>
         </View>
         <View style={HomeStyles.secondContainer}>

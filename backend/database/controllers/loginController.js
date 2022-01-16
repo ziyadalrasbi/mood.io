@@ -2,17 +2,30 @@
 
 const firebase = require('../db.js');
 
-
 const signIn = async (req, res, next) => {
     try {
         firebase.auth().signInWithCustomToken(JSON.stringify(req.body.token))
             .then((userCredential) => {
-                var user = userCredential.user;
-                res.json({ user: user });
+                firebase.auth().currentUser.getIdToken(true)
+                    .then((token) => {
+                        res.json({ user: token });
+                    })
             })
     } catch (error) {
         console.log('Error signing in user, please try again. \n' + error);
         res.status(400).send(error.message);
+    }
+}
+
+const signOut = async (req, res, next) => {
+    try {
+        firebase.auth().signOut()
+        .then(() => {
+            console.log('User signed out!');
+            res.json({ code: 200 });
+        })
+    } catch (error) {
+        console.log('There was an error signing out, please try again. \n' + error);
     }
 }
 
@@ -21,8 +34,9 @@ const addUser = async (req, res, next) => {
         const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.set({
             username: JSON.stringify(req.body.user),
-            refreshToken: JSON.stringify(req.body.refreshToken)
-        })
+            refreshToken: JSON.stringify(req.body.refreshToken),
+            topGenres: null
+        }, { merge: true });
         res.send('User added successfully!');
     } catch (error) {
         console.log('Error initializing the user for the first time, please try again. \n' + error);
@@ -35,16 +49,17 @@ const saveUserGenres = async (req, res, next) => {
         const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.set({
             topGenres: req.body.genres
-        })
+        }, { merge: true });
         res.send('User added successfully!');
     } catch (error) {
-        console.log('Error initializing the user for the first time, please try again. \n' + error);
+        console.log('Error saving user genres, please try again. \n' + error);
         res.status(400).send(error.message);
     }
 }
 
 module.exports = {
     signIn,
+    signOut,
     addUser,
     saveUserGenres
 }

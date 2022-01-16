@@ -73,7 +73,7 @@ function Login({ navigation }) {
 
     const initUser = async (user, refreshToken) => {
         try {
-            await fetch("http://192.168.0.14:19001/database/login/initUser", {
+            await fetch("http://192.168.0.14:19001/database/login/addUser", {
                 method: 'post',
                 headers: {
                     Accept: 'application/json',
@@ -173,22 +173,25 @@ function Login({ navigation }) {
         await promptAsync()
             .then((res) => {
                 if (res && res.type === 'success') {
+                    console.log(res);
                     requestAccessToken(res.params.code)
                         .then(res => res.json())
                         .then(data => {
-                            const token = data.accessToken;
-                            AsyncStorage.setItem('spotify_access_token', token);
-                            getUserData(token)
+                            const accessToken = data.accessToken;
+                            const refreshToken = data.refreshToken;
+                            AsyncStorage.setItem('spotify_access_token', accessToken);
+                            AsyncStorage.setItem('spotify_refresh_token', refreshToken);
+                            getUserData(accessToken)
                                 .then(res => res.json())
                                 .then(data => {
                                     const userId = data.id;
-                                    initUser(userId, token);
+                                    initUser(userId, accessToken);
                                     loginUser(userId);
-                                    getUserGenres(token)
+                                    getUserGenres(accessToken)
                                         .then((res) => res.json())
                                         .then(data => {
                                             saveUserGenres(userId, data.topGenres);
-                                            navigation.navigate('Home', { navigation: navigation });
+                                            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
                                         })
                                 })
                                 .catch((error) => {
