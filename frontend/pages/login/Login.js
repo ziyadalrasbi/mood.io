@@ -1,17 +1,28 @@
 import * as React from 'react';
 import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
-import { View, Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-paper';
 import LoginStyles from './LoginStyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-var SpotifyWebApi = require('spotify-web-api-node');
+import * as SecureStore from 'expo-secure-store';
+import spotifylogo from '../../../assets/icons/login/spotifylogo.png';
+import { useFonts } from 'expo-font';
+import CustomCarousel from '../../components/carousel/CustomCarousel';
 
 function Login({ navigation }) {
-    // Endpoint
+    
     const discovery = {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
         tokenEndpoint: 'https://accounts.spotify.com/api/token',
     };
+
+    const [loaded] = useFonts({
+        InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+        InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
+        InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
+        InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
+        InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
+    });
+
 
     const [refreshToken, setRefreshToken] = React.useState(null);
     const [userName, setUserName] = React.useState(null);
@@ -48,7 +59,7 @@ function Login({ navigation }) {
                 .then((res) => res.json())
                 .then(data => {
                     const tempToken = data.token;
-                    AsyncStorage.setItem('database_access_token', tempToken);
+                    SecureStore.setItemAsync('database_access_token', tempToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                     return fetch("http://192.168.0.14:19001/database/login/signIn", {
                         method: 'post',
                         headers: {
@@ -178,9 +189,10 @@ function Login({ navigation }) {
                         .then(res => res.json())
                         .then(data => {
                             const accessToken = data.accessToken;
+                            console.log(accessToken);
                             const refreshToken = data.refreshToken;
-                            AsyncStorage.setItem('spotify_access_token', accessToken);
-                            AsyncStorage.setItem('spotify_refresh_token', refreshToken);
+                            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                            SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                             getUserData(accessToken)
                                 .then(res => res.json())
                                 .then(data => {
@@ -203,9 +215,21 @@ function Login({ navigation }) {
             });
     }
 
+    if (!loaded) {
+        return (
+            <View>
+                <Text>Loading...</Text>
+            </View>
+        )
+    }
+
     return (
-        <View style={LoginStyles.topContainer}>
-            <Button onPress={onPressLogin} title="Login" />
+        <View style={LoginStyles.mainContainer}>
+            <View style={{ alignItems: 'center' }}>
+            </View>
+            <View style={LoginStyles.bottomContainer}>
+                <CustomCarousel onPressLogin={onPressLogin} />
+            </View>
         </View>
 
     );

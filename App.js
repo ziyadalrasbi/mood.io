@@ -6,7 +6,7 @@ import Login from './frontend/pages/login/Login';
 import Home from './frontend/pages/home/Home';
 import Upload from './frontend/pages/upload/Upload';
 import Results from './frontend/pages/results/Results';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import HomeStyles from './frontend/pages/home/HomeStyles';
 import { Text, View, Image, ScrollView } from 'react-native';
 
@@ -19,8 +19,8 @@ function App({ navigation }) {
 
     React.useEffect(() => {
         const fetchData = async () => {
-            const spotifyAccessToken = await AsyncStorage.getItem('spotify_access_token');
-            const spotifyRefreshToken = await AsyncStorage.getItem('spotify_refresh_token');
+            const spotifyAccessToken = await SecureStore.getItemAsync('spotify_access_token');
+            const spotifyRefreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
             if (spotifyAccessToken != null) {
                 try {
                     await fetch("http://192.168.0.14:19001/spotify/login/refreshAccessToken", {
@@ -37,7 +37,7 @@ function App({ navigation }) {
                         .then(res => res.json())
                         .then(data => {
                             if (data.token != "Null") {
-                                AsyncStorage.setItem('spotify_access_token', data.token);
+                                SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                                 setVerified(true);
                             }
                         })

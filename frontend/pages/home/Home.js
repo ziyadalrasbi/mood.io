@@ -4,8 +4,8 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import HomeStyles from './HomeStyles';
+import * as SecureStore from 'expo-secure-store';
 import Navbar from '../../components/navbar/Navbar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 
 function Home({ navigation }) {
@@ -36,7 +36,7 @@ function Home({ navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = await AsyncStorage.getItem('spotify_access_token');
+      const token = await SecureStore.getItemAsync('spotify_access_token');
       if (token != null) {
         try {
           await fetch("http://192.168.0.14:19001/spotify/home/getTopArtists", {
@@ -132,10 +132,9 @@ function Home({ navigation }) {
 
   const signOut = async () => {
     try {
-      await AsyncStorage.removeItem('spotify_access_token');
-      await AsyncStorage.removeItem('spotify_refresh_token');
-      await AsyncStorage.removeItem('database_access_token');
-      await AsyncStorage.removeItem('database_refresh_token');
+      await SecureStore.deleteItemAsync('spotify_access_token');
+      await SecureStore.deleteItemAsync('spotify_refresh_token');
+      await SecureStore.deleteItemAsync('database_access_token');
       await fetch("http://192.168.0.14:19001/database/login/signOut", {
         method: 'post',
         headers: {
@@ -209,10 +208,10 @@ function Home({ navigation }) {
           </Text>
           <View style={HomeStyles.topArtistsContainer}>
             {topArtistsOne != null ? Object.keys(topArtistsOne).map((artist, index) =>
-              <View>
+              <View key={index}>
                 {topArtistsOne[artist].map((artist2, i) =>
                   artist2[1] != null &&
-                  <View>
+                  <View key={i}>
                     <Text style={HomeStyles.topArtistText}>{artist2[0]}</Text>
                     <Image
                       style={{ width: 100, height: 100 }}
@@ -226,10 +225,10 @@ function Home({ navigation }) {
           </View>
           <View style={HomeStyles.topArtistsContainer}>
             {topArtistsTwo != null ? Object.keys(topArtistsTwo).map((artist, index) =>
-              <View>
+              <View key={index}>
                 {topArtistsTwo[artist].map((artist2, i) =>
                   artist2[1] != null &&
-                  <View>
+                  <View key={i}>
                     <Text style={HomeStyles.topArtistText}>{artist2[0]}</Text>
                     <Image
                       style={{ width: 100, height: 100 }}
@@ -250,11 +249,11 @@ function Home({ navigation }) {
             your top tracks in the past 6 months
           </Text>
           <View style={HomeStyles.topTracksContainer}>
-            {topTracksOne != null ? Object.keys(topTracksOne).map((track) =>
-              <View>
+            {topTracksOne != null ? Object.keys(topTracksOne).map((track, index) =>
+              <View key={index}>
                 {topTracksOne[track].map((track2, i) =>
                   track2[2] != null &&
-                  <View>
+                  <View key={i}>
                     <Text style={HomeStyles.topTrackText}>{track2[0]}</Text>
                     <Text style={HomeStyles.topTrackArtistText}>by {track2[1]}</Text>
                     <Image
@@ -267,11 +266,11 @@ function Home({ navigation }) {
             ) : <Text style={HomeStyles.topTrackText}>Loading...</Text>}
           </View>
           <View style={HomeStyles.topTracksContainer}>
-            {topTracksTwo != null ? Object.keys(topTracksTwo).map((track) =>
-              <View>
+            {topTracksTwo != null ? Object.keys(topTracksTwo).map((track, index) =>
+              <View key={index}>
                 {topTracksTwo[track].map((track2, i) =>
                   track2[2] != null &&
-                  <View>
+                  <View key={i}>
                     <Text style={HomeStyles.topTrackText}>{track2[0]}</Text>
                     <Text style={HomeStyles.topTrackArtistText}>by {track2[1]}</Text>
                     <Image
