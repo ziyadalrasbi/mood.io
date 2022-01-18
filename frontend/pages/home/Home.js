@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import HomeStyles from './HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import Navbar from '../../components/navbar/Navbar';
 import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
+import * as Linking from 'expo-linking';
 
 function Home({ navigation }) {
 
@@ -53,9 +54,6 @@ function Home({ navigation }) {
             .then(data => {
               if (data != null) {
                 setTopArtists(data.artistNames);
-                const half = Math.ceil(Object.entries(topArtists).length / 2);
-                setTopArtistsOne(Object.entries(topArtists).slice(0, half));
-                setTopArtistsTwo(Object.entries(topArtists).slice(-half));
               }
             })
           await fetch("http://192.168.0.14:19001/spotify/home/getName", {
@@ -87,9 +85,6 @@ function Home({ navigation }) {
               if (data != null) {
                 setTopTracks(data.topTracks);
                 setTrackIds(data.trackIds);
-                const half = Math.ceil(Object.keys(topTracks).length / 2);
-                setTopTracksOne(Object.entries(topTracks).slice(0, half));
-                setTopTracksTwo(Object.entries(topTracks).slice(-half));
               }
             })
             .then(() => {
@@ -142,9 +137,9 @@ function Home({ navigation }) {
           'Content-Type': 'application/json',
         },
       })
-      .then(() => {
-        navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
-      })
+        .then(() => {
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+        })
     } catch (error) {
       console.log(error);
       throw error;
@@ -152,7 +147,7 @@ function Home({ navigation }) {
   }
 
   return (
-    <ScrollView style={HomeStyles.scroll}>
+    <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
       <View style={HomeStyles.mainContainer}>
         <View style={HomeStyles.topContainer}>
           <Navbar scan={true} navigation={navigation} />
@@ -206,83 +201,43 @@ function Home({ navigation }) {
           <Text style={HomeStyles.thirdSubHeader}>
             your top artists in the past 6 months
           </Text>
-          <View style={HomeStyles.topArtistsContainer}>
-            {topArtistsOne != null ? Object.keys(topArtistsOne).map((artist, index) =>
+          <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+            {topArtists != null ? topArtists.map((artist, index) =>
               <View key={index}>
-                {topArtistsOne[artist].map((artist2, i) =>
-                  artist2[1] != null &&
-                  <View key={i}>
-                    <Text style={HomeStyles.topArtistText}>{artist2[0]}</Text>
-                    <Image
-                      style={{ width: 100, height: 100 }}
-                      source={{ uri: artist2[1] }}
-                    />
-                  </View>
-                )}
+                <TouchableOpacity onPress={() => Linking.openURL(artist[2])}>
+                  <Image
+                    style={HomeStyles.topTrackArtistImage}
+                    source={{ uri: artist[1] }}
+                  />
+                </TouchableOpacity>
+                <Text style={HomeStyles.topArtistText}>{artist[0]}</Text>
               </View>
 
             ) : <Text style={HomeStyles.topArtistText}>Loading...</Text>}
-          </View>
-          <View style={HomeStyles.topArtistsContainer}>
-            {topArtistsTwo != null ? Object.keys(topArtistsTwo).map((artist, index) =>
-              <View key={index}>
-                {topArtistsTwo[artist].map((artist2, i) =>
-                  artist2[1] != null &&
-                  <View key={i}>
-                    <Text style={HomeStyles.topArtistText}>{artist2[0]}</Text>
-                    <Image
-                      style={{ width: 100, height: 100 }}
-                      source={{ uri: artist2[1] }}
-                    />
-                  </View>
-                )}
-              </View>
-            ) : <Text style={HomeStyles.topArtistText}>Loading...</Text>}
-          </View>
-          <View style={{ height: 20 }} />
+          </ScrollView>
         </View>
         <View style={HomeStyles.fourthContainer}>
-          <Text style={HomeStyles.thirdHeader}>
+          <Text style={HomeStyles.fourthHeader}>
             your top tracks
           </Text>
-          <Text style={HomeStyles.thirdSubHeader}>
+          <Text style={HomeStyles.fourthSubHeader}>
             your top tracks in the past 6 months
           </Text>
-          <View style={HomeStyles.topTracksContainer}>
-            {topTracksOne != null ? Object.keys(topTracksOne).map((track, index) =>
+          <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+            {topTracks != null ? topTracks.map((track, index) =>
               <View key={index}>
-                {topTracksOne[track].map((track2, i) =>
-                  track2[2] != null &&
-                  <View key={i}>
-                    <Text style={HomeStyles.topTrackText}>{track2[0]}</Text>
-                    <Text style={HomeStyles.topTrackArtistText}>by {track2[1]}</Text>
-                    <Image
-                      style={{ width: 150, height: 150 }}
-                      source={{ uri: track2[2] }}
-                    />
-                  </View>
-                )}
+                <TouchableOpacity onPress={() => Linking.openURL(track[3])}>
+                  <Image
+                    style={HomeStyles.topTrackImage}
+                    source={{ uri: track[2] }}
+                  />
+                </TouchableOpacity>
+                <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
+                <Text style={HomeStyles.topTrackArtistText}>by {track[1]}</Text>
               </View>
             ) : <Text style={HomeStyles.topTrackText}>Loading...</Text>}
-          </View>
-          <View style={HomeStyles.topTracksContainer}>
-            {topTracksTwo != null ? Object.keys(topTracksTwo).map((track, index) =>
-              <View key={index}>
-                {topTracksTwo[track].map((track2, i) =>
-                  track2[2] != null &&
-                  <View key={i}>
-                    <Text style={HomeStyles.topTrackText}>{track2[0]}</Text>
-                    <Text style={HomeStyles.topTrackArtistText}>by {track2[1]}</Text>
-                    <Image
-                      style={{ width: 150, height: 150 }}
-                      source={{ uri: track2[2] }}
-                    />
-                  </View>
-                )}
-              </View>
-            ) : <Text style={HomeStyles.topTrackText}>Loading...</Text>}
-          </View>
-          <View style={{ height: 20 }} />
+          </ScrollView>
+          <View style={{ height: 30 }} />
         </View>
         <StatusBar style="auto" />
       </View>

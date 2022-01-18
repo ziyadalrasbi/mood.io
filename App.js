@@ -54,30 +54,32 @@ function App({ navigation }) {
                         .then(res => res.json())
                         .then(data => {
                             setUserId(data.id);
-                            fetch("http://192.168.0.14:19001/spotify/login/getUserTopGenres", {
-                                method: 'post',
-                                headers: {
-                                    Accept: 'application/json',
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    token: spotifyAccessToken
-                                })
-                            })
-                                .then(res => res.json())
-                                .then(data => {
-                                    fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
-                                        method: 'post',
-                                        headers: {
-                                            Accept: 'application/json',
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({
-                                            user: userId,
-                                            genres: data.topGenres
-                                        })
+                            if (userId != null) {
+                                fetch("http://192.168.0.14:19001/spotify/login/getUserTopGenres", {
+                                    method: 'post',
+                                    headers: {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        token: spotifyAccessToken
                                     })
                                 })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
+                                            method: 'post',
+                                            headers: {
+                                                Accept: 'application/json',
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                                user: userId != null && userId,
+                                                genres: data.topGenres
+                                            })
+                                        })
+                                    })
+                            }
                         })
 
 
@@ -102,7 +104,6 @@ function App({ navigation }) {
     }
 
     return (
-
         <NavigationContainer>
             <Stack.Navigator
                 initialRouteName={!loading && verified == true ? 'Home' : 'Login'}

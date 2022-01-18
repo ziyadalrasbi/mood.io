@@ -44,6 +44,7 @@ export default StyleSheet.create({
     firstHeader: {
       marginTop: 5,
       fontFamily: 'InconsolataBlack',
+      color: '#191414',
       fontSize: 17,
       padding: 10,
       marginBottom: -10
@@ -73,6 +74,7 @@ export default StyleSheet.create({
     secondHeader: {
       marginTop: 5,
       fontFamily: 'InconsolataBlack',
+      color: '#191414',
       fontSize: 17,
       padding: 10,
       marginBottom: -10
@@ -109,6 +111,7 @@ export default StyleSheet.create({
       marginTop: 5,
       marginBottom: -10,
       fontFamily: 'InconsolataBlack',
+      color: '#191414',
       fontSize: 17,
       padding: 10,
     },
@@ -119,21 +122,22 @@ export default StyleSheet.create({
       color: 'grey'
     },
     topArtistsContainer: {
-      padding: 10,
+      marginHorizontal: 10,
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
-      justifyContent: 'space-evenly'
     },
     topArtistText: {
       fontFamily: 'InconsolataSemiExpanded',
       color: 'blue',
       alignSelf: 'center',
       textAlign: 'center',
+      marginTop: 10,
       marginBottom: 5,
-      fontSize: 12,
+      fontSize: 13,
       fontStyle: 'italic',
-      maxWidth: 130
+      maxWidth: 130,
+      marginRight: 20,
     },
     fourthContainer: {
       position: 'relative',
@@ -147,6 +151,7 @@ export default StyleSheet.create({
       marginTop: 5,
       marginBottom: -10,
       fontFamily: 'InconsolataBlack',
+      color: '#191414',
       fontSize: 17,
       padding: 10,
     },
@@ -174,20 +179,37 @@ export default StyleSheet.create({
       fontFamily: 'InconsolataSemiExpanded',
       color: 'red',
       alignSelf: 'center',
+      textAlign: 'center',
+      marginTop: 8,
       marginBottom: 5,
       fontSize: 12,
       fontStyle: 'italic',
-      maxWidth: 200
+      maxWidth: 150,
+      marginRight: 20
     },
     topTrackArtistText: {
       fontFamily: 'InconsolataSemiExpanded',
       color: 'grey',
       alignSelf: 'center',
       textAlign: 'center',
-      marginBottom: 5,
       fontSize: 12,
       fontStyle: 'italic',
-      maxWidth: 150
+      maxWidth: 150,
+      marginRight: 20
+    },
+    topTrackArtistImage: {
+      width: 120,
+      height: 120,
+      marginRight: 20,
+      marginTop: 10,
+      borderRadius: 100
+    },
+    topTrackImage: {
+      width: 150,
+      height: 150,
+      marginRight: 20,
+      marginTop: 10,
+      borderRadius: 20
     },
     mainContainer: {
       flex: 1,
