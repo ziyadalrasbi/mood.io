@@ -14,11 +14,14 @@ function App({ navigation }) {
 
     const Stack = createNativeStackNavigator();
     const [verified, setVerified] = React.useState(false);
-    const [userId, setUserId] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
+
+    const [length, setLength] = React.useState(0);
 
     React.useEffect(() => {
         const fetchData = async () => {
+            var tempId;
+            var token;
             const spotifyAccessToken = await SecureStore.getItemAsync('spotify_access_token');
             const spotifyRefreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
             if (spotifyAccessToken != null) {
@@ -37,6 +40,7 @@ function App({ navigation }) {
                         .then(res => res.json())
                         .then(data => {
                             if (data.token != "Null") {
+                                token = data.token;
                                 SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                                 setVerified(true);
                             }
@@ -48,41 +52,40 @@ function App({ navigation }) {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            token: spotifyAccessToken
+                            token: token
                         })
                     })
                         .then(res => res.json())
                         .then(data => {
-                            setUserId(data.id);
-                            if (userId != null) {
-                                fetch("http://192.168.0.14:19001/spotify/login/getUserTopGenres", {
-                                    method: 'post',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({
-                                        token: spotifyAccessToken
-                                    })
-                                })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
-                                            method: 'post',
-                                            headers: {
-                                                Accept: 'application/json',
-                                                'Content-Type': 'application/json',
-                                            },
-                                            body: JSON.stringify({
-                                                user: userId != null && userId,
-                                                genres: data.topGenres
-                                            })
-                                        })
-                                    })
-                            }
+                            tempId = data.id;
                         })
+                    await fetch("http://192.168.0.14:19001/spotify/login/getUserTopGenres", {
+                        method: 'post',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            token: token
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            var tempLength = Object.keys(data.topGenres).length;
+                            setLength(tempLength);
+                            fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
+                                method: 'post',
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    user: tempId,
+                                    genres: data.topGenres
+                                })
+                            })
 
-
+                        })
                 } catch (error) {
                     console.log('Error fetching home data, please try again. \n' + error);
                 }
@@ -107,10 +110,11 @@ function App({ navigation }) {
         <NavigationContainer>
             <Stack.Navigator
                 initialRouteName={!loading && verified == true ? 'Home' : 'Login'}
+                initialParams={loading}
                 screenOptions={{ headerShown: false }}
             >
-                <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='Login' component={Login}  />
+                <Stack.Screen name='Home' component={Home} initialParams={length > 0 ? {new: false} : {new: true}} />
                 <Stack.Screen name='Upload' component={Upload} />
                 <Stack.Screen name='Results' component={Results} />
             </Stack.Navigator>

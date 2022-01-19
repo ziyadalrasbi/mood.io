@@ -225,7 +225,10 @@ function Login({ navigation }) {
 
     return (
         <View style={LoginStyles.mainContainer}>
-            <View style={{ alignItems: 'center' }}>
+            <View style={LoginStyles.logo}>
+                <Text>
+                LOGO HERE
+                </Text>
             </View>
             <View style={LoginStyles.bottomContainer}>
                 <CustomCarousel onPressLogin={onPressLogin} />

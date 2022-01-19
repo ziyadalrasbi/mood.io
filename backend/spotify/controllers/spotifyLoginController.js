@@ -21,8 +21,6 @@ const refreshAccessToken = async (req, res, next) => {
         clientSecret: "830caf99293c4da0a262ce0ea53009b5",
         redirectUri: "exp://192.168.0.14:19000"
     })
-    console.log(JSON.stringify(req.body.refreshToken));
-    console.log(JSON.stringify(req.body.accessToken));
     if (req.body.refreshToken != null) {
         spotifyApi.setAccessToken(req.body.accessToken);
         spotifyApi.setRefreshToken(req.body.refreshToken);
@@ -50,7 +48,6 @@ const getUserId = async (req, res, next) => {
 const getUserTopGenres = async (req, res, next) => {
     var topGenres = [];
     await api.setAccessToken(req.body.token);
-
     await api.getMyTopArtists({ limit: 10, time_range: 'medium_term' })
         .then((data) => {
             if (data.body.items[0] != null) {

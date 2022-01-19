@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   topContainer: {
@@ -6,9 +8,9 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: '30%',
+    height: 280,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '#2e41b3',
   },
   subTop: {
@@ -22,15 +24,16 @@ export default StyleSheet.create({
   },
   title: {
     padding: 10,
+    marginTop: 120,
     fontFamily: 'InconsolataBold',
     color: 'white',
-    fontSize: 50
+    fontSize: width / 13.8
   },
   subText: {
     padding: 10,
     fontFamily: 'InconsolataLight',
     color: 'white',
-    fontSize: 26
+    fontSize: width / 21.7894737
   },
   uploadContainer: {
     position: 'relative',
@@ -60,13 +63,14 @@ export default StyleSheet.create({
     backgroundColor: '#461ad6'
   },
   mainContainer: {
+    position: 'relative',
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     flexDirection: 'column',
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'flex-start',
-    backgroundColor: 'rgba(41, 67, 227, 0.3)'
+    height: '100%'
   },
   mainFont: {
     fontFamily: 'InconsolataMedium',

@@ -19,4 +19,8 @@ export default StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-end'
   },
+  logo: {
+    flex: 1,
+    justifyContent: 'center'
+  }
 });

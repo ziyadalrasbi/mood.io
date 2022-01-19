@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import HomeStyles from './HomeStyles';
@@ -8,20 +8,17 @@ import * as SecureStore from 'expo-secure-store';
 import Navbar from '../../components/navbar/Navbar';
 import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 import * as Linking from 'expo-linking';
+import GenreModal from '../../components/genremodal/GenreModal';
+import GenreSelect from '../../components/genreselect/GenreSelect';
 
-function Home({ navigation }) {
+function Home({ navigation, route }) {
 
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
 
   const [topArtists, setTopArtists] = useState({ topArtists: [] });
-  const [topArtistsOne, setTopArtistsOne] = useState({ topArtistsOne: [] });
-  const [topArtistsTwo, setTopArtistsTwo] = useState({ topArtistsTwo: [] });
-
   const [topTracks, setTopTracks] = useState({ topTracks: [] });
-  const [topTracksOne, setTopTracksOne] = useState({ topTracksOne: [] });
-  const [topTracksTwo, setTopTracksTwo] = useState({ topTracksTwo: [] });
 
   const [trackIds, setTrackIds] = useState({ trackIds: [] });
   const [habits, setHabits] = useState({ habits: [] });
@@ -37,6 +34,7 @@ function Home({ navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(route.params.new);
       const token = await SecureStore.getItemAsync('spotify_access_token');
       if (token != null) {
         try {
@@ -161,6 +159,7 @@ function Home({ navigation }) {
         <View style={HomeStyles.subTop}>
         </View>
         <View style={HomeStyles.firstContainer}>
+        <GenreModal data ={route.params.new}/>
           <Text style={HomeStyles.firstHeader}>
             let's find some new music!
           </Text>
@@ -202,7 +201,7 @@ function Home({ navigation }) {
             your top artists in the past 6 months
           </Text>
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
-            {topArtists != null ? topArtists.map((artist, index) =>
+            {topArtists.length > 0 && topArtists.map((artist, index) =>
               <View key={index}>
                 <TouchableOpacity onPress={() => Linking.openURL(artist[2])}>
                   <Image
@@ -212,9 +211,13 @@ function Home({ navigation }) {
                 </TouchableOpacity>
                 <Text style={HomeStyles.topArtistText}>{artist[0]}</Text>
               </View>
-
-            ) : <Text style={HomeStyles.topArtistText}>Loading...</Text>}
+            )}
           </ScrollView>
+          {topArtists.length == 0 &&
+            <Text style={HomeStyles.noDataText}>
+              It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+              and come back at a later date to view this data!
+            </Text>}
         </View>
         <View style={HomeStyles.fourthContainer}>
           <Text style={HomeStyles.fourthHeader}>
@@ -224,7 +227,7 @@ function Home({ navigation }) {
             your top tracks in the past 6 months
           </Text>
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
-            {topTracks != null ? topTracks.map((track, index) =>
+            {topTracks.length > 0 && topTracks.map((track, index) =>
               <View key={index}>
                 <TouchableOpacity onPress={() => Linking.openURL(track[3])}>
                   <Image
@@ -235,8 +238,14 @@ function Home({ navigation }) {
                 <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
                 <Text style={HomeStyles.topTrackArtistText}>by {track[1]}</Text>
               </View>
-            ) : <Text style={HomeStyles.topTrackText}>Loading...</Text>}
+            )}
           </ScrollView>
+          {topTracks.length == 0 &&
+            <Text style={HomeStyles.noDataText}>
+              It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+              and come back at a later date to view this data!
+            </Text>
+          }
           <View style={{ height: 30 }} />
         </View>
         <StatusBar style="auto" />

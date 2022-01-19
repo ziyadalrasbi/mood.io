@@ -68,8 +68,9 @@ function Upload({ navigation }) {
 
   return (
     <View style={UploadStyles.mainContainer}>
+      
       <View style={UploadStyles.topContainer}>
-        <Navbar scan={false} />
+      <Navbar scan={false} />
         <Text style={UploadStyles.title}>
           scan your mood
         </Text>
