@@ -45,7 +45,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
   },
   firstHeader: {
-    marginTop: 5,
     fontFamily: 'InconsolataBold',
     color: '#191414',
     fontSize: 15,

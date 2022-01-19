@@ -148,7 +148,7 @@ function Home({ navigation, route }) {
     <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
       <View style={HomeStyles.mainContainer}>
         <View style={HomeStyles.topContainer}>
-          <Navbar scan={true} navigation={navigation} />
+          <Navbar scan={true} signOut={signOut} />
           <Text style={HomeStyles.welcome}>
             welcome, {name}!
           </Text>
@@ -159,7 +159,7 @@ function Home({ navigation, route }) {
         <View style={HomeStyles.subTop}>
         </View>
         <View style={HomeStyles.firstContainer}>
-        <GenreModal data ={route.params.new}/>
+        <GenreModal data={route.params.new} seeds={route.params.genreSeeds}/>
           <Text style={HomeStyles.firstHeader}>
             let's find some new music!
           </Text>
@@ -174,15 +174,6 @@ function Home({ navigation, route }) {
             onPress={() => navigation.navigate('Upload', { navigation: navigation })}
           >
             get started
-          </Button>
-          <Button
-            style={HomeStyles.startButton}
-            uppercase={false}
-            mode="contained"
-            labelStyle={HomeStyles.mainFont}
-            onPress={() => signOut()}
-          >
-            sign out
           </Button>
         </View>
         <View style={HomeStyles.secondContainer}>

@@ -17,11 +17,12 @@ function App({ navigation }) {
     const [loading, setLoading] = React.useState(true);
 
     const [length, setLength] = React.useState(0);
-
+    const [genreSeeds, setGenreSeeds] = React.useState(null);
     React.useEffect(() => {
         const fetchData = async () => {
             var tempId;
             var token;
+            var l;
             const spotifyAccessToken = await SecureStore.getItemAsync('spotify_access_token');
             const spotifyRefreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
             if (spotifyAccessToken != null) {
@@ -72,6 +73,7 @@ function App({ navigation }) {
                         .then(res => res.json())
                         .then(data => {
                             var tempLength = Object.keys(data.topGenres).length;
+                            l = tempLength;
                             setLength(tempLength);
                             fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
                                 method: 'post',
@@ -86,41 +88,56 @@ function App({ navigation }) {
                             })
 
                         })
+                    await fetch("http://192.168.0.14:19001/spotify/login/getGenreSeeds", {
+                        method: 'post',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            token: token
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            var genres = data.genreSeeds;
+                            setGenreSeeds(genres);
+                        })
                 } catch (error) {
-                    console.log('Error fetching home data, please try again. \n' + error);
-                }
+                console.log('Error fetching home data, please try again. \n' + error);
             }
         }
-        fetchData().then(() => setLoading(false));
-    }, [loading])
-
-    if (loading) {
-        return (
-            <View style={HomeStyles.mainContainer}>
-                <View style={HomeStyles.topContainer}>
-                    <Text style={HomeStyles.welcome}>
-                        moodio...
-                    </Text>
-                </View>
-            </View>
-        );
     }
+        fetchData().then(() => setLoading(false));
+}, [loading])
 
+if (loading) {
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName={!loading && verified == true ? 'Home' : 'Login'}
-                initialParams={loading}
-                screenOptions={{ headerShown: false }}
-            >
-                <Stack.Screen name='Login' component={Login}  />
-                <Stack.Screen name='Home' component={Home} initialParams={length > 0 ? {new: false} : {new: true}} />
-                <Stack.Screen name='Upload' component={Upload} />
-                <Stack.Screen name='Results' component={Results} />
-            </Stack.Navigator>
-        </NavigationContainer>
-
+        <View style={HomeStyles.mainContainer}>
+            <View style={HomeStyles.topContainer}>
+                <Text style={HomeStyles.welcome}>
+                    moodio...
+                </Text>
+            </View>
+        </View>
     );
+}
+
+return (
+    <NavigationContainer>
+        <Stack.Navigator
+            initialRouteName={!loading && verified == true ? 'Home' : 'Login'}
+            initialParams={loading}
+            screenOptions={{ headerShown: false }}
+        >
+            <Stack.Screen name='Login' component={Login} />
+            <Stack.Screen name='Home' component={Home} initialParams={length > 0 ? { new: false } : { new: true, genreSeeds: genreSeeds.length > 0 && genreSeeds  }} />
+            <Stack.Screen name='Upload' component={Upload} />
+            <Stack.Screen name='Results' component={Results} />
+        </Stack.Navigator>
+    </NavigationContainer>
+
+);
 }
 
 export default App;

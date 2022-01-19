@@ -3,9 +3,9 @@ import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } fro
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import GenreModalStyles from './GenreModalStyles';
+import GenreSelect from '../genreselect/GenreSelect';
 
-
-function GenreModal({ data }) {
+function GenreModal({ data, seeds }) {
 
     const [modalVisible, setModalVisible] = useState(data);
     
@@ -14,7 +14,7 @@ function GenreModal({ data }) {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={modalVisible}
+              visible={!modalVisible}
               onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
                 setModalVisible(!modalVisible);
@@ -25,13 +25,11 @@ function GenreModal({ data }) {
                   <Text style={GenreModalStyles.modalSubText}>It seems that you have signed in with a new or unused Spotify account, so we could not find your top genres. 
                   Before proceeding, please enter your preferred genres below (this is a one time setup). After using Spotify more, 
                   we can extract your top genres automatically!</Text>
-                  <Button
-                    style={[GenreModalStyles.button, GenreModalStyles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={GenreModalStyles.textStyle}>Hide Modal</Text>
-                  </Button>
+                  <GenreSelect seeds={seeds} />
                 </View>
+                
               </View>
+              
             </Modal>
             {/* <Pressable style={[GenreModalStyles.button, GenreModalStyles.buttonOpen]} onPress={() => setModalVisible(true)}>
               <Text style={GenreModalStyles.textStyle}>Show Modal</Text>

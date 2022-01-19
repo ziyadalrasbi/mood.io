@@ -4,13 +4,13 @@ import NavbarStyles from './NavbarStyles';
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 
-function Navbar({ scan, navigation }) {
+function Navbar({ scan, signOut }) {
 
   return (
     <View style={NavbarStyles.topBar}>
       <Image style={NavbarStyles.hamburger} source={hamburger} />
       {scan == true ?
-        <TouchableOpacity onPress={() => navigation.navigate('Upload')}>
+        <TouchableOpacity onPress={() => signOut()}>
           <Image style={NavbarStyles.scan} source={scanimg} />
         </TouchableOpacity>
         : null}

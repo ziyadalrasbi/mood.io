@@ -23,6 +23,7 @@ centeredView: {
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    height: 345
   },
   button: {
     borderRadius: 20,

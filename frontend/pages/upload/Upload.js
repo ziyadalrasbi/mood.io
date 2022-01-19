@@ -83,7 +83,7 @@ function Upload({ navigation }) {
         {selectedImage != null &&
           <Image
             style={UploadStyles.selectedImage}
-            source={{ uri: selectedImage.uri != null && selectedImage.uri }}
+            source={{ uri: selectedImage.uri != "" && selectedImage.uri }}
           />
         }
       </View>

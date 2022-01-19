@@ -70,9 +70,28 @@ const getUserTopGenres = async (req, res, next) => {
         }
 }
 
+const getGenreSeeds = async (req, res, next) => {
+    var genreSeeds = [];
+    await api.setAccessToken(req.body.token);
+    await api.getAvailableGenreSeeds()
+    .then((data) => {
+        for (let i = 0; i < data.body.genres.length; i++) {
+            var tempGenre = {
+                id: i,
+                title: data.body.genres[i]
+            }
+            genreSeeds.push(tempGenre);
+        }
+        res.json({ genreSeeds: genreSeeds });
+    }), function (err) {
+        console.log('There was an error getting the available genre seeds, please try again. \n', err);
+    }
+}
+
 module.exports = {
     requestAccessToken,
     refreshAccessToken,
     getUserId,
-    getUserTopGenres
+    getUserTopGenres,
+    getGenreSeeds
 }
