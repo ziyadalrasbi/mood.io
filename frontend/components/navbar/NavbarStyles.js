@@ -8,17 +8,17 @@ export default StyleSheet.create({
         justifyContent: 'space-evenly',
         backgroundColor: 'transparent',
         position: 'absolute',
-        marginLeft: 10,
-        marginTop: 55
+        marginLeft: width/41.4,
+        marginTop: height/16.2909091
     },
     hamburger: {
-        width: 30,
-        height: 40,
+        width: width/13.8,
+        height: height/22.4,
         backgroundColor: 'transparent',
     },
     scan: {
-        width: 30,
-        height: 40,
+        width:  width/13.8,
+        height: height/22.4,
         backgroundColor: 'transparent',
         marginLeft: width/ 1.25454545
     }

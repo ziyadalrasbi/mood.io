@@ -81,7 +81,8 @@ function App({ navigation }) {
                                     },
                                     body: JSON.stringify({
                                         user: tempId,
-                                        genres: data.topGenres
+                                        genres: data.topGenres,
+                                        artists: data.topArtists
                                     })
                                 })
                             } else {

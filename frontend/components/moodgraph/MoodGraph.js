@@ -2,6 +2,7 @@ import { PieChart } from "react-native-chart-kit";
 import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import MoodGraphStyles from "./MoodGraphStyles";
+const { width, height } = Dimensions.get('window');
 
 function MoodGraph({ data }) {
 
@@ -13,7 +14,7 @@ function MoodGraph({ data }) {
         color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
+        useShadowColorFromDataset: false, // optional,
     };
 
     return (
@@ -21,8 +22,8 @@ function MoodGraph({ data }) {
             <View style={MoodGraphStyles.topContainer}>
                 <PieChart
                     data={data}
-                    width={Dimensions.get('window').width}
-                    height={180}
+                    width={width}
+                    height={width/2.3}
                     center={[Dimensions.get('window').width * 0.5, 300]}
                     accessor='percentage'
                     chartConfig={chartConfig}
@@ -34,7 +35,7 @@ function MoodGraph({ data }) {
                 <PieChart
                     data={data}
                     width={Dimensions.get('window').width}
-                    height={200}
+                    height={width/2.07}
                     center={[Dimensions.get('window').width * 0.03, 0]}
                     accessor='percentage'
                     chartConfig={chartConfig}

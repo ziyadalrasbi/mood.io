@@ -13,27 +13,18 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: 'transparent',
   },
-  subTop: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2.5%',
-    width: '100%',
-    backgroundColor: '#2943e3',
-  },
   title: {
-    marginLeft: 10,
-    fontFamily: 'InconsolataBold',
-    marginTop: 120,
+    marginLeft: width/41.4,
+    fontFamily: 'MontserratBold',
+    marginTop: height / 6.89230769,
     color: 'white',
-    fontSize: width / 13.8
+    fontSize: width / 16.56
   },
   subText: {
-    padding: 10,
+    padding: width/41.4,
     fontFamily: 'InconsolataLight',
     color: 'white',
-    fontSize: width / 21.7894737
+    fontSize: width/23
   },
   uploadContainer: {
     position: 'relative',
@@ -42,7 +33,7 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: height/89.6,
     borderRadius: 25
   },
   selectedImage: {
@@ -55,7 +46,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: '70%',
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: height/89.6
   },
   uploadButton: {
     backgroundColor: '#159ea3',
@@ -78,7 +69,7 @@ export default StyleSheet.create({
     fontSize: width/29.5714286
   },
   gradientContainer: {
-    height: 320, 
+    height: height/2.8, 
     left: 0,
     right: 0, 
     top: 0, 

@@ -1,12 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import ResultsStyles from './ResultsStyles';
 import Navbar from '../../components/navbar/Navbar';
 import MoodGraph from '../../components/moodgraph/MoodGraph';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Dimensions } from 'react-native';
+import HomeStyles from '../home/HomeStyles';
+import * as SecureStore from 'expo-secure-store';
+import * as Linking from 'expo-linking';
+const { width, height } = Dimensions.get('window');
+
+
 
 function Results({ navigation, route }) {
 
@@ -20,10 +27,62 @@ function Results({ navigation, route }) {
     const [values, setValues] = useState({ values: [] });
     const [averages, setAverages] = useState({ averages: [] });
 
+    const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
+        const fetchData = async () => {
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            try {
+                await fetch("http://192.168.0.14:19001/spotify/login/getUserId", {
+                    method: 'post',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: token
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        fetch("http://192.168.0.14:19001/database/results/getUserGenres", {
+                            method: 'post',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                user: data.id
+                            })
+                        })
+                        .then(res => res.json())
+                            .then((data) => {
+                                const artists = data.topGenres;
+                                fetch("http://192.168.0.14:19001/spotify/results/getRecommendations", {
+                                    method: 'post',
+                                    headers: {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        token: token,
+                                        artists: artists
+                                    })
+                                })
+                                .then(res => res.json())
+                                    .then((data) => {
+                                        setRecommendations(data.recommendations);
+                                    })
+                            })
+                    })
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+
+        }
         const getMood = async () => {
             if (route.params.results != null) {
                 var jsonText = JSON.stringify(route.params.results);
@@ -55,7 +114,7 @@ function Results({ navigation, route }) {
                             color: moods.moods[i] === 'happy' ? 'yellow' : moods.moods[i] === 'sad' ? 'grey' : moods.moods[i] === 'angry' ? 'red' :
                                 moods.moods[i] === 'fearful' ? 'blue' : moods.moods[i] === 'disgusted' ? 'purple' : moods.moods[i] === 'surprised' ? 'orange' : 'black',
                             legendFontColor: '#7F7F7F',
-                            legendFontSize: 15
+                            legendFontSize: width / 29.5714286
                         };
                         tempAverages.push(getAverages);
                     }
@@ -95,6 +154,7 @@ function Results({ navigation, route }) {
             }
         }
 
+        fetchData();
         getMood();
         setLoading(false);
 
@@ -109,8 +169,21 @@ function Results({ navigation, route }) {
         InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
     });
 
-    if (!loaded) {
-        return null;
+    if (!loaded || loading) {
+        return (
+            <View style={HomeStyles.mainContainer}>
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={['#185a9d', '#4ca1af']}
+                    style={HomeStyles.gradientContainer}
+                />
+                <View style={HomeStyles.topContainer}>
+                    <Text style={HomeStyles.welcome}>
+                        Loading...
+                    </Text>
+                </View>
+            </View>
+        );
     }
 
 
@@ -140,6 +213,28 @@ function Results({ navigation, route }) {
                     </Text>
                     {averages.averages.length > 1 ? <MoodGraph data={averages.averages} /> : null}
                 </View>
+                <ScrollView style={ResultsStyles.recommendationsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+                    {recommendations.length > 0 && recommendations.map((track, index) =>
+                        <View key={index}>
+                            <TouchableOpacity
+                                style={{
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 2 },
+                                    shadowOpacity: 0.5,
+                                    shadowRadius: 2, 
+                                    elevation: 5
+                                }}
+                                onPress={() => Linking.openURL(track[3])}>
+                                <Image
+                                    style={ResultsStyles.trackImage}
+                                    source={{ uri: track[2] }}
+                                />
+                            </TouchableOpacity>
+                            <Text style={ResultsStyles.trackText}>{track[0]}</Text>
+                            <Text style={ResultsStyles.trackArtistText}>by {track[1]}</Text>
+                        </View>
+                    )}
+                </ScrollView>
                 <StatusBar style="auto" />
             </View>
         </ScrollView>

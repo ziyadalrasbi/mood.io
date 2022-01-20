@@ -47,6 +47,7 @@ const getUserId = async (req, res, next) => {
 
 const getUserTopGenres = async (req, res, next) => {
     var topGenres = [];
+    var topArtists = [];
     await api.setAccessToken(req.body.token);
     await api.getMyTopArtists({ limit: 10, time_range: 'medium_term' })
         .then((data) => {
@@ -56,11 +57,14 @@ const getUserTopGenres = async (req, res, next) => {
                         topGenres.push(data.body.items[i].genres[j]);
                     }
                 }
+                for (let i = 0; i < 5; i++) {
+                    topArtists.push(data.body.items[i].id);
+                }
                 const genresCount = topGenres.reduce(function (obj, item) {
                     obj[item] = (obj[item] || 0) + 1;
                     return obj;
                 }, {});
-                res.json({ topGenres: genresCount });
+                res.json({ topGenres: genresCount, topArtists: topArtists });
             } else {
                 res.json({ topGenres: topGenres });
             }

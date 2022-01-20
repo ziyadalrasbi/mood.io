@@ -25,7 +25,7 @@ function Home({ navigation, route }) {
 
 
   const [loaded] = useFonts({
-    InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+    MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
     InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
     InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
     InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
@@ -34,7 +34,7 @@ function Home({ navigation, route }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      
+
       const token = await SecureStore.getItemAsync('spotify_access_token');
       if (token != null) {
         try {
@@ -148,7 +148,7 @@ function Home({ navigation, route }) {
       throw error;
     }
   }
-  
+
   return (
     <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
       <View style={HomeStyles.mainContainer}>
@@ -202,7 +202,14 @@ function Home({ navigation, route }) {
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
             {topArtists.length > 0 && topArtists.map((artist, index) =>
               <View key={index}>
-                <TouchableOpacity onPress={() => Linking.openURL(artist[2])}>
+                <TouchableOpacity
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 2, elevation: 5
+                  }}
+                  onPress={() => Linking.openURL(artist[2])}>
                   <Image
                     style={HomeStyles.topTrackArtistImage}
                     source={{ uri: artist[1] }}
@@ -228,7 +235,14 @@ function Home({ navigation, route }) {
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
             {topTracks.length > 0 && topTracks.map((track, index) =>
               <View key={index}>
-                <TouchableOpacity onPress={() => Linking.openURL(track[3])}>
+                <TouchableOpacity
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 2, elevation: 5
+                  }}
+                  onPress={() => Linking.openURL(track[3])}>
                   <Image
                     style={HomeStyles.topTrackImage}
                     source={{ uri: track[2] }}

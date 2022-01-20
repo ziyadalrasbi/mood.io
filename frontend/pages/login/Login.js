@@ -17,7 +17,7 @@ function Login({ navigation }) {
     };
 
     const [loaded] = useFonts({
-        InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+        MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
         InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
         InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
         InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
@@ -146,7 +146,7 @@ function Login({ navigation }) {
         }
     }
 
-    const saveUserGenres = async (user, genres) => {
+    const saveUserGenres = async (user, genres, artists) => {
         try {
             return fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
                 method: 'post',
@@ -156,7 +156,8 @@ function Login({ navigation }) {
                 },
                 body: JSON.stringify({
                     user: user,
-                    genres: genres
+                    genres: genres,
+                    artists: artists
                 })
             })
         } catch (error) {
@@ -225,7 +226,7 @@ function Login({ navigation }) {
                                         .then(data => {
                                             console.log(Object.keys(data.topGenres).length);
                                             if (Object.keys(data.topGenres).length > 0) {
-                                                saveUserGenres(userId, data.topGenres);
+                                                saveUserGenres(userId, data.topGenres, data.topArtists);
                                                 navigation.reset({ index: 0, routes: [{ name: 'Home', params: { new: false } }] });
                                             } else {
                                                 getGenreSeeds(accessToken)

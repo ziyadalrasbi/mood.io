@@ -11,29 +11,20 @@ export default StyleSheet.create({
     height: height/3.2,
     width: '100%',
     justifyContent: 'flex-start',
-    backgroundColor: 'white',
-  },
-  subTop: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2.5%',
-    width: '100%',
-    backgroundColor: '#2943e3',
+    backgroundColor: 'transparent',
   },
   title: {
-    marginLeft: 10,
-    fontFamily: 'InconsolataBold',
-    marginTop: 120,
+    marginLeft: width/41.4,
+    fontFamily: 'MontserratBold',
+    marginTop: height / 6.89230769,
     color: 'white',
-    fontSize: width / 13.8
+    fontSize: width / 16.56
   },
   subText: {
-    padding: 10,
+    padding: width/41.4,
     fontFamily: 'InconsolataLight',
     color: 'white',
-    fontSize: width / 21.7894737
+    fontSize: width/23
   },
   mainContainer: {
     position: 'relative',
@@ -50,24 +41,24 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    marginBottom: 25,
+    marginBottom: height / 40.84,
     width: '100%',
     justifyContent: 'flex-start',
+    borderRadius: 23,
     backgroundColor: 'white',
-    borderRadius: 25
   },
   firstHeader: {
-    fontFamily: 'InconsolataBold',
+    fontFamily: 'MontserratBold',
     color: '#191414',
-    fontSize: 15,
-    padding: 10,
-    marginBottom: -10,
-    marginTop: 15
+    fontSize: width / 27.6,
+    padding: width / 41.4,
+    marginBottom: -(width / 41.4),
+    marginTop: height / 59.7333333
   },
   firstSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 14,
-    padding: 10,
+    fontSize: width / 29.5714286,
+    padding: width / 41.4,
     color: 'grey'
   },
   moodAnalysis: {
@@ -76,12 +67,12 @@ export default StyleSheet.create({
     right: 0,
     top: 0,
     width: '100%',
-    marginBottom: 25,
+    marginBottom: height/35.84,
     justifyContent: 'flex-start',
   },
   mainFont: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 22
+    fontSize: width/18.8181818
   },
   scroll: {
     flex: 1,
@@ -89,10 +80,46 @@ export default StyleSheet.create({
     backgroundColor:'white',
   },
   gradientContainer: {
-    height: 320, 
+    height: height/2.8, 
     left: 0,
     right: 0, 
     top: 0, 
     position: 'absolute'
+  },
+  recommendationsContainer: {
+    marginHorizontal: width / 41.4,
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    borderRadius: width / 41.4,
+  },
+  trackImage: {
+    width: width / 3.45,
+    height: width / 3.45,
+    marginRight: width / 20.7,
+    marginTop: height / 89.6,
+    borderRadius: 20
+  },
+  trackArtistText: {
+    fontFamily: 'InconsolataSemiExpanded',
+    color: 'grey',
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: width / 34.5,
+    fontStyle: 'italic',
+    maxWidth: width / 3.45,
+    marginRight: width / 20.7
+  },
+  trackText: {
+    fontFamily: 'InconsolataSemiExpanded',
+    color: 'red',
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginTop: height / 112,
+    marginBottom: height / 179.2,
+    fontSize: width / 34.5,
+    fontStyle: 'italic',
+    maxWidth: width / 3.45,
+    marginRight: width / 20.7
   }
 });
