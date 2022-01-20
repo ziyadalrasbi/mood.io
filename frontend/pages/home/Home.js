@@ -9,7 +9,7 @@ import Navbar from '../../components/navbar/Navbar';
 import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
-import GenreSelect from '../../components/genreselect/GenreSelect';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function Home({ navigation, route }) {
 
@@ -34,7 +34,7 @@ function Home({ navigation, route }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(route.params.new);
+      
       const token = await SecureStore.getItemAsync('spotify_access_token');
       if (token != null) {
         try {
@@ -114,6 +114,11 @@ function Home({ navigation, route }) {
   if (!loaded || loading) {
     return (
       <View style={HomeStyles.mainContainer}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['#185a9d', '#4ca1af']}
+          style={HomeStyles.gradientContainer}
+        />
         <View style={HomeStyles.topContainer}>
           <Text style={HomeStyles.welcome}>
             Loading...
@@ -143,11 +148,16 @@ function Home({ navigation, route }) {
       throw error;
     }
   }
-
+  
   return (
     <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
       <View style={HomeStyles.mainContainer}>
         <View style={HomeStyles.topContainer}>
+          <LinearGradient
+            // Background Linear Gradient
+            colors={['#185a9d', '#4ca1af']}
+            style={HomeStyles.gradientContainer}
+          />
           <Navbar scan={true} signOut={signOut} />
           <Text style={HomeStyles.welcome}>
             welcome, {name}!
@@ -156,10 +166,8 @@ function Home({ navigation, route }) {
             how are you feeling today?
           </Text>
         </View>
-        <View style={HomeStyles.subTop}>
-        </View>
         <View style={HomeStyles.firstContainer}>
-        <GenreModal data={route.params.new} seeds={route.params.genreSeeds}/>
+
           <Text style={HomeStyles.firstHeader}>
             let's find some new music!
           </Text>
@@ -239,9 +247,14 @@ function Home({ navigation, route }) {
           }
           <View style={{ height: 30 }} />
         </View>
+        {route.params.new == true &&
+          <GenreModal data={route.params.new} seeds={route.params.genreSeeds} />
+        }
         <StatusBar style="auto" />
       </View>
+
     </ScrollView>
+
   );
 }
 

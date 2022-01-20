@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   topContainer: {
@@ -6,10 +8,10 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: '30%',
+    height: height/3.2,
     width: '100%',
-    justifyContent: 'center',
-    backgroundColor: '#2e41b3',
+    justifyContent: 'flex-start',
+    backgroundColor: 'white',
   },
   subTop: {
     position: 'relative',
@@ -21,24 +23,27 @@ export default StyleSheet.create({
     backgroundColor: '#2943e3',
   },
   title: {
-    padding: 10,
+    marginLeft: 10,
     fontFamily: 'InconsolataBold',
+    marginTop: 120,
     color: 'white',
-    fontSize: 50
+    fontSize: width / 13.8
   },
   subText: {
     padding: 10,
     fontFamily: 'InconsolataLight',
     color: 'white',
-    fontSize: 26
+    fontSize: width / 21.7894737
   },
   mainContainer: {
+    position: 'relative',
     flex: 1,
+    backgroundColor: 'white',
     flexDirection: 'column',
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'flex-start',
-    backgroundColor: 'transparent'
+    height: '100%'
   },
   firstContainer: {
     position: 'relative',
@@ -48,17 +53,20 @@ export default StyleSheet.create({
     marginBottom: 25,
     width: '100%',
     justifyContent: 'flex-start',
+    backgroundColor: 'white',
+    borderRadius: 25
   },
   firstHeader: {
-    marginTop: 5,
-    fontFamily: 'InconsolataBlack',
-    fontSize: 22,
+    fontFamily: 'InconsolataBold',
+    color: '#191414',
+    fontSize: 15,
     padding: 10,
-    marginBottom: -10
+    marginBottom: -10,
+    marginTop: 15
   },
   firstSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 18,
+    fontSize: 14,
     padding: 10,
     color: 'grey'
   },
@@ -77,6 +85,14 @@ export default StyleSheet.create({
   },
   scroll: {
     flex: 1,
-    height: '100%'
+    height: '100%',
+    backgroundColor:'white',
+  },
+  gradientContainer: {
+    height: 320, 
+    left: 0,
+    right: 0, 
+    top: 0, 
+    position: 'absolute'
   }
 });

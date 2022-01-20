@@ -22,5 +22,12 @@ export default StyleSheet.create({
   logo: {
     flex: 1,
     justifyContent: 'center'
+  },
+  gradientContainer: {
+    height: '100%', 
+    left: 0,
+    right: 0, 
+    top: 0, 
+    position: 'absolute'
   }
 });

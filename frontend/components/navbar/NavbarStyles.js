@@ -6,7 +6,7 @@ export default StyleSheet.create({
     topBar: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        backgroundColor: '#2e41b3',
+        backgroundColor: 'transparent',
         position: 'absolute',
         marginLeft: 10,
         marginTop: 55

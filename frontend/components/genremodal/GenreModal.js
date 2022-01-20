@@ -10,11 +10,12 @@ function GenreModal({ data, seeds }) {
     const [modalVisible, setModalVisible] = useState(data);
     
     return (
+      <View style={GenreModalStyles.modalContainer}>
         <View style={GenreModalStyles.centeredView}>
             <Modal
               animationType="slide"
               transparent={true}
-              visible={!modalVisible}
+              visible={modalVisible}
               onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
                 setModalVisible(!modalVisible);
@@ -27,13 +28,9 @@ function GenreModal({ data, seeds }) {
                   we can extract your top genres automatically!</Text>
                   <GenreSelect seeds={seeds} />
                 </View>
-                
               </View>
-              
             </Modal>
-            {/* <Pressable style={[GenreModalStyles.button, GenreModalStyles.buttonOpen]} onPress={() => setModalVisible(true)}>
-              <Text style={GenreModalStyles.textStyle}>Show Modal</Text>
-            </Pressable> */}
+          </View>
           </View>
     )
 }

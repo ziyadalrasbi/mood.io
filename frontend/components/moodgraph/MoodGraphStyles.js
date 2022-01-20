@@ -7,6 +7,7 @@ export default StyleSheet.create({
         right: 0,
         top: 0,
         marginBottom: 25,
+        marginLeft:12,
         width: '100%',
         justifyContent: 'flex-start',
     },
@@ -15,8 +16,9 @@ export default StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        width: '100%',
+        width: '80%',
         justifyContent: 'center',
+        flexDirection:'row',
         backgroundColor: 'transparent',
     },
     mainFont: {

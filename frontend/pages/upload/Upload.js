@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font'
 import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function Upload({ navigation }) {
 
@@ -68,22 +69,25 @@ function Upload({ navigation }) {
 
   return (
     <View style={UploadStyles.mainContainer}>
-      
       <View style={UploadStyles.topContainer}>
-      <Navbar scan={false} />
-        <Text style={UploadStyles.title}>
-          scan your mood
-        </Text>
-        <Text style={UploadStyles.subText}>
-          upload an image below to scan
-        </Text>
-      </View>
-      <View style={UploadStyles.subTop} />
+          <LinearGradient
+            // Background Linear Gradient
+            colors={['#2b5876', '#4e4376']}
+            style={UploadStyles.gradientContainer}
+          />
+          <Navbar scan={false}  />
+          <Text style={UploadStyles.title}>
+            scan your mood
+          </Text>
+          <Text style={UploadStyles.subText}>
+            upload an image below to scan
+          </Text>
+        </View>
       <View style={UploadStyles.uploadContainer}>
         {selectedImage != null &&
           <Image
             style={UploadStyles.selectedImage}
-            source={{ uri: selectedImage.uri != "" && selectedImage.uri }}
+            source={{ uri: selectedImage.uri != null && selectedImage.uri }}
           />
         }
       </View>

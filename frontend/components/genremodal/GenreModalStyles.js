@@ -3,6 +3,13 @@ import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
+  modalContainer: {
+    position: 'absolute',
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
 centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -52,5 +59,5 @@ centeredView: {
     fontSize: 12,
     marginBottom: 15,
     textAlign: 'center',
-  },
+  }
 });

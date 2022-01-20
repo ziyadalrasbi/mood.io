@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
+import { makeRedirectUri, useAuthRequest, ResponseType, Prompt } from 'expo-auth-session';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import LoginStyles from './LoginStyles';
@@ -7,9 +7,10 @@ import * as SecureStore from 'expo-secure-store';
 import spotifylogo from '../../../assets/icons/login/spotifylogo.png';
 import { useFonts } from 'expo-font';
 import CustomCarousel from '../../components/carousel/CustomCarousel';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function Login({ navigation }) {
-    
+
     const discovery = {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
         tokenEndpoint: 'https://accounts.spotify.com/api/token',
@@ -36,10 +37,12 @@ function Login({ navigation }) {
                 'user-read-private',
                 'user-top-read'
             ],
+            prompt: Prompt.Login,
             usePKCE: false,
             redirectUri: makeRedirectUri({
                 native: "moodio://oauthredirect"
-            })
+            }),
+            
         },
         discovery
     );
@@ -180,6 +183,24 @@ function Login({ navigation }) {
         }
     }
 
+    const getGenreSeeds = async (token) => {
+        try {
+            return fetch("http://192.168.0.14:19001/spotify/login/getGenreSeeds", {
+                method: 'post',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token
+                })
+            })
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     const onPressLogin = async () => {
         await promptAsync()
             .then((res) => {
@@ -202,8 +223,18 @@ function Login({ navigation }) {
                                     getUserGenres(accessToken)
                                         .then((res) => res.json())
                                         .then(data => {
-                                            saveUserGenres(userId, data.topGenres);
-                                            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+                                            console.log(Object.keys(data.topGenres).length);
+                                            if (Object.keys(data.topGenres).length > 0) {
+                                                saveUserGenres(userId, data.topGenres);
+                                                navigation.reset({ index: 0, routes: [{ name: 'Home', params: { new: false } }] });
+                                            } else {
+                                                getGenreSeeds(accessToken)
+                                                    .then(res => res.json())
+                                                    .then(data => {
+                                                        navigation.reset({ index: 0, routes: [{ name: 'Home', params: { new: true, genreSeeds: data.genreSeeds } }] });
+                                                    })
+                                            }
+
                                         })
                                 })
                                 .catch((error) => {
@@ -225,9 +256,14 @@ function Login({ navigation }) {
 
     return (
         <View style={LoginStyles.mainContainer}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['#185a9d', '#4ca1af']}
+                style={LoginStyles.gradientContainer}
+            />
             <View style={LoginStyles.logo}>
                 <Text>
-                LOGO HERE
+                    LOGO HERE
                 </Text>
             </View>
             <View style={LoginStyles.bottomContainer}>

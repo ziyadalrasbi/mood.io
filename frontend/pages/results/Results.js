@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font'
 import ResultsStyles from './ResultsStyles';
 import Navbar from '../../components/navbar/Navbar';
 import MoodGraph from '../../components/moodgraph/MoodGraph';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function Results({ navigation, route }) {
 
@@ -117,6 +118,11 @@ function Results({ navigation, route }) {
         <ScrollView style={ResultsStyles.scroll}>
             <View style={ResultsStyles.mainContainer}>
                 <View style={ResultsStyles.topContainer}>
+                    <LinearGradient
+                        // Background Linear Gradient
+                        colors={['#36d1dc', '#5b86e5']}
+                        style={ResultsStyles.gradientContainer}
+                    />
                     <Navbar scan={false} />
                     <Text style={ResultsStyles.title}>
                         results
@@ -125,7 +131,6 @@ function Results({ navigation, route }) {
                         your mood analysis can be found below!
                     </Text>
                 </View>
-                <View style={ResultsStyles.subTop} />
                 <View style={ResultsStyles.firstContainer}>
                     <Text style={ResultsStyles.firstHeader}>
                         your result analysis showed {maxProp.maxProp != "" && moodHeader.moodHeader}

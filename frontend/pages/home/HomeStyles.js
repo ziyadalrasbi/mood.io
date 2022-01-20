@@ -8,29 +8,20 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: 280,
+    height: height/3.2,
     width: '100%',
     justifyContent: 'flex-start',
-    backgroundColor: '#2e41b3',
-  },
-  subTop: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 20,
-    width: '100%',
-    backgroundColor: '#2943e3',
+    backgroundColor: 'transparent',
   },
   welcome: {
-    marginLeft: 10,
+    marginLeft: width/41.4,
     fontFamily: 'InconsolataBold',
-    marginTop: 120,
+    marginTop: width/3.45,
     color: 'white',
     fontSize: width / 13.8
   },
   subWelcome: {
-    padding: 10,
+    padding: width/41.4,
     fontFamily: 'InconsolataLight',
     color: 'white',
     fontSize: width / 21.7894737
@@ -40,28 +31,31 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    marginBottom: 25,
+    marginBottom: height/40.84,
     width: '100%',
     justifyContent: 'flex-start',
+    borderRadius: 23,
+    backgroundColor: 'white',
   },
   firstHeader: {
     fontFamily: 'InconsolataBold',
     color: '#191414',
-    fontSize: 15,
-    padding: 10,
-    marginBottom: -10
+    fontSize: width/27.6,
+    padding: width/41.4,
+    marginBottom: -(width/41.4),
+    marginTop: height/59.7333333
   },
   firstSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 14,
-    padding: 10,
+    fontSize: width/29.5714286,
+    padding: width/41.4,
     color: 'grey'
   },
   startButton: {
-    backgroundColor: '#4494da',
-    marginLeft: 8,
-    marginTop: 15,
-    padding: 5,
+    backgroundColor: '#4ca1af',
+    marginLeft: width/41.4,
+    marginTop: height/59.7333333,
+    padding: width/82.8,
     alignSelf: 'flex-start'
   },
   secondContainer: {
@@ -69,7 +63,7 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    marginBottom: 25,
+    marginBottom: height/35.84,
     width: '100%',
     justifyContent: 'flex-start',
   },
@@ -77,20 +71,20 @@ export default StyleSheet.create({
     marginTop: 5,
     fontFamily: 'InconsolataBold',
     color: '#191414',
-    fontSize: 15,
-    padding: 10,
-    marginBottom: -10
+    fontSize: width/27.6,
+    padding: width/41.4,
+    marginBottom: -(width/41.4)
   },
   secondSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 14,
+    fontSize: width/29.5714286,
     padding: 10,
     color: 'grey'
   },
   mainContainer: {
     position: 'relative',
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     flexDirection: 'column',
     alignItems: 'center',
     display: 'flex',
@@ -107,7 +101,7 @@ export default StyleSheet.create({
     right: 0,
     top: 0,
     width: '100%',
-    marginBottom: 25,
+    marginBottom: height/35.84,
     justifyContent: 'flex-start',
   },
   thirdHeader: {
@@ -115,33 +109,33 @@ export default StyleSheet.create({
     marginBottom: -10,
     fontFamily: 'InconsolataBold',
     color: '#191414',
-    fontSize: 15,
-    padding: 10,
+    fontSize: width/27.6,
+    padding: width/41.4,
   },
   thirdSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 14,
+    fontSize: width/29.5714286,
     padding: 10,
     color: 'grey'
   },
   topArtistsContainer: {
-    marginHorizontal: 10,
+    marginHorizontal: width/41.4,
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    borderRadius: 10
+    borderRadius: width/41.4
   },
   topArtistText: {
     fontFamily: 'InconsolataSemiExpanded',
     color: 'blue',
     alignSelf: 'center',
     textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 5,
-    fontSize: 12,
+    marginTop: height/89.6,
+    marginBottom: height/179.2,
+    fontSize: width/34.5,
     fontStyle: 'italic',
-    maxWidth: 100,
-    marginRight: 20,
+    maxWidth: width/4.14,
+    marginRight: width/20.7,
   },
   fourthContainer: {
     position: 'relative',
@@ -152,28 +146,28 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
   },
   fourthHeader: {
-    marginTop: 5,
-    marginBottom: -10,
+    marginTop: height/179.2,
+    marginBottom: -(width/89.6),
     fontFamily: 'InconsolataBold',
     color: '#191414',
-    fontSize: 15,
-    padding: 10,
+    fontSize: width/27.6,
+    padding: width/41.4,
   },
   fourthSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 14,
-    padding: 10,
+    fontSize: width/29.5714286,
+    padding: width/41.4,
     color: 'grey'
   },
   topSongsContainer: {
-    padding: 10,
+    padding: width/41.4,
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between'
   },
   topTracksContainer: {
-    padding: 10,
+    padding: width/41.4,
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
@@ -184,53 +178,60 @@ export default StyleSheet.create({
     color: 'red',
     alignSelf: 'center',
     textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 5,
-    fontSize: 12,
+    marginTop: height/112,
+    marginBottom: height/179.2,
+    fontSize: width/34.5,
     fontStyle: 'italic',
-    maxWidth: 120,
-    marginRight: 20
+    maxWidth: width/3.45,
+    marginRight: width/20.7
   },
   topTrackArtistText: {
     fontFamily: 'InconsolataSemiExpanded',
     color: 'grey',
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: width/34.5,
     fontStyle: 'italic',
-    maxWidth: 120,
-    marginRight: 20
+    maxWidth: width/3.45,
+    marginRight: width/20.7
   },
   topTrackArtistImage: {
-    width: 100,
-    height: 100,
-    marginRight: 20,
-    marginTop: 10,
+    width: width/4.14,
+    height: width/4.14,
+    marginRight: width/20.7,
+    marginTop: height/89.6,
     borderRadius: 100
   },
   topTrackImage: {
-    width: 120,
-    height: 120,
-    marginRight: 20,
-    marginTop: 10,
+    width: width/3.45,
+    height: height/7.46666667,
+    marginRight: width/20.7,
+    marginTop: height/89.6,
     borderRadius: 20
   },
   mainFont: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 17
+    fontSize: width/25.875
   },
   scroll: {
     flex: 1,
     height: '100%'
   },
   noDataText: {
-    marginTop: 5,
+    marginTop: height/179.2,
     fontFamily: 'InconsolataBold',
     color: 'blue',
-    fontSize: 13,
-    marginRight: 10,
+    fontSize: width/31.8461538,
+    marginRight: width/41.4,
     padding: 10,
     maxWidth: width / 1.06153846,
   },
+  gradientContainer: {
+    height: height/2.8, 
+    left: 0,
+    right: 0, 
+    top: 0, 
+    position: 'absolute'
+  }
 });
 

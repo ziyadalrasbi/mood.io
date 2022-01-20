@@ -23,7 +23,7 @@ function MoodGraph({ data }) {
                     data={data}
                     width={Dimensions.get('window').width}
                     height={180}
-                    center={[Dimensions.get('window').width * 0.2, 300]}
+                    center={[Dimensions.get('window').width * 0.5, 300]}
                     accessor='percentage'
                     chartConfig={chartConfig}
                     backgroundColor="transparent"
@@ -34,8 +34,8 @@ function MoodGraph({ data }) {
                 <PieChart
                     data={data}
                     width={Dimensions.get('window').width}
-                    height={300}
-                    center={[Dimensions.get('window').width * 0.2, 0]}
+                    height={200}
+                    center={[Dimensions.get('window').width * 0.03, 0]}
                     accessor='percentage'
                     chartConfig={chartConfig}
                     backgroundColor="transparent"

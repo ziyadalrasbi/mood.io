@@ -8,10 +8,10 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: 280,
+    height: height/3.2,
     width: '100%',
     justifyContent: 'flex-start',
-    backgroundColor: '#2e41b3',
+    backgroundColor: 'transparent',
   },
   subTop: {
     position: 'relative',
@@ -23,9 +23,9 @@ export default StyleSheet.create({
     backgroundColor: '#2943e3',
   },
   title: {
-    padding: 10,
-    marginTop: 120,
+    marginLeft: 10,
     fontFamily: 'InconsolataBold',
+    marginTop: 120,
     color: 'white',
     fontSize: width / 13.8
   },
@@ -38,11 +38,12 @@ export default StyleSheet.create({
   uploadContainer: {
     position: 'relative',
     height: '40%',
-    width: '90%',
-    backgroundColor: 'transparent',
+    width: '100%',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10
+    marginTop: 10,
+    borderRadius: 25
   },
   selectedImage: {
     width: '100%',
@@ -52,20 +53,20 @@ export default StyleSheet.create({
   buttonContainer: {
     position: 'relative',
     flexDirection: 'row',
-    width: '90%',
+    width: '70%',
     justifyContent: 'space-between',
     marginTop: 10
   },
   uploadButton: {
-    backgroundColor: '#159ea3'
+    backgroundColor: '#159ea3',
   },
   continueButton: {
-    backgroundColor: '#461ad6'
+    backgroundColor: '#461ad6',
   },
   mainContainer: {
     position: 'relative',
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     flexDirection: 'column',
     alignItems: 'center',
     display: 'flex',
@@ -74,6 +75,13 @@ export default StyleSheet.create({
   },
   mainFont: {
     fontFamily: 'InconsolataMedium',
-    fontSize: 22
+    fontSize: width/29.5714286
+  },
+  gradientContainer: {
+    height: 320, 
+    left: 0,
+    right: 0, 
+    top: 0, 
+    position: 'absolute'
   }
 });
