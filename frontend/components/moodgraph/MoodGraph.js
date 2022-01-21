@@ -3,9 +3,23 @@ import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import MoodGraphStyles from "./MoodGraphStyles";
 const { width, height } = Dimensions.get('window');
-
+import { useFonts } from 'expo-font';
 function MoodGraph({ data }) {
 
+    const [loaded] = useFonts({
+        InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+        InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
+        InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
+        InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Italic.ttf'),
+    });
+
+    if (!loaded) {
+        return (
+            <View>
+                <Text>Loading</Text>
+            </View>
+        )
+    }
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
         backgroundGradientFromOpacity: 0,
@@ -15,6 +29,9 @@ function MoodGraph({ data }) {
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false, // optional,
+        propsForLabels: {
+            fontFamily: 'InconsolataBlack'
+        }
     };
 
     return (

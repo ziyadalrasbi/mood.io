@@ -17,12 +17,16 @@ const getRecommendations = async (req, res, next) => {
                 let trackDate = new Date(data.body.tracks[i]['album'].release_date);
                 let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                 if (yearsDiff <= 4) {
+                    if (data.body.tracks[i]['album'].images[0]) {
                     let recommendation = [];
                     recommendation.push(data.body.tracks[i].name);
                     recommendation.push(data.body.tracks[i].artists[0].name);
                     recommendation.push(data.body.tracks[i]['album'].images[0].url);
                     recommendation.push(data.body.tracks[i].external_urls.spotify);
                     recommendations.push(recommendation);
+                    } else {
+                        console.log('broken recommendation found: '+ JSON.stringify(data.body.tracks[i]));
+                    }
                 }
             }
         }, function (err) {
@@ -50,12 +54,16 @@ const getRecommendations = async (req, res, next) => {
                     let trackDate = new Date(data.body.tracks[k]['album'].release_date);
                     let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                     if (yearsDiff <= 4) {
+                        if (data.body.tracks[k]['album'].images[0]) {
                         let recommendation = [];
                         recommendation.push(data.body.tracks[k].name);
                         recommendation.push(data.body.tracks[k].artists[0].name);
                         recommendation.push(data.body.tracks[k]['album'].images[0].url);
                         recommendation.push(data.body.tracks[k].external_urls.spotify);
                         recommendations.push(recommendation);
+                    } else {
+                        console.log('broken recommendation found: '+ JSON.stringify(data.body.tracks[k]));
+                    }
                     }
                 }
             }, function (err) {

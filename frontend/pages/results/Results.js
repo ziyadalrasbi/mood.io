@@ -11,6 +11,7 @@ import { Dimensions } from 'react-native';
 import HomeStyles from '../home/HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
+import Loading from '../../components/loading/Loading';
 const { width, height } = Dimensions.get('window');
 
 
@@ -29,7 +30,7 @@ function Results({ navigation, route }) {
 
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [rloading, setRLoading] = useState(true);
     useEffect(() => {
 
         const fetchData = async () => {
@@ -74,6 +75,7 @@ function Results({ navigation, route }) {
                                 .then(res => res.json())
                                     .then((data) => {
                                         setRecommendations(data.recommendations);
+                                        setRLoading(false);
                                     })
                             })
                     })
@@ -114,7 +116,7 @@ function Results({ navigation, route }) {
                             color: moods.moods[i] === 'happy' ? 'yellow' : moods.moods[i] === 'sad' ? 'grey' : moods.moods[i] === 'angry' ? 'red' :
                                 moods.moods[i] === 'fearful' ? 'blue' : moods.moods[i] === 'disgusted' ? 'purple' : moods.moods[i] === 'surprised' ? 'orange' : 'black',
                             legendFontColor: '#7F7F7F',
-                            legendFontSize: width / 29.5714286
+                            legendFontSize: width / 29.5714286,
                         };
                         tempAverages.push(getAverages);
                     }
@@ -158,31 +160,15 @@ function Results({ navigation, route }) {
         getMood();
         setLoading(false);
 
-    }, [loading])
+    }, [loading, rloading])
 
 
 
-    const [loaded] = useFonts({
-        InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-        InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-        InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-        InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
-    });
+    
 
-    if (!loaded || loading) {
+    if (loading || rloading) {
         return (
-            <View style={HomeStyles.mainContainer}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={['#185a9d', '#4ca1af']}
-                    style={HomeStyles.gradientContainer}
-                />
-                <View style={HomeStyles.topContainer}>
-                    <Text style={HomeStyles.welcome}>
-                        Loading...
-                    </Text>
-                </View>
-            </View>
+            <Loading page={"results"} />
         );
     }
 
@@ -211,7 +197,7 @@ function Results({ navigation, route }) {
                     <Text style={ResultsStyles.firstSubHeader}>
                         {maxProp.maxProp != "" && moodDescription.moodDescription}
                     </Text>
-                    {averages.averages.length > 1 ? <MoodGraph data={averages.averages} /> : null}
+                    {!loading && !rloading && <MoodGraph data={averages.averages} />}
                 </View>
                 <ScrollView style={ResultsStyles.recommendationsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
                     {recommendations.length > 0 && recommendations.map((track, index) =>

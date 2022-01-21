@@ -4,7 +4,6 @@ const firebase = require('../db.js');
 
 const getUserGenres = async (req, res, next) => {
     try {
-        console.log(req.body.user);
         const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {

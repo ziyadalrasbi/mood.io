@@ -89,7 +89,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'flex-start',
-    height: '100%'
+    height: '100%',
+    
   },
   mainFont: {
     fontFamily: 'InconsolataMedium',

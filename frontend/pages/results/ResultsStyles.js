@@ -88,6 +88,7 @@ export default StyleSheet.create({
   },
   recommendationsContainer: {
     marginHorizontal: width / 41.4,
+    padding: 10,
     display: 'flex',
     flexDirection: 'row',
     width: '100%',

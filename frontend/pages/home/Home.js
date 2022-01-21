@@ -10,6 +10,7 @@ import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
+import Loading from '../../components/loading/Loading';
 
 function Home({ navigation, route }) {
 
@@ -113,18 +114,7 @@ function Home({ navigation, route }) {
 
   if (!loaded || loading) {
     return (
-      <View style={HomeStyles.mainContainer}>
-        <LinearGradient
-          // Background Linear Gradient
-          colors={['#185a9d', '#4ca1af']}
-          style={HomeStyles.gradientContainer}
-        />
-        <View style={HomeStyles.topContainer}>
-          <Text style={HomeStyles.welcome}>
-            Loading...
-          </Text>
-        </View>
-      </View>
+     <Loading page={"home"} />
     );
   }
 
