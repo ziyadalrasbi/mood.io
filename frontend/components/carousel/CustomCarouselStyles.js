@@ -23,7 +23,7 @@ export default StyleSheet.create({
     },
     welcome: {
         padding: width / 41.4,
-        fontFamily: 'InconsolataBold',
+        fontFamily: 'MontserratBold',
         color: '#191414',
         alignSelf: 'center',
         textAlign: 'center',
@@ -65,6 +65,22 @@ export default StyleSheet.create({
         fontFamily: 'InconsolataMedium',
         fontSize: width / 31.8461538,
         color: 'white'
+    },
+    signUpContainer: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginTop: height/59.7333333
+    },
+    signUp: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: 11,
+        color: 'black'
+    },
+    signUpLink: {
+        fontFamily: 'MontserratBold',
+        fontSize: 11,
+        color: 'black'
     },
     carouselItem: {
         backgroundColor: 'white',

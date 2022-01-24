@@ -11,6 +11,7 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
+import { getTopArtists, getName, getTopTracks, getListeningHabits, signOut } from '../../fetch';
 
 function Home({ navigation, route }) {
 
@@ -35,50 +36,22 @@ function Home({ navigation, route }) {
 
   useEffect(() => {
     const fetchData = async () => {
-
       const token = await SecureStore.getItemAsync('spotify_access_token');
       if (token != null) {
         try {
-          await fetch("http://192.168.0.14:19001/spotify/home/getTopArtists", {
-            method: 'post',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              token: token
-            })
-          })
+          await getTopArtists(token)
             .then((res) => res.json())
             .then(data => {
               if (data != null) {
                 setTopArtists(data.artistNames);
               }
             })
-          await fetch("http://192.168.0.14:19001/spotify/home/getName", {
-            method: 'post',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              token: token
-            })
-          })
+          await getName(token)
             .then((res) => res.json())
             .then(data => {
               setName(data.name);
             })
-          await fetch("http://192.168.0.14:19001/spotify/home/getTopTracks", {
-            method: 'post',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              token: token
-            })
-          })
+          await getTopTracks(token)
             .then((res) => res.json())
             .then(data => {
               if (data != null) {
@@ -87,17 +60,7 @@ function Home({ navigation, route }) {
               }
             })
             .then(() => {
-              fetch("http://192.168.0.14:19001/spotify/home/getListeningHabits", {
-                method: 'post',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  token: token,
-                  tracks: trackIds
-                })
-              })
+              getListeningHabits(token, trackIds)
                 .then((res) => res.json())
                 .then(data => {
                   setHabits({ habits: data.habits });
@@ -114,22 +77,16 @@ function Home({ navigation, route }) {
 
   if (!loaded || loading) {
     return (
-     <Loading page={"home"} />
+      <Loading page={"home"} />
     );
   }
 
-  const signOut = async () => {
+  const signOutUser = async () => {
     try {
       await SecureStore.deleteItemAsync('spotify_access_token');
       await SecureStore.deleteItemAsync('spotify_refresh_token');
       await SecureStore.deleteItemAsync('database_access_token');
-      await fetch("http://192.168.0.14:19001/database/login/signOut", {
-        method: 'post',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
+      await signOut()
         .then(() => {
           navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
         })
@@ -148,7 +105,7 @@ function Home({ navigation, route }) {
             colors={['#185a9d', '#4ca1af']}
             style={HomeStyles.gradientContainer}
           />
-          <Navbar scan={true} signOut={signOut} />
+          <Navbar scan={true} signOut={signOutUser} />
           <Text style={HomeStyles.welcome}>
             welcome, {name}!
           </Text>

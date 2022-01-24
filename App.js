@@ -9,6 +9,7 @@ import Results from './frontend/pages/results/Results';
 import * as SecureStore from 'expo-secure-store';
 import HomeStyles from './frontend/pages/home/HomeStyles';
 import { Text, View, Image, ScrollView } from 'react-native';
+import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDatabaseGenres, getGenreSeeds } from './frontend/fetch';
 
 function App({ navigation }) {
 
@@ -27,17 +28,7 @@ function App({ navigation }) {
             const spotifyRefreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
             if (spotifyAccessToken != null) {
                 try {
-                    await fetch("http://192.168.0.14:19001/spotify/login/refreshAccessToken", {
-                        method: 'post',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            accessToken: spotifyAccessToken,
-                            refreshToken: spotifyRefreshToken
-                        })
-                    })
+                    await refreshAccessToken(spotifyAccessToken, spotifyRefreshToken)
                         .then(res => res.json())
                         .then(data => {
                             if (data.token != "Null") {
@@ -46,69 +37,22 @@ function App({ navigation }) {
                                 setVerified(true);
                             }
                         })
-                    await fetch("http://192.168.0.14:19001/spotify/login/getUserId", {
-                        method: 'post',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            token: token
-                        })
-                    })
+                    await getUserId(token)
                         .then(res => res.json())
                         .then(data => {
                             tempId = data.id;
                         })
-                    await fetch("http://192.168.0.14:19001/spotify/login/getUserTopGenres", {
-                        method: 'post',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            token: token
-                        })
-                    })
+                    await getUserGenres(token)
                         .then(res => res.json())
                         .then(data => {
                             if (Object.keys(data.topGenres).length > 0) {
-                                fetch("http://192.168.0.14:19001/database/login/saveUserGenres", {
-                                    method: 'post',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({
-                                        user: tempId,
-                                        genres: data.topGenres,
-                                        artists: data.topArtists
-                                    })
-                                })
+                                saveUserGenres(tempId, data.topGenres, data.topArtists)
                             } else {
-                                fetch("http://192.168.0.14:19001/database/login/getUserGenres", {
-                                    method: 'post',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({
-                                        user: tempId,
-                                    })
-                                })
+                                getUserDatabaseGenres(tempId)
                                     .then(res => res.json())
                                     .then(data => {
                                         if (data.code == 404) {
-                                            fetch("http://192.168.0.14:19001/spotify/login/getGenreSeeds", {
-                                                method: 'post',
-                                                headers: {
-                                                    Accept: 'application/json',
-                                                    'Content-Type': 'application/json',
-                                                },
-                                                body: JSON.stringify({
-                                                    token: token
-                                                })
-                                            })
+                                            getGenreSeeds(token)
                                                 .then(res => res.json())
                                                 .then(data => {
                                                     setSeeds({ ...seeds, seeds: data.genreSeeds });

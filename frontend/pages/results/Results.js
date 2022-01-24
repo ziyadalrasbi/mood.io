@@ -12,6 +12,7 @@ import HomeStyles from '../home/HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
+import { getRecommendations, getUserDatabaseGenres, getUserId, refreshAccessToken } from '../../fetch';
 const { width, height } = Dimensions.get('window');
 
 
@@ -29,53 +30,39 @@ function Results({ navigation, route }) {
     const [averages, setAverages] = useState({ averages: [] });
 
     const [recommendations, setRecommendations] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(true);
+    
     useEffect(() => {
 
         const fetchData = async () => {
             const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            var accessToken;
             try {
-                await fetch("http://192.168.0.14:19001/spotify/login/getUserId", {
-                    method: 'post',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        token: token
-                    })
-                })
+                await refreshAccessToken(token, refreshToken)
                     .then(res => res.json())
                     .then(data => {
-                        fetch("http://192.168.0.14:19001/database/results/getUserGenres", {
-                            method: 'post',
-                            headers: {
-                                Accept: 'application/json',
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                user: data.id
-                            })
-                        })
-                        .then(res => res.json())
-                            .then((data) => {
-                                const artists = data.topGenres;
-                                fetch("http://192.168.0.14:19001/spotify/results/getRecommendations", {
-                                    method: 'post',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({
-                                        token: token,
-                                        artists: artists
-                                    })
-                                })
-                                .then(res => res.json())
+                        if (data.token != "Null") {
+                            accessToken = data.token;
+                            SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                        }
+                    })
+                    .then(() => {
+                        getUserId(accessToken)
+                            .then(res => res.json())
+                            .then(data => {
+                                getUserDatabaseGenres(data.id)
+                                    .then(res => res.json())
                                     .then((data) => {
-                                        setRecommendations(data.recommendations);
-                                        setRLoading(false);
+                                        const artists = data.topGenres;
+                                        getRecommendations(accessToken, artists)
+                                            .then(res => res.json())
+                                            .then((data) => {
+                                                setRecommendations(data.recommendations);
+                                                setRLoading(false);
+                                            })
                                     })
                             })
                     })
@@ -164,7 +151,7 @@ function Results({ navigation, route }) {
 
 
 
-    
+
 
     if (loading || rloading) {
         return (
@@ -207,7 +194,7 @@ function Results({ navigation, route }) {
                                     shadowColor: '#000',
                                     shadowOffset: { width: 0, height: 2 },
                                     shadowOpacity: 0.5,
-                                    shadowRadius: 2, 
+                                    shadowRadius: 2,
                                     elevation: 5
                                 }}
                                 onPress={() => Linking.openURL(track[3])}>

@@ -7,6 +7,7 @@ import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { detectFace } from '../../fetch';
 
 function Upload({ navigation }) {
 
@@ -49,16 +50,7 @@ function Upload({ navigation }) {
     openImagePicker()
       .then((res) => {
         if (res.base64 != "") {
-          fetch("http://192.168.0.14:19001/detection/detect/detectFace", {
-            method: 'post',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              base64: res.base64
-            })
-          })
+          detectFace(res.base64)
             .then((res) => res.json())
             .then(data => {
               setMoodAnalysis({ moodAnalysis: data.image[0].expressions });

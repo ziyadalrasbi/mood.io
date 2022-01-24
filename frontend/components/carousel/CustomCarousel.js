@@ -11,7 +11,9 @@ import CustomCarouselStyles from './CustomCarouselStyles';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useFonts } from 'expo-font';
 import { Dimensions } from 'react-native';
+import * as Linking from 'expo-linking';
 const { width, height } = Dimensions.get('window');
+
 
 const CustomCarousel = ({ onPressLogin }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -82,6 +84,12 @@ const CustomCarousel = ({ onPressLogin }) => {
         <View />
         <Text style={CustomCarouselStyles.mainFont}> &nbsp; LOGIN WITH SPOTIFY </Text>
       </TouchableOpacity>
+      <View style={CustomCarouselStyles.signUpContainer}>
+        <Text style={CustomCarouselStyles.signUp}> Don't have a Spotify account? </Text>
+        <TouchableOpacity onPress={() => Linking.openURL('https://www.spotify.com/signup')}>
+        <Text style={CustomCarouselStyles.signUpLink}> Sign Up </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   ), []);
 
