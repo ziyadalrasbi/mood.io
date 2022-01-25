@@ -208,9 +208,9 @@ function Home({ navigation, route }) {
           }
           <View style={{ height: 30 }} />
         </View>
-        {route.params.new == true &&
+        {/* {route.params.new == true && */}
           <GenreModal data={route.params.new} seeds={route.params.genreSeeds} />
-        }
+        {/* } */}
         <StatusBar style="auto" />
       </View>
 

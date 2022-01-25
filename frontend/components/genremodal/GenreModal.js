@@ -15,7 +15,7 @@ function GenreModal({ data, seeds }) {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={modalVisible}
+              visible={true}
               onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
                 setModalVisible(!modalVisible);
@@ -24,7 +24,7 @@ function GenreModal({ data, seeds }) {
                 <View style={GenreModalStyles.modalView}>
                   <Text style={GenreModalStyles.modalTitleText}>Before we continue...</Text>
                   <Text style={GenreModalStyles.modalSubText}>It seems that you have signed in with a new or unused Spotify account, so we could not find your top genres. 
-                  Before proceeding, please enter your preferred genres below (this is a one time setup). After using Spotify more, 
+                  Before proceeding, please enter your top 5 artists below (this is a one time setup). After using Spotify more, 
                   we can extract your top genres automatically!</Text>
                   <GenreSelect seeds={seeds} />
                 </View>

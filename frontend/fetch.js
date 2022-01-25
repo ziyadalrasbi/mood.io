@@ -119,7 +119,7 @@ export const getUserGenres = async (token) => {
     }
 }
 
-export const saveUserGenres = async (user, genres, artists) => {
+export const saveUserGenres = async (user, artists) => {
     try {
         return fetch(`${baseUrl}/database/login/saveUserGenres`, {
             method: 'post',
@@ -129,7 +129,6 @@ export const saveUserGenres = async (user, genres, artists) => {
             },
             body: JSON.stringify({
                 user: user,
-                genres: genres,
                 artists: artists
             })
         })
@@ -221,6 +220,20 @@ export const getListeningHabits = async (token, trackIds) => {
     })
 }
 
+export const searchForArtists = async (token, artist) => {
+    return fetch(`${baseUrl}/spotify/home/searchForArtists`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+            search: artist
+        })
+    })
+}
+
 /* -------------- DETECTION FETCH FUNCTIONS ---------- */
 export const detectFace = async (base64) => {
     return fetch(`${baseUrl}/detection/detect/detectFace`, {
@@ -287,6 +300,19 @@ export const getRecommendations = async (token, artists) => {
         body: JSON.stringify({
             token: token,
             artists: artists
+        })
+    })
+}
+
+export const saveUserRating = async (rating) => {
+    return fetch(`${baseUrl}/database/results/saveUserRating`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            rating: rating
         })
     })
 }

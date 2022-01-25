@@ -103,9 +103,30 @@ const getListeningHabits = async (req, res, next) => {
     }
 }
 
+const searchForArtists = async (req, res, next) => {
+    var artists = [];
+    await api.setAccessToken(req.body.token);
+    try {
+        await api.searchArtists(req.body.search, {limit: 5})
+        .then((data) => {
+            for (var i = 0; i< data.body.artists.items.length; i++) {
+                var artist = {
+                    id: data.body.artists.items[i].id,
+                    title: data.body.artists.items[i].name
+                };
+                artists.push(artist);
+            }
+            res.json({ artists: artists });
+        })
+    } catch (error) {
+        console.log('There was an error searching for artists, please try again. \n' + JSON.stringify(error));
+    }
+}
+
 module.exports = {
     getName,
     getTopArtists,
     getTopTracks,
-    getListeningHabits
+    getListeningHabits,
+    searchForArtists
 }

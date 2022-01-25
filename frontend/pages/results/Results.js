@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
@@ -12,8 +12,9 @@ import HomeStyles from '../home/HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
-import { getRecommendations, getUserDatabaseGenres, getUserId, refreshAccessToken } from '../../fetch';
-const { width, height } = Dimensions.get('window');
+import { getRecommendations, getUserDatabaseGenres, getUserId, refreshAccessToken, saveUserRating } from '../../fetch';
+import StarRating from 'react-native-star-rating';
+const { width } = Dimensions.get('window');
 
 
 
@@ -31,9 +32,14 @@ function Results({ navigation, route }) {
 
     const [recommendations, setRecommendations] = useState([]);
 
+    const [count, setCount] = useState(0);
+    const numRef = useRef(0);
+
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(true);
-    
+
+
+
     useEffect(() => {
 
         const fetchData = async () => {
@@ -146,19 +152,18 @@ function Results({ navigation, route }) {
         fetchData();
         getMood();
         setLoading(false);
-
     }, [loading, rloading])
 
-
-
-
+    const onStarRatingPress = async (rating) => {
+        setCount(rating);
+        await saveUserRating(rating);
+    }
 
     if (loading || rloading) {
         return (
             <Loading page={"results"} />
         );
     }
-
 
     return (
         <ScrollView style={ResultsStyles.scroll}>
@@ -208,6 +213,24 @@ function Results({ navigation, route }) {
                         </View>
                     )}
                 </ScrollView>
+                <Text style={{ fontFamily: 'MontserratBold', fontSize: 11, display: count > 0 ? 'none' : 'flex', marginBottom: 10 }}>
+                        how would you rate the accuracy of this recommendation?
+                    </Text>
+                <View style={{ display: count > 0 ? 'none' : 'flex' }}>
+                    
+                    <StarRating
+                        disabled={false}
+                        maxStars={5}
+                        rating={count}
+                        selectedStar={(rating) => onStarRatingPress(rating)}
+                        starSize={30}
+                        fullStarColor='gold'
+                    />
+                </View>
+                <Text style={{ fontFamily: 'MontserratBold', fontSize: 11, display: count > 0 ? 'flex' : 'none' }}>
+                    thank you! ⭐
+                </Text>
+                <View style={{ height: 30 }} />
                 <StatusBar style="auto" />
             </View>
         </ScrollView>

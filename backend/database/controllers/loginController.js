@@ -64,7 +64,6 @@ const saveUserGenres = async (req, res, next) => {
     try {
         const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.set({
-            topGenres: req.body.genres,
             topArtists: req.body.artists
         }, { merge: true });
         res.send('User added successfully!');

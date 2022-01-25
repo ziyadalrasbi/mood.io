@@ -34,8 +34,13 @@ function Login({ navigation }) {
                 'user-read-private',
                 'user-top-read'
             ],
+            show_dialog: 'true',
             prompt: Prompt.Login,
             usePKCE: false,
+            extraParams: {
+                // On Android it will just skip right past sign in otherwise
+                show_dialog: 'true',
+            },
             redirectUri: makeRedirectUri({
                 native: "moodio://oauthredirect"
             }),
