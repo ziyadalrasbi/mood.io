@@ -11,9 +11,9 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
-import { getTopArtists, getName, getTopTracks, getListeningHabits, signOut } from '../../fetch';
-
-function Home({ navigation, route }) {
+import { getTopArtists, getName, getTopTracks, getListeningHabits, signOut, getUserDatabaseGenres, getGenreSeeds, getUserId } from '../../fetch';
+import nextimg from '../../../assets/icons/home/next.png'
+function Home({ navigation }) {
 
   const [loading, setLoading] = useState(true);
 
@@ -24,6 +24,8 @@ function Home({ navigation, route }) {
 
   const [trackIds, setTrackIds] = useState({ trackIds: [] });
   const [habits, setHabits] = useState({ habits: [] });
+
+  const [newUser, setNewUser] = useState({ newUser: false });
 
 
   const [loaded] = useFonts({
@@ -66,6 +68,18 @@ function Home({ navigation, route }) {
                   setHabits({ habits: data.habits });
                 })
             })
+          await getUserId(token)
+            .then(res => res.json())
+            .then(data => {
+              getUserDatabaseGenres(data.id)
+                .then(res => res.json())
+                .then(data => {
+                  if (data.topGenres == null) {
+                    var isNew = true;
+                    setNewUser({ newUser: isNew });
+                  }
+                })
+            })
         } catch (error) {
           console.log('Error fetching home data, please try again. \n' + error);
         }
@@ -80,6 +94,7 @@ function Home({ navigation, route }) {
       <Loading page={"home"} />
     );
   }
+
 
   const signOutUser = async () => {
     try {
@@ -97,55 +112,59 @@ function Home({ navigation, route }) {
   }
 
   return (
+
     <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
+      <LinearGradient
+        // Background Linear Gradient
+        colors={['#0d324d', '#7f5a83']}
+        style={HomeStyles.gradientContainer}
+      />
       <View style={HomeStyles.mainContainer}>
+
         <View style={HomeStyles.topContainer}>
-          <LinearGradient
-            // Background Linear Gradient
-            colors={['#185a9d', '#4ca1af']}
-            style={HomeStyles.gradientContainer}
-          />
-          <Navbar scan={true} signOut={signOutUser} />
-          <Text style={HomeStyles.welcome}>
-            welcome, {name}!
-          </Text>
-          <Text style={HomeStyles.subWelcome}>
-            how are you feeling today?
-          </Text>
+          <Navbar navigation={navigation} name={name} scan={true} signOut={signOutUser} />
         </View>
         <View style={HomeStyles.firstContainer}>
-
           <Text style={HomeStyles.firstHeader}>
-            let's find some new music!
+            Discover Music
           </Text>
           <Text style={HomeStyles.firstSubHeader}>
-            press the button below to scan your mood 😎
+            press the button below to scan your mood
           </Text>
           <Button
             style={HomeStyles.startButton}
             uppercase={false}
             mode="contained"
             labelStyle={HomeStyles.mainFont}
-            onPress={() => navigation.navigate('Upload', { navigation: navigation })}
+            onPress={() => navigation.navigate('UploadOptions', { navigation: navigation })}
           >
             get started
           </Button>
         </View>
         <View style={HomeStyles.secondContainer}>
           <Text style={HomeStyles.secondHeader}>
-            recent recommendations
+            Recent Recommendations
           </Text>
           <Text style={HomeStyles.secondSubHeader}>
             songs recommended to you in the past week
           </Text>
         </View>
+
         <View style={HomeStyles.thirdContainer}>
-          <Text style={HomeStyles.thirdHeader}>
-            your top artists
-          </Text>
-          <Text style={HomeStyles.thirdSubHeader}>
-            your top artists in the past 6 months
-          </Text>
+          <View style={HomeStyles.headerContainer}>
+            <Text style={HomeStyles.thirdHeader}>
+              Top Artists
+            </Text>
+            <View style={{ flexDirection: 'row', marginRight: 10 }}>
+              <Text style={HomeStyles.thirdHeader}>
+                All
+              </Text>
+              <Image
+                style={HomeStyles.next}
+                source={nextimg}
+              />
+            </View>
+          </View>
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
             {topArtists.length > 0 && topArtists.map((artist, index) =>
               <View key={index}>
@@ -173,15 +192,24 @@ function Home({ navigation, route }) {
             </Text>}
         </View>
         <View style={HomeStyles.fourthContainer}>
-          <Text style={HomeStyles.fourthHeader}>
-            your top tracks
-          </Text>
-          <Text style={HomeStyles.fourthSubHeader}>
-            your top tracks in the past 6 months
-          </Text>
-          <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
-            {topTracks.length > 0 && topTracks.map((track, index) =>
-              <View key={index}>
+          <View style={HomeStyles.headerContainer}>
+            <Text style={HomeStyles.fourthHeader}>
+              Top Tracks
+            </Text>
+            <View style={{ flexDirection: 'row', marginRight: 10 }}>
+              <Text style={HomeStyles.thirdHeader}>
+                All
+              </Text>
+              <Image
+                style={HomeStyles.next}
+                source={nextimg}
+              />
+            </View>
+
+          </View>
+          {topTracks.length > 0 && topTracks.map((track, index) =>
+            <View key={index}>
+              <View style={HomeStyles.topTracksContainer}>
                 <TouchableOpacity
                   style={{
                     shadowColor: '#000',
@@ -195,11 +223,13 @@ function Home({ navigation, route }) {
                     source={{ uri: track[2] }}
                   />
                 </TouchableOpacity>
-                <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
-                <Text style={HomeStyles.topTrackArtistText}>by {track[1]}</Text>
+                <View style={HomeStyles.topTrackTextContainer}>
+                  <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
+                  <Text style={HomeStyles.topTrackArtistText}>{track[1]}</Text>
+                </View>
               </View>
-            )}
-          </ScrollView>
+            </View>
+          )}
           {topTracks.length == 0 &&
             <Text style={HomeStyles.noDataText}>
               It seems like you haven't listened to much music on your Spotify account. Listen to some more music
@@ -208,12 +238,10 @@ function Home({ navigation, route }) {
           }
           <View style={{ height: 30 }} />
         </View>
-        {/* {route.params.new == true && */}
-          <GenreModal data={route.params.new} seeds={route.params.genreSeeds} />
-        {/* } */}
+        <GenreModal data={true} navigation={navigation} />
         <StatusBar style="auto" />
       </View>
-
+      <View style={{ height: '100%', backgroundColor: '#7f5a83' }} />
     </ScrollView>
 
   );

@@ -51,6 +51,7 @@ const getUserGenres = async (req, res, next) => {
                 if (doc.data().topGenres != null) {
                     res.json({ code: 200 });
                 } else {
+                    console.log('hello')
                     res.json({ code: 404 });
                 }
             })

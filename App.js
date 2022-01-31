@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import HomeStyles from './frontend/pages/home/HomeStyles';
 import { Text, View, Image, ScrollView } from 'react-native';
 import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDatabaseGenres, getGenreSeeds } from './frontend/fetch';
+import UploadOptions from './frontend/pages/UploadOptions/UploadOptions';
 
 function App({ navigation }) {
 
@@ -46,19 +47,7 @@ function App({ navigation }) {
                         .then(res => res.json())
                         .then(data => {
                             if (Object.keys(data.topGenres).length > 0) {
-                                saveUserGenres(tempId, data.topGenres, data.topArtists)
-                            } else {
-                                getUserDatabaseGenres(tempId)
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        if (data.code == 404) {
-                                            getGenreSeeds(token)
-                                                .then(res => res.json())
-                                                .then(data => {
-                                                    setSeeds({ ...seeds, seeds: data.genreSeeds });
-                                                })
-                                        }
-                                    })
+                                saveUserGenres(tempId, data.topArtists)
                             }
                         })
                 } catch (error) {
@@ -92,7 +81,8 @@ function App({ navigation }) {
                 screenOptions={{ headerShown: false }}
             >
                 <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Home' component={Home} initialParams={{ new: newUser, genreSeeds: seeds.seeds.length > 0 && seeds.seeds }} />
+                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='UploadOptions' component={UploadOptions} />
                 <Stack.Screen name='Upload' component={Upload} />
                 <Stack.Screen name='Results' component={Results} />
             </Stack.Navigator>

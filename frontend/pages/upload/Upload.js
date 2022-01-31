@@ -53,6 +53,7 @@ function Upload({ navigation }) {
           detectFace(res.base64)
             .then((res) => res.json())
             .then(data => {
+              console.log(data.image[0].expressions)
               setMoodAnalysis({ moodAnalysis: data.image[0].expressions });
             })
         }

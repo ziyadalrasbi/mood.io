@@ -10,7 +10,8 @@ import { getUserId, searchForArtists } from '../../fetch';
 import * as SecureStore from 'expo-secure-store';
 import { Searchbar } from 'react-native-paper';
 import { saveUserGenres } from '../../fetch';
-const GenreSelect = ({ seeds }) => {
+
+const GenreSelect = ({ navigation }) => {
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -66,8 +67,9 @@ const GenreSelect = ({ seeds }) => {
     .then(res => res.json())
     .then(data => {
       saveUserGenres(data.id, artists);
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
     })
-   
+    
   }
 
   return (

@@ -6,7 +6,11 @@ const getRecommendations = async (req, res, next) => {
     var recommendations = [];
     await api.setAccessToken(req.body.token);
     await api.getRecommendations({
-        // params here for getting similarity
+        max_valence: 0.3,
+        max_energy: 0.3,
+        max_danceability: 0.3,
+        max_instrumentalness: 0.35,
+        // target_key: req.body.key,
         seed_artists: req.body.artists,
         min_popularity: 50,
         limit: 100
@@ -18,14 +22,14 @@ const getRecommendations = async (req, res, next) => {
                 let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                 if (yearsDiff <= 4) {
                     if (data.body.tracks[i]['album'].images[0]) {
-                    let recommendation = [];
-                    recommendation.push(data.body.tracks[i].name);
-                    recommendation.push(data.body.tracks[i].artists[0].name);
-                    recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                    recommendation.push(data.body.tracks[i].external_urls.spotify);
-                    recommendations.push(recommendation);
+                        let recommendation = [];
+                        recommendation.push(data.body.tracks[i].name);
+                        recommendation.push(data.body.tracks[i].artists[0].name);
+                        recommendation.push(data.body.tracks[i]['album'].images[0].url);
+                        recommendation.push(data.body.tracks[i].external_urls.spotify);
+                        recommendations.push(recommendation);
                     } else {
-                        console.log('broken recommendation found: '+ JSON.stringify(data.body.tracks[i]));
+                        console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
                     }
                 }
             }
@@ -37,13 +41,18 @@ const getRecommendations = async (req, res, next) => {
         let similarArtists = [];
         await api.getArtistRelatedArtists(req.body.artists[i])
             .then((data) => {
-                for (let j = 0; j < 5; j++) {
-                    similarArtists.push(data.body.artists[j].id);
+                if (data.body.artists.length > 0) {
+                    for (let j = 0; j < 5; j++) {
+                        similarArtists.push(data.body.artists[j].id);
+                    }
                 }
             })
 
         await api.getRecommendations({
-            // params here for getting similarity
+            target_valence: 0.3,
+            target_energy: 0.3,
+            target_danceability: 0.3,
+            max_instrumentalness: 0.35,
             seed_artists: similarArtists,
             min_popularity: 50,
             limit: 100
@@ -55,15 +64,15 @@ const getRecommendations = async (req, res, next) => {
                     let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                     if (yearsDiff <= 4) {
                         if (data.body.tracks[k]['album'].images[0]) {
-                        let recommendation = [];
-                        recommendation.push(data.body.tracks[k].name);
-                        recommendation.push(data.body.tracks[k].artists[0].name);
-                        recommendation.push(data.body.tracks[k]['album'].images[0].url);
-                        recommendation.push(data.body.tracks[k].external_urls.spotify);
-                        recommendations.push(recommendation);
-                    } else {
-                        console.log('broken recommendation found: '+ JSON.stringify(data.body.tracks[k]));
-                    }
+                            let recommendation = [];
+                            recommendation.push(data.body.tracks[k].name);
+                            recommendation.push(data.body.tracks[k].artists[0].name);
+                            recommendation.push(data.body.tracks[k]['album'].images[0].url);
+                            recommendation.push(data.body.tracks[k].external_urls.spotify);
+                            recommendations.push(recommendation);
+                        } else {
+                            console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[k]));
+                        }
                     }
                 }
             }, function (err) {

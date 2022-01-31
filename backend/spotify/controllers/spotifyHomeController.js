@@ -26,7 +26,7 @@ const getTopArtists = async (req, res, next) => {
     var artistNames = [];
     await api.setAccessToken(req.body.token);
     try {
-        await api.getMyTopArtists({ limit: 8, time_range: 'medium_term' })
+        await api.getMyTopArtists({ limit: 8, time_range: 'short_term' })
             .then((data) => {
                 if (data.body.items[0] != null) {
                     for (let i = 0; i < 8; i++) {
@@ -51,7 +51,7 @@ const getTopTracks = async (req, res, next) => {
     var trackIds = [];
     await api.setAccessToken(req.body.token);
     try {
-        await api.getMyTopTracks({ limit: 6, time_range: 'medium_term' })
+        await api.getMyTopTracks({ limit: 6, time_range: 'short_term' })
             .then((data) => {
                 if (data.body.items[0] != null) {
                     for (let i = 0; i < 6; i++) {
@@ -106,20 +106,22 @@ const getListeningHabits = async (req, res, next) => {
 const searchForArtists = async (req, res, next) => {
     var artists = [];
     await api.setAccessToken(req.body.token);
-    try {
-        await api.searchArtists(req.body.search, {limit: 5})
-        .then((data) => {
-            for (var i = 0; i< data.body.artists.items.length; i++) {
-                var artist = {
-                    id: data.body.artists.items[i].id,
-                    title: data.body.artists.items[i].name
-                };
-                artists.push(artist);
-            }
-            res.json({ artists: artists });
-        })
-    } catch (error) {
-        console.log('There was an error searching for artists, please try again. \n' + JSON.stringify(error));
+    if (req.body.search.length > 0) {
+        try {
+            await api.searchArtists(req.body.search, { limit: 5 })
+                .then((data) => {
+                    for (var i = 0; i < data.body.artists.items.length; i++) {
+                        var artist = {
+                            id: data.body.artists.items[i].id,
+                            title: data.body.artists.items[i].name
+                        };
+                        artists.push(artist);
+                    }
+                    res.json({ artists: artists });
+                })
+        } catch (error) {
+            console.log('There was an error searching for artists, please try again. \n' + JSON.stringify(error));
+        }
     }
 }
 

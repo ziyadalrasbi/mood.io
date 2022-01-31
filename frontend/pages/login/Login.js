@@ -38,7 +38,6 @@ function Login({ navigation }) {
             prompt: Prompt.Login,
             usePKCE: false,
             extraParams: {
-                // On Android it will just skip right past sign in otherwise
                 show_dialog: 'true',
             },
             redirectUri: makeRedirectUri({
@@ -73,7 +72,7 @@ function Login({ navigation }) {
                                         .then(data => {
                                             console.log(Object.keys(data.topGenres).length);
                                             if (Object.keys(data.topGenres).length > 0) {
-                                                saveUserGenres(userId, data.topGenres, data.topArtists);
+                                                saveUserGenres(userId, data.topArtists);
                                                 navigation.reset({ index: 0, routes: [{ name: 'Home', params: { new: false } }] });
                                             } else {
                                                 getGenreSeeds(accessToken)
