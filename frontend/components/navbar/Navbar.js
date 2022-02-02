@@ -5,24 +5,36 @@ import NavbarStyles from './NavbarStyles';
 import React from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 
-function Navbar({ navigation, name, scan, signOut }) {
+function Navbar({ navigation, name, page, signOut }) {
 
   return (
     <View>
-      {scan == true ?
+      {page == 'home' &&
         <View style={NavbarStyles.topBar}>
           <Image style={NavbarStyles.hamburger} source={hamburger} />
           <Text style={NavbarStyles.welcome}>
             Welcome, {name}!
           </Text>
-          <TouchableOpacity onPress={() => signOut()}>
+          <TouchableOpacity onPress={() => navigation.navigate('UserStats')}>
             <Image style={NavbarStyles.scan} source={scanimg} />
           </TouchableOpacity>
         </View>
-        :
+      }
+      {page == 'upload' &&
         <View style={NavbarStyles.topBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image style={NavbarStyles.close} source={closeimg} />
+            <Image style={NavbarStyles.close} source={closeimg} />
+          </TouchableOpacity>
+        </View>
+      }
+      {page == 'stats' &&
+        <View style={NavbarStyles.topBar}>
+          <Image style={NavbarStyles.hamburger} source={hamburger} />
+          <Text style={NavbarStyles.welcome}>
+            Your Profile
+          </Text>
+          <TouchableOpacity onPress={() => signOut()}>
+            <Image style={NavbarStyles.scan} source={scanimg} />
           </TouchableOpacity>
         </View>
       }

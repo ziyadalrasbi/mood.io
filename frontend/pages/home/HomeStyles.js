@@ -187,7 +187,7 @@ export default StyleSheet.create({
     marginBottom: height / 179.2,
     fontSize: width / 34.5,
     fontStyle: 'italic',
-    maxWidth: width/1.38,
+    maxWidth: width / 1.38,
     marginRight: width / 20.7
   },
   topTrackTextContainer: {
@@ -201,7 +201,7 @@ export default StyleSheet.create({
     fontSize: width / 34.5,
     fontStyle: 'italic',
     marginRight: width / 20.7,
-    maxWidth:width/1.38
+    maxWidth: width / 1.38
   },
   topTrackArtistImage: {
     width: width / 4.14,

@@ -12,7 +12,7 @@ function UploadOptions({ navigation }) {
     return (
         <ScrollView style={UploadOptionsStyles.scroll} showsVerticalScrollIndicator={false}>
             <View style={UploadOptionsStyles.topContainer}>
-                <Navbar navigation={navigation} />
+                <Navbar page={'upload'} navigation={navigation} />
             </View>
             <View style={UploadOptionsStyles.mainContainer}>
                 <Text style={UploadOptionsStyles.welcome}>
@@ -22,7 +22,7 @@ function UploadOptions({ navigation }) {
                     Let's discover some new music! To begin, choose an option
                     below to detect your mood.
                 </Text>
-                <View style={UploadOptionsStyles.uploadContainer}>
+
                     <Text style={UploadOptionsStyles.headerText}>
                         1. Upload Image
                     </Text>
@@ -32,7 +32,7 @@ function UploadOptions({ navigation }) {
                         loop
                         style={UploadOptionsStyles.lottie}
                     />
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginLeft: 10, alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                         <Text style={UploadOptionsStyles.headerSubText}>
                             Upload a picture of your face and your mood will be detected automatically!
                         </Text>
@@ -46,8 +46,7 @@ function UploadOptions({ navigation }) {
                             continue
                         </Button>
                     </View>
-                </View>
-                <View style={UploadOptionsStyles.uploadContainer}>
+
                     <Text style={UploadOptionsStyles.headerText}>
                         2. Select Mood
                     </Text>
@@ -57,7 +56,7 @@ function UploadOptions({ navigation }) {
                         loop={false}
                         style={UploadOptionsStyles.lottie}
                     />
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginLeft: 10, alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                         <Text style={UploadOptionsStyles.headerSubText}>
                             Select the mood that best describes you from a list of options.
                         </Text>
@@ -70,7 +69,6 @@ function UploadOptions({ navigation }) {
                         >
                             continue
                         </Button>
-                    </View>
                 </View>
             </View>
         </ScrollView>

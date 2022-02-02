@@ -53,7 +53,7 @@ export default StyleSheet.create({
         width: width / 1.88181818,
         marginRight: width / 20.7,
         fontSize: width / 29.5714286,
-        padding: width / 41.4,
+        paddingVertical: width / 41.4,
         color: '#dbdbdb'
     },
     uploadContainer: {
@@ -62,7 +62,6 @@ export default StyleSheet.create({
     lottie: {
         alignSelf: 'center',
         width: 200,
-        marginLeft: 10,
         height: 200
     },
     scroll: {

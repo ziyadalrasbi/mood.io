@@ -12,6 +12,7 @@ const detectionRoutes = require('./detection/routes/detection-routes.js');
 const spotifyLoginRoutes = require('./spotify/routes/login-routes.js');
 const spotifyHomeRoutes = require('./spotify/routes/home-routes.js');
 const spotifyResultsRoutes = require('./spotify/routes/results-routes.js');
+const spotifyStatsRoutes = require('./spotify/routes/stats-routes.js')
 
 const PORT = process.env.PORT || 19001;
 const app = express();
@@ -39,6 +40,7 @@ app.use('/detection/detect', detectionRoutes.routes);
 app.use('/spotify/login', spotifyLoginRoutes.routes);
 app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
+app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)

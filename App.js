@@ -11,6 +11,7 @@ import HomeStyles from './frontend/pages/home/HomeStyles';
 import { Text, View, Image, ScrollView } from 'react-native';
 import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDatabaseGenres, getGenreSeeds } from './frontend/fetch';
 import UploadOptions from './frontend/pages/UploadOptions/UploadOptions';
+import UserStats from './frontend/pages/userstats/UserStats';
 
 function App({ navigation }) {
 
@@ -85,6 +86,7 @@ function App({ navigation }) {
                 <Stack.Screen name='UploadOptions' component={UploadOptions} />
                 <Stack.Screen name='Upload' component={Upload} />
                 <Stack.Screen name='Results' component={Results} />
+                <Stack.Screen name='UserStats' component={UserStats} />
             </Stack.Navigator>
         </NavigationContainer>
 

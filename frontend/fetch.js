@@ -316,3 +316,46 @@ export const saveUserRating = async (rating) => {
         })
     })
 }
+
+/* ------------- USER STATS FETCH FUNCTIONS ---------- */
+
+export const getUserProfile = async (token) => {
+    return fetch(`${baseUrl}/spotify/stats/getProfile`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token
+        })
+    })
+}
+
+export const getUserTopArtists = async (token, range) => {
+    return fetch(`${baseUrl}/spotify/stats/getTopArtists`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+            range: range
+        })
+    })
+}
+
+export const getUserTopTracks = async (token, range) => {
+    return fetch(`${baseUrl}/spotify/stats/getTopTracks`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+            range: range
+        })
+    })
+}

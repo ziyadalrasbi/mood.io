@@ -112,7 +112,6 @@ function Home({ navigation }) {
   }
 
   return (
-
     <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
       <LinearGradient
         // Background Linear Gradient
@@ -120,9 +119,8 @@ function Home({ navigation }) {
         style={HomeStyles.gradientContainer}
       />
       <View style={HomeStyles.mainContainer}>
-
         <View style={HomeStyles.topContainer}>
-          <Navbar navigation={navigation} name={name} scan={true} signOut={signOutUser} />
+          <Navbar navigation={navigation} name={name} page={'home'} signOut={signOutUser} />
         </View>
         <View style={HomeStyles.firstContainer}>
           <Text style={HomeStyles.firstHeader}>

@@ -38,6 +38,7 @@ const getUserId = async (req, res, next) => {
     await api.setAccessToken(req.body.token);
     await api.getMe()
         .then((data) => {
+            console.log(data.body.images);
             id = data.body.id;
             res.json({ id: id });
         }, function (error) {
@@ -78,18 +79,18 @@ const getGenreSeeds = async (req, res, next) => {
     var genreSeeds = [];
     await api.setAccessToken(req.body.token);
     await api.getAvailableGenreSeeds()
-    .then((data) => {
-        for (let i = 0; i < data.body.genres.length; i++) {
-            var tempGenre = {
-                id: i,
-                title: data.body.genres[i]
+        .then((data) => {
+            for (let i = 0; i < data.body.genres.length; i++) {
+                var tempGenre = {
+                    id: i,
+                    title: data.body.genres[i]
+                }
+                genreSeeds.push(tempGenre);
             }
-            genreSeeds.push(tempGenre);
+            res.json({ genreSeeds: genreSeeds });
+        }), function (err) {
+            console.log('There was an error getting the available genre seeds, please try again. \n', err);
         }
-        res.json({ genreSeeds: genreSeeds });
-    }), function (err) {
-        console.log('There was an error getting the available genre seeds, please try again. \n', err);
-    }
 }
 
 module.exports = {

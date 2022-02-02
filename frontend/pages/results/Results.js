@@ -38,10 +38,7 @@ function Results({ navigation, route }) {
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(true);
 
-
-
     useEffect(() => {
-
         const fetchData = async () => {
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
@@ -108,7 +105,7 @@ function Results({ navigation, route }) {
                             percentage: values.values[i],
                             color: moods.moods[i] === 'happy' ? 'yellow' : moods.moods[i] === 'sad' ? 'grey' : moods.moods[i] === 'angry' ? 'red' :
                                 moods.moods[i] === 'fearful' ? 'blue' : moods.moods[i] === 'disgusted' ? 'purple' : moods.moods[i] === 'surprised' ? 'orange' : 'black',
-                            legendFontColor: '#7F7F7F',
+                            legendFontColor: 'white',
                             legendFontSize: width / 29.5714286,
                         };
                         tempAverages.push(getAverages);
@@ -167,21 +164,17 @@ function Results({ navigation, route }) {
 
     return (
         <ScrollView style={ResultsStyles.scroll}>
+            <View style={ResultsStyles.topContainer}>
+                <Navbar scan={false} navigation={navigation} />
+            </View>
             <View style={ResultsStyles.mainContainer}>
-                <View style={ResultsStyles.topContainer}>
-                    <LinearGradient
-                        // Background Linear Gradient
-                        colors={['#36d1dc', '#5b86e5']}
-                        style={ResultsStyles.gradientContainer}
-                    />
-                    <Navbar scan={false} />
-                    <Text style={ResultsStyles.title}>
-                        results
-                    </Text>
-                    <Text style={ResultsStyles.subText}>
-                        your mood analysis can be found below!
-                    </Text>
-                </View>
+                <Text style={ResultsStyles.welcome}>
+                    results
+                </Text>
+                <Text style={ResultsStyles.subWelcome}>
+                    your mood analysis can be found below!
+                </Text>
+
                 <View style={ResultsStyles.firstContainer}>
                     <Text style={ResultsStyles.firstHeader}>
                         your result analysis showed {maxProp.maxProp != "" && moodHeader.moodHeader}
@@ -214,10 +207,10 @@ function Results({ navigation, route }) {
                     )}
                 </ScrollView>
                 <Text style={{ fontFamily: 'MontserratBold', fontSize: 11, display: count > 0 ? 'none' : 'flex', marginBottom: 10 }}>
-                        how would you rate the accuracy of this recommendation?
-                    </Text>
+                    how would you rate the accuracy of this recommendation?
+                </Text>
                 <View style={{ display: count > 0 ? 'none' : 'flex' }}>
-                    
+
                     <StarRating
                         disabled={false}
                         maxStars={5}

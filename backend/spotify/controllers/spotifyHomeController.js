@@ -26,7 +26,7 @@ const getTopArtists = async (req, res, next) => {
     var artistNames = [];
     await api.setAccessToken(req.body.token);
     try {
-        await api.getMyTopArtists({ limit: 8, time_range: 'short_term' })
+        await api.getMyTopArtists({ limit: 8, time_range: 'medium_term' })
             .then((data) => {
                 if (data.body.items[0] != null) {
                     for (let i = 0; i < 8; i++) {

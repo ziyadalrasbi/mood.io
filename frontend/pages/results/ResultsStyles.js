@@ -3,38 +3,42 @@ import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
+  mainContainer: {
+    position: 'relative',
+    flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    height: '100%',
+    padding: 10,
+    backgroundColor: '#0d324d'
+  },
   topContainer: {
     position: 'relative',
     left: 0,
     right: 0,
     top: 0,
-    height: height/3.2,
+    height: height / 10.2,
     width: '100%',
     justifyContent: 'flex-start',
     backgroundColor: 'transparent',
   },
-  title: {
-    marginLeft: width/41.4,
+  welcome: {
+    marginLeft: width / 41.4,
     fontFamily: 'MontserratBold',
-    marginTop: height / 6.89230769,
     color: 'white',
-    fontSize: width / 16.56
+    fontSize: width / 15.56
   },
-  subText: {
-    padding: width/41.4,
+  subWelcome: {
+    marginLeft: width / 41.4,
+    marginTop: height / 30.89230769,
+    marginBottom: height / 89.6,
+    maxWidth: width / 1.01764706,
     fontFamily: 'InconsolataLight',
     color: 'white',
-    fontSize: width/23
-  },
-  mainContainer: {
-    position: 'relative',
-    flex: 1,
-    backgroundColor: 'white',
-    flexDirection: 'column',
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    height: '100%'
+    fontSize: width / 25
   },
   firstContainer: {
     position: 'relative',
@@ -44,12 +48,10 @@ export default StyleSheet.create({
     marginBottom: height / 40.84,
     width: '100%',
     justifyContent: 'flex-start',
-    borderRadius: 23,
-    backgroundColor: 'white',
   },
   firstHeader: {
     fontFamily: 'MontserratBold',
-    color: '#191414',
+    color: 'white',
     fontSize: width / 27.6,
     padding: width / 41.4,
     marginBottom: -(width / 41.4),
@@ -59,7 +61,7 @@ export default StyleSheet.create({
     fontFamily: 'InconsolataMedium',
     fontSize: width / 29.5714286,
     padding: width / 41.4,
-    color: 'grey'
+    color: '#dbdbdb'
   },
   moodAnalysis: {
     position: 'relative',
@@ -77,7 +79,7 @@ export default StyleSheet.create({
   scroll: {
     flex: 1,
     height: '100%',
-    backgroundColor:'white',
+    backgroundColor: '#0d324d'
   },
   gradientContainer: {
     height: height/2.8, 
