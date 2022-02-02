@@ -13,6 +13,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
 import { getTopArtists, getName, getTopTracks, getListeningHabits, signOut, getUserDatabaseGenres, getGenreSeeds, getUserId } from '../../fetch';
 import nextimg from '../../../assets/icons/home/next.png'
+import playimg from '../../../assets/icons/home/play.png';
+
 function Home({ navigation }) {
 
   const [loading, setLoading] = useState(true);
@@ -47,11 +49,17 @@ function Home({ navigation }) {
               if (data != null) {
                 setTopArtists(data.artistNames);
               }
+            }).catch((error) => {
+              console.log('Error fetching top artists, please try again. \n' + error);
+              throw error;
             })
           await getName(token)
             .then((res) => res.json())
             .then(data => {
               setName(data.name);
+            }).catch((error) => {
+              console.log('Error fetching name, please try again. \n' + error);
+              throw error;
             })
           await getTopTracks(token)
             .then((res) => res.json())
@@ -60,12 +68,19 @@ function Home({ navigation }) {
                 setTopTracks(data.topTracks);
                 setTrackIds(data.trackIds);
               }
+            }).catch((error) => {
+              console.log('Error fetching top tracks, please try again. \n' + error);
+              throw error;
             })
             .then(() => {
               getListeningHabits(token, trackIds)
                 .then((res) => res.json())
                 .then(data => {
                   setHabits({ habits: data.habits });
+                })
+                .catch((error) => {
+                  console.log('Error fetching habits, please try again. \n' + error);
+                  throw error;
                 })
             })
           await getUserId(token)
@@ -79,13 +94,26 @@ function Home({ navigation }) {
                     setNewUser({ newUser: isNew });
                   }
                 })
+                .catch((error) => {
+                  console.log('Error fetching user genres, please try again. \n' + error);
+                  throw error;
+                })
+            }).catch((error) => {
+              console.log('Error fetching user ID, please try again. \n' + error);
+              throw error;
             })
         } catch (error) {
           console.log('Error fetching home data, please try again. \n' + error);
+          throw error;
         }
       }
     }
-    fetchData().then(() => setLoading(false));
+    fetchData().then(() => {
+      setLoading(false)
+    }).catch((error) => {
+      console.log('Error fetching top tracks, please try again. \n' + error);
+      throw error;
+    });
 
   }, [loading]);
 
@@ -151,17 +179,19 @@ function Home({ navigation }) {
         <View style={HomeStyles.thirdContainer}>
           <View style={HomeStyles.headerContainer}>
             <Text style={HomeStyles.thirdHeader}>
-              Top Artists
+            Your Top Artists
             </Text>
-            <View style={{ flexDirection: 'row', marginRight: 10 }}>
-              <Text style={HomeStyles.thirdHeader}>
-                All
-              </Text>
-              <Image
-                style={HomeStyles.next}
-                source={nextimg}
-              />
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 0 })}>
+              <View style={{ flexDirection: 'row', marginRight: 10 }}>
+                <Text style={HomeStyles.thirdHeader}>
+                  All
+                </Text>
+                <Image
+                  style={HomeStyles.next}
+                  source={nextimg}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
             {topArtists.length > 0 && topArtists.map((artist, index) =>
@@ -192,17 +222,19 @@ function Home({ navigation }) {
         <View style={HomeStyles.fourthContainer}>
           <View style={HomeStyles.headerContainer}>
             <Text style={HomeStyles.fourthHeader}>
-              Top Tracks
+              Your Top Tracks
             </Text>
-            <View style={{ flexDirection: 'row', marginRight: 10 }}>
-              <Text style={HomeStyles.thirdHeader}>
-                All
-              </Text>
-              <Image
-                style={HomeStyles.next}
-                source={nextimg}
-              />
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 1 })}>
+              <View style={{ flexDirection: 'row', marginRight: 10 }}>
+                <Text style={HomeStyles.thirdHeader}>
+                  All
+                </Text>
+                <Image
+                  style={HomeStyles.next}
+                  source={nextimg}
+                />
+              </View>
+            </TouchableOpacity>
 
           </View>
           {topTracks.length > 0 && topTracks.map((track, index) =>
@@ -225,6 +257,14 @@ function Home({ navigation }) {
                   <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
                   <Text style={HomeStyles.topTrackArtistText}>{track[1]}</Text>
                 </View>
+                <TouchableOpacity
+                  style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                  onPress={() => Linking.openURL(track[3])}>
+                  <Image
+                    style={HomeStyles.playImage}
+                    source={playimg}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           )}

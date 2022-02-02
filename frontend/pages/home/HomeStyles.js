@@ -176,6 +176,7 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
+    alignItems:'center',
     justifyContent: 'flex-start'
   },
   topTrackText: {
@@ -248,6 +249,10 @@ export default StyleSheet.create({
     height: height / 52.7058824,
     marginLeft: -(width / 41.4),
     marginTop: height / 54.9693252
+  },
+  playImage: {
+    width: width / 18.8181818,
+    height: height / 40.7272727
   }
 });
 

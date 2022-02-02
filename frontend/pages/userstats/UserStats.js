@@ -5,97 +5,21 @@ import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import UserStatsStyles from './UserStatsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { getUserProfile, getUserTopTracks, getUserTopArtists } from '../../fetch';
+import { getUserProfile, getUserTopTracks, getUserTopArtists, refreshAccessToken } from '../../fetch';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import * as Linking from 'expo-linking';
+import playimg from '../../../assets/icons/home/play.png';
 
-function UserStats({ navigation }) {
 
-    const [profile, setProfile] = useState({ name: "", picture: "", followers: null });
-    const [loading, setLoading] = useState(true);
-    const [topArtists, setTopArtists] = useState({ topArtists: [] });
-    const [open, setOpen] = useState(false);
-    const [items, setItems] = useState([
-        { label: 'Short term', value: 'short_term' },
-        { label: 'Medium term', value: 'medium_term' },
-        { label: 'Long term', value: 'long_term' },
-    ]);
-    const [value, setValue] = useState('medium_term');
+function UserStats({ navigation, route }) {
 
-    const [loaded] = useFonts({
-        InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-        InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-        InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-        InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
-    });
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const token = await SecureStore.getItemAsync('spotify_access_token');
-            await getUserProfile(token)
-                .then(res => res.json())
-                .then(data => {
-                    setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-                })
-            await getUserTopArtists(token, 'medium_term')
-                .then(res => res.json())
-                .then(data => {
-                    if (data != null) {
-                        setTopArtists(data.artistNames);
-                    }
-                })
-        }
-        fetchData().then(() => setLoading(false));
-    }, [loading])
-
-    if (!loaded || loading) {
-        return (
-            <Loading page={"home"} />
-        );
-    }
-
-    const changeRange = async (range) => {
-        const token = await SecureStore.getItemAsync('spotify_access_token');
-        await getUserTopArtists(token, range)
-            .then(res => res.json())
-            .then(data => {
-                if (data != null) {
-                    setTopArtists(data.artistNames);
-                }
-            })
-    }
-
-    return (
-        <ScrollView style={UserStatsStyles.scroll} showsVerticalScrollIndicator={false}>
-            <View style={UserStatsStyles.topContainer}>
-                <Navbar page={'stats'} navigation={navigation} />
-            </View>
-            <View style={UserStatsStyles.mainContainer}>
-                <View style={UserStatsStyles.firstContainer}>
-                    <Image
-                        style={UserStatsStyles.profilePicture}
-                        source={{ uri: profile.picture }}
-                    />
-                    <Text style={UserStatsStyles.firstHeader}>
-                        {profile.name}
-                    </Text>
-                    <Text style={UserStatsStyles.firstSubHeader}>
-                        Followers: {profile.followers}
-                    </Text>
-                </View>
-                <DropDownPicker
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    containerStyle={{ height: 40 }}
-                    onChangeValue={item => changeRange(item)}
-                />
+    const FirstRoute = () => (
+        <ScrollView style={UserStatsStyles.tabView} showsVerticalScrollIndicator={false}>
+            <View style={UserStatsStyles.artistsRouteContainer} >
                 {topArtists.length > 0 && topArtists.map((artist, index) =>
-                    <View key={index}>
+                    <View style={{ padding: 10 }} key={index}>
                         <TouchableOpacity
                             style={{
                                 shadowColor: '#000',
@@ -112,9 +36,215 @@ function UserStats({ navigation }) {
                         <Text style={UserStatsStyles.topArtistText}>{artist[0]}</Text>
                     </View>
                 )}
-                <StatusBar style="auto" />
             </View>
+            <View style={{ height: 20 }} />
         </ScrollView>
+    );
+
+    const SecondRoute = () => (
+        <ScrollView style={UserStatsStyles.tabView} showsVerticalScrollIndicator={false}>
+            {topTracks.length > 0 && topTracks.map((track, index) =>
+                <View key={index} style={UserStatsStyles.topTracksContainer}>
+                    <TouchableOpacity
+                        style={{
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.5,
+                            shadowRadius: 2, elevation: 5
+                        }}
+                        onPress={() => Linking.openURL(track[3])}>
+                        <Image
+                            style={UserStatsStyles.topTrackImage}
+                            source={{ uri: track[2] }}
+                        />
+                    </TouchableOpacity>
+                    <View style={UserStatsStyles.topTrackTextContainer}>
+                        <Text style={UserStatsStyles.topTrackText}>{track[0]}</Text>
+                        <Text style={UserStatsStyles.topTrackArtistText}>{track[1]}</Text>
+                    </View>
+                    <TouchableOpacity
+                        style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                        onPress={() => Linking.openURL(track[3])}>
+                        <Image
+                            style={UserStatsStyles.playImage}
+                            source={playimg}
+                        />
+                    </TouchableOpacity>
+                </View>
+
+            )}
+            <View style={{ height: 20 }} />
+        </ScrollView>
+    );
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+    });
+
+    const [profile, setProfile] = useState({ name: "", picture: "", followers: null });
+    const [loading, setLoading] = useState(true);
+    const [topArtists, setTopArtists] = useState({ topArtists: [] });
+    const [topTracks, setTopTracks] = useState({ topTracks: [] });
+    const [index, setIndex] = useState(route.params.index);
+    const [routes] = useState([
+        { key: 'first', title: 'Top Artists' },
+        { key: 'second', title: 'Top Tracks' },
+    ]);
+    const [open, setOpen] = useState(false);
+    const [items, setItems] = useState([
+        { label: 'Short term', value: 'short_term' },
+        { label: 'Medium term', value: 'medium_term' },
+        { label: 'Long term', value: 'long_term' },
+    ]);
+    const [range, setRange] = useState('medium_term');
+    const [selectedIndex, setSelectedIndex] = useState(2);
+
+    const [loaded] = useFonts({
+        InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
+        InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
+        InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
+        InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
+    });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            var accessToken;
+            await refreshAccessToken(token, refreshToken)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.token != "Null") {
+                        accessToken = data.token;
+                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                    }
+                })
+                .then(() => {
+                    getUserProfile(accessToken)
+                        .then(res => res.json())
+                        .then(data => {
+                            setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
+                        })
+                    getUserTopArtists(accessToken, 'medium_term')
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data != null) {
+                                setTopArtists(data.artistNames);
+                            }
+                        })
+                    getUserTopTracks(accessToken, 'medium_term')
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data != null) {
+                                setTopTracks(data.topTracks);
+                            }
+                        })
+                })
+        }
+        fetchData().then(() => setLoading(false));
+    }, [loading])
+
+    if (!loaded || loading) {
+        return (
+            <Loading page={"home"} />
+        );
+    }
+
+    const changeRange = async (range, i) => {
+        setSelectedIndex(i);
+        const token = await SecureStore.getItemAsync('spotify_access_token');
+        await getUserTopArtists(token, range)
+            .then(res => res.json())
+            .then(data => {
+                if (data != null) {
+                    setTopArtists(data.artistNames);
+                }
+            })
+        await getUserTopTracks(token, range)
+            .then(res => res.json())
+            .then(data => {
+                if (data != null) {
+                    setTopTracks(data.topTracks);
+                }
+            })
+    }
+
+    const renderTabBar = props => {
+        return (
+            <TabBar
+                style={{ backgroundColor: 'transparent' }}
+                {...props}
+                renderLabel={({ focused, route }) => {
+                    return (
+                        <Text style={[UserStatsStyles.tabBarText, { color: focused ? 'white' : 'grey' }]}>
+                            {route.title}
+                        </Text>
+                    );
+                }}
+            />
+        );
+    };
+
+    return (
+        <View style={UserStatsStyles.scroll}>
+
+            <View style={UserStatsStyles.topContainer}>
+                <Navbar page={'stats'} navigation={navigation} />
+            </View>
+            <View style={UserStatsStyles.mainContainer}>
+                <View style={UserStatsStyles.firstContainer}>
+                    <Image
+                        style={UserStatsStyles.profilePicture}
+                        source={{ uri: profile.picture }}
+                    />
+                    <Text style={UserStatsStyles.firstHeader}>
+                        {profile.name}
+                    </Text>
+                    <Text style={UserStatsStyles.firstSubHeader}>
+                        Followers: {profile.followers}
+                    </Text>
+                </View>
+                <View style={UserStatsStyles.selectContainer}>
+                    <View style={UserStatsStyles.selectButtonContainer}>
+                        <TouchableOpacity
+                            style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 1 ? '#0e219c' : 'grey' }]}
+                            onPress={() => changeRange('short_term', 1)}
+                        />
+                        <Text style={UserStatsStyles.selectText}>
+                            Past 4 weeks
+                        </Text>
+                    </View>
+                    <View style={UserStatsStyles.selectButtonContainer}>
+                        <TouchableOpacity
+                            style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 2 ? '#0e219c' : 'grey' }]}
+                            onPress={() => changeRange('medium_term', 2)}
+                        />
+                        <Text style={UserStatsStyles.selectText}>
+                            Past 6 months
+                        </Text>
+                    </View>
+                    <View style={UserStatsStyles.selectButtonContainer}>
+                        <TouchableOpacity
+                            style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 3 ? '#0e219c' : 'grey' }]}
+                            onPress={() => changeRange('long_term', 3)}
+                        />
+                        <Text style={UserStatsStyles.selectText}>
+                            All time
+                        </Text>
+                    </View>
+                </View>
+            </View>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: '100%' }}
+                style={{ color: 'black' }}
+                renderTabBar={renderTabBar}
+            />
+            <StatusBar style="auto" />
+        </View>
     );
 }
 

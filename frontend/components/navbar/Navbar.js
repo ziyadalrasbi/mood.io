@@ -15,7 +15,7 @@ function Navbar({ navigation, name, page, signOut }) {
           <Text style={NavbarStyles.welcome}>
             Welcome, {name}!
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('UserStats')}>
+          <TouchableOpacity onPress={() => signOut()}>
             <Image style={NavbarStyles.scan} source={scanimg} />
           </TouchableOpacity>
         </View>

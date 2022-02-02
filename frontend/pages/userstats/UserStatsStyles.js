@@ -60,24 +60,43 @@ export default StyleSheet.create({
         marginTop: height / 179.2
     },
     topTrackArtistImage: {
-        width: width / 4.14,
-        height: width / 4.14,
-        marginRight: width / 20.7,
+        width: width / 3.6,
+        height: height / 7.79130435,
         marginTop: height / 89.6,
         borderRadius: 100
-      },
+    },
     firstSubHeader: {
         fontFamily: 'InconsolataMedium',
         fontSize: width / 29.5714286,
         padding: width / 41.4,
         color: '#dbdbdb'
     },
-    startButton: {
-        backgroundColor: '#4ca1af',
-        marginLeft: width / 41.4,
-        marginTop: height / 59.7333333,
+    selectContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '80%',
+        marginLeft: -10,
+        marginTop: 5
+    },
+    selectButtonContainer: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    selectIcon: {
         padding: width / 82.8,
-        alignSelf: 'flex-start'
+        width: width / 27.6,
+        height: height / 59.7333333,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: 'grey'
+    },
+    selectText: {
+        color: 'white',
+        fontFamily: 'InconsolataMedium',
+        fontSize: width / 37.6363636,
+        paddingHorizontal: width / 82.8
     },
     secondContainer: {
         position: 'relative',
@@ -111,10 +130,7 @@ export default StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         height: '100%',
-    },
-    mainFont: {
-        fontFamily: 'InconsolataMedium',
-        fontSize: 17
+        marginBottom: -(height / 2.98666667)
     },
     thirdContainer: {
         position: 'relative',
@@ -154,8 +170,7 @@ export default StyleSheet.create({
         marginBottom: height / 179.2,
         fontSize: width / 34.5,
         fontStyle: 'italic',
-        maxWidth: width / 4.14,
-        marginRight: width / 20.7,
+        maxWidth: width / 4.14
     },
     fourthContainer: {
         position: 'relative',
@@ -188,11 +203,11 @@ export default StyleSheet.create({
     },
     topTracksContainer: {
         padding: width / 41.4,
-        borderColor: 'red',
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        alignItems:'center',
     },
     topTrackText: {
         fontFamily: 'InconsolataMedium',
@@ -220,11 +235,15 @@ export default StyleSheet.create({
         maxWidth: width / 1.38
     },
     topTrackImage: {
-        width: 60,
-        height: 60,
+        width: width / 6.9,
+        height: height / 14.9333333,
         marginRight: width / 20.7,
         marginTop: height / 89.6,
         borderRadius: 5
+    },
+    playImage: {
+        width: width/18.8181818,
+        height: height/40.7272727
     },
     mainFont: {
         fontFamily: 'InconsolataMedium',
@@ -235,13 +254,18 @@ export default StyleSheet.create({
         height: '100%',
         backgroundColor: '#0d324d'
     },
+    tabView: {
+        flex: 1,
+        height: '100%',
+        backgroundColor: '#09263b',
+    },
     noDataText: {
         marginTop: height / 179.2,
         fontFamily: 'MontserratBold',
         color: 'grey',
         fontSize: width / 31.8461538,
         marginRight: width / 41.4,
-        padding: 10,
+        padding: width / 41.4,
         maxWidth: width / 1.06153846,
     },
     gradientContainer: {
@@ -257,6 +281,23 @@ export default StyleSheet.create({
         height: height / 52.7058824,
         marginLeft: -(width / 41.4),
         marginTop: height / 54.9693252
+    },
+    artistsRouteContainer: {
+        display: "flex",
+        flexDirection: 'row',
+        flexWrap: "wrap",
+        flex: 1,
+        justifyContent: 'center'
+    },
+    tracksRouteContainer: {
+        display: "flex",
+        flexDirection: 'column',
+        flexWrap: "wrap",
+        flex: 1
+    },
+    tabBarText: {
+        fontFamily: 'MontserratBold',
+        fontSize: width / 29.5714286
     }
 });
 
