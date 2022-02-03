@@ -12,7 +12,7 @@ function UploadOptions({ navigation }) {
     return (
         <ScrollView style={UploadOptionsStyles.scroll} showsVerticalScrollIndicator={false}>
             <View style={UploadOptionsStyles.topContainer}>
-                <Navbar page={'upload'} navigation={navigation} />
+                <Navbar page={'uploadOptions'} navigation={navigation} />
             </View>
             <View style={UploadOptionsStyles.mainContainer}>
                 <Text style={UploadOptionsStyles.welcome}>
@@ -23,52 +23,52 @@ function UploadOptions({ navigation }) {
                     below to detect your mood.
                 </Text>
 
-                    <Text style={UploadOptionsStyles.headerText}>
-                        1. Upload Image
+                <Text style={UploadOptionsStyles.headerText}>
+                    1. Upload Image
+                </Text>
+                <LottieView
+                    source={require('./animations/lf30_editor_3xr8ifgo.json')}
+                    autoPlay
+                    loop={false}
+                    style={UploadOptionsStyles.lottie}
+                />
+                <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
+                    <Text style={UploadOptionsStyles.headerSubText}>
+                        Upload a picture of your face and your mood will be detected automatically!
                     </Text>
-                    <LottieView
-                        source={require('./animations/lf30_editor_pijjj3w6.json')}
-                        autoPlay
-                        loop
-                        style={UploadOptionsStyles.lottie}
-                    />
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                        <Text style={UploadOptionsStyles.headerSubText}>
-                            Upload a picture of your face and your mood will be detected automatically!
-                        </Text>
-                        <Button
-                            style={UploadOptionsStyles.startButton}
-                            uppercase={false}
-                            mode="contained"
-                            labelStyle={UploadOptionsStyles.mainFont}
-                            onPress={() => navigation.navigate('Upload', { navigation: navigation })}
-                        >
-                            continue
-                        </Button>
-                    </View>
+                    <Button
+                        style={UploadOptionsStyles.startButton}
+                        uppercase={false}
+                        mode="contained"
+                        labelStyle={UploadOptionsStyles.mainFont}
+                        onPress={() => navigation.navigate('Upload', { navigation: navigation })}
+                    >
+                        continue
+                    </Button>
+                </View>
 
-                    <Text style={UploadOptionsStyles.headerText}>
-                        2. Select Mood
+                <Text style={UploadOptionsStyles.headerText}>
+                    2. Select Mood
+                </Text>
+                <LottieView
+                    source={require('./animations/lf30_editor_r2rkclcy.json')}
+                    autoPlay
+                    loop={false}
+                    style={UploadOptionsStyles.lottie}
+                />
+                <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
+                    <Text style={UploadOptionsStyles.headerSubText}>
+                        Select the mood that best describes you from a list of options.
                     </Text>
-                    <LottieView
-                        source={require('./animations/lf30_editor_r2rkclcy.json')}
-                        autoPlay
-                        loop={false}
-                        style={UploadOptionsStyles.lottie}
-                    />
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                        <Text style={UploadOptionsStyles.headerSubText}>
-                            Select the mood that best describes you from a list of options.
-                        </Text>
-                        <Button
-                            style={UploadOptionsStyles.startButton}
-                            uppercase={false}
-                            mode="contained"
-                            labelStyle={UploadOptionsStyles.mainFont}
-                            onPress={() => navigation.navigate('Upload', { navigation: navigation })}
-                        >
-                            continue
-                        </Button>
+                    <Button
+                        style={UploadOptionsStyles.startButton}
+                        uppercase={false}
+                        mode="contained"
+                        labelStyle={UploadOptionsStyles.mainFont}
+                        onPress={() => navigation.navigate('SelectMood', { navigation: navigation })}
+                    >
+                        continue
+                    </Button>
                 </View>
             </View>
         </ScrollView>

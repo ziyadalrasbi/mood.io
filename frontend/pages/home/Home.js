@@ -29,6 +29,8 @@ function Home({ navigation }) {
 
   const [newUser, setNewUser] = useState({ newUser: false });
 
+  const [artistImgLoaded, setArtistImgLoaded] = useState(false);
+  const [trackImgLoaded, setTrackImgLoaded] = useState(false);
 
   const [loaded] = useFonts({
     MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -123,6 +125,23 @@ function Home({ navigation }) {
     );
   }
 
+  const changeArtistImageLoadedTrue = () => {
+    setArtistImgLoaded(true);
+  }
+
+  const changeArtistImageLoadedFalse = () => {
+    setArtistImgLoaded(false);
+  }
+
+  const changeTrackImageLoadedTrue = () => {
+    setTrackImgLoaded(true);
+  }
+
+  const changeTrackImageLoadedFalse = () => {
+    setTrackImgLoaded(true);
+  }
+
+
 
   const signOutUser = async () => {
     try {
@@ -179,10 +198,10 @@ function Home({ navigation }) {
         <View style={HomeStyles.thirdContainer}>
           <View style={HomeStyles.headerContainer}>
             <Text style={HomeStyles.thirdHeader}>
-            Your Top Artists
+              Your Top Artists
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 0 })}>
-              <View style={{ flexDirection: 'row', marginRight: 10 }}>
+              <View style={HomeStyles.allContainer}>
                 <Text style={HomeStyles.thirdHeader}>
                   All
                 </Text>
@@ -193,6 +212,7 @@ function Home({ navigation }) {
               </View>
             </TouchableOpacity>
           </View>
+
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
             {topArtists.length > 0 && topArtists.map((artist, index) =>
               <View key={index}>
@@ -205,6 +225,8 @@ function Home({ navigation }) {
                   }}
                   onPress={() => Linking.openURL(artist[2])}>
                   <Image
+                    onLoadStart={changeArtistImageLoadedFalse}
+                    onLoad={changeArtistImageLoadedTrue}
                     style={HomeStyles.topTrackArtistImage}
                     source={{ uri: artist[1] }}
                   />
@@ -213,6 +235,7 @@ function Home({ navigation }) {
               </View>
             )}
           </ScrollView>
+
           {topArtists.length == 0 &&
             <Text style={HomeStyles.noDataText}>
               It seems like you haven't listened to much music on your Spotify account. Listen to some more music
@@ -225,7 +248,7 @@ function Home({ navigation }) {
               Your Top Tracks
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 1 })}>
-              <View style={{ flexDirection: 'row', marginRight: 10 }}>
+              <View style={HomeStyles.allContainer}>
                 <Text style={HomeStyles.thirdHeader}>
                   All
                 </Text>
@@ -249,6 +272,8 @@ function Home({ navigation }) {
                   }}
                   onPress={() => Linking.openURL(track[3])}>
                   <Image
+                    onLoadStart={changeTrackImageLoadedFalse}
+                    onLoad={changeTrackImageLoadedTrue}
                     style={HomeStyles.topTrackImage}
                     source={{ uri: track[2] }}
                   />
@@ -261,10 +286,13 @@ function Home({ navigation }) {
                   style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
                   onPress={() => Linking.openURL(track[3])}>
                   <Image
+
                     style={HomeStyles.playImage}
                     source={playimg}
                   />
+
                 </TouchableOpacity>
+
               </View>
             </View>
           )}

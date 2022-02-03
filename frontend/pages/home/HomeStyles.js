@@ -110,7 +110,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
   },
   thirdHeader: {
-    marginTop: 5,
+    marginTop: height / 179.2,
     fontFamily: 'MontserratBold',
     color: 'white',
     fontSize: width / 27.6,
@@ -119,7 +119,7 @@ export default StyleSheet.create({
   thirdSubHeader: {
     fontFamily: 'InconsolataMedium',
     fontSize: width / 29.5714286,
-    padding: 10,
+    padding: width / 41.4,
     color: '#dbdbdb'
   },
   topArtistsContainer: {
@@ -176,7 +176,7 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    alignItems:'center',
+    alignItems: 'center',
     justifyContent: 'flex-start'
   },
   topTrackText: {
@@ -246,13 +246,17 @@ export default StyleSheet.create({
   },
   next: {
     width: width / 24.3529412,
-    height: height / 52.7058824,
+    height: width / 24.3529412,
     marginLeft: -(width / 41.4),
-    marginTop: height / 54.9693252
+    marginTop: height/54.3030303
   },
   playImage: {
     width: width / 18.8181818,
-    height: height / 40.7272727
+    height: width / 18.8181818
+  },
+  allContainer: {
+    flexDirection: 'row',
+    marginRight: width / 41.4
   }
 });
 

@@ -51,7 +51,7 @@ const getTopTracks = async (req, res, next) => {
     var trackIds = [];
     await api.setAccessToken(req.body.token);
     try {
-        await api.getMyTopTracks({ limit: 6, time_range: 'short_term' })
+        await api.getMyTopTracks({ limit: 6, time_range: 'medium_term' })
             .then((data) => {
                 if (data.body.items[0] != null) {
                     for (let i = 0; i < 6; i++) {

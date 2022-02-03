@@ -28,7 +28,7 @@ export default StyleSheet.create({
     welcome: {
         marginLeft: width / 41.4,
         fontFamily: 'MontserratBold',
-        
+
         color: 'white',
         fontSize: width / 15.56
     },
@@ -61,8 +61,8 @@ export default StyleSheet.create({
     },
     lottie: {
         alignSelf: 'center',
-        width: 200,
-        height: 200
+        width: width / 2.07,
+        height: width / 2.07
     },
     scroll: {
         flex: 1,

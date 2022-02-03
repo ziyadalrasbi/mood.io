@@ -61,7 +61,7 @@ export default StyleSheet.create({
     },
     topTrackArtistImage: {
         width: width / 3.6,
-        height: height / 7.79130435,
+        height: width / 3.6,
         marginTop: height / 89.6,
         borderRadius: 100
     },
@@ -207,7 +207,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'flex-start',
-        alignItems:'center',
+        alignItems: 'center',
     },
     topTrackText: {
         fontFamily: 'InconsolataMedium',
@@ -236,14 +236,14 @@ export default StyleSheet.create({
     },
     topTrackImage: {
         width: width / 6.9,
-        height: height / 14.9333333,
+        height: width / 6.9,
         marginRight: width / 20.7,
         marginTop: height / 89.6,
         borderRadius: 5
     },
     playImage: {
-        width: width/18.8181818,
-        height: height/40.7272727
+        width: width / 18.8181818,
+        height: width / 18.8181818
     },
     mainFont: {
         fontFamily: 'InconsolataMedium',

@@ -64,8 +64,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: '70%',
     justifyContent: 'center',
-    alignItems:'center',
-    alignSelf:'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     marginTop: height / 89.6
   },
   uploadButton: {

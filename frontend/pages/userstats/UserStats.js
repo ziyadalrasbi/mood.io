@@ -11,7 +11,7 @@ import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
-
+import defaultimg from '../../../assets/icons/stats/default.png';
 
 function UserStats({ navigation, route }) {
 
@@ -37,6 +37,12 @@ function UserStats({ navigation, route }) {
                     </View>
                 )}
             </View>
+            {topArtists.length == 0 &&
+                <Text style={UserStatsStyles.noDataText}>
+                    No data found for this time frame. Try a different time frame, or listen to some more #
+                    music on Spotify and come back at a later date to view this data!
+                </Text>
+            }
             <View style={{ height: 20 }} />
         </ScrollView>
     );
@@ -71,8 +77,13 @@ function UserStats({ navigation, route }) {
                         />
                     </TouchableOpacity>
                 </View>
-
             )}
+            {topTracks.length == 0 &&
+                <Text style={UserStatsStyles.noDataText}>
+                    No data found for this time frame. Try a different time frame, or listen to some more #
+                    music on Spotify and come back at a later date to view this data!
+                </Text>
+            }
             <View style={{ height: 20 }} />
         </ScrollView>
     );
@@ -91,13 +102,6 @@ function UserStats({ navigation, route }) {
         { key: 'first', title: 'Top Artists' },
         { key: 'second', title: 'Top Tracks' },
     ]);
-    const [open, setOpen] = useState(false);
-    const [items, setItems] = useState([
-        { label: 'Short term', value: 'short_term' },
-        { label: 'Medium term', value: 'medium_term' },
-        { label: 'Long term', value: 'long_term' },
-    ]);
-    const [range, setRange] = useState('medium_term');
     const [selectedIndex, setSelectedIndex] = useState(2);
 
     const [loaded] = useFonts({
@@ -188,7 +192,6 @@ function UserStats({ navigation, route }) {
 
     return (
         <View style={UserStatsStyles.scroll}>
-
             <View style={UserStatsStyles.topContainer}>
                 <Navbar page={'stats'} navigation={navigation} />
             </View>
@@ -196,7 +199,7 @@ function UserStats({ navigation, route }) {
                 <View style={UserStatsStyles.firstContainer}>
                     <Image
                         style={UserStatsStyles.profilePicture}
-                        source={{ uri: profile.picture }}
+                        source={profile.picture != null ? { uri: profile.picture } : defaultimg}
                     />
                     <Text style={UserStatsStyles.firstHeader}>
                         {profile.name}
@@ -206,33 +209,36 @@ function UserStats({ navigation, route }) {
                     </Text>
                 </View>
                 <View style={UserStatsStyles.selectContainer}>
+                    <TouchableOpacity onPress={() => changeRange('short_term', 1)}>
+                        <View style={UserStatsStyles.selectButtonContainer}>
+                            <View
+                                style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 1 ? '#0e219c' : 'grey' }]}
+                            />
+                            <Text style={UserStatsStyles.selectText}>
+                                Past 4 weeks
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeRange('medium_term', 2)}>
                     <View style={UserStatsStyles.selectButtonContainer}>
-                        <TouchableOpacity
-                            style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 1 ? '#0e219c' : 'grey' }]}
-                            onPress={() => changeRange('short_term', 1)}
-                        />
-                        <Text style={UserStatsStyles.selectText}>
-                            Past 4 weeks
-                        </Text>
-                    </View>
-                    <View style={UserStatsStyles.selectButtonContainer}>
-                        <TouchableOpacity
+                        <View
                             style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 2 ? '#0e219c' : 'grey' }]}
-                            onPress={() => changeRange('medium_term', 2)}
                         />
                         <Text style={UserStatsStyles.selectText}>
                             Past 6 months
                         </Text>
                     </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeRange('long_term', 3)}>
                     <View style={UserStatsStyles.selectButtonContainer}>
-                        <TouchableOpacity
+                        <View
                             style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 3 ? '#0e219c' : 'grey' }]}
-                            onPress={() => changeRange('long_term', 3)}
                         />
                         <Text style={UserStatsStyles.selectText}>
                             All time
                         </Text>
                     </View>
+                    </TouchableOpacity>
                 </View>
             </View>
             <TabView

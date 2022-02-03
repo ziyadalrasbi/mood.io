@@ -5,7 +5,6 @@ const config = require('../config.js');
 
 const getProfile = async (req, res, next) => {
     try {
-        var name;
         await api.setAccessToken(req.body.token);
         await api.getMe()
             .then((data) => {
@@ -31,7 +30,7 @@ const getTopArtists = async (req, res, next) => {
         await api.getMyTopArtists({ limit: 15, time_range: req.body.range })
             .then((data) => {
                 if (data.body.items[0] != null) {
-                    for (let i = 0; i < 15; i++) {
+                    for (let i = 0; i < data.body.items.length; i++) {
                         let tempArtist = [];
                         tempArtist.push(data.body.items[i].name);
                         tempArtist.push(data.body.items[i].images[0].url);
@@ -56,7 +55,7 @@ const getTopTracks = async (req, res, next) => {
         await api.getMyTopTracks({ limit: 15, time_range: req.body.range })
             .then((data) => {
                 if (data.body.items[0] != null) {
-                    for (let i = 0; i < 15; i++) {
+                    for (let i = 0; i < data.body.items.length; i++) {
                         let tempTrack = [];
                         tempTrack.push(data.body.items[i].name);
                         tempTrack.push(data.body.items[i].artists[0].name);

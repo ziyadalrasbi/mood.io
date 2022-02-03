@@ -26,12 +26,18 @@ export default StyleSheet.create({
     welcome: {
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: 15
+        fontSize: width / 27.6
     },
     close: {
         marginLeft: width / 41.4,
-        width: 22,
-        height: 22,
+        marginTop: height / 179.2,
+        width: width / 18.8181818,
+        height: width / 18.8181818,
+        backgroundColor: 'transparent',
+    },
+    back: {
+        width: width / 11.8285714,
+        height: width / 11.8285714,
         backgroundColor: 'transparent',
     }
 })
