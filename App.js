@@ -1,5 +1,6 @@
 
 import * as React from 'react';
+import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './frontend/pages/login/Login';
@@ -13,6 +14,8 @@ import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDa
 import UploadOptions from './frontend/pages/UploadOptions/UploadOptions';
 import UserStats from './frontend/pages/userstats/UserStats';
 import SelectMood from './frontend/pages/selectmood/SelectMood';
+import DrawerStack from './frontend/components/drawer/DrawerStack';
+
 
 function App({ navigation }) {
 
@@ -77,19 +80,7 @@ function App({ navigation }) {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName={!loading && verified == true ? 'Home' : 'Login'}
-                initialParams={loading}
-                screenOptions={{ headerShown: false }}
-            >
-                <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Home' component={Home} />
-                <Stack.Screen name='UploadOptions' component={UploadOptions} />
-                <Stack.Screen name='Upload' component={Upload} />
-                <Stack.Screen name='SelectMood' component={SelectMood} />
-                <Stack.Screen name='Results' component={Results} />
-                <Stack.Screen name='UserStats' component={UserStats} />
-            </Stack.Navigator>
+            <DrawerStack loading={loading} verified={verified} />
         </NavigationContainer>
 
     );

@@ -9,13 +9,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
         position: 'absolute',
-        width: width,
+        width: '100%',
         paddingHorizontal: 10,
         marginTop: height / 16.2909091
     },
     hamburger: {
         width: width / 13.8,
-        height: height / 22.4,
+        height: width / 13.8,
+        backgroundColor: 'transparent',
+    },
+    about: {
+        width: width / 13.8,
+        height: width / 13.8,
         backgroundColor: 'transparent',
     },
     scan: {
@@ -26,7 +31,9 @@ export default StyleSheet.create({
     welcome: {
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: width / 27.6
+        fontSize: width / 27.6,
+        maxWidth: width / 1.27384615,
+        textAlign: 'center'
     },
     close: {
         marginLeft: width / 41.4,

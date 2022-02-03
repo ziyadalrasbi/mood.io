@@ -158,19 +158,31 @@ function UserStats({ navigation, route }) {
     const changeRange = async (range, i) => {
         setSelectedIndex(i);
         const token = await SecureStore.getItemAsync('spotify_access_token');
-        await getUserTopArtists(token, range)
+        const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+        var accessToken;
+        await refreshAccessToken(token, refreshToken)
             .then(res => res.json())
             .then(data => {
-                if (data != null) {
-                    setTopArtists(data.artistNames);
+                if (data.token != "Null") {
+                    accessToken = data.token;
+                    SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                 }
             })
-        await getUserTopTracks(token, range)
-            .then(res => res.json())
-            .then(data => {
-                if (data != null) {
-                    setTopTracks(data.topTracks);
-                }
+            .then(() => {
+                getUserTopArtists(accessToken, range)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data != null) {
+                            setTopArtists(data.artistNames);
+                        }
+                    })
+                getUserTopTracks(accessToken, range)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data != null) {
+                            setTopTracks(data.topTracks);
+                        }
+                    })
             })
     }
 
@@ -220,24 +232,24 @@ function UserStats({ navigation, route }) {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => changeRange('medium_term', 2)}>
-                    <View style={UserStatsStyles.selectButtonContainer}>
-                        <View
-                            style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 2 ? '#0e219c' : 'grey' }]}
-                        />
-                        <Text style={UserStatsStyles.selectText}>
-                            Past 6 months
-                        </Text>
-                    </View>
+                        <View style={UserStatsStyles.selectButtonContainer}>
+                            <View
+                                style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 2 ? '#0e219c' : 'grey' }]}
+                            />
+                            <Text style={UserStatsStyles.selectText}>
+                                Past 6 months
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => changeRange('long_term', 3)}>
-                    <View style={UserStatsStyles.selectButtonContainer}>
-                        <View
-                            style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 3 ? '#0e219c' : 'grey' }]}
-                        />
-                        <Text style={UserStatsStyles.selectText}>
-                            All time
-                        </Text>
-                    </View>
+                        <View style={UserStatsStyles.selectButtonContainer}>
+                            <View
+                                style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 3 ? '#0e219c' : 'grey' }]}
+                            />
+                            <Text style={UserStatsStyles.selectText}>
+                                All time
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </View>

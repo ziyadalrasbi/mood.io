@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font'
+import { useFonts } from 'expo-font';
 import HomeStyles from './HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import Navbar from '../../components/navbar/Navbar';
