@@ -22,15 +22,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, '../../web/index.html'), function (err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    })
-})
-
-
 /*------------ DATABASE ROUTES ------------*/
 app.use('/database/admin', adminRoutes.routes);
 app.use('/database/login', loginRoutes.routes);
@@ -42,6 +33,10 @@ app.use('/spotify/login', spotifyLoginRoutes.routes);
 app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
+
+app.use(function(req, res){
+    res.send(404);
+});
 
 app.listen(process.env.PORT || 19001, () => {
     console.log(`Server listening on ${PORT}`)
