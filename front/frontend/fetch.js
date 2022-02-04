@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-const baseUrl = "https://mood-io-ziyadalrasbi.vercel.app";
+const baseUrl = "http://192.168.0.14:19001";
 
 /* ------------- LOGIN FETCH FUNCTIONS --------------- */
 export const getGenreSeeds = async (token) => {
