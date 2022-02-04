@@ -30,6 +30,7 @@ app.get('/*', function (req, res) {
     })
 })
 
+
 /*------------ DATABASE ROUTES ------------*/
 app.use('/database/admin', adminRoutes.routes);
 app.use('/database/login', loginRoutes.routes);
