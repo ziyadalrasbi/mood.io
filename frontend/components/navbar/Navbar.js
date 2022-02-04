@@ -49,6 +49,13 @@ function Navbar({ navigation, name, page, signOut }) {
           <View style={{width: 30, height: 30}} />
         </View>
       }
+      {page == 'results' &&
+        <View style={NavbarStyles.topBar}>
+          <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Home' }] })}>
+            <Image style={NavbarStyles.close} source={closeimg} />
+          </TouchableOpacity>
+        </View>
+      }
     </View>
   );
 }

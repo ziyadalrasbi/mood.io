@@ -52,7 +52,6 @@ function Login({ navigation }) {
         await promptAsync()
             .then((res) => {
                 if (res && res.type === 'success') {
-                    console.log(res);
                     requestAccessToken(res.params.code)
                         .then(res => res.json())
                         .then(data => {
@@ -73,12 +72,12 @@ function Login({ navigation }) {
                                             console.log(Object.keys(data.topGenres).length);
                                             if (Object.keys(data.topGenres).length > 0) {
                                                 saveUserGenres(userId, data.topArtists);
-                                                navigation.reset({ index: 0, routes: [{ name: 'Home', params: { new: false } }] });
+                                                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
                                             } else {
                                                 getGenreSeeds(accessToken)
                                                     .then(res => res.json())
                                                     .then(data => {
-                                                        navigation.reset({ index: 0, routes: [{ name: 'Home', params: { new: true, genreSeeds: data.genreSeeds } }] });
+                                                        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
                                                     })
                                             }
 

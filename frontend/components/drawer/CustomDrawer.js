@@ -7,8 +7,9 @@ import * as SecureStore from 'expo-secure-store';
 import { signOut, refreshAccessToken, getUserProfile } from '../../fetch';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
+import defaultimg from '../../../assets/icons/stats/default.png';
 
-const CustomDrawer = ({ props, navigation }) => {
+const CustomDrawer = ({ props, navigation, route, options }) => {
 
     const [profile, setProfile] = useState({ name: "", picture: "", followers: "" });
     const [loaded] = useFonts({
@@ -18,8 +19,8 @@ const CustomDrawer = ({ props, navigation }) => {
         InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
+
     useEffect(() => {
-        
         const fetchData = async () => {
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
@@ -63,41 +64,34 @@ const CustomDrawer = ({ props, navigation }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['#d1bad2', '#2884b8']}
-                style={{
-                    height: '100%',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    flex: 1,
-                    position: 'absolute'
-                }}
-            />
+        <View style={{ flex: 1, backgroundColor: '#0d324d' }}>
+            <View style={CustomDrawerStyles.firstContainer}>
+                <Image
+                    style={CustomDrawerStyles.profilePicture}
+                    source={profile.picture != null ? { uri: profile.picture } : defaultimg}
+                />
+                <Text style={CustomDrawerStyles.firstHeader}>
+                    {profile.name}
+                </Text>
+            </View>
             <DrawerContentScrollView
                 {...props}
             >
-                <View style={CustomDrawerStyles.firstContainer}>
-                    <Image
-                        style={CustomDrawerStyles.profilePicture}
-                        source={profile.picture != null ? { uri: profile.picture } : defaultimg}
-                    />
-                    <Text style={CustomDrawerStyles.firstHeader}>
-                        {profile.name}
-                    </Text>
-                </View>
-                <View>
-                <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 0 })}>
-                    <Text style={CustomDrawerStyles.optionText}>
-                        Profile
-                    </Text>
+                <View style={{ alignItems: 'flex-start', marginTop: -50 }}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Home
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Profile
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('UploadOptions')}>
-                    <Text style={CustomDrawerStyles.optionText}>
-                        Discover Music
-                    </Text>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Discover Music
+                        </Text>
                     </TouchableOpacity>
                     <Text style={CustomDrawerStyles.optionText}>
                         Previous Recommendations

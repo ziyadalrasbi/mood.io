@@ -24,12 +24,13 @@ const getName = async (req, res, next) => {
 
 const getTopArtists = async (req, res, next) => {
     var artistNames = [];
-    await api.setAccessToken(req.body.token);
+    console.log(req.body.token);
+    api.setAccessToken(req.body.token);
     try {
-        await api.getMyTopArtists({ limit: 8, time_range: 'medium_term' })
+        await api.getMyTopArtists({ limit: 6, time_range: 'medium_term' })
             .then((data) => {
                 if (data.body.items[0] != null) {
-                    for (let i = 0; i < 8; i++) {
+                    for (let i = 0; i < data.body.items.length; i++) {
                         let tempArtist = [];
                         tempArtist.push(data.body.items[i].name);
                         tempArtist.push(data.body.items[i].images[0].url);
@@ -54,7 +55,7 @@ const getTopTracks = async (req, res, next) => {
         await api.getMyTopTracks({ limit: 6, time_range: 'medium_term' })
             .then((data) => {
                 if (data.body.items[0] != null) {
-                    for (let i = 0; i < 6; i++) {
+                    for (let i = 0; i < data.body.items.length; i++) {
                         let tempTrack = [];
                         tempTrack.push(data.body.items[i].name);
                         tempTrack.push(data.body.items[i].artists[0].name);

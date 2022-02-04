@@ -165,7 +165,7 @@ function Results({ navigation, route }) {
     return (
         <ScrollView style={ResultsStyles.scroll}>
             <View style={ResultsStyles.topContainer}>
-                <Navbar scan={false} navigation={navigation} />
+                <Navbar page={'results'} navigation={navigation} />
             </View>
             <View style={ResultsStyles.mainContainer}>
                 <Text style={ResultsStyles.welcome}>

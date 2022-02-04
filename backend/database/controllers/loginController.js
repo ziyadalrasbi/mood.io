@@ -36,7 +36,7 @@ const addUser = async (req, res, next) => {
             username: JSON.stringify(req.body.user),
             refreshToken: JSON.stringify(req.body.refreshToken),
         }, { merge: true });
-        res.send('User added successfully!');
+        res.json({ status: 'User added successfully!' });
     } catch (error) {
         console.log('Error initializing the user for the first time, please try again. \n' + error);
         res.status(400).send(error.message);
@@ -67,7 +67,7 @@ const saveUserGenres = async (req, res, next) => {
         response.set({
             topArtists: req.body.artists
         }, { merge: true });
-        res.send('User added successfully!');
+        res.json({ status: 'User added successfully!' });
     } catch (error) {
         console.log('Error saving user genres, please try again. \n' + error);
         res.status(400).send(error.message);

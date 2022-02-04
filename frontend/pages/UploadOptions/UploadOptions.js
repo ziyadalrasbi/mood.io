@@ -8,7 +8,7 @@ import Navbar from '../../components/navbar/Navbar';
 
 function UploadOptions({ navigation }) {
 
-
+    
     return (
         <ScrollView style={UploadOptionsStyles.scroll} showsVerticalScrollIndicator={false}>
             <View style={UploadOptionsStyles.topContainer}>

@@ -19,14 +19,15 @@ const DrawerStack = ({loading, verified}) => {
             initialRouteName={!loading && verified == true ? 'Home' : 'Login'}
             initialParams={loading}
             backBehavior='history'
+            defaultStatus='closed'
         >
-            <Drawer.Screen name='UserStats' component={UserStats} initialParams={{ index: 0 }} />
-            <Drawer.Screen name='Login' component={Login} />
+            <Drawer.Screen name='UserStats' component={UserStats} initialParams={{ index: 0 }} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='Login' component={Login} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Home' component={Home} />
-            <Drawer.Screen name='UploadOptions' component={UploadOptions} />
-            <Drawer.Screen name='Upload' component={Upload} />
-            <Drawer.Screen name='SelectMood' component={SelectMood} />
-            <Drawer.Screen name='Results' component={Results} />
+            <Drawer.Screen name='UploadOptions' component={UploadOptions} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='Upload' component={Upload} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='SelectMood' component={SelectMood} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='Results' component={Results} options={{unmountOnBlur:true}} />
         </Drawer.Navigator>
     );
 }

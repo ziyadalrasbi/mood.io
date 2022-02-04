@@ -6,32 +6,32 @@ export default StyleSheet.create({
     optionText: {
         fontFamily: 'MontserratBold',
         fontSize: width / 29.5714286,
-        color:'white',
-        paddingHorizontal:10,
+        color: 'white',
+        paddingHorizontal: 10,
         paddingVertical: 20
     },
     logOutText: {
         fontFamily: 'MontserratBold',
         fontSize: width / 29.5714286,
-        color:'red',
-        paddingHorizontal:10,
+        color: 'red',
+        paddingHorizontal: 10,
         paddingVertical: 20
     },
     profilePicture: {
         width: width / 4.14,
         height: width / 4.14,
-        marginTop: height / 89.6,
+        marginTop: 80,
         borderRadius: 100,
         borderWidth: 1,
         borderColor: 'white'
     },
     firstHeader: {
-        fontFamily: 'MontserratBold',
+        fontFamily: 'InconsolataMedium',
         color: 'white',
         fontSize: width / 27.6,
         padding: width / 41.4,
-        marginBottom: -(height / 74.6666667),
-        marginTop: height / 179.2
+        marginBottom: 15,
+        marginTop: height / 179.2,
     },
     firstContainer: {
         position: 'relative',
@@ -42,8 +42,8 @@ export default StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 23,
-        backgroundColor: 'transparent',
+        borderBottomWidth:1,
+        borderBottomColor:'grey'
     },
 });
 

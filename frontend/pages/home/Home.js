@@ -15,7 +15,7 @@ import { getTopArtists, getName, getTopTracks, getListeningHabits, signOut, getU
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
 
-function Home({ navigation }) {
+function Home({ navigation, route }) {
 
   const [loading, setLoading] = useState(true);
 
@@ -43,72 +43,69 @@ function Home({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       const token = await SecureStore.getItemAsync('spotify_access_token');
-      if (token != null) {
-        try {
-          await getTopArtists(token)
-            .then((res) => res.json())
-            .then(data => {
-              if (data != null) {
-                setTopArtists(data.artistNames);
-              }
-            }).catch((error) => {
-              console.log('Error fetching top artists, please try again. \n' + error);
-              throw error;
-            })
-          await getName(token)
-            .then((res) => res.json())
-            .then(data => {
-              setName(data.name);
-            }).catch((error) => {
-              console.log('Error fetching name, please try again. \n' + error);
-              throw error;
-            })
-          await getTopTracks(token)
-            .then((res) => res.json())
-            .then(data => {
-              if (data != null) {
-                setTopTracks(data.topTracks);
-                setTrackIds(data.trackIds);
-              }
-            }).catch((error) => {
-              console.log('Error fetching top tracks, please try again. \n' + error);
-              throw error;
-            })
-            .then(() => {
-              getListeningHabits(token, trackIds)
-                .then((res) => res.json())
-                .then(data => {
-                  setHabits({ habits: data.habits });
-                })
-                .catch((error) => {
-                  console.log('Error fetching habits, please try again. \n' + error);
-                  throw error;
-                })
-            })
-          await getUserId(token)
+      await getTopArtists(token)
+        .then((res) => res.json())
+        .then(data => {
+
+          if (data != null) {
+            setTopArtists(data.artistNames);
+          }
+        }).catch((error) => {
+          console.log('Error fetching top artists, please try again. \n' + error);
+          throw error;
+        })
+      await getName(token)
+        .then((res) => res.json())
+        .then(data => {
+          setName(data.name);
+        }).catch((error) => {
+          console.log('Error fetching name, please try again. \n' + error);
+          throw error;
+        })
+      await getTopTracks(token)
+        .then((res) => res.json())
+        .then(data => {
+          if (data != null) {
+            setTopTracks(data.topTracks);
+            setTrackIds(data.trackIds);
+          }
+        }).catch((error) => {
+          console.log('Error fetching top tracks, please try again. \n' + error);
+          throw error;
+        })
+      /* ----- ENDPOINT CAUSING ERRORS, MUST FIX ------
+       .then(() => {
+         getListeningHabits(token, trackIds)
+          .then((res) => res.json())
+           .then(data => {
+            setHabits({ habits: data.habits });
+          })
+           .catch((error) => {
+             console.log('Error fetching habits, please try again. \n' + error);
+             throw error;
+           })
+     })*/
+      await getUserId(token)
+        .then(res => res.json())
+        .then(data => {
+          getUserDatabaseGenres(data.id)
             .then(res => res.json())
             .then(data => {
-              getUserDatabaseGenres(data.id)
-                .then(res => res.json())
-                .then(data => {
-                  if (data.topGenres == null) {
-                    var isNew = true;
-                    setNewUser({ newUser: isNew });
-                  }
-                })
-                .catch((error) => {
-                  console.log('Error fetching user genres, please try again. \n' + error);
-                  throw error;
-                })
-            }).catch((error) => {
-              console.log('Error fetching user ID, please try again. \n' + error);
+              if (data.topGenres == null) {
+                var isNew = true;
+                setNewUser({ newUser: isNew });
+              }
+            })
+            .catch((error) => {
+              console.log('Error fetching user genres, please try again. \n' + error);
               throw error;
             })
-        } catch (error) {
-          console.log('Error fetching home data, please try again. \n' + error);
+        }).catch((error) => {
+          console.log('Error fetching user ID, please try again. \n' + error);
           throw error;
-        }
-      }
+        })
+
+
     }
     fetchData().then(() => {
       setLoading(false)
@@ -117,12 +114,12 @@ function Home({ navigation }) {
       throw error;
     });
 
-  }, [loading]);
+  }, []);
 
   if (!loaded || loading) {
     return (
       <Loading page={"home"} />
-    );
+    )
   }
 
   const changeArtistImageLoadedTrue = () => {
@@ -181,7 +178,7 @@ function Home({ navigation }) {
             uppercase={false}
             mode="contained"
             labelStyle={HomeStyles.mainFont}
-            onPress={() => navigation.navigate('UploadOptions', { navigation: navigation })}
+            onPress={() => navigation.navigate('UploadOptions')}
           >
             get started
           </Button>
@@ -200,7 +197,7 @@ function Home({ navigation }) {
             <Text style={HomeStyles.thirdHeader}>
               Your Top Artists
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 0 })}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
               <View style={HomeStyles.allContainer}>
                 <Text style={HomeStyles.thirdHeader}>
                   All
@@ -247,7 +244,7 @@ function Home({ navigation }) {
             <Text style={HomeStyles.fourthHeader}>
               Your Top Tracks
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { navigation: navigation, index: 1 })}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 1 })}>
               <View style={HomeStyles.allContainer}>
                 <Text style={HomeStyles.thirdHeader}>
                   All
