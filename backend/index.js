@@ -39,25 +39,7 @@ app.get('/callback', function (req, res) {
     var code = req.query.code || null;
     var state = req.query.state || null;
 
-    if (state === null) {
-        res.redirect('/#' +
-            querystring.stringify({
-                error: 'state_mismatch'
-            }));
-    } else {
-        var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
-            form: {
-                code: code,
-                redirect_uri: 'https://mood-io-app.herokuapp.com/callback',
-                grant_type: 'authorization_code'
-            },
-            headers: {
-                'Authorization': 'Basic ' + (new Buffer("481af46969f2416e95e9196fa60d808d" + ':' + "830caf99293c4da0a262ce0ea53009b5").toString('base64'))
-            },
-            json: true
-        };
-    }
+    res.send(code);
 });
 
 app.use(function (req, res) {
