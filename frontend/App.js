@@ -3,18 +3,18 @@ import * as React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './frontend/pages/login/Login';
-import Home from './frontend/pages/home/Home';
-import Upload from './frontend/pages/upload/Upload';
-import Results from './frontend/pages/results/Results';
+import Login from './src/pages/login/Login';
+import Home from './src/pages/home/Home';
+import Upload from './src/pages/upload/Upload';
+import Results from './src/pages/results/Results';
 import * as SecureStore from 'expo-secure-store';
-import HomeStyles from './frontend/pages/home/HomeStyles';
+import HomeStyles from './src/pages/home/HomeStyles';
 import { Text, View, Image, ScrollView } from 'react-native';
-import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDatabaseGenres, getGenreSeeds } from './frontend/fetch';
-import UploadOptions from './frontend/pages/UploadOptions/UploadOptions';
-import UserStats from './frontend/pages/userstats/UserStats';
-import SelectMood from './frontend/pages/selectmood/SelectMood';
-import DrawerStack from './frontend/components/drawer/DrawerStack';
+import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDatabaseGenres, getGenreSeeds } from './src/fetch';
+import UploadOptions from './src/pages/UploadOptions/UploadOptions';
+import UserStats from './src/pages/userstats/UserStats';
+import SelectMood from './src/pages/selectmood/SelectMood';
+import DrawerStack from './src/components/drawer/DrawerStack';
 
 
 function App({ navigation }) {
