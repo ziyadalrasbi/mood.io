@@ -8,7 +8,7 @@ const getRecommendations = async (req, res, next) => {
     const test = req.body.features;
     await api.setAccessToken(req.body.token);
     await api.getRecommendations({
-        test,
+
         seed_artists: req.body.artists,
         min_popularity: 50,
         limit: 100
@@ -48,7 +48,7 @@ const getRecommendations = async (req, res, next) => {
             })
 
         await api.getRecommendations({
-            test,
+    
             seed_artists: similarArtists,
             min_popularity: 50,
             limit: 100
