@@ -40,6 +40,7 @@ app.get('/callback', function (req, res) {
     var state = req.query.state || null;
 
     res.send(code);
+    res.end();
 });
 
 app.use(function (req, res) {

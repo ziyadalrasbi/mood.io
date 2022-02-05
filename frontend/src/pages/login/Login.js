@@ -49,7 +49,7 @@ function Login({ navigation }) {
         await promptAsync()
             .then((res) => {
                 console.log(res);
-                if (res && res.type === 'success') {
+                if (res) {
                     requestAccessToken(res.params.code)
                         .then(res => res.json())
                         .then(data => {
