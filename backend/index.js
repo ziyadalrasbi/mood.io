@@ -35,7 +35,7 @@ app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
 app.use(function(req, res){
-    res.send(404);
+    res.redirect('/');
 });
 
 app.listen(process.env.PORT || 19001, () => {

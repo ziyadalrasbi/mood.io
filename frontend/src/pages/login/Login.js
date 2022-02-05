@@ -24,7 +24,7 @@ function Login({ navigation }) {
         InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
-
+    const REDIRECT_URI = "https://mood-io-app.herokuapp.com";
     const [request, response, promptAsync] = useAuthRequest(
         {
             responseType: 'code',
@@ -40,7 +40,7 @@ function Login({ navigation }) {
             extraParams: {
                 show_dialog: 'true',
             },
-            redirectUri: "https://mood-io-app.herokuapp.com"
+            redirectUri: REDIRECT_URI
         },
         discovery
     );
