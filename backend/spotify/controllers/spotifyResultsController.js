@@ -96,9 +96,9 @@ const getAudioFeatures = async (req, res, next) => {
                     var mA = 0;
                     var mB = 0;
                     for (var j = 0; j < currentFeatures.length; j++) {
-                        dotproduct += (currentFeatures[i] * requestedFeatures[i]);
-                        mA += (currentFeatures[i] * currentFeatures[i]);
-                        mB += (requestedFeatures[i] * requestedFeatures[i]);
+                        dotproduct += (currentFeatures[j] * requestedFeatures[j]);
+                        mA += (currentFeatures[j] * currentFeatures[j]);
+                        mB += (requestedFeatures[j] * requestedFeatures[j]);
                     }
                     mA = Math.sqrt(mA);
                     mB = Math.sqrt(mB);

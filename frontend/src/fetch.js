@@ -305,6 +305,21 @@ export const getRecommendations = async (token, artists, features) => {
     })
 }
 
+export const getAudioFeatures = async (token, tracks, features) => {
+    return fetch(`${baseUrl}/spotify/results/getAudioFeatures`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+            tracks: tracks,
+            features: features
+        })
+    })
+}
+
 export const saveUserRating = async (rating) => {
     return fetch(`${baseUrl}/database/results/saveUserRating`, {
         method: 'post',
