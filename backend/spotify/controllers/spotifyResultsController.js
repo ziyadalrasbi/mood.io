@@ -10,7 +10,7 @@ const getRecommendations = async (req, res, next) => {
     await api.getRecommendations({
 
         seed_artists: req.body.artists,
-        min_popularity: 50,
+        target_popularity: 80,
         limit: 100
     })
         .then((data) => {
@@ -50,7 +50,7 @@ const getRecommendations = async (req, res, next) => {
         await api.getRecommendations({
     
             seed_artists: similarArtists,
-            min_popularity: 50,
+            target_popularity: 80,
             limit: 100
         })
             .then((data) => {
