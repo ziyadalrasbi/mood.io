@@ -5,12 +5,11 @@ const api = require('../api.js');
 const getRecommendations = async (req, res, next) => {
     var recommendations = [];
     var trackIds = [];
-    const test = req.body.features;
+    const features = req.body.features;
     await api.setAccessToken(req.body.token);
     await api.getRecommendations({
-
+        features,
         seed_artists: req.body.artists,
-        target_popularity: 80,
         limit: 100
     })
         .then((data) => {
@@ -48,9 +47,8 @@ const getRecommendations = async (req, res, next) => {
             })
 
         await api.getRecommendations({
-    
+            features,
             seed_artists: similarArtists,
-            target_popularity: 80,
             limit: 100
         })
             .then((data) => {
