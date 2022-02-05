@@ -12,7 +12,7 @@ import HomeStyles from '../home/HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
-import { getRecommendations, getUserDatabaseGenres, getUserId, refreshAccessToken, saveUserRating } from '../../fetch';
+import { getRecommendations, getUserDatabaseGenres, getUserId, refreshAccessToken, saveUserRating, getAudioFeatures } from '../../fetch';
 import StarRating from 'react-native-star-rating';
 const { width } = Dimensions.get('window');
 
@@ -37,6 +37,49 @@ function Results({ navigation, route }) {
 
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(true);
+
+    const createArrayOfFeatures = async (emotion) => {
+        const maxEmotion = emotion;
+
+        const valence = maxEmotion == 'happy' ? 0.9 :
+            (maxEmotion == 'sad' ? 0.4 :
+                (maxEmotion == 'angry' ? 0.4 :
+                    (maxEmotion == 'netutral' ? 0.7 :
+                        (maxEmotion == 'surprised' ? 0.7 :
+                            (maxEmotion == 'confused' && 0.6)))));
+
+        const energy = maxEmotion == 'happy' ? 0.8 :
+            (maxEmotion == 'sad' ? 0.2 :
+                (maxEmotion == 'angry' ? 0.3 :
+                    (maxEmotion == 'netutral' ? 0.4 :
+                        (maxEmotion == 'surprised' ? 0.5 :
+                            (maxEmotion == 'confused' && 0.3)))));
+
+        const danceability = maxEmotion == 'happy' ? 0.7 :
+            (maxEmotion == 'sad' ? 0.1 :
+                (maxEmotion == 'angry' ? 0.2 :
+                    (maxEmotion == 'netutral' ? 0.3 :
+                        (maxEmotion == 'surprised' ? 0.5 :
+                            (maxEmotion == 'confused' && 0.3)))));
+
+        const loudness = maxEmotion == 'happy' ? -10 :
+            (maxEmotion == 'sad' ? -55 :
+                (maxEmotion == 'angry' ? -45 :
+                    (maxEmotion == 'netutral' ? -30 :
+                        (maxEmotion == 'surprised' ? -30 :
+                            (maxEmotion == 'confused' && -40)))));
+        const mode = maxEmotion == 'happy' ? 0.9 :
+            (maxEmotion == 'sad' ? 0.3 :
+                (maxEmotion == 'angry' ? 0.3 :
+                    (maxEmotion == 'netutral' ? 0.6 :
+                        (maxEmotion == 'surprised' ? 0.7 :
+                            (maxEmotion == 'confused' && 0.5)))));
+
+        var features = [mode, valence, energy, danceability, loudness];
+
+        return features;
+    }
+
 
     const filterFeaturesByMaxEmotion = async (emotion) => {
         const maxEmotion = emotion;
@@ -88,8 +131,8 @@ function Results({ navigation, route }) {
             max_loudness: loudness
         }
 
-        console.log(features);
-        
+
+
         return features;
     }
 
@@ -120,7 +163,12 @@ function Results({ navigation, route }) {
                                             .then(res => res.json())
                                             .then((data) => {
                                                 setRecommendations(data.recommendations);
-                                                setRLoading(false);
+                                                getAudioFeatures(accessToken, data.trackIds, createArrayOfFeatures(route.params.maxMood))
+                                                    .then((data) => {
+                                                        console.log(data);
+                                                        setRLoading(false);
+                                                    })
+
                                             })
                                     })
                             })

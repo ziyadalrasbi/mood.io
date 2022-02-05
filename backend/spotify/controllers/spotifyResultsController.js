@@ -80,6 +80,7 @@ const getRecommendations = async (req, res, next) => {
 const getAudioFeatures = async (req, res, next) => {
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
+    console.log(requestedFeatures);
     await api.setAccessToken(req.body.token);
     await api.getAudioFeaturesForTracks(req.body.tracks)
         .then((data) => {
