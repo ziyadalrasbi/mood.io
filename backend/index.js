@@ -34,12 +34,12 @@ app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
-app.get("/", (req, res) => {
-    window.close();
+app.get("/callback", (req, res) => {
+    res.send(200);
   });
 
 app.use(function(req, res){
-    window.close();
+    res.send(404);
 });
 
 app.listen(process.env.PORT || 19001, () => {
