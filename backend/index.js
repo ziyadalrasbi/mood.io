@@ -34,9 +34,9 @@ app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
-app.get("/callback", (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
+app.get("/callback/:code", (req, res) => {
+    console.log(req);
+    res.send(req);
   });
 
 app.use(function(req, res){
