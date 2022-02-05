@@ -75,6 +75,7 @@ function Results({ navigation, route }) {
             target_danceability: danceability,
             target_loudness: loudness
         }
+        console.log(features);
 
         return features;
     }
@@ -101,7 +102,8 @@ function Results({ navigation, route }) {
                                     .then(res => res.json())
                                     .then((data) => {
                                         const artists = data.topGenres;
-                                        getRecommendations(accessToken, artists, filterFeaturesByMaxEmotion(route.params.maxMood))
+                                        const features = filterFeaturesByMaxEmotion(route.params.maxMood);
+                                        getRecommendations(accessToken, artists, features)
                                             .then(res => res.json())
                                             .then((data) => {
                                                 setRecommendations(data.recommendations);

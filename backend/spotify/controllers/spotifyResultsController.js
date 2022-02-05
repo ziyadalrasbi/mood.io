@@ -5,12 +5,14 @@ const api = require('../api.js');
 const getRecommendations = async (req, res, next) => {
     var recommendations = [];
     var trackIds = [];
+    const test = req.body.features;
     await api.setAccessToken(req.body.token);
-    await api.getRecommendations([req.body.features, {
+    await api.getRecommendations({
+        test,
         seed_artists: req.body.artists,
         min_popularity: 50,
         limit: 100
-    }])
+    })
         .then((data) => {
             for (var i = 0; i < data.body.tracks.length; i++) {
                 let currentDate = new Date(Date.now());
@@ -45,11 +47,12 @@ const getRecommendations = async (req, res, next) => {
                 }
             })
 
-        await api.getRecommendations([req.body.features, {
+        await api.getRecommendations({
+            test,
             seed_artists: similarArtists,
             min_popularity: 50,
             limit: 100
-        }])
+        })
             .then((data) => {
                 for (var k = 0; k < similarArtists.length; k++) {
                     let currentDate = new Date(Date.now());
