@@ -49,8 +49,8 @@ function Login({ navigation }) {
         await promptAsync()
             .then((res) => {
                 console.log(res);
-                if (res) {
-                    requestAccessToken(res.params.code)
+            
+                    requestAccessToken(res)
                         .then(res => res.json())
                         .then(data => {
                             const accessToken = data.accessToken;
@@ -86,7 +86,7 @@ function Login({ navigation }) {
                                     throw error;
                                 });
                         });
-                };
+        
             });
     }
 

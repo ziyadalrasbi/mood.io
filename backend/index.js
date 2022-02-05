@@ -39,7 +39,7 @@ app.post('/callback', function (req, res) {
     var code = req.query.code || null;
     var state = req.query.state || null;
 
-    res.send(code);
+    res.json({code: code});
 });
 
 app.use(function (req, res) {
