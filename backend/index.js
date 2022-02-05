@@ -35,11 +35,11 @@ app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
 app.get("/", (req, res) => {
-    res.send(200);
+    window.close();
   });
 
 app.use(function(req, res){
-    res.send(200);
+    window.close();
 });
 
 app.listen(process.env.PORT || 19001, () => {
