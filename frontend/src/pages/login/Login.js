@@ -50,7 +50,7 @@ function Login({ navigation }) {
             .then((res) => {
                 console.log(res);
             
-                    requestAccessToken(res)
+                    requestAccessToken(res.code)
                         .then(res => res.json())
                         .then(data => {
                             const accessToken = data.accessToken;

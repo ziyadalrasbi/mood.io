@@ -42,10 +42,6 @@ app.post('/callback', function (req, res) {
     res.json({code: code});
 });
 
-app.use(function (req, res) {
-    res.send(404);
-});
-
 app.listen(process.env.PORT || 19001, () => {
     console.log(`Server listening on ${PORT}`)
 })
