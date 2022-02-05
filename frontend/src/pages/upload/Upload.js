@@ -59,6 +59,7 @@ function Upload({ navigation }) {
             .then(data => {
               if (data.image[0] != null) {
                 setMoodAnalysis({ moodAnalysis: data.image[0].expressions });
+                console.log(data.image[0].expressions)
                 setLoading(false);
               } else {
                 setMoodAnalysis({ moodAnalysis: null });
@@ -115,7 +116,7 @@ function Upload({ navigation }) {
               mode="contained"
               labelStyle={UploadStyles.mainFont}
               disabled={Object.keys(moodAnalysis.moodAnalysis).length > 0 ? false : true}
-              onPress={() => navigation.navigate('Results', { navigation: navigation, results: moodAnalysis.moodAnalysis })}
+              onPress={() => navigation.navigate('Results', { results: moodAnalysis.moodAnalysis })}
             >
               continue
             </Button>

@@ -38,6 +38,47 @@ function Results({ navigation, route }) {
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(true);
 
+    const filterFeaturesByMaxEmotion = async (emotion) => {
+        const maxEmotion = emotion;
+
+        const valence = maxEmotion == 'happy' ? 0.9 :
+            (maxEmotion == 'sad' ? 0.5 :
+                (maxEmotion == 'angry' ? 0.6 :
+                    (maxEmotion == 'netutral' ? 0.7 :
+                        (maxEmotion == 'surprised' ? 0.7 :
+                            (maxEmotion == 'confused' && 0.6)))));
+
+        const energy = maxEmotion == 'happy' ? 0.8 :
+            (maxEmotion == 'sad' ? 0.2 :
+                (maxEmotion == 'angry' ? 0.3 :
+                    (maxEmotion == 'netutral' ? 0.4 :
+                        (maxEmotion == 'surprised' ? 0.5 :
+                            (maxEmotion == 'confused' && 0.3)))));
+
+        const danceability = maxEmotion == 'happy' ? 0.7 :
+            (maxEmotion == 'sad' ? 0.2 :
+                (maxEmotion == 'angry' ? 0.3 :
+                    (maxEmotion == 'netutral' ? 0.3 :
+                        (maxEmotion == 'surprised' ? 0.5 :
+                            (maxEmotion == 'confused' && 0.3)))));
+
+        const loudness = maxEmotion == 'happy' ? -10 :
+            (maxEmotion == 'sad' ? -55 :
+                (maxEmotion == 'angry' ? -45 :
+                    (maxEmotion == 'netutral' ? -30 :
+                        (maxEmotion == 'surprised' ? -30 :
+                            (maxEmotion == 'confused' && -40)))));
+
+        var features = {
+            target_valence: valence,
+            target_energy: energy,
+            target_danceability: danceability,
+            target_loudness: loudness
+        }
+
+        return features;
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const token = await SecureStore.getItemAsync('spotify_access_token');
@@ -60,7 +101,7 @@ function Results({ navigation, route }) {
                                     .then(res => res.json())
                                     .then((data) => {
                                         const artists = data.topGenres;
-                                        getRecommendations(accessToken, artists)
+                                        getRecommendations(accessToken, artists, filterFeaturesByMaxEmotion(route.params.maxMood))
                                             .then(res => res.json())
                                             .then((data) => {
                                                 setRecommendations(data.recommendations);

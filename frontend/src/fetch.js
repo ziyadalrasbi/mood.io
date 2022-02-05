@@ -290,7 +290,7 @@ export const getUserDatabaseGenres = async (id) => {
     })
 }
 
-export const getRecommendations = async (token, artists) => {
+export const getRecommendations = async (token, artists, features) => {
     return fetch(`${baseUrl}/spotify/results/getRecommendations`, {
         method: 'post',
         headers: {
@@ -299,7 +299,8 @@ export const getRecommendations = async (token, artists) => {
         },
         body: JSON.stringify({
             token: token,
-            artists: artists
+            artists: artists,
+            features: features
         })
     })
 }

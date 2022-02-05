@@ -18,7 +18,7 @@ import LottieView from 'lottie-react-native';
 
 function SelectMood({ navigation }) {
 
-    const [index, setIndex] = useState(-1);
+    const [index, setIndex] = useState({ index: -1, mood: "" });
 
     const [loaded] = useFonts({
         InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
@@ -31,8 +31,22 @@ function SelectMood({ navigation }) {
         return null;
     }
 
-    const changeSelectedMood = (i) => {
-        setIndex(i);
+    const changeSelectedMood = (i, mood) => {
+        setIndex({ index: i, mood: mood });
+    }
+
+    const sendMood = () => {
+        const mood = {
+            "angry": index.mood == "angry" ? 1 : 0,
+            "disgusted": index.mood == "disgusted" ? 1 : 0,
+            "fearful": index.mood == "confused" ? 1 : 0,
+            "happy": index.mood == "happy" ? 1 : 0,
+            "neutral": index.mood == "neutral" ? 1 : 0,
+            "sad": index.mood == "sad" ? 1 : 0,
+            "surprised": index.mood == "surprised" ? 1 : 0,
+        }
+
+        navigation.navigate('Results', { results: mood, maxMood: index.mood })
     }
 
     return (
@@ -49,10 +63,10 @@ function SelectMood({ navigation }) {
                 </Text>
                 <View style={{ marginTop: 30 }}>
                     <View style={SelectMoodStyles.moodContainer}>
-                        <TouchableOpacity onPress={() => changeSelectedMood(1)}>
-                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index == 1 ? 'white' : 'grey' }]}>
+                        <TouchableOpacity onPress={() => changeSelectedMood(1, "happy")}>
+                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index.index == 1 ? 'white' : 'grey' }]}>
                                 <Image
-                                    style={[SelectMoodStyles.moodImg, { opacity: index == 1 ? 1 : 0.3 }]}
+                                    style={[SelectMoodStyles.moodImg, { opacity: index.index == 1 ? 1 : 0.3 }]}
                                     source={happy}
                                 />
                                 <Text style={SelectMoodStyles.moodText}>
@@ -60,10 +74,10 @@ function SelectMood({ navigation }) {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => changeSelectedMood(2)}>
-                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index == 2 ? 'white' : 'grey' }]}>
+                        <TouchableOpacity onPress={() => changeSelectedMood(2, "neutral")}>
+                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index.index == 2 ? 'white' : 'grey' }]}>
                                 <Image
-                                    style={[SelectMoodStyles.moodImg, { opacity: index == 2 ? 1 : 0.3 }]}
+                                    style={[SelectMoodStyles.moodImg, { opacity: index.index == 2 ? 1 : 0.3 }]}
                                     source={neutral}
                                 />
                                 <Text style={SelectMoodStyles.moodText}>
@@ -73,10 +87,10 @@ function SelectMood({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View style={SelectMoodStyles.moodContainer}>
-                        <TouchableOpacity onPress={() => changeSelectedMood(3)}>
-                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index == 3 ? 'white' : 'grey' }]}>
+                        <TouchableOpacity onPress={() => changeSelectedMood(3, "sad")}>
+                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index.index == 3 ? 'white' : 'grey' }]}>
                                 <Image
-                                    style={[SelectMoodStyles.moodImg, { opacity: index == 3 ? 1 : 0.3 }]}
+                                    style={[SelectMoodStyles.moodImg, { opacity: index.index == 3 ? 1 : 0.3 }]}
                                     source={sad}
                                 />
                                 <Text style={SelectMoodStyles.moodText}>
@@ -84,10 +98,10 @@ function SelectMood({ navigation }) {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => changeSelectedMood(4)}>
-                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index == 4 ? 'white' : 'grey' }]}>
+                        <TouchableOpacity onPress={() => changeSelectedMood(4, "angry")}>
+                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index.index == 4 ? 'white' : 'grey' }]}>
                                 <Image
-                                    style={[SelectMoodStyles.moodImg, { opacity: index == 4 ? 1 : 0.3 }]}
+                                    style={[SelectMoodStyles.moodImg, { opacity: index.index == 4 ? 1 : 0.3 }]}
                                     source={angry}
                                 />
                                 <Text style={SelectMoodStyles.moodText}>
@@ -97,10 +111,10 @@ function SelectMood({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View style={SelectMoodStyles.moodContainer}>
-                        <TouchableOpacity onPress={() => changeSelectedMood(5)}>
-                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index == 5 ? 'white' : 'grey' }]}>
+                        <TouchableOpacity onPress={() => changeSelectedMood(5, "confused")}>
+                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index.index == 5 ? 'white' : 'grey' }]}>
                                 <Image
-                                    style={[SelectMoodStyles.moodImg, { opacity: index == 5 ? 1 : 0.3 }]}
+                                    style={[SelectMoodStyles.moodImg, { opacity: index.index == 5 ? 1 : 0.3 }]}
                                     source={confused}
                                 />
                                 <Text style={SelectMoodStyles.moodText}>
@@ -108,10 +122,10 @@ function SelectMood({ navigation }) {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => changeSelectedMood(6)}>
-                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index == 6 ? 'white' : 'grey' }]}>
+                        <TouchableOpacity onPress={() => changeSelectedMood(6, "surprised")}>
+                            <View style={[SelectMoodStyles.moodOption, { backgroundColor: index.index == 6 ? 'white' : 'grey' }]}>
                                 <Image
-                                    style={[SelectMoodStyles.moodImg, { opacity: index == 6 ? 1 : 0.3 }]}
+                                    style={[SelectMoodStyles.moodImg, { opacity: index.index == 6 ? 1 : 0.3 }]}
                                     source={surprised}
                                 />
                                 <Text style={SelectMoodStyles.moodText}>
@@ -121,6 +135,23 @@ function SelectMood({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
+                {index.mood != "" &&
+                    <View style={{ alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-between', width: '80%', alignItems: 'center' }}>
+                        <Text style={SelectMoodStyles.selectedMoodText}>
+                            Selected mood: {index.mood}
+                        </Text>
+                        <Button
+                            style={SelectMoodStyles.startButton}
+                            uppercase={false}
+                            mode="contained"
+                            labelStyle={SelectMoodStyles.mainFont}
+                            onPress={() => sendMood()}
+                        >
+                            continue
+                        </Button>
+
+                    </View>
+                }
                 <StatusBar style="auto" />
             </View>
         </ScrollView>

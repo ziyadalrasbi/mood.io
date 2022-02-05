@@ -4,13 +4,9 @@ const api = require('../api.js');
 
 const getRecommendations = async (req, res, next) => {
     var recommendations = [];
+    var trackIds = [];
     await api.setAccessToken(req.body.token);
-    await api.getRecommendations({
-        max_valence: 0.3,
-        max_energy: 0.3,
-        max_danceability: 0.3,
-        max_instrumentalness: 0.35,
-        // target_key: req.body.key,
+    await api.getRecommendations(req.body.features, {
         seed_artists: req.body.artists,
         min_popularity: 50,
         limit: 100
@@ -28,6 +24,7 @@ const getRecommendations = async (req, res, next) => {
                         recommendation.push(data.body.tracks[i]['album'].images[0].url);
                         recommendation.push(data.body.tracks[i].external_urls.spotify);
                         recommendations.push(recommendation);
+                        trackIds.push(data.body.tracks[i].id);
                     } else {
                         console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
                     }
@@ -48,11 +45,7 @@ const getRecommendations = async (req, res, next) => {
                 }
             })
 
-        await api.getRecommendations({
-            target_valence: 0.3,
-            target_energy: 0.3,
-            target_danceability: 0.3,
-            max_instrumentalness: 0.35,
+        await api.getRecommendations(req.body.features, {
             seed_artists: similarArtists,
             min_popularity: 50,
             limit: 100
@@ -70,6 +63,7 @@ const getRecommendations = async (req, res, next) => {
                             recommendation.push(data.body.tracks[k]['album'].images[0].url);
                             recommendation.push(data.body.tracks[k].external_urls.spotify);
                             recommendations.push(recommendation);
+                            trackIds.push(data.body.tracks[i].id);
                         } else {
                             console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[k]));
                         }
@@ -79,9 +73,24 @@ const getRecommendations = async (req, res, next) => {
                 console.log('There was an error getting recommendations, please try again.', err);
             })
     }
-    res.json({ recommendations: recommendations });
+    res.json({ recommendations: recommendations, trackIds: trackIds });
+}
+
+const getAudioFeatures = async (req, res, next) => {
+    var audioFeatures = [];
+    await api.setAccessToken(req.body.token);
+    await api.getAudioFeaturesForTracks(req.body.tracks)
+        .then((data) => {
+            if (data != null) {
+                audioFeatures.push(data.body.audio_features);
+                res.json({ audioFeatures: audioFeatures });
+            }
+        }, function (err) {
+            console.log('There was an error getting audio features, please try again.', err);
+        });
 }
 
 module.exports = {
-    getRecommendations
+    getRecommendations,
+    getAudioFeatures
 }

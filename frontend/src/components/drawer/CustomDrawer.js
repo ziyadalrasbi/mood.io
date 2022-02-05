@@ -20,29 +20,29 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const token = await SecureStore.getItemAsync('spotify_access_token');
-    //         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-    //         var accessToken;
-    //         await refreshAccessToken(token, refreshToken)
-    //             .then(res => res.json())
-    //             .then(data => {
-    //                 if (data.token != "Null") {
-    //                     accessToken = data.token;
-    //                     SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-    //                 }
-    //             })
-    //             .then(() => {
-    //                 getUserProfile(accessToken)
-    //                     .then(res => res.json())
-    //                     .then(data => {
-    //                         setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-    //                     })
-    //             })
-    //     }
-    //     fetchData();
-    // }, [])
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            var accessToken;
+            await refreshAccessToken(token, refreshToken)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.token != "Null") {
+                        accessToken = data.token;
+                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                    }
+                })
+                .then(() => {
+                    getUserProfile(accessToken)
+                        .then(res => res.json())
+                        .then(data => {
+                            setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
+                        })
+                })
+        }
+        fetchData();
+    }, [])
 
     if (!loaded) {
         return null;

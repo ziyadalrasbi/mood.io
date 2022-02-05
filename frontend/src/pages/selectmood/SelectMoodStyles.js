@@ -108,5 +108,15 @@ export default StyleSheet.create({
         width: width / 6.9,
         height: height / 14.9333333,
         marginBottom: height / 89.6,
+    },
+    selectedMoodText: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: width / 29.5714286,
+        color:'white'
+    },
+    selectedMood: {
+        fontFamily: 'MontserratBold',
+        fontSize: width / 29.5714286,
+        color:'white'
     }
 });
