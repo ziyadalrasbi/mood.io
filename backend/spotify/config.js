@@ -15,6 +15,6 @@ module.exports = {
     spotifyConfig: {
         clientId: "481af46969f2416e95e9196fa60d808d",
         clientSecret: "830caf99293c4da0a262ce0ea53009b5",
-        redirectUri: "exp://192.168.0.14:19000"
+        redirectUri: "https://mood-io-app.herokuapp.com"
     }
 }
