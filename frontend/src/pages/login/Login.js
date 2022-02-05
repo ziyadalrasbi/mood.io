@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { makeRedirectUri, useAuthRequest, ResponseType, Prompt } from 'expo-auth-session';
+import { makeRedirectUri, useAuthRequest, ResponseType, Prompt, startAsync } from 'expo-auth-session';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import LoginStyles from './LoginStyles';
@@ -9,7 +9,9 @@ import { useFonts } from 'expo-font';
 import CustomCarousel from '../../components/carousel/CustomCarousel';
 import { LinearGradient } from 'expo-linear-gradient';
 import { loginUser, initUser, getUserData, getUserGenres, saveUserGenres, requestAccessToken, getGenreSeeds } from '../../fetch';
+import * as WebBrowser from 'expo-web-browser';
 
+WebBrowser.maybeCompleteAuthSession();
 function Login({ navigation }) {
 
     const discovery = {
@@ -25,7 +27,7 @@ function Login({ navigation }) {
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
     const REDIRECT_URI = "https://mood-io-app.herokuapp.com/callback";
-    const [request, response, promptAsync] = useAuthRequest(
+    const [request, response, startAsync] = useAuthRequest(
         {
             responseType: 'code',
             clientId: "481af46969f2416e95e9196fa60d808d",
@@ -44,49 +46,49 @@ function Login({ navigation }) {
         },
         discovery
     );
-
+    
     const onPressLogin = async () => {
-        await promptAsync()
+        await startAsync()
             .then((res) => {
                 console.log(res);
-            
-                    requestAccessToken(res.code)
-                        .then(res => res.json())
-                        .then(data => {
-                            const accessToken = data.accessToken;
-                            console.log(accessToken);
-                            const refreshToken = data.refreshToken;
-                            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                            SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                            getUserData(accessToken)
-                                .then(res => res.json())
-                                .then(data => {
-                                    const userId = data.id;
-                                    initUser(userId, accessToken);
-                                    loginUser(userId);
-                                    getUserGenres(accessToken)
-                                        .then((res) => res.json())
-                                        .then(data => {
-                                            console.log(Object.keys(data.topGenres).length);
-                                            if (Object.keys(data.topGenres).length > 0) {
-                                                saveUserGenres(userId, data.topArtists);
-                                                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                            } else {
-                                                getGenreSeeds(accessToken)
-                                                    .then(res => res.json())
-                                                    .then(data => {
-                                                        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                                    })
-                                            }
 
-                                        })
-                                })
-                                .catch((error) => {
-                                    console.log('Error logging in, please try again. \n' + error);
-                                    throw error;
-                                });
-                        });
-        
+                requestAccessToken(res.code)
+                    .then(res => res.json())
+                    .then(data => {
+                        const accessToken = data.accessToken;
+                        console.log(accessToken);
+                        const refreshToken = data.refreshToken;
+                        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                        SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                        getUserData(accessToken)
+                            .then(res => res.json())
+                            .then(data => {
+                                const userId = data.id;
+                                initUser(userId, accessToken);
+                                loginUser(userId);
+                                getUserGenres(accessToken)
+                                    .then((res) => res.json())
+                                    .then(data => {
+                                        console.log(Object.keys(data.topGenres).length);
+                                        if (Object.keys(data.topGenres).length > 0) {
+                                            saveUserGenres(userId, data.topArtists);
+                                            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+                                        } else {
+                                            getGenreSeeds(accessToken)
+                                                .then(res => res.json())
+                                                .then(data => {
+                                                    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+                                                })
+                                        }
+
+                                    })
+                            })
+                            .catch((error) => {
+                                console.log('Error logging in, please try again. \n' + error);
+                                throw error;
+                            });
+                    });
+
             });
     }
 

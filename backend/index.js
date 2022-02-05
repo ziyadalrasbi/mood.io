@@ -40,6 +40,7 @@ app.get('/callback', function (req, res) {
     var state = req.query.state || null;
 
     res.json({code: code});
+    window.location.replace('https://mood-io-app.herokuapp.com/callback' + window.location.hash);
 });
 
 app.listen(process.env.PORT || 19001, () => {
