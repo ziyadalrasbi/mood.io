@@ -40,7 +40,7 @@ function Login({ navigation }) {
             extraParams: {
                 show_dialog: 'true',
             },
-            redirectUri: REDIRECT_URI
+            redirectUri: 'https://mood-io-app.herokuapp.com/callback'
         },
         discovery
     );
@@ -48,6 +48,7 @@ function Login({ navigation }) {
     const onPressLogin = async () => {
         await promptAsync()
             .then((res) => {
+                console.log(res);
                 if (res && res.type === 'success') {
                     requestAccessToken(res.params.code)
                         .then(res => res.json())
