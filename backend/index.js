@@ -34,12 +34,33 @@ app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
-app.post("/callback", (req, res) => {
-    console.log(req);
-    res.send(req);
-  });
+app.get('/callback', function (req, res) {
 
-app.use(function(req, res){
+    var code = req.query.code || null;
+    var state = req.query.state || null;
+
+    if (state === null) {
+        res.redirect('/#' +
+            querystring.stringify({
+                error: 'state_mismatch'
+            }));
+    } else {
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            form: {
+                code: code,
+                redirect_uri: redirect_uri,
+                grant_type: 'authorization_code'
+            },
+            headers: {
+                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+            },
+            json: true
+        };
+    }
+});
+
+app.use(function (req, res) {
     res.send(404);
 });
 
