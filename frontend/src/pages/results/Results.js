@@ -38,7 +38,7 @@ function Results({ navigation, route }) {
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(true);
 
-    const createArrayOfFeatures = async (emotion) => {
+    const createArrayOfFeatures = (emotion) => {
         const maxEmotion = emotion;
 
         const valence = maxEmotion == 'happy' ? 0.9 :
@@ -163,9 +163,12 @@ function Results({ navigation, route }) {
                                             .then(res => res.json())
                                             .then((data) => {
                                                 setRecommendations(data.recommendations);
-                                                getAudioFeatures(accessToken, data.trackIds, createArrayOfFeatures(route.params.maxMood))
+                                                const features2 = createArrayOfFeatures(route.params.maxMood);
+                                                console.log(features2);
+                                                getAudioFeatures(accessToken, data.trackIds, features2)
+                                                    .then(res => res.json())
                                                     .then((data) => {
-                                                        console.log(data);
+                                                        console.log(data.similarity);
                                                         setRLoading(false);
                                                     })
 

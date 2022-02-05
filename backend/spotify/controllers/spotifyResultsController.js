@@ -111,6 +111,7 @@ const getAudioFeatures = async (req, res, next) => {
                     cosineSimTracks.push(currentSimilarity);
                     console.log(similarity);
                 }
+                cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
                 res.json({ similarity: cosineSimTracks });
             }
         }, function (err) {
