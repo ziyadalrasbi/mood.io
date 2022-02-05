@@ -168,7 +168,7 @@ function Results({ navigation, route }) {
                                                 getAudioFeatures(accessToken, data.trackIds, features2)
                                                     .then(res => res.json())
                                                     .then((data) => {
-                                                        console.log(data.similarity);
+                                                        console.log(data.recommendations);
                                                         setRLoading(false);
                                                     })
 

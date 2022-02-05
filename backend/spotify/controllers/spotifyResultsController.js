@@ -114,7 +114,7 @@ const getAudioFeatures = async (req, res, next) => {
                 }
                 cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
                 for (var i = 0; i < 20; i++) {
-                    await api.getTrack(cosineSimTracks[i].id)
+                    api.getTrack(cosineSimTracks[i].id)
                         .then((data) => {
                             let recommendation = [];
                             recommendation.push(data.body.name);
