@@ -53,7 +53,7 @@ app.get('/callback', function (req, res) {
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer("481af46969f2416e95e9196fa60d808d" + ':' + "830caf99293c4da0a262ce0ea53009b5").toString('base64'))
             },
             json: true
         };
