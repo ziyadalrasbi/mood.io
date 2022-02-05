@@ -78,6 +78,7 @@ const getRecommendations = async (req, res, next) => {
 }
 
 const getAudioFeatures = async (req, res, next) => {
+    var recommendations = [];
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
     console.log(requestedFeatures);
@@ -87,10 +88,10 @@ const getAudioFeatures = async (req, res, next) => {
             if (data != null) {
                 for (var i = 0; i < data.body.audio_features.length; i++) {
                     var currentFeatures = [
-                        data.body.audio_features[i].mode, 
-                        data.body.audio_features[i].valence, 
-                        data.body.audio_features[i].energy, 
-                        data.body.audio_features[i].danceability, 
+                        data.body.audio_features[i].mode,
+                        data.body.audio_features[i].valence,
+                        data.body.audio_features[i].energy,
+                        data.body.audio_features[i].danceability,
                         data.body.audio_features[i].loudness
                     ];
                     var dotproduct = 0;
@@ -112,7 +113,18 @@ const getAudioFeatures = async (req, res, next) => {
                     console.log(similarity);
                 }
                 cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
-                res.json({ similarity: cosineSimTracks });
+                for (var i = 0; i < 20; i++) {
+                    await api.getTrack(cosineSimTracks[i].id)
+                        .then((data) => {
+                            let recommendation = [];
+                            recommendation.push(data.body.name);
+                            recommendation.push(data.body.artists[0].name);
+                            recommendation.push(data.body['album'].images[0].url);
+                            recommendation.push(data.body.external_urls.spotify);
+                            recommendations.push(recommendation);
+                        })
+                }
+                res.json({ similarity: cosineSimTracks, recommendations: recommendations });
             }
         }, function (err) {
             console.log('There was an error getting audio features, please try again.', err);
