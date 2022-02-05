@@ -40,7 +40,10 @@ function Login({ navigation }) {
             extraParams: {
                 show_dialog: 'true',
             },
-            redirectUri: "https://mood-io-app.herokuapp.com"
+            redirectUri: makeRedirectUri({
+                native: "https://mood-io-app.herokuapp.com"
+            }),
+
         },
         discovery
     );
