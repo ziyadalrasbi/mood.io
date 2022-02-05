@@ -36,7 +36,7 @@ app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
 app.get("/callback", (req, res) => {
     console.log(req.body);
-    res.send(200);
+    res.send(req.body);
   });
 
 app.use(function(req, res){
