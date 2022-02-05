@@ -34,15 +34,6 @@ app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
-app.get('/callback', function (req, res) {
-
-    var code = req.query.code || null;
-    var state = req.query.state || null;
-
-    res.json({code: code});
-    window.location.replace('https://mood-io-app.herokuapp.com/callback' + window.location.hash);
-});
-
 app.listen(process.env.PORT || 19001, () => {
     console.log(`Server listening on ${PORT}`)
 })

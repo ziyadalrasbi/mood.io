@@ -11,7 +11,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { loginUser, initUser, getUserData, getUserGenres, saveUserGenres, requestAccessToken, getGenreSeeds } from '../../fetch';
 import * as WebBrowser from 'expo-web-browser';
 
-WebBrowser.maybeCompleteAuthSession();
+if (Platform.OS === 'web') {
+    WebBrowser.maybeCompleteAuthSession();
+}
 function Login({ navigation }) {
 
     const discovery = {
@@ -27,7 +29,7 @@ function Login({ navigation }) {
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
     const REDIRECT_URI = "https://mood-io-app.herokuapp.com/callback";
-    const [request, response, startAsync] = useAuthRequest(
+    const [request, response, promptAsync] = useAuthRequest(
         {
             responseType: 'code',
             clientId: "481af46969f2416e95e9196fa60d808d",
@@ -41,18 +43,21 @@ function Login({ navigation }) {
             usePKCE: false,
             extraParams: {
                 show_dialog: 'true',
+
             },
-            redirectUri: 'https://mood-io-app.herokuapp.com/callback'
+            redirectUri: makeRedirectUri({
+                native: "moodio://oauthredirect"
+            })
         },
         discovery
     );
-    
+
     const onPressLogin = async () => {
-        await startAsync()
+        await promptAsync()
             .then((res) => {
                 console.log(res);
-
-                requestAccessToken(res.code)
+                if (res && res.type == 'success') {
+                requestAccessToken(res.params.code)
                     .then(res => res.json())
                     .then(data => {
                         const accessToken = data.accessToken;
@@ -88,7 +93,7 @@ function Login({ navigation }) {
                                 throw error;
                             });
                     });
-
+                }
             });
     }
 
