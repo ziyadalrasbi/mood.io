@@ -42,8 +42,8 @@ function Results({ navigation, route }) {
         const maxEmotion = emotion;
 
         const valence = maxEmotion == 'happy' ? 0.9 :
-            (maxEmotion == 'sad' ? 0.5 :
-                (maxEmotion == 'angry' ? 0.6 :
+            (maxEmotion == 'sad' ? 0.4 :
+                (maxEmotion == 'angry' ? 0.4 :
                     (maxEmotion == 'netutral' ? 0.7 :
                         (maxEmotion == 'surprised' ? 0.7 :
                             (maxEmotion == 'confused' && 0.6)))));
@@ -56,8 +56,8 @@ function Results({ navigation, route }) {
                             (maxEmotion == 'confused' && 0.3)))));
 
         const danceability = maxEmotion == 'happy' ? 0.7 :
-            (maxEmotion == 'sad' ? 0.2 :
-                (maxEmotion == 'angry' ? 0.3 :
+            (maxEmotion == 'sad' ? 0.1 :
+                (maxEmotion == 'angry' ? 0.2 :
                     (maxEmotion == 'netutral' ? 0.3 :
                         (maxEmotion == 'surprised' ? 0.5 :
                             (maxEmotion == 'confused' && 0.3)))));
@@ -68,15 +68,28 @@ function Results({ navigation, route }) {
                     (maxEmotion == 'netutral' ? -30 :
                         (maxEmotion == 'surprised' ? -30 :
                             (maxEmotion == 'confused' && -40)))));
+        const mode = maxEmotion == 'happy' ? 0.9 :
+            (maxEmotion == 'sad' ? 0.3 :
+                (maxEmotion == 'angry' ? 0.3 :
+                    (maxEmotion == 'netutral' ? 0.6 :
+                        (maxEmotion == 'surprised' ? 0.7 :
+                            (maxEmotion == 'confused' && 0.5)))));
 
         var features = {
+            target_mode: mode,
+            max_mode: mode,
             target_valence: valence,
+            max_valence: valence,
             target_energy: energy,
+            max_energy: energy,
             target_danceability: danceability,
-            target_loudness: loudness
+            max_danceability: danceability,
+            target_loudness: loudness,
+            max_loudness: loudness
         }
-        console.log(features);
 
+        console.log(features);
+        
         return features;
     }
 

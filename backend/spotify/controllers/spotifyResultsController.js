@@ -78,13 +78,39 @@ const getRecommendations = async (req, res, next) => {
 }
 
 const getAudioFeatures = async (req, res, next) => {
-    var audioFeatures = [];
+    var cosineSimTracks = [];
+    var requestedFeatures = req.body.features;
     await api.setAccessToken(req.body.token);
     await api.getAudioFeaturesForTracks(req.body.tracks)
         .then((data) => {
             if (data != null) {
-                audioFeatures.push(data.body.audio_features);
-                res.json({ audioFeatures: audioFeatures });
+                for (var i = 0; i < data.body.audio_features.length; i++) {
+                    var currentFeatures = [
+                        data.body.audio_features[i].mode, 
+                        data.body.audio_features[i].valence, 
+                        data.body.audio_features[i].energy, 
+                        data.body.audio_features[i].danceability, 
+                        data.body.audio_features[i].loudness
+                    ];
+                    var dotproduct = 0;
+                    var mA = 0;
+                    var mB = 0;
+                    for (var j = 0; j < currentFeatures.length; j++) {
+                        dotproduct += (currentFeatures[i] * requestedFeatures[i]);
+                        mA += (currentFeatures[i] * currentFeatures[i]);
+                        mB += (requestedFeatures[i] * requestedFeatures[i]);
+                    }
+                    mA = Math.sqrt(mA);
+                    mB = Math.sqrt(mB);
+                    var similarity = (dotproduct) / ((mA) * (mB));
+                    const currentSimilarity = {
+                        id: data.body.audio_features[i].id,
+                        similarity: similarity
+                    }
+                    cosineSimTracks.push(currentSimilarity);
+                    console.log(similarity);
+                }
+                res.json({ similarity: cosineSimTracks });
             }
         }, function (err) {
             console.log('There was an error getting audio features, please try again.', err);
