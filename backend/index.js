@@ -49,7 +49,7 @@ app.get('/callback', function (req, res) {
             url: 'https://accounts.spotify.com/api/token',
             form: {
                 code: code,
-                redirect_uri: redirect_uri,
+                redirect_uri: 'https://mood-io-app.herokuapp.com/callback',
                 grant_type: 'authorization_code'
             },
             headers: {
