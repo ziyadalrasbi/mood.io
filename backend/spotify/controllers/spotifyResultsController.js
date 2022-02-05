@@ -113,8 +113,8 @@ const getAudioFeatures = async (req, res, next) => {
                     console.log(similarity);
                 }
                 cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
-                for (var i = 0; i < 20; i++) {
-                    api.getTrack(cosineSimTracks[i].id)
+                cosineSimTracks.forEach(function (track) {
+                    api.getTrack(track.id)
                         .then((data) => {
                             let recommendation = [];
                             recommendation.push(data.body.name);
@@ -123,7 +123,9 @@ const getAudioFeatures = async (req, res, next) => {
                             recommendation.push(data.body.external_urls.spotify);
                             recommendations.push(recommendation);
                         })
-                }
+                })
+
+
                 res.json({ similarity: cosineSimTracks, recommendations: recommendations });
             }
         }, function (err) {
