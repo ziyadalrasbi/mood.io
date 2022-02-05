@@ -34,6 +34,10 @@ app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
 
+app.get("/", (req, res) => {
+    res.send("Test");
+  });
+
 app.use(function(req, res){
     res.redirect('/');
 });
