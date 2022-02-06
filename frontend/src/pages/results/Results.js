@@ -162,13 +162,13 @@ function Results({ navigation, route }) {
                                         getRecommendations(accessToken, artists, features)
                                             .then(res => res.json())
                                             .then((data) => {
-                                                setRecommendations(data.recommendations);
                                                 const features2 = createArrayOfFeatures(route.params.maxMood);
                                                 console.log(features2);
                                                 getAudioFeatures(accessToken, data.trackIds, features2)
                                                     .then(res => res.json())
                                                     .then((data) => {
                                                         console.log(data.recommendations);
+                                                        setRecommendations(data.recommendations);
                                                         setRLoading(false);
                                                     })
 

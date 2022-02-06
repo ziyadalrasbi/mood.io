@@ -119,8 +119,9 @@ const getAudioFeatures = async (req, res, next) => {
 
     cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
     var tracksOnly = cosineSimTracks.map(track => track.id);
-    tracksOnly = tracksOnly.slice(0, 20);
-    await api.getTracks(tracksOnly)
+    var uniqueTracks = tracksOnly.filter(onlyUnique);
+    uniqueTracks = uniqueTracks.slice(0, 20);
+    await api.getTracks(uniqueTracks)
         .then((data) => {
             for (var i = 0; i < data.body.tracks.length; i++) {
                 console.log(data.body.tracks[i]);
@@ -140,6 +141,10 @@ const getAudioFeatures = async (req, res, next) => {
             console.log('There was an error getting audio features, please try again.', err);
         })
 }
+
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
 
 module.exports = {
     getRecommendations,
