@@ -113,17 +113,24 @@ const getAudioFeatures = async (req, res, next) => {
                     console.log(similarity);
                 }
                 cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
-                cosineSimTracks.forEach(function (track) {
-                    api.getTrack(track.id)
-                        .then((data) => {
-                            let recommendation = [];
-                            recommendation.push(data.body.name);
-                            recommendation.push(data.body.artists[0].name);
-                            recommendation.push(data.body['album'].images[0].url);
-                            recommendation.push(data.body.external_urls.spotify);
-                            recommendations.push(recommendation);
-                        })
-                })
+                const tracksOnly = cosineSimTracks.map(track => track.id);
+                tracksOnly.slice(0, 20);
+                api.getTracks(tracksOnly)
+                    .then((data) => {
+                        for (var i = 0; i < data.body.tracks.length; i++) {
+                            if (data.body.tracks[i]['album'].images[0]) {
+                                let recommendation = [];
+                                recommendation.push(data.body.tracks[i].name);
+                                recommendation.push(data.body.tracks[i].artists[0].name);
+                                recommendation.push(data.body.tracks[i]['album'].images[0].url);
+                                recommendation.push(data.body.tracks[i].external_urls.spotify);
+                                recommendations.push(recommendation);
+                            } else {
+                                console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
+                            }
+                        }
+                    })
+
 
 
                 res.json({ similarity: cosineSimTracks, recommendations: recommendations });
