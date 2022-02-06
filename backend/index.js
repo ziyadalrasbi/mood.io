@@ -25,6 +25,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5000
 
 /*------------ DATABASE ROUTES ------------*/
 app.use('/database/admin', adminRoutes.routes);
+app.use('/database/home', homeRoutes.routes);
 app.use('/database/login', loginRoutes.routes);
 app.use('/database/results', resultsRoutes.routes);
 /*------------ DETECTION ROUTES ------------*/
