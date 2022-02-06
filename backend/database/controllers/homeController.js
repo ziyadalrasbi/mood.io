@@ -26,6 +26,3 @@ const getRecommendations = async (req, res, next) => {
 module.exports = {
     getRecommendations
 }
-
-const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
-response.get()
