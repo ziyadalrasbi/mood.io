@@ -4,6 +4,7 @@ const cors = require('cors');
 const config = require('./database/config.js');
 /*------------ DATABASE ROUTES ------------*/
 const adminRoutes = require('./database/routes/admin-routes.js');
+const homeRoutes = require('./database/routes/home-routes.js');
 const loginRoutes = require('./database/routes/login-routes.js');
 const resultsRoutes = require('./database/routes/results-routes.js');
 /*------------ DETECTION ROUTES ------------*/

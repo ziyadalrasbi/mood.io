@@ -37,7 +37,7 @@ function SelectMood({ navigation }) {
         setIndex({ index: i, mood: mood });
     }
 
-    const sendMood = () => {
+    const navigateResults = () => {
         const mood = {
             "angry": index.mood == "angry" ? 1 : 0,
             "disgusted": index.mood == "disgusted" ? 1 : 0,
@@ -47,9 +47,41 @@ function SelectMood({ navigation }) {
             "sad": index.mood == "sad" ? 1 : 0,
             "surprised": index.mood == "surprised" ? 1 : 0,
         }
-
-        navigation.navigate('Results', { results: mood, maxMood: index.mood })
-    }
+        var jsonText = JSON.stringify(mood);
+        var data = JSON.parse(jsonText);
+        var getValues = [];
+        var getMoods = [];
+        var tempMax = 0;
+        var tempProp;
+        for (var prop in mood) {
+          var value = data[prop];
+          getValues.push(value);
+          getMoods.push(prop);
+          if (value > tempMax) {
+            tempMax = value;
+            tempProp = prop;
+          }
+        }
+        var tempAverages = [];
+        for (var i = 0; i < getValues.length; i++) {
+          const getAverages = {
+            name: getMoods[i],
+            percentage: getValues[i],
+            color: getMoods[i] === 'happy' ? 'yellow' : getMoods[i] === 'sad' ? 'grey' : getMoods[i] === 'angry' ? 'red' :
+              getMoods[i] === 'fearful' ? 'blue' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'black',
+            legendFontColor: 'white',
+            legendFontSize: 15,
+          };
+          tempAverages.push(getAverages);
+        }
+    
+        navigation.navigate('Results', {
+          results: mood,
+          maxMood: index.mood,
+          averages: tempAverages,
+          values: getValues
+        });
+      }
 
 
     return (
@@ -148,7 +180,7 @@ function SelectMood({ navigation }) {
                             uppercase={false}
                             mode="contained"
                             labelStyle={SelectMoodStyles.mainFont}
-                            onPress={() => sendMood()}
+                            onPress={() => navigateResults()}
                         >
                             continue
                         </Button>

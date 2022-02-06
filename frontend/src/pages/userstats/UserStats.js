@@ -211,7 +211,7 @@ function UserStats({ navigation, route }) {
                 <View style={UserStatsStyles.firstContainer}>
                     <Image
                         style={UserStatsStyles.profilePicture}
-                        source={profile.picture != null ? { uri: profile.picture } : defaultimg}
+                        source={profile.picture != "" ? { uri: profile.picture } : defaultimg}
                     />
                     <Text style={UserStatsStyles.firstHeader}>
                         {profile.name}

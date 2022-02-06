@@ -143,131 +143,115 @@ function Results({ navigation, route }) {
 
         return features;
     }
+    const fetchData = async () => {
+        const token = await SecureStore.getItemAsync('spotify_access_token');
+        const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+        var accessToken;
+        try {
+            await refreshAccessToken(token, refreshToken)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.token != "Null") {
+                        accessToken = data.token;
+                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                    }
+                })
+                .then(() => {
+                    getUserId(accessToken)
+                        .then(res => res.json())
+                        .then(data => {
+                            const id = data.id;
+                            getUserDatabaseGenres(id)
+                                .then(res => res.json())
+                                .then((data) => {
+                                    const artists = data.topGenres;
+                                    const features = filterFeaturesByMaxEmotion(route.params.maxMood);
+                                    getRecommendations(accessToken, artists, features)
+                                        .then(res => res.json())
+                                        .then((data) => {
+                                            const features2 = createArrayOfFeatures(route.params.maxMood);
+                                            console.log(features2);
+                                            getAudioFeatures(accessToken, data.trackIds, features2)
+                                                .then(res => res.json())
+                                                .then((data) => {
+                                                    setRecommendations(data.recommendations);
+                                                    setRLoading(false);
+
+                                                    saveRecommendations(id, route.params.maxMood, JSON.stringify(data.recommendations));
+
+                                                })
+
+                                        })
+                                })
+                        })
+                })
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+
+    }
+    const getMood = () => {
+        if (route.params.maxMood) {
+            if (route.params.maxMood == 'happy') {
+                const mood = {
+                    moodHeader: 'that you are feeling happy. that makes us happy too!',
+                    moodDescription: 'be sure to spread the happiness with others around you :)'
+                }
+                return mood;
+            }
+            if (route.params.maxMood == 'sad') {
+                const mood = {
+                    moodHeader: 'that you are feeling down. we\'re sorry to hear that.',
+                    moodDescription: 'it will get better, keep your head up high!'
+                }
+                return mood;
+            }
+            if (route.params.maxMood == 'angry') {
+                const mood = {
+                    moodHeader: 'that you seem tempered and fully of energy!',
+                    moodDescription: 'try to harness your thoughts and energy into something positive!'
+                }
+                return mood;
+            }
+            if (route.params.maxMood == 'fearful') {
+                const mood = {
+                    moodHeader: 'that you seem fearful. stay safe!',
+                    moodDescription: 'surround yourself around people that make you feel safe.'
+                }
+                return mood;
+            }
+            if (route.params.maxMood == 'disgusted') {
+                const mood = {
+                    moodHeader: 'that something may be putting you off. let\'s change that!',
+                    moodDescription: 'engage in activities that put you in your comfort zone.'
+                }
+                return mood;
+            }
+            if (route.params.maxMood == 'surprised') {
+                const mood = {
+                    moodHeader: 'that somthing may have caught you off guard recently!',
+                    moodDescription: 'there may be something that is surprising you. we hope it is something positive!'
+                }
+                return mood;
+            }
+            if (route.params.maxMood == 'neutral') {
+                const mood = {
+                    moodHeader: 'that everything seems normal!',
+                    moodDescription: 'being in a neutral state of mind is always good!'
+                }
+                return mood;
+            }
+        }
+    }
+
+    const mood = getMood();
 
     useEffect(() => {
-        const fetchData = async () => {
-            const token = await SecureStore.getItemAsync('spotify_access_token');
-            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            var accessToken;
-            try {
-                await refreshAccessToken(token, refreshToken)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.token != "Null") {
-                            accessToken = data.token;
-                            SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                        }
-                    })
-                    .then(() => {
-                        getUserId(accessToken)
-                            .then(res => res.json())
-                            .then(data => {
-                                const id = data.id;
-                                getUserDatabaseGenres(id)
-                                    .then(res => res.json())
-                                    .then((data) => {
-                                        const artists = data.topGenres;
-                                        const features = filterFeaturesByMaxEmotion(route.params.maxMood);
-                                        getRecommendations(accessToken, artists, features)
-                                            .then(res => res.json())
-                                            .then((data) => {
-                                                const features2 = createArrayOfFeatures(route.params.maxMood);
-                                                console.log(features2);
-                                                getAudioFeatures(accessToken, data.trackIds, features2)
-                                                    .then(res => res.json())
-                                                    .then((data) => {
-                                                        const test = JSON.stringify(data.recommendations);
-                                                        console.log(JSON.parse(test));
-                                                        setRecommendations(data.recommendations);
-                                                        saveRecommendations(id, route.params.maxMood, JSON.stringify(data.recommendations));
-                                                        setRLoading(false);
-                                                    })
-
-                                            })
-                                    })
-                            })
-                    })
-            } catch (error) {
-                console.log(error);
-                throw error;
-            }
-
-        }
-        const getMood = async () => {
-            if (route.params.results != null) {
-                var jsonText = JSON.stringify(route.params.results);
-                var data = JSON.parse(jsonText);
-                var getValues = [];
-                var getMoods = [];
-                var tempMax = 0;
-                var tempProp;
-                for (var prop in route.params.results) {
-                    var value = data[prop];
-                    getValues.push(value);
-                    getMoods.push(prop);
-                    if (value > tempMax) {
-                        tempMax = value;
-                        tempProp = prop;
-                    }
-                }
-                setMaxProp({ maxProp: tempProp });
-                setMaxValue({ maxValue: tempMax });
-                setValues({ values: getValues });
-                setMoods({ moods: getMoods });
-
-                if (values.values.length > 1) {
-                    var tempAverages = [];
-                    for (var i = 0; i < values.values.length; i++) {
-                        const getAverages = {
-                            name: moods.moods[i],
-                            percentage: values.values[i],
-                            color: moods.moods[i] === 'happy' ? 'yellow' : moods.moods[i] === 'sad' ? 'grey' : moods.moods[i] === 'angry' ? 'red' :
-                                moods.moods[i] === 'fearful' ? 'blue' : moods.moods[i] === 'disgusted' ? 'purple' : moods.moods[i] === 'surprised' ? 'orange' : 'black',
-                            legendFontColor: 'white',
-                            legendFontSize: width / 29.5714286,
-                        };
-                        tempAverages.push(getAverages);
-                    }
-                    setAverages({ averages: tempAverages });
-                }
-
-                if (maxValue.maxValue != "surprised" && maxProp.maxProp != "") {
-                    if (maxProp.maxProp == 'happy') {
-                        setMoodHeader({ moodHeader: 'that you are feeling happy. that makes us happy too!' });
-                        setMoodDescription({ moodDescription: 'be sure to spread the happiness with others around you :)' });
-                    }
-                    if (maxProp.maxProp == 'sad') {
-                        setMoodHeader({ moodHeader: 'that you are feeling down. we\'re sorry to hear that.' });
-                        setMoodDescription({ moodDescription: 'it will get better, keep your head up high!' })
-                    }
-                    if (maxProp.maxProp == 'angry') {
-                        setMoodHeader({ moodHeader: 'that you seem tempered and fully of energy!' });
-                        setMoodDescription({ moodDescription: 'try to harness your thoughts and energy into something positive!' });
-                    }
-                    if (maxProp.maxProp == 'fearful') {
-                        setMoodHeader({ moodHeader: 'that you seem fearful. stay safe!' });
-                        setMoodDescription({ moodDescription: 'surround yourself around people that make you feel safe.' });
-                    }
-                    if (maxProp.maxProp == 'disgusted') {
-                        setMoodHeader({ moodHeader: 'that something may be putting you off. let\'s change that!' });
-                        setMoodDescription({ moodDescription: 'engage in activities that put you in your comfort zone.' });
-                    }
-                    if (maxProp.maxProp == 'surprised') {
-                        setMoodHeader({ moodHeader: 'that somthing may have caught you off guard recently!' });
-                        setMoodDescription({ moodDescription: 'there may be something that is surprising you. we hope it is something positive!' });
-                    }
-                    if (maxProp.maxProp == 'neutral') {
-                        setMoodHeader({ moodHeader: 'that everything seems normal!' })
-                        setMoodDescription({ moodDescription: 'being in a neutral state of mind is always good!' });
-                    }
-                }
-            }
-        }
-
         fetchData();
         getMood();
         setLoading(false);
-    }, [loading, rloading])
+    }, [])
 
     const onStarRatingPress = async (rating) => {
         setCount(rating);
@@ -295,15 +279,15 @@ function Results({ navigation, route }) {
 
                 <View style={ResultsStyles.firstContainer}>
                     <Text style={ResultsStyles.firstHeader}>
-                        your result analysis showed {maxProp.maxProp != "" && moodHeader.moodHeader}
+                        your result analysis showed mood.moodHeader
                     </Text>
                     <Text style={ResultsStyles.firstSubHeader}>
-                        {maxProp.maxProp != "" && moodDescription.moodDescription}
+                        mood.moodDescription
                     </Text>
-                    {!loading && !rloading && <MoodGraph data={averages.averages} />}
+                    {<MoodGraph data={route.params.averages} />}
                 </View>
                 <ScrollView style={ResultsStyles.recommendationsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
-                    {recommendations.length > 0 && recommendations.map((track, index) =>
+                    {!rloading && recommendations.length > 0 && recommendations.map((track, index) =>
                         <View key={index}>
                             <TouchableOpacity
                                 style={{

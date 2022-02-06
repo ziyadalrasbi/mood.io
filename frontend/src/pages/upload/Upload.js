@@ -17,6 +17,7 @@ function Upload({ navigation }) {
   const [moodAnalysis, setMoodAnalysis] = useState({ moodAnalysis: [] });
   const [loading, setLoading] = useState(false);
 
+
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
     InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
@@ -72,6 +73,45 @@ function Upload({ navigation }) {
       })
   }
 
+
+  const navigateResults = () => {
+    var jsonText = JSON.stringify(moodAnalysis.moodAnalysis);
+    var data = JSON.parse(jsonText);
+    var getValues = [];
+    var getMoods = [];
+    var tempMax = 0;
+    var tempProp;
+    for (var prop in moodAnalysis.moodAnalysis) {
+      var value = data[prop];
+      getValues.push(value);
+      getMoods.push(prop);
+      if (value > tempMax) {
+        tempMax = value;
+        tempProp = prop;
+      }
+    }
+    var tempAverages = [];
+    for (var i = 0; i < getValues.length; i++) {
+      const getAverages = {
+        name: getMoods[i],
+        percentage: getValues[i],
+        color: getMoods[i] === 'happy' ? 'yellow' : getMoods[i] === 'sad' ? 'grey' : getMoods[i] === 'angry' ? 'red' :
+          getMoods[i] === 'fearful' ? 'blue' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'black',
+        legendFontColor: 'white',
+        legendFontSize: 15,
+      };
+      tempAverages.push(getAverages);
+    }
+
+    navigation.navigate('Results', {
+      results: moodAnalysis.moodAnalysis,
+      maxMood: tempProp,
+      averages: tempAverages,
+      values: getValues
+    });
+  }
+
+
   return (
     <ScrollView style={UploadStyles.scroll} showsVerticalScrollIndicator={false}>
       <View style={UploadStyles.topContainer}>
@@ -118,7 +158,7 @@ function Upload({ navigation }) {
               mode="contained"
               labelStyle={UploadStyles.mainFont}
               disabled={Object.keys(moodAnalysis.moodAnalysis).length > 0 ? false : true}
-              onPress={() => navigation.navigate('Results', { results: moodAnalysis.moodAnalysis })}
+              onPress={() => navigateResults()}
             >
               continue
             </Button>
