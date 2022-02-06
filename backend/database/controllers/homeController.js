@@ -6,8 +6,7 @@ const firebase = require('../db.js');
 const getRecommendations = async (req, res, next) => {
     try {
         var recommendations = [];
-        const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user)).collection('recommendations');
-        response.get()
+        const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user)).collection('recommendations').get();
         response.forEach(doc => {
             let recommendation = {
                 mood: doc.data().mood, 
