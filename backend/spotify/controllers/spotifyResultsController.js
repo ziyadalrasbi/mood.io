@@ -114,7 +114,8 @@ const getAudioFeatures = async (req, res, next) => {
                 }
                 cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
                 const tracksOnly = cosineSimTracks.map(track => track.id);
-                tracksOnly.slice(0, 20);
+                tracksOnly.slice(0, 10);
+                console.log(tracksOnly);
                 api.getTracks(tracksOnly)
                     .then((data) => {
                         for (var i = 0; i < data.body.tracks.length; i++) {
