@@ -12,7 +12,15 @@ import HomeStyles from '../home/HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
-import { getRecommendations, getUserDatabaseGenres, getUserId, refreshAccessToken, saveUserRating, getAudioFeatures } from '../../fetch';
+import {
+    getRecommendations,
+    getUserDatabaseGenres,
+    getUserId,
+    refreshAccessToken,
+    saveRecommendations,
+    saveUserRating,
+    getAudioFeatures
+} from '../../fetch';
 import StarRating from 'react-native-star-rating';
 const { width } = Dimensions.get('window');
 
@@ -154,7 +162,8 @@ function Results({ navigation, route }) {
                         getUserId(accessToken)
                             .then(res => res.json())
                             .then(data => {
-                                getUserDatabaseGenres(data.id)
+                                const id = data.id;
+                                getUserDatabaseGenres(id)
                                     .then(res => res.json())
                                     .then((data) => {
                                         const artists = data.topGenres;
@@ -167,8 +176,10 @@ function Results({ navigation, route }) {
                                                 getAudioFeatures(accessToken, data.trackIds, features2)
                                                     .then(res => res.json())
                                                     .then((data) => {
-                                                        console.log(data.recommendations);
+                                                        const test = JSON.stringify(data.recommendations);
+                                                        console.log(JSON.parse(test));
                                                         setRecommendations(data.recommendations);
+                                                        saveRecommendations(id, route.params.maxMood, JSON.stringify(data.recommendations));
                                                         setRLoading(false);
                                                     })
 
