@@ -4,7 +4,7 @@ const firebase = require('../db.js');
 
 const signIn = async (req, res, next) => {
     try {
-        firebase.auth().signInWithCustomToken(JSON.stringify(req.body.token))
+        await firebase.auth().signInWithCustomToken(JSON.stringify(req.body.token))
             .then((userCredential) => {
                 firebase.auth().currentUser.getIdToken(true)
                     .then((token) => {
@@ -19,7 +19,7 @@ const signIn = async (req, res, next) => {
 
 const signOut = async (req, res, next) => {
     try {
-        firebase.auth().signOut()
+        await firebase.auth().signOut()
             .then(() => {
                 console.log('User signed out!');
                 res.json({ code: 200 });
@@ -31,7 +31,7 @@ const signOut = async (req, res, next) => {
 
 const addUser = async (req, res, next) => {
     try {
-        const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.set({
             username: JSON.stringify(req.body.user),
             refreshToken: JSON.stringify(req.body.refreshToken),
@@ -45,7 +45,7 @@ const addUser = async (req, res, next) => {
 
 const getUserGenres = async (req, res, next) => {
     try {
-        const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
                 if (doc.data().topGenres != null) {
@@ -63,7 +63,7 @@ const getUserGenres = async (req, res, next) => {
 
 const saveUserGenres = async (req, res, next) => {
     try {
-        const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.set({
             topArtists: req.body.artists
         }, { merge: true });

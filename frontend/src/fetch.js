@@ -263,6 +263,20 @@ export const detectFace = async (base64) => {
 
 /* ---------------- RESULTS FETCH FUNCTIONS ---------- */
 
+export const saveRecentMood = async (user, mood) => {
+    return fetch(`${baseUrl}/database/results/saveRecentMood`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: user,
+            mood: mood
+        })
+    })
+}
+
 export const refreshAccessToken = async (token, refreshToken) => {
     return fetch(`${baseUrl}/spotify/login/refreshAccessToken`, {
         method: 'post',

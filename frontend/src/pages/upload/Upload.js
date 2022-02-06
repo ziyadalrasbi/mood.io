@@ -7,9 +7,10 @@ import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { detectFace } from '../../fetch';
+import { detectFace, saveRecentMood } from '../../fetch';
 import uploadimg from '../../../assets/icons/upload/upload.png';
 import LottieView from 'lottie-react-native';
+import * as SecureStore from 'expo-secure-store';
 
 function Upload({ navigation }) {
 
@@ -74,7 +75,7 @@ function Upload({ navigation }) {
   }
 
 
-  const navigateResults = () => {
+  const navigateResults = async () => {
     var jsonText = JSON.stringify(moodAnalysis.moodAnalysis);
     var data = JSON.parse(jsonText);
     var getValues = [];
@@ -102,13 +103,16 @@ function Upload({ navigation }) {
       };
       tempAverages.push(getAverages);
     }
-
-    navigation.navigate('Results', {
-      results: moodAnalysis.moodAnalysis,
-      maxMood: tempProp,
-      averages: tempAverages,
-      values: getValues
-    });
+    const id = await SecureStore.getItemAsync('user_id');
+    await saveRecentMood(id, tempProp)
+      .then(() => {
+        navigation.navigate('Results', {
+          results: moodAnalysis.moodAnalysis,
+          maxMood: tempProp,
+          averages: tempAverages,
+          values: getValues
+        });
+      })
   }
 
 

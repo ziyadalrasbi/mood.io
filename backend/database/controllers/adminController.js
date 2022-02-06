@@ -8,7 +8,7 @@ admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 
 const createToken = async (req, res, next) => {
     try {
-        admin.auth().createCustomToken(req.body.id)
+        await admin.auth().createCustomToken(req.body.id)
             .then((customToken) => {
                 res.json({ token: customToken });
             })
@@ -21,7 +21,7 @@ const createToken = async (req, res, next) => {
 const verifyFirebaseToken = async (req, res, next) => {
     try {
         if (req.body.token != null) {
-            admin.auth().verifyIdToken(req.body.token)
+            await admin.auth().verifyIdToken(req.body.token)
                 .then((decodeToken) => {
                     res.json({ code: 200 });
                 })

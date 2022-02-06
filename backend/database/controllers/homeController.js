@@ -17,8 +17,6 @@ const getRecommendations = async (req, res, next) => {
                     }
                     recommendations.push(recommendation);
                 })
-
-
             })
         recommendations.sort((a, b) => b.time - a.time);
         res.json({ recommendations: recommendations });

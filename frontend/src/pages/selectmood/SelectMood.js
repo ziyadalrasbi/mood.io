@@ -6,8 +6,9 @@ import { useFonts } from 'expo-font'
 import SelectMoodStyles from './SelectMoodStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
+import * as SecureStore from 'expo-secure-store';
 import { LinearGradient } from 'expo-linear-gradient';
-import { detectFace } from '../../fetch';
+import { saveRecentMood, getUserId } from '../../fetch';
 import happy from '../../../assets/icons/selectmood/happy.png';
 import angry from '../../../assets/icons/selectmood/angry.png';
 import sad from '../../../assets/icons/selectmood/sad.png';
@@ -29,7 +30,7 @@ function SelectMood({ navigation }) {
 
     if (!loaded) {
         return (
-            <View style={{height: '100%', backgroundColor:'#0d324d'}} />
+            <View style={{ height: '100%', backgroundColor: '#0d324d' }} />
         )
     }
 
@@ -37,7 +38,7 @@ function SelectMood({ navigation }) {
         setIndex({ index: i, mood: mood });
     }
 
-    const navigateResults = () => {
+    const navigateResults = async () => {
         const mood = {
             "angry": index.mood == "angry" ? 1 : 0,
             "disgusted": index.mood == "disgusted" ? 1 : 0,
@@ -54,34 +55,37 @@ function SelectMood({ navigation }) {
         var tempMax = 0;
         var tempProp;
         for (var prop in mood) {
-          var value = data[prop];
-          getValues.push(value);
-          getMoods.push(prop);
-          if (value > tempMax) {
-            tempMax = value;
-            tempProp = prop;
-          }
+            var value = data[prop];
+            getValues.push(value);
+            getMoods.push(prop);
+            if (value > tempMax) {
+                tempMax = value;
+                tempProp = prop;
+            }
         }
         var tempAverages = [];
         for (var i = 0; i < getValues.length; i++) {
-          const getAverages = {
-            name: getMoods[i],
-            percentage: getValues[i],
-            color: getMoods[i] === 'happy' ? 'yellow' : getMoods[i] === 'sad' ? 'grey' : getMoods[i] === 'angry' ? 'red' :
-              getMoods[i] === 'fearful' ? 'blue' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'black',
-            legendFontColor: 'white',
-            legendFontSize: 15,
-          };
-          tempAverages.push(getAverages);
+            const getAverages = {
+                name: getMoods[i],
+                percentage: getValues[i],
+                color: getMoods[i] === 'happy' ? 'yellow' : getMoods[i] === 'sad' ? 'grey' : getMoods[i] === 'angry' ? 'red' :
+                    getMoods[i] === 'fearful' ? 'blue' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'black',
+                legendFontColor: 'white',
+                legendFontSize: 15,
+            };
+            tempAverages.push(getAverages);
         }
-    
-        navigation.navigate('Results', {
-          results: mood,
-          maxMood: index.mood,
-          averages: tempAverages,
-          values: getValues
-        });
-      }
+        const id = await SecureStore.getItemAsync('user_id');
+        await saveRecentMood(id, tempProp)
+            .then(() => {
+                navigation.navigate('Results', {
+                    results: mood,
+                    maxMood: index.mood,
+                    averages: tempAverages,
+                    values: getValues
+                });
+            })
+    }
 
 
     return (

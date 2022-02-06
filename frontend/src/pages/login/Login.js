@@ -57,42 +57,43 @@ function Login({ navigation }) {
             .then((res) => {
                 console.log(res);
                 if (res && res.type == 'success') {
-                requestAccessToken(res.params.code)
-                    .then(res => res.json())
-                    .then(data => {
-                        const accessToken = data.accessToken;
-                        console.log(accessToken);
-                        const refreshToken = data.refreshToken;
-                        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                        SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                        getUserData(accessToken)
-                            .then(res => res.json())
-                            .then(data => {
-                                const userId = data.id;
-                                initUser(userId, accessToken);
-                                loginUser(userId);
-                                getUserGenres(accessToken)
-                                    .then((res) => res.json())
-                                    .then(data => {
-                                        console.log(Object.keys(data.topGenres).length);
-                                        if (Object.keys(data.topGenres).length > 0) {
-                                            saveUserGenres(userId, data.topArtists);
-                                            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                        } else {
-                                            getGenreSeeds(accessToken)
-                                                .then(res => res.json())
-                                                .then(data => {
-                                                    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                                })
-                                        }
+                    requestAccessToken(res.params.code)
+                        .then(res => res.json())
+                        .then(data => {
+                            const accessToken = data.accessToken;
+                            console.log(accessToken);
+                            const refreshToken = data.refreshToken;
+                            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                            SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                            getUserData(accessToken)
+                                .then(res => res.json())
+                                .then(data => {
+                                    const userId = data.id;
+                                    SecureStore.setItemAsync('user_id', userId, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                                    initUser(userId, accessToken);
+                                    loginUser(userId);
+                                    getUserGenres(accessToken)
+                                        .then((res) => res.json())
+                                        .then(data => {
+                                            console.log(Object.keys(data.topGenres).length);
+                                            if (Object.keys(data.topGenres).length > 0) {
+                                                saveUserGenres(userId, data.topArtists);
+                                                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+                                            } else {
+                                                getGenreSeeds(accessToken)
+                                                    .then(res => res.json())
+                                                    .then(data => {
+                                                        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+                                                    })
+                                            }
 
-                                    })
-                            })
-                            .catch((error) => {
-                                console.log('Error logging in, please try again. \n' + error);
-                                throw error;
-                            });
-                    });
+                                        })
+                                })
+                                .catch((error) => {
+                                    console.log('Error logging in, please try again. \n' + error);
+                                    throw error;
+                                });
+                        });
                 }
             });
     }
