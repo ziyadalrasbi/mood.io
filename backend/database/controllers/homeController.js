@@ -13,7 +13,12 @@ const getRecommendations = async (req, res, next) => {
             .orderBy('time', 'desc')
             .onSnapshot((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    recommendations.push(...doc.data());
+                    let recommendation = {
+                        mood: doc.data().mood,
+                        time: doc.data().time,
+                        tracks: JSON.parse(doc.data().tracks)
+                    }
+                    recommendations.push(recommendation);
                 })
             })
         res.json({ recommendations: recommendations });
