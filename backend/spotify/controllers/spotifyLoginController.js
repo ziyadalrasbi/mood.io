@@ -42,7 +42,7 @@ const getUserId = async (req, res, next) => {
             id = data.body.id;
             res.json({ id: id });
         }, function (error) {
-            console.log('There was an error getting ID, please try again. \n' + error);
+            console.log('There was an error getting ID, please try again. \n' + JSON.stringify(error));
         });
 }
 

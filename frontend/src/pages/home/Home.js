@@ -112,6 +112,7 @@ function Home({ navigation, route }) {
             .then(res => res.json())
             .then(data => {
               if (data.topGenres == null) {
+                console.log('hello')
                 var isNew = true;
                 setNewUser({ newUser: isNew });
               }
@@ -194,6 +195,7 @@ function Home({ navigation, route }) {
         colors={['#0d324d', '#7f5a83']}
         style={HomeStyles.gradientContainer}
       />
+      <GenreModal newUser={newUser.newUser} navigation={navigation} />
       <View style={HomeStyles.mainContainer}>
         <View style={HomeStyles.topContainer}>
           <Navbar navigation={navigation} name={name} page={'home'} signOut={signOutUser} />
@@ -254,6 +256,10 @@ function Home({ navigation, route }) {
               </View>
             )}
           </ScrollView>
+          {recommendations.length == 0 &&
+            <Text style={HomeStyles.noDataText}>
+              No recommendations yet. To get recommendations, press the "get started" button above!
+            </Text>}
         </View>
 
         <View style={HomeStyles.thirdContainer}>
@@ -364,8 +370,8 @@ function Home({ navigation, route }) {
             </Text>
           }
           <View style={{ height: 30 }} />
+                  
         </View>
-        <GenreModal data={true} navigation={navigation} />
         <StatusBar style="auto" />
       </View>
       <View style={{ height: '100%', backgroundColor: '#7f5a83' }} />

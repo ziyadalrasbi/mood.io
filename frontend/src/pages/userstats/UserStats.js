@@ -39,7 +39,7 @@ function UserStats({ navigation, route }) {
             </View>
             {topArtists.length == 0 &&
                 <Text style={UserStatsStyles.noDataText}>
-                    No data found for this time frame. Try a different time frame, or listen to some more #
+                    No data found for this time frame. Try a different time frame, or listen to some more
                     music on Spotify and come back at a later date to view this data!
                 </Text>
             }
@@ -80,7 +80,7 @@ function UserStats({ navigation, route }) {
             )}
             {topTracks.length == 0 &&
                 <Text style={UserStatsStyles.noDataText}>
-                    No data found for this time frame. Try a different time frame, or listen to some more #
+                    No data found for this time frame. Try a different time frame, or listen to some more
                     music on Spotify and come back at a later date to view this data!
                 </Text>
             }
