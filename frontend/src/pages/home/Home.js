@@ -51,6 +51,15 @@ function Home({ navigation, route }) {
     InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
   });
 
+  function isArrayInArray(arr, item) {
+    var item_as_string = JSON.stringify(item);
+
+    var contains = arr.some(function (ele) {
+      return JSON.stringify(ele) === item_as_string;
+    });
+    return contains;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const token = await SecureStore.getItemAsync('spotify_access_token');
@@ -112,8 +121,9 @@ function Home({ navigation, route }) {
             .then(data => {
               var recommendation = [];
               for (var i = 0; i < 6 && i < data.recommendations.length; i++) {
-                if (!recommendation.includes(data.recommendations[i].tracks[0])) {
-                  recommendation.push(data.recommendations[i].tracks[0]);
+                const current = data.recommendations[i].tracks[0];
+                if (!isArrayInArray(recommendation, current)) {
+                  recommendation.push(current);
                 }
               }
               setRecommendations(recommendation);
