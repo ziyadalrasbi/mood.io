@@ -10,7 +10,6 @@ const getRecommendations = async (req, res, next) => {
             .collection('users')
             .doc(JSON.stringify(req.body.user))
             .collection('recommendations')
-            .orderBy('time', 'desc')
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
