@@ -42,8 +42,11 @@ export default StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomWidth:1,
-        borderBottomColor:'grey'
+        borderBottomWidth: 1,
+        borderBottomColor: 'grey'
     },
+    drawerTouchable: {
+        width: width / 1.47857143
+    }
 });
 

@@ -77,20 +77,20 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
             <DrawerContentScrollView
                 {...props}
             >
-                <View style={{ alignItems: 'flex-start', marginTop: -50 }}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <View style={{ alignItems: 'flex-start', marginTop: -50, width: '100%' }}>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Home')}>
                         <Text style={CustomDrawerStyles.optionText}>
                             Home
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Profile
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('UploadOptions')}>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable}  onPress={() => navigation.navigate('UploadOptions')}>
                         <Text style={CustomDrawerStyles.optionText}>
                             Discover Music
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('UserStats', { index: 0 })}>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Profile
                         </Text>
                     </TouchableOpacity>
                     <Text style={CustomDrawerStyles.optionText}>

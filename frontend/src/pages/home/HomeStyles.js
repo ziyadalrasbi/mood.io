@@ -47,7 +47,7 @@ export default StyleSheet.create({
     color: 'white',
     fontSize: width / 27.6,
     padding: width / 41.4,
-    marginBottom: -(width / 41.4),
+
     marginTop: height / 59.7333333
   },
   firstSubHeader: {
@@ -95,10 +95,6 @@ export default StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     height: '100%',
-  },
-  mainFont: {
-    fontFamily: 'InconsolataMedium',
-    fontSize: 17
   },
   thirdContainer: {
     position: 'relative',

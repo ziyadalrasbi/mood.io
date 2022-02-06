@@ -2,9 +2,22 @@
 
 const firebase = require('../db.js');
 
+const saveRecentMood = async (req, res, next) => {
+    try {
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.set({
+            recentMood: req.body.mood
+        }, { merge: true });
+        res.json({ status: 200 });
+    } catch (error) {
+        console.log('Error saving user\'s recent mood, please try again. \n' + error);
+        res.json({ status: 400 });
+    }
+}
+
 const getUserGenres = async (req, res, next) => {
     try {
-        const response = firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
                 res.json({ topGenres: doc.data().topArtists });
@@ -17,7 +30,7 @@ const getUserGenres = async (req, res, next) => {
 
 const saveRecommendations = async (req, res, next) => {
     try {
-        firebase.firestore()
+        await firebase.firestore()
             .collection('users')
             .doc(JSON.stringify(req.body.user))
             .collection('recommendations')
@@ -35,7 +48,7 @@ const saveRecommendations = async (req, res, next) => {
 
 const saveUserRating = async (req, res, next) => {
     try {
-        const response = firebase.firestore().collection('ratings').doc('algorithm');
+        const response = await firebase.firestore().collection('ratings').doc('algorithm');
         response.get()
             .then((doc) => {
                 response.set({
@@ -52,6 +65,7 @@ const saveUserRating = async (req, res, next) => {
 }
 
 module.exports = {
+    saveRecentMood,
     getUserGenres,
     saveRecommendations,
     saveUserRating

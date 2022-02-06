@@ -120,7 +120,7 @@ function Home({ navigation, route }) {
             .then(res => res.json())
             .then(data => {
               var recommendation = [];
-              for (var i = 0; i < 6 && i < data.recommendations.length; i++) {
+              for (var i = 0; i < data.recommendations.length && recommendation.length < 6; i++) {
                 const current = data.recommendations[i].tracks[0];
                 if (!isArrayInArray(recommendation, current)) {
                   recommendation.push(current);
@@ -201,9 +201,6 @@ function Home({ navigation, route }) {
         <View style={HomeStyles.firstContainer}>
           <Text style={HomeStyles.firstHeader}>
             Discover Music
-          </Text>
-          <Text style={HomeStyles.firstSubHeader}>
-            press the button below to scan your mood
           </Text>
           <Button
             style={HomeStyles.startButton}
