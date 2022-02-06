@@ -10,7 +10,6 @@ const getRecommendations = async (req, res, next) => {
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    console.log('data is ' + JSON.stringify(doc.data()));
                     let recommendation = {
                         mood: doc.data().mood,
                         time: doc.data().time,
