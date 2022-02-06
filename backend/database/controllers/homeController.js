@@ -11,7 +11,8 @@ const getRecommendations = async (req, res, next) => {
             .doc(JSON.stringify(req.body.user))
             .collection('recommendations')
             .orderBy('time', 'desc')
-            .onSnapshot((querySnapshot) => {
+            .get()
+            .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     let recommendation = {
                         mood: doc.data().mood,
