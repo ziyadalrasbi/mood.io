@@ -38,7 +38,6 @@ const getUserId = async (req, res, next) => {
     await api.setAccessToken(req.body.token);
     await api.getMe()
         .then((data) => {
-            console.log(data.body.images);
             id = data.body.id;
             res.json({ id: id });
         }, function (error) {
