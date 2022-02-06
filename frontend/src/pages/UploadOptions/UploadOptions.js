@@ -41,7 +41,7 @@ function UploadOptions({ navigation }) {
                         uppercase={false}
                         mode="contained"
                         labelStyle={UploadOptionsStyles.mainFont}
-                        onPress={() => navigation.navigate('Upload', { navigation: navigation })}
+                        onPress={() => navigation.navigate('Upload')}
                     >
                         continue
                     </Button>
@@ -65,7 +65,7 @@ function UploadOptions({ navigation }) {
                         uppercase={false}
                         mode="contained"
                         labelStyle={UploadOptionsStyles.mainFont}
-                        onPress={() => navigation.navigate('SelectMood', { navigation: navigation })}
+                        onPress={() => navigation.navigate('SelectMood')}
                     >
                         continue
                     </Button>

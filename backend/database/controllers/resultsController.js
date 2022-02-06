@@ -15,6 +15,24 @@ const getUserGenres = async (req, res, next) => {
     }
 }
 
+const saveRecommendations = async (req, res, next) => {
+    try {
+        firebase.firestore()
+            .collection('users')
+            .doc(JSON.stringify(req.body.user))
+            .collection('recommendations')
+            .add({
+                mood: req.body.mood,
+                tracks: req.body.tracks,
+                time: Date.now()
+            })
+        res.json({ status: 200 });
+    } catch (error) {
+        console.log('Error getting user top genres from database, please try again. \n' + error);
+        res.json({ status: 400 });
+    }
+}
+
 const saveUserRating = async (req, res, next) => {
     try {
         const response = firebase.firestore().collection('ratings').doc('algorithm');
@@ -35,5 +53,6 @@ const saveUserRating = async (req, res, next) => {
 
 module.exports = {
     getUserGenres,
+    saveRecommendations,
     saveUserRating
 }

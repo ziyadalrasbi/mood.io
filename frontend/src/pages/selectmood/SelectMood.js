@@ -28,7 +28,9 @@ function SelectMood({ navigation }) {
     });
 
     if (!loaded) {
-        return null;
+        return (
+            <View style={{height: '100%', backgroundColor:'#0d324d'}} />
+        )
     }
 
     const changeSelectedMood = (i, mood) => {
@@ -48,6 +50,7 @@ function SelectMood({ navigation }) {
 
         navigation.navigate('Results', { results: mood, maxMood: index.mood })
     }
+
 
     return (
         <ScrollView style={SelectMoodStyles.scroll} showsVerticalScrollIndicator={false}>

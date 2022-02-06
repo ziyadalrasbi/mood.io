@@ -25,7 +25,9 @@ function Upload({ navigation }) {
   });
 
   if (!loaded) {
-    return null;
+    return (
+      <View style={{ height: '100%', backgroundColor: '#0d324d' }} />
+    )
   }
 
 
