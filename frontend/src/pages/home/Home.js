@@ -11,7 +11,17 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
-import { getTopArtists, getName, getTopTracks, getListeningHabits, signOut, getUserDatabaseGenres, getGenreSeeds, getUserId } from '../../fetch';
+import {
+  getTopArtists,
+  getName,
+  getTopTracks,
+  getListeningHabits,
+  signOut,
+  getUserDatabaseGenres,
+  getGenreSeeds,
+  getUserId,
+  getPreviousRecommendations
+} from '../../fetch';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
 
@@ -29,6 +39,7 @@ function Home({ navigation, route }) {
 
   const [newUser, setNewUser] = useState({ newUser: false });
 
+  const [recommendations, setRecommendations] = useState({ recommendations: [] });
   const [artistImgLoaded, setArtistImgLoaded] = useState(false);
   const [trackImgLoaded, setTrackImgLoaded] = useState(false);
 
@@ -95,6 +106,17 @@ function Home({ navigation, route }) {
                 var isNew = true;
                 setNewUser({ newUser: isNew });
               }
+            })
+          getPreviousRecommendations(data.id)
+            .then(res => res.json())
+            .then(data => {
+              var recommendation = [];
+              for (var i = 0; i < 6 && i < data.recommendations.length; i++) {
+                if (!recommendation.includes(data.recommendations[i].tracks[0])) {
+                  recommendation.push(data.recommendations[i].tracks[0]);
+                }
+              }
+              setRecommendations(recommendation);
             })
             .catch((error) => {
               console.log('Error fetching user genres, please try again. \n' + error);
@@ -184,12 +206,47 @@ function Home({ navigation, route }) {
           </Button>
         </View>
         <View style={HomeStyles.secondContainer}>
-          <Text style={HomeStyles.secondHeader}>
-            Recent Recommendations
-          </Text>
-          <Text style={HomeStyles.secondSubHeader}>
-            songs recommended to you in the past week
-          </Text>
+          <View style={HomeStyles.headerContainer}>
+            <Text style={HomeStyles.secondHeader}>
+              Recent Recommendations
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
+              <View style={HomeStyles.allContainer}>
+                <Text style={HomeStyles.thirdHeader}>
+                  All
+                </Text>
+                <Image
+                  style={HomeStyles.next}
+                  source={nextimg}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+            {recommendations.length > 0 && recommendations.map((track, index) =>
+              <View key={index}>
+                <TouchableOpacity
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 2, elevation: 5
+                  }}
+                  onPress={() => Linking.openURL(track[3])}>
+                  <Image
+                    onLoadStart={changeArtistImageLoadedFalse}
+                    onLoad={changeArtistImageLoadedTrue}
+                    style={HomeStyles.recommendationImage}
+                    source={{ uri: track[2] }}
+                  />
+                </TouchableOpacity>
+                <View style={HomeStyles.topTrackTextContainer}>
+                  <Text style={HomeStyles.topRecommendationTrackText}>{track[0]}</Text>
+                  <Text style={HomeStyles.topRecommendationTrackArtistText}>{track[1]}</Text>
+                </View>
+              </View>
+            )}
+          </ScrollView>
         </View>
 
         <View style={HomeStyles.thirdContainer}>

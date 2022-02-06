@@ -191,6 +191,28 @@ export default StyleSheet.create({
     maxWidth: width / 1.38,
     marginRight: width / 20.7
   },
+  topRecommendationTrackText: {
+    fontFamily: 'InconsolataMedium',
+    color: 'white',
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginTop: height / 89.6,
+    marginBottom: height / 179.2,
+    fontSize: width / 34.5,
+    fontStyle: 'italic',
+    maxWidth: width / 3.45,
+    marginRight: width / 16.56,
+  },
+  topRecommendationTrackArtistText: {
+    fontFamily: 'InconsolataMedium',
+    color: '#dbdbdb',
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: width / 34.5,
+    fontStyle: 'italic',
+    maxWidth: width / 4.14,
+    marginRight: width / 16.56,
+  },
   topTrackTextContainer: {
     alignSelf: 'center'
   },
@@ -212,10 +234,17 @@ export default StyleSheet.create({
     borderRadius: 100
   },
   topTrackImage: {
-    width: 60,
-    height: 60,
+    width: width / 6.9,
+    height: width / 6.9,
     marginRight: width / 20.7,
     marginTop: height / 89.6,
+    borderRadius: 5
+  },
+  recommendationImage: {
+    width: width / 3.45,
+    height: width / 3.45,
+    marginRight: width / 16.56,
+    marginTop: height / 44.8,
     borderRadius: 5
   },
   mainFont: {
@@ -248,7 +277,7 @@ export default StyleSheet.create({
     width: width / 24.3529412,
     height: width / 24.3529412,
     marginLeft: -(width / 41.4),
-    marginTop: height/54.3030303
+    marginTop: height / 54.3030303
   },
   playImage: {
     width: width / 18.8181818,

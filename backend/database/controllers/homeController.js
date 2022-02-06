@@ -20,6 +20,7 @@ const getRecommendations = async (req, res, next) => {
 
 
             })
+        recommendations.sort((a, b) => b.time - a.time);
         res.json({ recommendations: recommendations });
     } catch (error) {
         console.log('There was an error getting recommendations, please try again. ' + error);

@@ -206,6 +206,19 @@ export const getTopTracks = async (token) => {
     })
 }
 
+export const getPreviousRecommendations = async (id) => {
+    return fetch(`${baseUrl}/database/home/getRecommendations`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: id
+        })
+    })
+}
+
 export const getListeningHabits = async (token, trackIds) => {
     return fetch(`${baseUrl}/spotify/home/getListeningHabits`, {
         method: 'post',
