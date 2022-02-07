@@ -82,40 +82,45 @@ const getAudioFeatures = async (req, res, next) => {
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
     await api.setAccessToken(req.body.token);
-    await api.getAudioFeaturesForTracks(req.body.tracks)
-        .then((data) => {
-            console.log(data);
-            if (data != null) {
-                for (var i = 0; i < data.body.audio_features.length; i++) {
-                    var currentFeatures = [
-                        data.body.audio_features[i].mode,
-                        data.body.audio_features[i].valence,
-                        data.body.audio_features[i].energy,
-                        data.body.audio_features[i].danceability,
-                        data.body.audio_features[i].loudness
-                    ];
-                    var dotproduct = 0;
-                    var mA = 0;
-                    var mB = 0;
-                    for (var j = 0; j < currentFeatures.length; j++) {
-                        dotproduct += (currentFeatures[j] * requestedFeatures[j]);
-                        mA += (currentFeatures[j] * currentFeatures[j]);
-                        mB += (requestedFeatures[j] * requestedFeatures[j]);
+    console.log(req.body.tracks);
+    try {
+        await api.getAudioFeaturesForTracks(req.body.tracks)
+            .then((data) => {
+                console.log(data);
+                if (data != null) {
+                    for (var i = 0; i < data.body.audio_features.length; i++) {
+                        var currentFeatures = [
+                            data.body.audio_features[i].mode,
+                            data.body.audio_features[i].valence,
+                            data.body.audio_features[i].energy,
+                            data.body.audio_features[i].danceability,
+                            data.body.audio_features[i].loudness
+                        ];
+                        var dotproduct = 0;
+                        var mA = 0;
+                        var mB = 0;
+                        for (var j = 0; j < currentFeatures.length; j++) {
+                            dotproduct += (currentFeatures[j] * requestedFeatures[j]);
+                            mA += (currentFeatures[j] * currentFeatures[j]);
+                            mB += (requestedFeatures[j] * requestedFeatures[j]);
+                        }
+                        mA = Math.sqrt(mA);
+                        mB = Math.sqrt(mB);
+                        var similarity = (dotproduct) / ((mA) * (mB));
+                        const currentSimilarity = {
+                            id: data.body.audio_features[i].id,
+                            similarity: similarity
+                        }
+                        cosineSimTracks.push(currentSimilarity);
+                        console.log(similarity);
                     }
-                    mA = Math.sqrt(mA);
-                    mB = Math.sqrt(mB);
-                    var similarity = (dotproduct) / ((mA) * (mB));
-                    const currentSimilarity = {
-                        id: data.body.audio_features[i].id,
-                        similarity: similarity
-                    }
-                    cosineSimTracks.push(currentSimilarity);
-                    console.log(similarity);
                 }
-            }
-        }, function (err) {
-            console.log('There was an error getting audio features, please try again.', err);
-        });
+            }, function (err) {
+                console.log('There was an error getting audio features, please try again.', err);
+            });
+    } catch (error) {
+        console.log(error);
+    }
 
     cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
     var tracksOnly = cosineSimTracks.map(track => track.id);
@@ -144,7 +149,7 @@ const getAudioFeatures = async (req, res, next) => {
 
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
-  }
+}
 
 module.exports = {
     getRecommendations,
