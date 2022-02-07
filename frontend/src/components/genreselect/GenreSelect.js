@@ -64,12 +64,12 @@ const GenreSelect = ({ navigation }) => {
     const currItems = [...selectedItems];
     const artists = currItems.map(artist => artist.id);
     await getUserId(token)
-    .then(res => res.json())
-    .then(data => {
-      saveUserGenres(data.id, artists);
-      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-    })
-    
+      .then(res => res.json())
+      .then(data => {
+        saveUserGenres(data.id, artists);
+        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+      })
+
   }
 
   return (
@@ -96,8 +96,10 @@ const GenreSelect = ({ navigation }) => {
           data={items}
           style={{ marginTop: 10 }}
           renderItem={({ item }) => (
-            <View style={{ padding: 10, backgroundColor: 'grey', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text>{item.title}</Text>
+            <View style={{ borderWidth:1, borderColor: 'grey', padding: 10, backgroundColor: 'transparent', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={GenreSelectStyles.artistText}>
+                {item.title}
+                </Text>
               <Button
                 disabled={selectedItems.length < 5 ? false : true}
                 // style={HomeStyles.startButton}
@@ -135,7 +137,7 @@ const GenreSelect = ({ navigation }) => {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
         <Button
-        disabled={selectedItems.length > 0 ? false : true}
+          disabled={selectedItems.length > 0 ? false : true}
           // style={HomeStyles.startButton}
           uppercase={false}
           mode="contained"
@@ -145,7 +147,7 @@ const GenreSelect = ({ navigation }) => {
           clear
         </Button>
         <Button
-        disabled={selectedItems.length < 5 ? true : false}
+          disabled={selectedItems.length < 5 ? true : false}
           // style={HomeStyles.startButton}
           uppercase={false}
           mode="contained"

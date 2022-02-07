@@ -114,7 +114,8 @@ const searchForArtists = async (req, res, next) => {
                     for (var i = 0; i < data.body.artists.items.length; i++) {
                         var artist = {
                             id: data.body.artists.items[i].id,
-                            title: data.body.artists.items[i].name
+                            title: data.body.artists.items[i].name,
+                            picture: data.body.artists.items[i].images[0] != null && data.body.artists.items[i].images[0].url
                         };
                         artists.push(artist);
                     }

@@ -5,19 +5,24 @@ const { width, height } = Dimensions.get('window');
 export default StyleSheet.create({
     selectText: {
         fontFamily: 'InconsolataBold',
-        fontSize: 13,
+        fontSize: width/31.8461538,
     },
     selectButton: {
         backgroundColor: '#4494da',
-        marginHorizontal: 70,
-        marginBottom: -20,
+        marginHorizontal: width/5.91428571,
+        marginBottom: -(height/44.8),
     },
     clearButton: {
         backgroundColor: 'red',
-        minWidth: 90,
-        marginRight: 50
+        minWidth: width/4.6,
+        marginRight: width/8.28
     },
     continueButton: {
         backgroundColor: 'purple'
+    },
+    artistText: {
+        fontFamily: 'InconsolataBold',
+        fontSize: width/31.8461538,
+        maxWidth: width/1.97142857
     }
 });
