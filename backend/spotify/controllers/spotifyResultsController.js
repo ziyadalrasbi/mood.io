@@ -85,6 +85,7 @@ const getAudioFeatures = async (req, res, next) => {
     await api.setAccessToken(req.body.token);
     await api.getAudioFeaturesForTracks(req.body.tracks)
         .then((data) => {
+            console.log(data);
             if (data != null) {
                 for (var i = 0; i < data.body.audio_features.length; i++) {
                     var currentFeatures = [
@@ -138,7 +139,7 @@ const getAudioFeatures = async (req, res, next) => {
             }
             res.json({ similarity: cosineSimTracks, recommendations: recommendations });
         }, function (err) {
-            console.log('There was an error getting audio features, please try again.', err);
+            console.log('There was an error getting audio features2, please try again.', err);
         })
 }
 

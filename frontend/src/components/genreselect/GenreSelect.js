@@ -1,5 +1,5 @@
 import React, { useRef, } from 'react'
-import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -10,8 +10,13 @@ import { getUserId, searchForArtists } from '../../fetch';
 import * as SecureStore from 'expo-secure-store';
 import { Searchbar } from 'react-native-paper';
 import { saveUserGenres } from '../../fetch';
+import defaultimg from '../../../assets/icons/stats/default.png';
+import LottieView from 'lottie-react-native';
+import addimg from '../../../assets/icons/genreselect/add.png';
+import removeimg from '../../../assets/icons/genreselect/remove.png';
 
 const GenreSelect = ({ navigation }) => {
+
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -30,11 +35,13 @@ const GenreSelect = ({ navigation }) => {
 
   const [selectedItems, setSelectedItems] = React.useState([]);
 
+  const [loading, setLoading] = React.useState(false);
   const search = async (query) => {
     const token = await SecureStore.getItemAsync('spotify_access_token');
     await searchForArtists(token, query)
       .then(res => res.json())
       .then(data => {
+        console.log(data.artists);
         setItems(data.artists);
       })
 
@@ -79,10 +86,12 @@ const GenreSelect = ({ navigation }) => {
         onChangeText={(text => {
           if (searchTimer) {
             clearTimeout(searchTimer);
+            setLoading(true);
           }
           setQuery(text);
           setSearchTimer(
             setTimeout(() => {
+              setLoading(false);
               search(text);
             }, 2000),
           );
@@ -91,46 +100,59 @@ const GenreSelect = ({ navigation }) => {
         style={{ width: '100%' }}
       />
       <View style={{ flexDirection: 'column' }}>
-
-        <FlatList
-          data={items}
-          style={{ marginTop: 10 }}
-          renderItem={({ item }) => (
-            <View style={{ borderWidth:1, borderColor: 'grey', padding: 10, backgroundColor: 'transparent', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={GenreSelectStyles.artistText}>
-                {item.title}
-                </Text>
-              <Button
-                disabled={selectedItems.length < 5 ? false : true}
-                // style={HomeStyles.startButton}
-                uppercase={false}
-                mode="contained"
-                // labelStyle={HomeStyles.mainFont}
-                onPress={() => selectItem(item)}
-              >
-                add
-              </Button>
-            </View>
-          )}
-        />
+        {!loading ?
+          <FlatList
+            data={items}
+            style={{ marginTop: 10 }}
+            renderItem={({ item }) => (
+              <View style={{ borderWidth: 1, borderColor: 'grey', padding: 10, backgroundColor: 'transparent', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image
+                    style={GenreSelectStyles.artistImage}
+                    source={item.picture != false ? { uri: item.picture } : defaultimg}
+                  >
+                  </Image>
+                  <Text style={GenreSelectStyles.artistText}>
+                    {item.title}
+                  </Text>
+                </View>
+                <TouchableOpacity onPress={() => selectItem(item)}>
+                  <Image
+                    style={[GenreSelectStyles.addImage, { display: selectedItems.length < 5 ? 'flex' : 'none' }]}
+                    source={addimg}
+                  >
+                  </Image>
+                </TouchableOpacity>
+               
+              </View>
+            )}
+          />
+          :
+          <LottieView
+            source={require('./animations/142-loading-animation.json')}
+            autoPlay
+            loop={true}
+            style={{ marginTop: 30, width: 100, height: 100, alignSelf: 'center' }}
+          />
+        }
 
         <FlatList
           data={selectedItems}
           horizontal={true}
           numColumns={1}
-          style={{ marginTop: 10 }}
+          style={{ paddingVertical: 10 }}
           renderItem={({ item }) => (
-            <View style={{ padding: 10, marginRight: 10, height: 60, backgroundColor: 'blue', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
-              <Text>{item.title}</Text>
-              <Button
-                // style={HomeStyles.startButton}
-                uppercase={false}
-                mode="contained"
-                // labelStyle={HomeStyles.mainFont}
-                onPress={() => removeItem(item)}
-              >
-                remove
-              </Button>
+            <View style={{ borderRadius: 5, borderWidth: 1, borderColor: 'grey', padding: 10, marginRight: 10, height: 60, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
+              <Text style={GenreSelectStyles.removeArtistText}>
+                {item.title}
+              </Text>
+              <TouchableOpacity onPress={() => removeItem(item)}>
+                  <Image
+                    style={GenreSelectStyles.removeImage}
+                    source={removeimg}
+                  >
+                  </Image>
+                </TouchableOpacity>
             </View>
           )}
         />

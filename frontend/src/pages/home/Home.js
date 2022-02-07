@@ -369,7 +369,7 @@ function Home({ navigation, route }) {
               and come back at a later date to view this data!
             </Text>
           }
-          <View style={{ height: 30 }} />
+          <View style={{ height: newUser.newUser == true? 500 : 30 }} />
                   
         </View>
         <StatusBar style="auto" />
