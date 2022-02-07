@@ -8,6 +8,7 @@ import Upload from '../../pages/upload/Upload';
 import Results from '../../pages/results/Results';
 import UploadOptions from '../../pages/UploadOptions/UploadOptions';
 import SelectMood from '../../pages/selectmood/SelectMood';
+import Recommendations from '../../pages/recommendations/Recommendations';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,6 +29,7 @@ const DrawerStack = ({loading, verified}) => {
             <Drawer.Screen name='Upload' component={Upload} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='SelectMood' component={SelectMood} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Results' component={Results} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='Recommendations' component={Recommendations} options={{unmountOnBlur:true}} />
         </Drawer.Navigator>
     );
 }

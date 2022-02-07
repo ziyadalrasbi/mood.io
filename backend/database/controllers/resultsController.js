@@ -64,9 +64,24 @@ const saveUserRating = async (req, res, next) => {
     }
 }
 
+const getRecentMood = async (req, res, next) => {
+    try {
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.get()
+            .then((doc) => {
+                res.json({ recentMood: doc.data().recentMood });
+            })
+    } catch (error) {
+        console.log('Error getting user top genres from database, please try again. \n' + error);
+        res.status(400).send(error.message);
+    }
+}
+
+
 module.exports = {
     saveRecentMood,
     getUserGenres,
     saveRecommendations,
-    saveUserRating
+    saveUserRating,
+    getRecentMood
 }

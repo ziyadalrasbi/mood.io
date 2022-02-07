@@ -219,7 +219,7 @@ function Home({ navigation, route }) {
             <Text style={HomeStyles.secondHeader}>
               Recent Recommendations
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
+            <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
               <View style={HomeStyles.allContainer}>
                 <Text style={HomeStyles.thirdHeader}>
                   All

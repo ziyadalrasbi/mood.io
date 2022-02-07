@@ -40,13 +40,24 @@ function Navbar({ navigation, name, page, signOut }) {
       }
       {page == 'stats' &&
         <View style={NavbarStyles.topBar}>
-         <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image style={NavbarStyles.back} source={backimg} />
           </TouchableOpacity>
           <Text style={NavbarStyles.welcome}>
             Your Profile
           </Text>
-          <View style={{width: 30, height: 30}} />
+          <View style={{ width: 30, height: 30 }} />
+        </View>
+      }
+      {page == 'recommendations' &&
+        <View style={NavbarStyles.topBar}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image style={NavbarStyles.back} source={backimg} />
+          </TouchableOpacity>
+          <Text style={NavbarStyles.welcome}>
+            Your Recommendations
+          </Text>
+          <View style={{ width: 30, height: 30 }} />
         </View>
       }
       {page == 'results' &&
