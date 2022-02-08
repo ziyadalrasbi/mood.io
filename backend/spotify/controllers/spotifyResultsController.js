@@ -111,6 +111,7 @@ const getAudioFeatures = async (req, res, next) => {
                         var similarity = (dotproduct) / ((mA) * (mB));
                         const currentSimilarity = {
                             id: data.body.audio_features[i].id,
+                            uri: data.body.audio_features[i].uri,
                             similarity: similarity
                         }
                         cosineSimTracks.push(currentSimilarity);
@@ -123,11 +124,13 @@ const getAudioFeatures = async (req, res, next) => {
     } catch (error) {
         console.log(error);
     }
-
     cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
     var tracksOnly = cosineSimTracks.map(track => track.id);
+    var urisOnly = cosineSimTracks.map(track => track.uri);
     var uniqueTracks = tracksOnly.filter(onlyUnique);
+    var uniqueUris = urisOnly.filter(onlyUnique);
     uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
+    uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
     await api.getTracks(uniqueTracks)
         .then((data) => {
             for (var i = 0; i < data.body.tracks.length; i++) {
@@ -143,7 +146,7 @@ const getAudioFeatures = async (req, res, next) => {
                     console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
                 }
             }
-            res.json({ similarity: cosineSimTracks, recommendations: recommendations });
+            res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
         }, function (err) {
             console.log('There was an error getting audio features2, please try again.', err);
         })
@@ -153,39 +156,42 @@ function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
-module.exports = {
-    getRecommendations,
-    getAudioFeatures
+const createPlaylist = async (req, res, next) => {
+    await api.setAccessToken(req.body.token);
+    try {
+        await api.createPlaylist(req.body.name, {
+            description: req.body.description,
+            collaborative: false,
+            public: true
+        })
+            .then((data) => {
+                var playlist = {
+                    id: data.body.id,
+                    link: data.body.external_urls.spotify
+                };
+                res.json({ playlist: playlist });
+            })
+    } catch (error) {
+        console.log('There was an error creating playlist for user, please try again.', err);
+    }
 }
 
-// '7pDdE5FLqcNCvjxzRzm80r', '4lgEtC1W3xZSRFoJuPLmkk', '1NtFAgFqmk3HrxzwAzUcAD',
-// 2022-02-07T15:51:07.824033+00:00 app[web.1]: '5Q2lulGI9ZQbwf18skmtqw', '6TR0FGw4zhlGbQALN065AI', '0qy1xNhQvnRhEpvKxdXYUR',
-// 2022-02-07T15:51:07.824033+00:00 app[web.1]: '3iINQZKpmSMY2mkjLtlzYO', '6ixjgNCGvFTXTO1fGqltw1', '0kUz4NuENHYVUChlthlNaB',
-// 2022-02-07T15:51:07.824034+00:00 app[web.1]: '5naYe7rLMZcLfO1DKg48MK', '5MZtSCAvjvCoUbJ0a9ljum', '4Z2RT2ODLF7AZSKLdg8jVe',
-// 2022-02-07T15:51:07.824034+00:00 app[web.1]: '79Vz5MNH7Qe4F7hPKT8tPz', '1YCgGjyv17S9ll8bH2u4gQ', '57Zcl7oKKr29qHp38dzzWi',
-// 2022-02-07T15:51:07.824034+00:00 app[web.1]: '4L2OSJR4kegcxlt87huva1', '3SXRZuCEGbbxsPiHyqwWuG', '0mSxHkAKB6JR8Y3IX20H3n',
-// 2022-02-07T15:51:07.824034+00:00 app[web.1]: '5IiCTrv2CVarZaaCAz74yO', '3vF1Bk53lUz287NAu5RCpS', '2Q8fFORnsDE6I3RNvSLXSf',
-// 2022-02-07T15:51:07.824034+00:00 app[web.1]: '3B5yl01KF06NkYG39BdTBa', '5acSb48zFAcXTdL5Wsk8xx', '73AA7MGpI602u0T9SyL6uu',
-// 2022-02-07T15:51:07.824034+00:00 app[web.1]: '6DKVZIGunsstjifYDYa5lT', '6uzwiQa5FkiiHLyt7ENYc6', '2dd3VTFfbTNJXpvhNGnFzQ',
-// 2022-02-07T15:51:07.824035+00:00 app[web.1]: '1rWoVZYprb19V7qDTXhpJL', '6iC7vapdKp0XlKhxOkp8QJ', '4OY3LbPQOaKeYsrDXw7zFD',
-// 2022-02-07T15:51:07.824035+00:00 app[web.1]: '0ib3Pdvgp2ZDk6nO1DC3sJ', '6KQYQ5ycUHmDYFjL2jLXYC', '4vnPji7QI3Bt3XDZxfDAXr',
-// 2022-02-07T15:51:07.824035+00:00 app[web.1]: '0IDU2CjK6ayag6xjarO3kh', '7p4tetW3qNwSCz92PLGJg5', '3Xup2MfX2tkMo1HlkpiPes',
-// 2022-02-07T15:51:07.824035+00:00 app[web.1]: '1pRShUtGOG6ZP5fsnw9G4h', '18asYwWugKjjsihZ0YvRxO', '0c5nqQNIH07Lh16AOjqEPQ',
-// 2022-02-07T15:51:07.824035+00:00 app[web.1]: '6BwN05qKw4Q8bNoq3rYuz7', '4fp5ICMxsl5kq9qWWpYBjN', '1xvh5ujI8fogjmadcLmLBZ',
-// 2022-02-07T15:51:07.824036+00:00 app[web.1]: '1IJ9Ksezp1W3fzhE0FK0gs', '2eomAcNgNQTogi2Y4apBKh', '2WrlysXGhULyfprVfW20UT',
-// 2022-02-07T15:51:07.824036+00:00 app[web.1]: '4GmxAkE4CBTHHxXPHjYkp7', '5PAr8JS5KtQrWzDixaD1Wl', '6tLPcgsXGFcXtnVCetRp4A',
-// 2022-02-07T15:51:07.824036+00:00 app[web.1]: '3itVWAvURMugCEceJy1Eo2', '67ZJbNoYqvCTeEpVY90Goc', '2Nc1v8I86FUGorwjXKo0in',
-// 2022-02-07T15:51:07.824037+00:00 app[web.1]: '3enGXmn9bnb7ltrpmbwtjM', '4zp8noasnK5XNuNojkVhiy', '7ETxvXQ5oWFRfAfaIEimAG',
-// 2022-02-07T15:51:07.824037+00:00 app[web.1]: '3zOj4iZqK4qU1OfcCGGk8i', '0rkVQ8MzzfX40xtNkC6hjA', '5KWwD9LzZa6ruNYGNqAqoN',
-// 2022-02-07T15:51:07.824037+00:00 app[web.1]: '64vBCC1lpjEnF10CkDiDhv', '4paNNGZD8qM134qqdiCEeI', '2aOK6TRYn4DneIBHJOAQ4r',
-// 2022-02-07T15:51:07.824038+00:00 app[web.1]: '6lvXCTiPKfgrvUjxKjd7Ds', '5D8sJEbM2zIAZkWn9wSDXl', '5ZDv6cSFtX1j0ZvULDCAGV',
-// 2022-02-07T15:51:07.824038+00:00 app[web.1]: '4DERbz1e89YD9VZt7or9GB', '5ECuiTw53JiKAI9JPrr22x', '7DgkSYT6vh3UAYQlFbsj6z',
-// 2022-02-07T15:51:07.824038+00:00 app[web.1]: '1LyTeIRYMHPA13p4b02NvV', '4GNpppEamtcqG6QkxfI9f9', '1S1bkqImhTErVkifCITLUg',
-// 2022-02-07T15:51:07.824038+00:00 app[web.1]: '5V661n1cACWE2O9gKlm5JW', '3jbAzLVcHiI5hYSkcKe1Ty', '1Mu0qs9DQ8OfhiPvHxZMMM',
-// 2022-02-07T15:51:07.824038+00:00 app[web.1]: '3EtXo9cEurLpblcdWHuBjT', '1tZC1ktebdhQSlhnFSetLk', '0eFZFjjWpc3UCyNJCIDUIz',
-// 2022-02-07T15:51:07.824039+00:00 app[web.1]: '0eFZFjjWpc3UCyNJCIDUIz', '0eFZFjjWpc3UCyNJCIDUIz', '0eFZFjjWpc3UCyNJCIDUIz',
-// 2022-02-07T15:51:07.824039+00:00 app[web.1]: '0eFZFjjWpc3UCyNJCIDUIz', '5wr3CiNDw7KUlR0yoIKeNu', '5wr3CiNDw7KUlR0yoIKeNu',
-// 2022-02-07T15:51:07.824039+00:00 app[web.1]: '5wr3CiNDw7KUlR0yoIKeNu', '5wr3CiNDw7KUlR0yoIKeNu', '1qRgEKIeSrMcS62Ji4g8VT',
-// 2022-02-07T15:51:07.824039+00:00 app[web.1]: '1qRgEKIeSrMcS62Ji4g8VT', '1qRgEKIeSrMcS62Ji4g8VT', '1qRgEKIeSrMcS62Ji4g8VT',
-// 2022-02-07T15:51:07.824039+00:00 app[web.1]: '7uM7YZwNZqdDMG0NfGhmux', '7uM7YZwNZqdDMG0NfGhmux', '7uM7YZwNZqdDMG0NfGhmux',
-// 2022-02-07T15:51:07.824040+00:00 app[web.1]: '7uM7YZwNZqdDMG0NfGhmux',
+const addTracksToPlaylist = async (req, res, next) => {
+    await api.setAccessToken(req.body.token);
+    try {
+        await api.addTracksToPlaylist(req.body.id, req.body.uris)
+        .then(() => {
+            res.json({ status: 200 });
+        })
+    } catch (error) {
+        console.log('There was an error adding tracks to playlist, please try again.', err);
+        res.json({ status: 400 });
+    }
+}
+
+module.exports = {
+    getRecommendations,
+    getAudioFeatures,
+    createPlaylist,
+    addTracksToPlaylist
+}
