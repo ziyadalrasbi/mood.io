@@ -388,6 +388,35 @@ export const getRecentMood = async (user) => {
     })
 }
 
+export const createPlaylist = async (token, name, description) => {
+    return fetch(`${baseUrl}/spotify/results/createPlaylist`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+            name: name,
+            description: description
+        })
+    })
+}
+
+export const addTracksToPlaylist = async (token, id, uris) => {
+    return fetch(`${baseUrl}/spotify/results/addTracksToPlaylist`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+            id: id,
+            uris: uris
+        })
+    })
+}
 /* ------------- USER STATS FETCH FUNCTIONS ---------- */
 
 export const getUserProfile = async (token) => {

@@ -38,7 +38,6 @@ function Recommendations({ navigation, route }) {
             await getPreviousRecommendations(userId)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.recommendations[0].tracks);
                     setRecommendations(data.recommendations);
                 })
 
@@ -133,8 +132,7 @@ function Recommendations({ navigation, route }) {
                     )}
                     {recommendations.length == 0 &&
                         <Text style={RecommendationsStyles.noDataText}>
-                            No data found for this time frame. Try a different time frame, or listen to some more
-                            music on Spotify and come back at a later date to view this data!
+                            No recommendations yet. To get recommendations, press the "get started" button on the home page!
                         </Text>
                     }
                     <View style={{ height: 400 }} />

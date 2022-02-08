@@ -36,7 +36,9 @@ function Login({ navigation }) {
             scopes: [
                 'user-read-email',
                 'user-read-private',
-                'user-top-read'
+                'user-top-read',
+                'playlist-modify-public',
+                'playlist-modify-private'
             ],
             show_dialog: 'true',
             prompt: Prompt.Login,

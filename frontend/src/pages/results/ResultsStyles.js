@@ -45,7 +45,6 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    marginBottom: height / 40.84,
     width: '100%',
     justifyContent: 'flex-start',
   },
@@ -62,6 +61,14 @@ export default StyleSheet.create({
     fontSize: width / 29.5714286,
     padding: width / 41.4,
     color: '#dbdbdb'
+  },
+  secondHeader: {
+    fontFamily: 'MontserratBold',
+    color: 'white',
+    fontSize: width / 27.6,
+    padding: width / 41.4,
+    marginBottom: -(width / 41.4),
+
   },
   moodAnalysis: {
     position: 'relative',
@@ -89,7 +96,7 @@ export default StyleSheet.create({
     position: 'absolute'
   },
   recommendationsContainer: {
-    marginHorizontal: width / 41.4,
+
     padding: 10,
     display: 'flex',
     flexDirection: 'row',
@@ -124,5 +131,28 @@ export default StyleSheet.create({
     fontStyle: 'italic',
     maxWidth: width / 3.45,
     marginRight: width / 20.7
+  },
+  rateText: {
+    fontFamily: 'MontserratBold', 
+    fontSize: 11, 
+    color:'white',
+    marginBottom: 10,
+    alignSelf:'center'
+  },
+  saveText: {
+    fontFamily: 'InconsolataMedium',
+    fontSize: width / 29.5714286,
+    padding: width / 41.4,
+    color: '#dbdbdb',
+    maxWidth:240
+  },
+  saveButton: {
+    backgroundColor: '#1DB954',
+
+  },
+  saveButtonText: {
+    fontFamily: 'InconsolataMedium',
+    fontSize: width / 29.5714286,
+    color: 'white',
   }
 });
