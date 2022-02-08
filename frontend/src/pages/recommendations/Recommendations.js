@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity, Nest } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import RecommendationsStyles from './RecommendationsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { getUserProfile, getUserTopTracks, getUserTopArtists, refreshAccessToken } from '../../fetch';
+import { getRecentMood, getPreviousRecommendations } from '../../fetch';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
@@ -22,70 +22,128 @@ function Recommendations({ navigation, route }) {
         InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
     });
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const token = await SecureStore.getItemAsync('spotify_access_token');
-    //         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-    //         var accessToken;
-    //         await refreshAccessToken(token, refreshToken)
-    //             .then(res => res.json())
-    //             .then(data => {
-    //                 if (data.token != "Null") {
-    //                     accessToken = data.token;
-    //                     SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-    //                 }
-    //             })
-    //             .then(() => {
-    //                 getUserProfile(accessToken)
-    //                     .then(res => res.json())
-    //                     .then(data => {
-    //                         setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-    //                     })
-    //                 getUserTopArtists(accessToken, 'medium_term')
-    //                     .then(res => res.json())
-    //                     .then(data => {
-    //                         if (data != null) {
-    //                             setTopArtists(data.artistNames);
-    //                         }
-    //                     })
-    //                 getUserTopTracks(accessToken, 'medium_term')
-    //                     .then(res => res.json())
-    //                     .then(data => {
-    //                         if (data != null) {
-    //                             setTopTracks(data.topTracks);
-    //                         }
-    //                     })
-    //             })
-    //     }
-    //     fetchData().then(() => setLoading(false));
-    // }, [loading])
+    const [recentMood, setRecentMood] = useState({ recentMood: "" });
+    const [recommendations, setRecommendations] = useState({ recommendations: [] });
+    const [loading, setLoading] = useState(true);
+    const [toggle, setToggle] = useState({});
 
-    // if (!loaded || loading) {
-    //     return (
-    //         <Loading page={"home"} />
-    //     );
-    // }
+    useEffect(() => {
+        const fetchData = async () => {
+            const userId = await SecureStore.getItemAsync('user_id');
+            await getRecentMood(userId)
+                .then(res => res.json())
+                .then(data => {
+                    setRecentMood({ recentMood: data.recentMood });
+                })
+            await getPreviousRecommendations(userId)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data.recommendations[0].tracks);
+                    setRecommendations(data.recommendations);
+                })
 
+        }
+        fetchData().then(() => setLoading(false));
+    }, [loading])
+
+    if (!loaded || loading) {
+        return (
+            <Loading page={"home"} />
+        );
+    }
+
+    const toggleHide = index => {
+        setToggle({ ...toggle[index], [index]: !toggle[index] });
+    }
+
+    const convertTimeToDate = (time) => {
+        var date = new Date(time);
+        var format = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+        };
+        var finalDate = date.toLocaleDateString('en', format);
+        return finalDate.toString();
+    }
     return (
+
         <View style={RecommendationsStyles.scroll}>
-            <View style={RecommendationsStyles.topContainer}>
-                <Navbar page={'recommendations'} navigation={navigation} />
-            </View>
-            <View style={RecommendationsStyles.mainContainer}>
-                <View style={RecommendationsStyles.firstContainer}>
-                    <Text style={RecommendationsStyles.firstSubHeader}>
-                        Find your recent recommendations below!
-                    </Text>
-                    <Text style={RecommendationsStyles.firstSubHeader}>
-                        Recommendations are saved for 4 weeks.
-                    </Text>
-                    <Text style={RecommendationsStyles.firstSubHeader}>
-                        Recent mood: happy
-                    </Text>
+            <ScrollView style={RecommendationsStyles.tabView} showsVerticalScrollIndicator={false}>
+                <View style={RecommendationsStyles.topContainer}>
+                    <Navbar page={'recommendations'} navigation={navigation} />
                 </View>
-            </View>
-            <StatusBar style="auto" />
+                <View style={RecommendationsStyles.mainContainer}>
+                    <View style={RecommendationsStyles.firstContainer}>
+                        <Text style={RecommendationsStyles.firstSubHeader}>
+                            Find your recent recommendations below!
+                        </Text>
+                        <Text style={RecommendationsStyles.firstSubHeader}>
+                            Recommendations are saved for 4 weeks.
+                        </Text>
+                        <Text style={RecommendationsStyles.firstSubHeader}>
+                            Recent mood: {recentMood.recentMood}
+                        </Text>
+                    </View>
+
+                    {recommendations.length > 0 && recommendations.map((recommendation, index) =>
+                        <View key={index} style={RecommendationsStyles.topTracksContainer}>
+                            <TouchableOpacity style={{ width: '100%' }} onPress={() => toggleHide(index)}>
+                                <Text style={RecommendationsStyles.firstHeader}>
+                                    Recommendation from date {convertTimeToDate(recommendation.time)}
+                                </Text>
+                                <Text style={RecommendationsStyles.firstHeader}>
+                                    Recommendation mood: {recommendation.mood}
+                                </Text>
+                            </TouchableOpacity>
+                            {!!toggle[index] &&
+                                <View>
+                                    {recommendation.tracks.map((track, i) =>
+                                        <View key={i} style={RecommendationsStyles.recommendationContainer}>
+                                            <TouchableOpacity
+                                                style={{
+                                                    shadowColor: '#000',
+                                                    shadowOffset: { width: 0, height: 2 },
+                                                    shadowOpacity: 0.5,
+                                                    shadowRadius: 2, elevation: 5
+                                                }}
+                                                onPress={() => Linking.openURL(track[3])}>
+                                                <Image
+                                                    style={RecommendationsStyles.topTrackImage}
+                                                    source={{ uri: track[2] }}
+                                                />
+                                            </TouchableOpacity>
+                                            <View style={RecommendationsStyles.topTrackTextContainer}>
+                                                <Text style={RecommendationsStyles.topTrackText}>{track[0]}</Text>
+                                                <Text style={RecommendationsStyles.topTrackArtistText}>{track[1]}</Text>
+                                            </View>
+                                            <TouchableOpacity
+                                                style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                                                onPress={() => Linking.openURL(track[3])}>
+                                                <Image
+                                                    style={RecommendationsStyles.playImage}
+                                                    source={playimg}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                </View>
+                            }
+                        </View>
+                    )}
+                    {recommendations.length == 0 &&
+                        <Text style={RecommendationsStyles.noDataText}>
+                            No data found for this time frame. Try a different time frame, or listen to some more
+                            music on Spotify and come back at a later date to view this data!
+                        </Text>
+                    }
+                    <View style={{ height: 400 }} />
+                </View>
+                <StatusBar style="auto" />
+               
+            </ScrollView >
         </View>
+
     );
 }
 

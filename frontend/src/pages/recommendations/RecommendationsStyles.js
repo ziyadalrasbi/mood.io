@@ -57,7 +57,8 @@ export default StyleSheet.create({
         fontSize: width / 27.6,
         padding: width / 41.4,
         marginBottom: -(height / 74.6666667),
-        marginTop: height / 179.2
+        marginTop: height / 179.2,
+        alignSelf:'center'
     },
     topTrackArtistImage: {
         width: width / 3.6,
@@ -204,7 +205,7 @@ export default StyleSheet.create({
     topTracksContainer: {
         padding: width / 41.4,
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -298,6 +299,11 @@ export default StyleSheet.create({
     tabBarText: {
         fontFamily: 'MontserratBold',
         fontSize: width / 29.5714286
+    },
+    recommendationContainer: {
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
     }
 });
 

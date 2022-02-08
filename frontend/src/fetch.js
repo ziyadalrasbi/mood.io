@@ -375,6 +375,19 @@ export const saveUserRating = async (rating) => {
     })
 }
 
+export const getRecentMood = async (user) => {
+    return fetch(`${baseUrl}/database/results/getRecentMood`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: user
+        })
+    })
+}
+
 /* ------------- USER STATS FETCH FUNCTIONS ---------- */
 
 export const getUserProfile = async (token) => {
