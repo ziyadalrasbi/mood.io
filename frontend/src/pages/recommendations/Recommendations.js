@@ -138,7 +138,6 @@ function Recommendations({ navigation, route }) {
                     <View style={{ height: 400 }} />
                 </View>
                 <StatusBar style="auto" />
-               
             </ScrollView >
         </View>
 

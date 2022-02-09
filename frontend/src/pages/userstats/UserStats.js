@@ -12,13 +12,14 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
 import defaultimg from '../../../assets/icons/stats/default.png';
+import LottieView from 'lottie-react-native';
 
 function UserStats({ navigation, route }) {
 
     const FirstRoute = () => (
         <ScrollView style={UserStatsStyles.tabView} showsVerticalScrollIndicator={false}>
             <View style={UserStatsStyles.artistsRouteContainer} >
-                {topArtists.length > 0 && topArtists.map((artist, index) =>
+                {(rloading == false && topArtists.length > 0) ? topArtists.map((artist, index) =>
                     <View style={{ padding: 10 }} key={index}>
                         <TouchableOpacity
                             style={{
@@ -35,7 +36,15 @@ function UserStats({ navigation, route }) {
                         </TouchableOpacity>
                         <Text style={UserStatsStyles.topArtistText}>{artist[0]}</Text>
                     </View>
-                )}
+                )
+                    :
+                    <LottieView
+                        source={require('./animations/142-loading-animation.json')}
+                        autoPlay
+                        loop={true}
+                        style={{ marginTop: 50, width: 150, height: 150, alignSelf: 'center' }}
+                    />
+                }
             </View>
             {topArtists.length == 0 &&
                 <Text style={UserStatsStyles.noDataText}>
@@ -49,7 +58,7 @@ function UserStats({ navigation, route }) {
 
     const SecondRoute = () => (
         <ScrollView style={UserStatsStyles.tabView} showsVerticalScrollIndicator={false}>
-            {topTracks.length > 0 && topTracks.map((track, index) =>
+            {(rloading == false && topTracks.length > 0) ? topTracks.map((track, index) =>
                 <View key={index} style={UserStatsStyles.topTracksContainer}>
                     <TouchableOpacity
                         style={{
@@ -76,8 +85,17 @@ function UserStats({ navigation, route }) {
                             source={playimg}
                         />
                     </TouchableOpacity>
+
                 </View>
-            )}
+            )
+                :
+                <LottieView
+                    source={require('./animations/142-loading-animation.json')}
+                    autoPlay
+                    loop={true}
+                    style={{ marginTop: 50, width: 150, height: 150, alignSelf: 'center' }}
+                />
+            }
             {topTracks.length == 0 &&
                 <Text style={UserStatsStyles.noDataText}>
                     No data found for this time frame. Try a different time frame, or listen to some more
@@ -95,6 +113,7 @@ function UserStats({ navigation, route }) {
 
     const [profile, setProfile] = useState({ name: "", picture: "", followers: null });
     const [loading, setLoading] = useState(true);
+    const [rloading, setRLoading] = useState(false);
     const [topArtists, setTopArtists] = useState({ topArtists: [] });
     const [topTracks, setTopTracks] = useState({ topTracks: [] });
     const [index, setIndex] = useState(route.params.index);
@@ -156,6 +175,7 @@ function UserStats({ navigation, route }) {
     }
 
     const changeRange = async (range, i) => {
+        setRLoading(true);
         setSelectedIndex(i);
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
@@ -183,6 +203,7 @@ function UserStats({ navigation, route }) {
                             setTopTracks(data.topTracks);
                         }
                     })
+                setRLoading(false);
             })
     }
 

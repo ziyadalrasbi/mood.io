@@ -74,6 +74,13 @@ function Results({ navigation, route }) {
                 }
                 return mood;
             }
+            if (maxMood == 'confused') {
+                const mood = {
+                    moodHeader: 'that you may be confused about something.',
+                    moodDescription: 'Be patient, you\'ll figure it out!'
+                }
+                return mood;
+            }
             if (maxMood == 'neutral') {
                 const mood = {
                     moodHeader: 'that everything seems normal!',
@@ -84,15 +91,9 @@ function Results({ navigation, route }) {
         }
     }
 
-    const [maxProp, setMaxProp] = useState({ maxProp: "" });
-    const [maxValue, setMaxValue] = useState({ maxValue: "" });
 
     const [moodHeader, setMoodHeader] = useState({ moodHeader: "" });
     const [moodDescription, setMoodDescription] = useState({ moodDescription: "" });
-
-    const [moods, setMoods] = useState({ moods: [] });
-    const [values, setValues] = useState({ values: [] });
-    const [averages, setAverages] = useState({ averages: [] });
 
     const [recommendations, setRecommendations] = useState([]);
     const [length, setLength] = useState(0);
@@ -109,7 +110,7 @@ function Results({ navigation, route }) {
     const [saving, setSaving] = useState(false);
     const [complete, setComplete] = useState(false);
 
-    const createArrayOfFeatures = (emotion) => {
+    const filterFeaturesByMaxEmotion = (emotion) => {
         const maxEmotion = emotion;
 
         const valence = maxEmotion == 'happy' ? 0.9 :
@@ -139,6 +140,7 @@ function Results({ navigation, route }) {
                     (maxEmotion == 'netutral' ? -30 :
                         (maxEmotion == 'surprised' ? -30 :
                             (maxEmotion == 'confused' && -40)))));
+
         const mode = maxEmotion == 'happy' ? 0.9 :
             (maxEmotion == 'sad' ? 0.3 :
                 (maxEmotion == 'angry' ? 0.3 :
@@ -146,50 +148,9 @@ function Results({ navigation, route }) {
                         (maxEmotion == 'surprised' ? 0.7 :
                             (maxEmotion == 'confused' && 0.5)))));
 
-        var features = [mode, valence, energy, danceability, loudness];
+        var arrayOfFeatures = [mode, valence, energy, danceability, loudness];
 
-        return features;
-    }
-
-
-    const filterFeaturesByMaxEmotion = async (emotion) => {
-        const maxEmotion = emotion;
-
-        const valence = maxEmotion == 'happy' ? 0.9 :
-            (maxEmotion == 'sad' ? 0.4 :
-                (maxEmotion == 'angry' ? 0.4 :
-                    (maxEmotion == 'netutral' ? 0.7 :
-                        (maxEmotion == 'surprised' ? 0.7 :
-                            (maxEmotion == 'confused' && 0.6)))));
-
-        const energy = maxEmotion == 'happy' ? 0.8 :
-            (maxEmotion == 'sad' ? 0.2 :
-                (maxEmotion == 'angry' ? 0.3 :
-                    (maxEmotion == 'netutral' ? 0.4 :
-                        (maxEmotion == 'surprised' ? 0.5 :
-                            (maxEmotion == 'confused' && 0.3)))));
-
-        const danceability = maxEmotion == 'happy' ? 0.7 :
-            (maxEmotion == 'sad' ? 0.1 :
-                (maxEmotion == 'angry' ? 0.2 :
-                    (maxEmotion == 'netutral' ? 0.3 :
-                        (maxEmotion == 'surprised' ? 0.5 :
-                            (maxEmotion == 'confused' && 0.3)))));
-
-        const loudness = maxEmotion == 'happy' ? -10 :
-            (maxEmotion == 'sad' ? -55 :
-                (maxEmotion == 'angry' ? -45 :
-                    (maxEmotion == 'netutral' ? -30 :
-                        (maxEmotion == 'surprised' ? -30 :
-                            (maxEmotion == 'confused' && -40)))));
-        const mode = maxEmotion == 'happy' ? 0.9 :
-            (maxEmotion == 'sad' ? 0.3 :
-                (maxEmotion == 'angry' ? 0.3 :
-                    (maxEmotion == 'netutral' ? 0.6 :
-                        (maxEmotion == 'surprised' ? 0.7 :
-                            (maxEmotion == 'confused' && 0.5)))));
-
-        var features = {
+        var objectOfFeatures = {
             target_mode: mode,
             max_mode: mode,
             target_valence: valence,
@@ -202,7 +163,10 @@ function Results({ navigation, route }) {
             max_loudness: loudness
         }
 
-
+        const features = {
+            array: arrayOfFeatures,
+            object: objectOfFeatures
+        }
 
         return features;
     }
@@ -229,12 +193,12 @@ function Results({ navigation, route }) {
                                 .then((data) => {
                                     const artists = data.topGenres;
                                     const features = filterFeaturesByMaxEmotion(route.params.maxMood);
-                                    getRecommendations(accessToken, artists, features)
+                                    console.log(features);
+                                    getRecommendations(accessToken, artists, features.object)
                                         .then(res => res.json())
                                         .then((data) => {
-                                            const features2 = createArrayOfFeatures(route.params.maxMood);
-                                            console.log(features2);
-                                            getAudioFeatures(accessToken, data.trackIds, features2)
+                                            console.log(features.array);
+                                            getAudioFeatures(accessToken, data.trackIds, features.array)
                                                 .then(res => res.json())
                                                 .then((data) => {
                                                     setLength(data.recommendations.length + 1);
@@ -357,40 +321,40 @@ function Results({ navigation, route }) {
                         </Button>
                     }
                     {saving == true &&
-                        <Text style={[ResultsStyles.rateText, {marginLeft: 20}]}>
+                        <Text style={[ResultsStyles.rateText, { marginLeft: 20 }]}>
                             Saving playlist...
                         </Text>
                     }
                     {complete == true &&
-                        <Text style={[ResultsStyles.rateText, {marginLeft: 20}]}>
+                        <Text style={[ResultsStyles.rateText, { marginLeft: 20 }]}>
                             Playlist saved!
                         </Text>
                     }
                 </View>
-                <View style={{alignSelf:'center', marginTop: 10}}>
-                {count == 0 &&
-                    <Text style={ResultsStyles.rateText}>
-                        How would you rate the accuracy of this recommendation?
-                    </Text>
-                }
+                <View style={{ alignSelf: 'center', marginTop: 10 }}>
+                    {count == 0 &&
+                        <Text style={ResultsStyles.rateText}>
+                            How would you rate the accuracy of this recommendation?
+                        </Text>
+                    }
 
-                {count == 0 &&
-                    <View style={{ alignSelf: 'center' }}>
-                        <StarRating
-                            disabled={false}
-                            maxStars={5}
-                            rating={count}
-                            selectedStar={(rating) => onStarRatingPress(rating)}
-                            starSize={30}
-                            fullStarColor='gold'
-                        />
-                    </View>
-                }
-                {count > 0 &&
-                    <Text style={ResultsStyles.rateText}>
-                        thank you! ⭐
-                    </Text>
-                }
+                    {count == 0 &&
+                        <View style={{ alignSelf: 'center' }}>
+                            <StarRating
+                                disabled={false}
+                                maxStars={5}
+                                rating={count}
+                                selectedStar={(rating) => onStarRatingPress(rating)}
+                                starSize={30}
+                                fullStarColor='gold'
+                            />
+                        </View>
+                    }
+                    {count > 0 &&
+                        <Text style={ResultsStyles.rateText}>
+                            thank you! ⭐
+                        </Text>
+                    }
                 </View>
 
                 <View style={{ height: 40 }} />

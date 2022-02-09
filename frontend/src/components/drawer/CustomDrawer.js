@@ -94,9 +94,11 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
                             Profile
                         </Text>
                     </TouchableOpacity>
-                    <Text style={CustomDrawerStyles.optionText}>
-                        Previous Recommendations
-                    </Text>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Recommendations')}>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Previous Recommendations
+                        </Text>
+                    </TouchableOpacity>
                     <Text style={CustomDrawerStyles.optionText}>
                         Listening Habits
                     </Text>
