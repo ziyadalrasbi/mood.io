@@ -250,7 +250,7 @@ export default StyleSheet.create({
   scroll: {
     flex: 1,
     height: '100%',
-    backgroundColor: '#0d324d'
+    backgroundColor: '#2b5876'
   },
   noDataText: {
     marginTop: height / 179.2,

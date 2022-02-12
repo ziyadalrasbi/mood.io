@@ -87,7 +87,7 @@ const CustomCarousel = ({ onPressLogin }) => {
       <View style={CustomCarouselStyles.signUpContainer}>
         <Text style={CustomCarouselStyles.signUp}> Don't have a Spotify account? </Text>
         <TouchableOpacity onPress={() => Linking.openURL('https://www.spotify.com/signup')}>
-        <Text style={CustomCarouselStyles.signUpLink}> Sign Up </Text>
+          <Text style={CustomCarouselStyles.signUpLink}> Sign Up </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -107,11 +107,12 @@ const CustomCarousel = ({ onPressLogin }) => {
     <SafeAreaView style={CustomCarouselStyles.mainContainer}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
         <Carousel
+        removeClippedSubviews={false}
           layout="default"
           ref={ref}
           data={data}
-          sliderWidth={width/1.035}
-          itemWidth={width/1.38}
+          sliderWidth={width / 1.035}
+          itemWidth={width / 1.38}
           renderItem={renderItem}
           onSnapToItem={(index) => setActiveIndex(index)}
         />

@@ -192,7 +192,7 @@ function Home({ navigation, route }) {
     <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
       <LinearGradient
         // Background Linear Gradient
-        colors={['#0d324d', '#7f5a83']}
+        colors={['#2b5876', '#4e4376']}
         style={HomeStyles.gradientContainer}
       />
       <GenreModal newUser={newUser.newUser} navigation={navigation} />
@@ -374,7 +374,7 @@ function Home({ navigation, route }) {
         </View>
         <StatusBar style="auto" />
       </View>
-      <View style={{ height: '100%', backgroundColor: '#7f5a83' }} />
+      <View style={{ height: '100%', backgroundColor: '#4e4376' }} />
     </ScrollView>
 
   );

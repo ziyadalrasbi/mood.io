@@ -111,7 +111,7 @@ function UserStats({ navigation, route }) {
         second: SecondRoute,
     });
 
-    const [profile, setProfile] = useState({ name: "", picture: "", followers: null });
+    const [profile, setProfile] = useState({ name: "", picture: null, followers: null });
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(false);
     const [topArtists, setTopArtists] = useState({ topArtists: [] });
