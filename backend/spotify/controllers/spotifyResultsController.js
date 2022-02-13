@@ -96,7 +96,8 @@ const getAudioFeatures = async (req, res, next) => {
                             data.body.audio_features[i].valence,
                             data.body.audio_features[i].energy,
                             data.body.audio_features[i].danceability,
-                            data.body.audio_features[i].loudness
+                            data.body.audio_features[i].loudness,
+                            data.body.audio_features[i].tempo
                         ];
                         var dotproduct = 0;
                         var mA = 0;

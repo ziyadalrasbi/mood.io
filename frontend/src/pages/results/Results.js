@@ -148,7 +148,14 @@ function Results({ navigation, route }) {
                         (maxEmotion == 'surprised' ? 0.7 :
                             (maxEmotion == 'confused' && 0.5)))));
 
-        var arrayOfFeatures = [mode, valence, energy, danceability, loudness];
+        const tempo = maxEmotion == 'happy' ? 115 :
+            (maxEmotion == 'sad' ? 80 :
+                (maxEmotion == 'angry' ? 90 :
+                    (maxEmotion == 'netutral' ? 100 :
+                        (maxEmotion == 'surprised' ? 100 :
+                            (maxEmotion == 'confused' && 80)))));
+
+        var arrayOfFeatures = [mode, valence, energy, danceability, loudness, tempo];
 
         var objectOfFeatures = {
             target_mode: mode,
@@ -160,7 +167,8 @@ function Results({ navigation, route }) {
             target_danceability: danceability,
             max_danceability: danceability,
             target_loudness: loudness,
-            max_loudness: loudness
+            max_loudness: loudness,
+            target_tempo: tempo
         }
 
         const features = {
@@ -170,6 +178,7 @@ function Results({ navigation, route }) {
 
         return features;
     }
+
     const fetchData = async () => {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');

@@ -55,6 +55,8 @@ function Login({ navigation }) {
     );
 
     const onPressLogin = async () => {
+        await SecureStore.deleteItemAsync('spotify_access_token');
+        await SecureStore.deleteItemAsync('spotify_refresh_token');
         await promptAsync()
             .then((res) => {
                 console.log(res);
