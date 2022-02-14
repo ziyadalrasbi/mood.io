@@ -2,16 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font'
 import ResultsStyles from './ResultsStyles';
 import Navbar from '../../components/navbar/Navbar';
 import MoodGraph from '../../components/moodgraph/MoodGraph';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
-import HomeStyles from '../home/HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
+
 import {
     getRecommendations,
     getUserDatabaseGenres,
@@ -168,7 +166,8 @@ function Results({ navigation, route }) {
             max_danceability: danceability,
             target_loudness: loudness,
             max_loudness: loudness,
-            target_tempo: tempo
+            target_tempo: tempo,
+            max_tempo: tempo
         }
 
         const features = {
