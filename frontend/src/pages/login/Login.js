@@ -28,7 +28,9 @@ function Login({ navigation }) {
         InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
-    const REDIRECT_URI = "https://mood-io-app.herokuapp.com/callback";
+    const REDIRECT_URI = makeRedirectUri({
+        scheme: "moodio://oauthredirect"
+    });
     const [request, response, promptAsync] = useAuthRequest(
         {
             responseType: 'code',
@@ -40,16 +42,14 @@ function Login({ navigation }) {
                 'playlist-modify-public',
                 'playlist-modify-private'
             ],
-            show_dialog: 'true',
             prompt: Prompt.Login,
             usePKCE: false,
             extraParams: {
-                show_dialog: 'true',
-
+                show_dialog: 'true'
             },
             redirectUri: makeRedirectUri({
-                native: "moodio://oauthredirect"
-            })
+                native: 'moodio://oauthredirect'
+            }),
         },
         discovery
     );
@@ -60,6 +60,7 @@ function Login({ navigation }) {
         await promptAsync()
             .then((res) => {
                 console.log(res);
+                console.log(request);
                 if (res && res.type == 'success') {
                     requestAccessToken(res.params.code)
                         .then(res => res.json())
