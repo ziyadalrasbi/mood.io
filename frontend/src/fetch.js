@@ -138,7 +138,7 @@ export const saveUserGenres = async (user, artists) => {
     }
 }
 
-export const requestAccessToken = async (code) => {
+export const requestAccessToken = async (uri, code) => {
     try {
         return fetch(`${baseUrl}/spotify/login/requestAccessToken`, {
             method: 'post',
@@ -147,6 +147,7 @@ export const requestAccessToken = async (code) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                redirect: uri,
                 code: code
             })
         })

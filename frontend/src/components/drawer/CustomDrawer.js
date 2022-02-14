@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image } from 'react-native';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { DrawerContentScrollView, useDrawerStatus } from '@react-navigation/drawer';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomDrawerStyles from './CustomDrawerStyles';
 import * as SecureStore from 'expo-secure-store';
@@ -9,8 +9,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
 import defaultimg from '../../../assets/icons/stats/default.png';
 
-const CustomDrawer = ({ props, navigation, route, options }) => {
 
+
+const CustomDrawer = ({ props, navigation, route, options }) => {
+    const isOpen = useDrawerStatus();
+    const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState({ name: "", picture: "", followers: "" });
     const [loaded] = useFonts({
         MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -22,29 +25,32 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = await SecureStore.getItemAsync('spotify_access_token');
-            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            var accessToken;
-            await refreshAccessToken(token, refreshToken)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.token != "Null") {
-                        accessToken = data.token;
-                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                    }
-                })
-                .then(() => {
-                    getUserProfile(accessToken)
-                        .then(res => res.json())
-                        .then(data => {
-                            setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-                        })
-                })
+                console.log('hello');
+                const token = await SecureStore.getItemAsync('spotify_access_token');
+                const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+                var accessToken;
+                await refreshAccessToken(token, refreshToken)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.token != "Null") {
+                            accessToken = data.token;
+                            SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                        }
+                    })
+                    .then(() => {
+                        getUserProfile(accessToken)
+                            .then(res => res.json())
+                            .then(data => {
+                                setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
+                            })
+                    })
+            
         }
-        fetchData();
-    }, [])
+        isOpen == 'open' && fetchData();
+        setLoading(false);
+    }, [loading]);
 
-    if (!loaded) {
+    if (!loaded || loading) {
         return null;
     }
 
@@ -84,7 +90,7 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
                             Home
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable}  onPress={() => navigation.navigate('UploadOptions')}>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('UploadOptions')}>
                         <Text style={CustomDrawerStyles.optionText}>
                             Discover Music
                         </Text>

@@ -59,14 +59,11 @@ function Login({ navigation }) {
         await SecureStore.deleteItemAsync('spotify_refresh_token');
         await promptAsync()
             .then((res) => {
-                console.log(res);
-                console.log(request);
                 if (res && res.type == 'success') {
-                    requestAccessToken(res.params.code)
+                    requestAccessToken(request.redirectUri, res.params.code)
                         .then(res => res.json())
                         .then(data => {
                             const accessToken = data.accessToken;
-                            console.log(accessToken);
                             const refreshToken = data.refreshToken;
                             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                             SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
