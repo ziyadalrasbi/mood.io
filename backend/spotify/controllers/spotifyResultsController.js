@@ -76,8 +76,6 @@ const getRecommendations = async (req, res, next) => {
                 console.log('There was an error getting recommendations, please try again.', err);
             })
     }
-    console.log('Data set is: ');
-    console.log(recommendations.slice(0, 20));
     res.json({ recommendations: recommendations, trackIds: trackIds });
 }
 
@@ -85,8 +83,6 @@ const getAudioFeatures = async (req, res, next) => {
     var recommendations = [];
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
-    console.log('Requested features are: ');
-    console.log(requestedFeatures);
     await api.setAccessToken(req.body.token);
     try {
         await api.getAudioFeaturesForTracks(req.body.tracks)
@@ -126,8 +122,6 @@ const getAudioFeatures = async (req, res, next) => {
     } catch (error) {
         console.log(error);
     }
-    console.log('Cosine similarity with tracks are: ');
-    console.log(cosineSimTracks.slice(0, 20));
     cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
     var tracksOnly = cosineSimTracks.map(track => track.id);
     var urisOnly = cosineSimTracks.map(track => track.uri);
@@ -149,8 +143,6 @@ const getAudioFeatures = async (req, res, next) => {
                     console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
                 }
             }
-            console.log('Formatted cosine similarity tracks are: ');
-            console.log(cosineSimTracks);
             res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
         }, function (err) {
             console.log('There was an error getting audio features2, please try again.', err);
