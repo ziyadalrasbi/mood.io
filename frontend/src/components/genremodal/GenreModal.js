@@ -8,7 +8,7 @@ import GenreSelect from '../genreselect/GenreSelect';
 function GenreModal({ newUser, navigation }) {
 
   const [modalVisible, setModalVisible] = useState(newUser);
-  console.log(modalVisible)
+
   return (
     <View style={[GenreModalStyles.modalContainer, { display: newUser == true ? 'flex' : 'none' }]}>
       <View style={GenreModalStyles.centeredView}>
@@ -22,10 +22,10 @@ function GenreModal({ newUser, navigation }) {
           }}>
           <View style={GenreModalStyles.centeredView}>
             <View style={GenreModalStyles.modalView}>
-              <Text style={GenreModalStyles.modalTitleText}>Before we continue...</Text>
-              <Text style={GenreModalStyles.modalSubText}>It seems that you have signed in with a new or unused Spotify account, so we could not find your top genres.
-                Before proceeding, please enter your top 5 artists below (this is a one time setup). After using Spotify more,
-                we can extract your top genres automatically!</Text>
+              <Text style={GenreModalStyles.modalTitleText}>Before continuing...</Text>
+              <Text style={GenreModalStyles.modalSubText}>It seems that you have signed in with a new or unused Spotify account.
+                Before proceeding, please enter your top 5 music artists below (this is a one time setup). After using Spotify more,
+                we can extract your top artists automatically!</Text>
               <GenreSelect navigation={navigation} />
             </View>
           </View>

@@ -25,7 +25,6 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-                console.log('hello');
                 const token = await SecureStore.getItemAsync('spotify_access_token');
                 const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
                 var accessToken;

@@ -106,7 +106,7 @@ export default StyleSheet.create({
     },
     moodImg: {
         width: width / 6.9,
-        height: height / 14.9333333,
+        height: width / 6.9,
         marginBottom: height / 89.6,
     },
     selectedMoodText: {
