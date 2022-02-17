@@ -1,10 +1,10 @@
 const express = require('express');
-const { getRecommendations, getAudioFeatures, createPlaylist, addTracksToPlaylist } = require('../controllers/spotifyResultsController.js');
+const { createLibrary, getRecommendations, createPlaylist, addTracksToPlaylist } = require('../controllers/spotifyResultsController.js');
 
 const router = express.Router();
 
+router.post('/createLibrary', createLibrary);
 router.post('/getRecommendations', getRecommendations);
-router.post('/getAudioFeatures', getAudioFeatures);
 router.post('/createPlaylist', createPlaylist);
 router.post('/addTracksToPlaylist', addTracksToPlaylist);
 

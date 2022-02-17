@@ -8,7 +8,7 @@ import spotifylogo from '../../../assets/icons/login/spotifylogo.png';
 import { useFonts } from 'expo-font';
 import CustomCarousel from '../../components/carousel/CustomCarousel';
 import { LinearGradient } from 'expo-linear-gradient';
-import { loginUser, initUser, getUserData, getUserGenres, saveUserGenres, requestAccessToken, getGenreSeeds } from '../../fetch';
+import { loginUser, initUser, getUserId, getUserTopArtistsLogin, saveUserArtists, requestAccessToken, getGenreSeeds } from '../../fetch';
 import * as WebBrowser from 'expo-web-browser';
 
 if (Platform.OS === 'web') {
@@ -67,28 +67,20 @@ function Login({ navigation }) {
                             const refreshToken = data.refreshToken;
                             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                             SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                            getUserData(accessToken)
+                            getUserId(accessToken)
                                 .then(res => res.json())
                                 .then(data => {
                                     const userId = data.id;
                                     SecureStore.setItemAsync('user_id', userId, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                                    initUser(userId, accessToken);
+                                    initUser(userId);
                                     loginUser(userId);
-                                    getUserGenres(accessToken)
+                                    getUserTopArtistsLogin(accessToken)
                                         .then((res) => res.json())
                                         .then(data => {
-                                            console.log(Object.keys(data.topGenres).length);
-                                            if (Object.keys(data.topGenres).length > 0) {
-                                                saveUserGenres(userId, data.topArtists);
-                                                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                            } else {
-                                                getGenreSeeds(accessToken)
-                                                    .then(res => res.json())
-                                                    .then(data => {
-                                                        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                                    })
+                                            if (Object.keys(data.topArtists).length > 0) {
+                                                saveUserArtists(userId, data.topArtists);
                                             }
-
+                                            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
                                         })
                                 })
                                 .catch((error) => {
@@ -111,7 +103,6 @@ function Login({ navigation }) {
     return (
         <View style={LoginStyles.mainContainer}>
             <LinearGradient
-                // Background Linear Gradient
                 colors={['#185a9d', '#4ca1af']}
                 style={LoginStyles.gradientContainer}
             />
@@ -124,7 +115,7 @@ function Login({ navigation }) {
                 <CustomCarousel onPressLogin={onPressLogin} />
             </View>
         </View>
-
     );
 }
+
 export default Login;

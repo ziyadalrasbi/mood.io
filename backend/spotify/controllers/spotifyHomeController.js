@@ -18,7 +18,7 @@ const getName = async (req, res, next) => {
             });
     } catch (error) {
         console.log('Error getting user\'s Spotify name, please try again. \n' + error);
-        res.status(400).send(error.message);
+        res.json({ status: 400 });
     }
 }
 
@@ -44,6 +44,7 @@ const getTopArtists = async (req, res, next) => {
             }
     } catch (error) {
         console.log('There was an error getting the top artists, please try again.', err);
+        res.json({ status: 400 });
     }
 }
 
@@ -71,6 +72,7 @@ const getTopTracks = async (req, res, next) => {
             }
     } catch (error) {
         console.log('There was an error getting the top tracks, please try again.', err);
+        res.json({ status: 400 });
     }
 }
 
@@ -101,6 +103,7 @@ const getListeningHabits = async (req, res, next) => {
 
     } catch (error) {
         console.log('There was an error getting user\'s listening habits, please try again. \n' + error);
+        res.json({ status: 400 });
     }
 }
 
@@ -123,6 +126,7 @@ const searchForArtists = async (req, res, next) => {
                 })
         } catch (error) {
             console.log('There was an error searching for artists, please try again. \n' + JSON.stringify(error));
+            res.json({ status: 400 });
         }
     }
 }

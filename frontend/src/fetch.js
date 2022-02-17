@@ -2,23 +2,6 @@ import * as SecureStore from 'expo-secure-store';
 const baseUrl = "https://mood-io-app.herokuapp.com";
 
 /* ------------- LOGIN FETCH FUNCTIONS --------------- */
-export const getGenreSeeds = async (token) => {
-    try {
-        return fetch(`${baseUrl}/spotify/login/getGenreSeeds`, {
-            method: 'post',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: token
-            })
-        })
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
 
 export const loginUser = async (id) => {
     try {
@@ -35,7 +18,6 @@ export const loginUser = async (id) => {
             .then((res) => res.json())
             .then(data => {
                 const tempToken = data.token;
-                SecureStore.setItemAsync('database_access_token', tempToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                 return fetch(`${baseUrl}/database/login/signIn`, {
                     method: 'post',
                     headers: {
@@ -58,7 +40,7 @@ export const loginUser = async (id) => {
     }
 }
 
-export const initUser = async (user, refreshToken) => {
+export const initUser = async (user) => {
     try {
         await fetch(`${baseUrl}/database/login/addUser`, {
             method: 'post',
@@ -67,8 +49,7 @@ export const initUser = async (user, refreshToken) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                user: user,
-                refreshToken: refreshToken
+                user: user
             })
         })
             .then((res) => res.json())
@@ -83,7 +64,7 @@ export const initUser = async (user, refreshToken) => {
 }
 
 
-export const getUserData = async (token) => {
+export const getUserId = async (token) => {
     try {
         return fetch(`${baseUrl}/spotify/login/getUserId`, {
             method: 'post',
@@ -101,9 +82,9 @@ export const getUserData = async (token) => {
     }
 }
 
-export const getUserGenres = async (token) => {
+export const getUserTopArtistsLogin = async (token) => {
     try {
-        return fetch(`${baseUrl}/spotify/login/getUserTopGenres`, {
+        return fetch(`${baseUrl}/spotify/login/getUserTopArtists`, {
             method: 'post',
             headers: {
                 Accept: 'application/json',
@@ -119,9 +100,9 @@ export const getUserGenres = async (token) => {
     }
 }
 
-export const saveUserGenres = async (user, artists) => {
+export const saveUserArtists = async (user, artists) => {
     try {
-        return fetch(`${baseUrl}/database/login/saveUserGenres`, {
+        return fetch(`${baseUrl}/database/login/saveUserArtists`, {
             method: 'post',
             headers: {
                 Accept: 'application/json',
@@ -168,7 +149,7 @@ export const signOut = async () => {
 }
 
 /* ------------ HOME FETCH FUNCTIONS ---------- */
-export const getTopArtists = async (token) => {
+export const getTopArtistsHome = async (token) => {
     return fetch(`${baseUrl}/spotify/home/getTopArtists`, {
         method: 'post',
         headers: {
@@ -194,7 +175,7 @@ export const getName = async (token) => {
     })
 }
 
-export const getTopTracks = async (token) => {
+export const getTopTracksHome = async (token) => {
     return fetch(`${baseUrl}/spotify/home/getTopTracks`, {
         method: 'post',
         headers: {
@@ -292,21 +273,8 @@ export const refreshAccessToken = async (token, refreshToken) => {
     })
 }
 
-export const getUserId = async (token) => {
-    return fetch(`${baseUrl}/spotify/login/getUserId`, {
-        method: 'post',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            token: token
-        })
-    })
-}
-
-export const getUserDatabaseGenres = async (id) => {
-    return fetch(`${baseUrl}/database/results/getUserGenres`, {
+export const getUserDatabaseArtists = async (id) => {
+    return fetch(`${baseUrl}/database/results/getUserArtists`, {
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -318,8 +286,8 @@ export const getUserDatabaseGenres = async (id) => {
     })
 }
 
-export const getRecommendations = async (token, artists, features) => {
-    return fetch(`${baseUrl}/spotify/results/getRecommendations`, {
+export const createLibrary = async (token, artists, features) => {
+    return fetch(`${baseUrl}/spotify/results/createLibrary`, {
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -333,8 +301,8 @@ export const getRecommendations = async (token, artists, features) => {
     })
 }
 
-export const getAudioFeatures = async (token, tracks, features) => {
-    return fetch(`${baseUrl}/spotify/results/getAudioFeatures`, {
+export const getRecommendations = async (token, tracks, features) => {
+    return fetch(`${baseUrl}/spotify/results/getRecommendations`, {
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -433,7 +401,7 @@ export const getUserProfile = async (token) => {
     })
 }
 
-export const getUserTopArtists = async (token, range) => {
+export const getUserTopArtistsStats = async (token, range) => {
     return fetch(`${baseUrl}/spotify/stats/getTopArtists`, {
         method: 'post',
         headers: {
@@ -447,7 +415,7 @@ export const getUserTopArtists = async (token, range) => {
     })
 }
 
-export const getUserTopTracks = async (token, range) => {
+export const getUserTopTracksStats = async (token, range) => {
     return fetch(`${baseUrl}/spotify/stats/getTopTracks`, {
         method: 'post',
         headers: {

@@ -2,31 +2,18 @@
 import * as React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './src/pages/login/Login';
-import Home from './src/pages/home/Home';
-import Upload from './src/pages/upload/Upload';
-import Results from './src/pages/results/Results';
 import * as SecureStore from 'expo-secure-store';
 import HomeStyles from './src/pages/home/HomeStyles';
-import { Text, View, Image, ScrollView } from 'react-native';
-import { refreshAccessToken, getUserId, getUserGenres, saveUserGenres, getUserDatabaseGenres, getGenreSeeds } from './src/fetch';
-import UploadOptions from './src/pages/UploadOptions/UploadOptions';
-import UserStats from './src/pages/userstats/UserStats';
-import SelectMood from './src/pages/selectmood/SelectMood';
+import { Text, View } from 'react-native';
+import { refreshAccessToken, getUserId, getUserTopArtistsLogin, saveUserArtists } from './src/fetch';
 import DrawerStack from './src/components/drawer/DrawerStack';
-
 
 function App({ navigation }) {
 
-    const Stack = createNativeStackNavigator();
     const [verified, setVerified] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
-    const [newUser, setNewUser] = React.useState(false);
-    const [seeds, setSeeds] = React.useState({ seeds: [] });
-    const isNewUser = [];
+
     React.useEffect(() => {
-        const isNew = [];
         const fetchData = async () => {
             var tempId;
             var token;
@@ -37,7 +24,7 @@ function App({ navigation }) {
                     await refreshAccessToken(spotifyAccessToken, spotifyRefreshToken)
                         .then(res => res.json())
                         .then(data => {
-                            if (data.token != "Null") {
+                            if (data.token != null) {
                                 token = data.token;
                                 SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                                 setVerified(true);
@@ -48,11 +35,11 @@ function App({ navigation }) {
                         .then(data => {
                             tempId = data.id;
                         })
-                    await getUserGenres(token)
+                    await getUserTopArtistsLogin(token)
                         .then(res => res.json())
                         .then(data => {
-                            if (Object.keys(data.topGenres).length > 0) {
-                                saveUserGenres(tempId, data.topArtists)
+                            if (Object.keys(data.topArtists).length > 0) {
+                                saveUserArtists(tempId, data.topArtists)
                             }
                         })
                 } catch (error) {
@@ -60,11 +47,8 @@ function App({ navigation }) {
                 }
             }
         }
-
         fetchData().then(() => setLoading(false));
     }, [loading])
-
-
 
     if (loading) {
         return (
@@ -82,7 +66,6 @@ function App({ navigation }) {
         <NavigationContainer>
             <DrawerStack loading={loading} verified={verified} />
         </NavigationContainer>
-
     );
 }
 

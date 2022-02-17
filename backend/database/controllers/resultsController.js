@@ -15,7 +15,7 @@ const saveRecentMood = async (req, res, next) => {
     }
 }
 
-const getUserGenres = async (req, res, next) => {
+const getUserArtists = async (req, res, next) => {
     try {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
@@ -80,7 +80,7 @@ const getRecentMood = async (req, res, next) => {
 
 module.exports = {
     saveRecentMood,
-    getUserGenres,
+    getUserArtists,
     saveRecommendations,
     saveUserRating,
     getRecentMood

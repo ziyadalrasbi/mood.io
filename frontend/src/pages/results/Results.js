@@ -11,13 +11,13 @@ import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
 
 import {
-    getRecommendations,
-    getUserDatabaseGenres,
+    createLibrary,
+    getUserDatabaseArtists,
     getUserId,
     refreshAccessToken,
     saveRecommendations,
     saveUserRating,
-    getAudioFeatures,
+    getRecommendations,
     createPlaylist,
     addTracksToPlaylist
 } from '../../fetch';
@@ -186,7 +186,7 @@ function Results({ navigation, route }) {
             await refreshAccessToken(token, refreshToken)
                 .then(res => res.json())
                 .then(data => {
-                    if (data.token != "Null") {
+                    if (data.token != null) {
                         accessToken = data.token;
                         SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                     }
@@ -196,17 +196,17 @@ function Results({ navigation, route }) {
                         .then(res => res.json())
                         .then(data => {
                             const id = data.id;
-                            getUserDatabaseGenres(id)
+                            getUserDatabaseArtists(id)
                                 .then(res => res.json())
                                 .then((data) => {
                                     const artists = data.topGenres;
                                     const features = filterFeaturesByMaxEmotion(route.params.maxMood);
                                     console.log(features);
-                                    getRecommendations(accessToken, artists, features.object)
+                                    createLibrary(accessToken, artists, features.object)
                                         .then(res => res.json())
                                         .then((data) => {
                                             console.log(features.array);
-                                            getAudioFeatures(accessToken, data.trackIds, features.array)
+                                            getRecommendations(accessToken, data.trackIds, features.array)
                                                 .then(res => res.json())
                                                 .then((data) => {
                                                     setLength(data.recommendations.length + 1);
@@ -225,10 +225,7 @@ function Results({ navigation, route }) {
             console.log(error);
             throw error;
         }
-
     }
-
-
 
     useEffect(() => {
         fetchData();
@@ -252,16 +249,28 @@ function Results({ navigation, route }) {
         setPLoading(true);
         setSaving(true);
         const token = await SecureStore.getItemAsync('spotify_access_token');
-        await createPlaylist(token, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!')
+        const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+        var accessToken;
+        await refreshAccessToken(token, refreshToken)
             .then(res => res.json())
-            .then((data) => {
-                const id = data.playlist.id;
-                addTracksToPlaylist(token, id, uris)
+            .then(data => {
+                if (data.token != null) {
+                    accessToken = data.token;
+                    SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                }
+            })
+            .then(() => {
+                createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!')
                     .then(res => res.json())
                     .then((data) => {
-                        console.log(data);
-                        setSaving(false);
-                        setComplete(true);
+                        const id = data.playlist.id;
+                        addTracksToPlaylist(accessToken, id, uris)
+                            .then(res => res.json())
+                            .then((data) => {
+                                console.log(data);
+                                setSaving(false);
+                                setComplete(true);
+                            })
                     })
             })
     }

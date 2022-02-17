@@ -1,13 +1,13 @@
 const express = require('express');
-const { signIn, signOut, addUser, getUserGenres, saveUserGenres } = require('../controllers/loginController.js');
+const { signIn, signOut, addUser, getUserArtists, saveUserArtists } = require('../controllers/loginController.js');
 
 const router = express.Router();
 
 router.post('/signIn', signIn);
 router.post('/signOut', signOut);
 router.post('/addUser', addUser);
-router.post('/getUserGenres', getUserGenres);
-router.post('/saveUserGenres', saveUserGenres);
+router.post('/getUserArtists', getUserArtists);
+router.post('/saveUserArtists', saveUserArtists);
 
 module.exports = {
     routes: router

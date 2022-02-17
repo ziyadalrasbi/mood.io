@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
+import React from 'react';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font';
 import LottieView from 'lottie-react-native';
 import UploadOptionsStyles from './UploadOptionsStyles';
 import Navbar from '../../components/navbar/Navbar';

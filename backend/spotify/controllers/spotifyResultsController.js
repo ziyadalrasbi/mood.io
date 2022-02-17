@@ -2,7 +2,7 @@
 
 const api = require('../api.js');
 
-const getRecommendations = async (req, res, next) => {
+const createLibrary = async (req, res, next) => {
     var recommendations = [];
     var trackIds = [];
     const features = req.body.features;
@@ -79,7 +79,7 @@ const getRecommendations = async (req, res, next) => {
     res.json({ recommendations: recommendations, trackIds: trackIds });
 }
 
-const getAudioFeatures = async (req, res, next) => {
+const getRecommendations = async (req, res, next) => {
     var recommendations = [];
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
@@ -187,8 +187,8 @@ const addTracksToPlaylist = async (req, res, next) => {
 }
 
 module.exports = {
+    createLibrary,
     getRecommendations,
-    getAudioFeatures,
     createPlaylist,
     addTracksToPlaylist
 }

@@ -14,6 +14,7 @@ const requestAccessToken = async (req, res, next) => {
             res.json({ accessToken: data.body.access_token, refreshToken: data.body.refresh_token });
         }, function (error) {
             console.log('Error requesting access token, please try again. ' + error);
+            res.json({ status: 400 });
         })
 }
 
@@ -30,8 +31,6 @@ const refreshAccessToken = async (req, res, next) => {
             .then((data) => {
                 res.json({ token: data.body.access_token });
             })
-    } else {
-        res.json({ token: 'Null' });
     }
 }
 
@@ -44,53 +43,24 @@ const getUserId = async (req, res, next) => {
             res.json({ id: id });
         }, function (error) {
             console.log('There was an error getting ID, please try again. \n' + JSON.stringify(error));
+            res.json({ status: 400 });
         });
 }
 
-const getUserTopGenres = async (req, res, next) => {
-    var topGenres = [];
+const getUserTopArtists = async (req, res, next) => {
     var topArtists = [];
     await api.setAccessToken(req.body.token);
-    await api.getMyTopArtists({ limit: 10, time_range: 'medium_term' })
+    await api.getMyTopArtists({ limit: 5, time_range: 'medium_term' })
         .then((data) => {
             if (data.body.items[0] != null) {
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < data.body.items[i].genres.length; j++) {
-                        topGenres.push(data.body.items[i].genres[j]);
-                    }
-                }
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < data.body.items.length; i++) {
                     topArtists.push(data.body.items[i].id);
                 }
-                const genresCount = topGenres.reduce(function (obj, item) {
-                    obj[item] = (obj[item] || 0) + 1;
-                    return obj;
-                }, {});
-                res.json({ topGenres: genresCount, topArtists: topArtists });
-            } else {
-                res.json({ topGenres: topGenres });
-            }
-
+                res.json({ topArtists: topArtists });
+            } 
         }), function (err) {
             console.log('There was an error getting the top genres, please try again. \n', err);
-        }
-}
-
-const getGenreSeeds = async (req, res, next) => {
-    var genreSeeds = [];
-    await api.setAccessToken(req.body.token);
-    await api.getAvailableGenreSeeds()
-        .then((data) => {
-            for (let i = 0; i < data.body.genres.length; i++) {
-                var tempGenre = {
-                    id: i,
-                    title: data.body.genres[i]
-                }
-                genreSeeds.push(tempGenre);
-            }
-            res.json({ genreSeeds: genreSeeds });
-        }), function (err) {
-            console.log('There was an error getting the available genre seeds, please try again. \n', err);
+            res.json({ status: 400 });
         }
 }
 
@@ -98,6 +68,5 @@ module.exports = {
     requestAccessToken,
     refreshAccessToken,
     getUserId,
-    getUserTopGenres,
-    getGenreSeeds
+    getUserTopArtists
 }

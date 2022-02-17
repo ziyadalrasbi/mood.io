@@ -12,13 +12,11 @@ import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
 import {
-  getTopArtists,
+  getTopArtistsHome,
   getName,
-  getTopTracks,
-  getListeningHabits,
+  getTopTracksHome,
   signOut,
-  getUserDatabaseGenres,
-  getGenreSeeds,
+  getUserDatabaseArtists,
   getUserId,
   getPreviousRecommendations
 } from '../../fetch';
@@ -63,10 +61,9 @@ function Home({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       const token = await SecureStore.getItemAsync('spotify_access_token');
-      await getTopArtists(token)
+      await getTopArtistsHome(token)
         .then((res) => res.json())
         .then(data => {
-
           if (data != null) {
             setTopArtists(data.artistNames);
           }
@@ -82,7 +79,7 @@ function Home({ navigation, route }) {
           console.log('Error fetching name, please try again. \n' + error);
           throw error;
         })
-      await getTopTracks(token)
+      await getTopTracksHome(token)
         .then((res) => res.json())
         .then(data => {
           if (data != null) {
@@ -108,11 +105,10 @@ function Home({ navigation, route }) {
       await getUserId(token)
         .then(res => res.json())
         .then(data => {
-          getUserDatabaseGenres(data.id)
+          getUserDatabaseArtists(data.id)
             .then(res => res.json())
             .then(data => {
               if (data.topGenres == null) {
-                console.log('hello')
                 var isNew = true;
                 setNewUser({ newUser: isNew });
               }
