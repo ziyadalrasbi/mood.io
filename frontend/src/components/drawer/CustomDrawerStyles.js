@@ -20,7 +20,7 @@ export default StyleSheet.create({
     profilePicture: {
         width: width / 4.14,
         height: width / 4.14,
-        marginTop: 80,
+        marginTop: height / 11.2,
         borderRadius: 100,
         borderWidth: 1,
         borderColor: 'white'
@@ -47,6 +47,11 @@ export default StyleSheet.create({
     },
     drawerTouchable: {
         width: width / 1.47857143
+    },
+    drawerContainer: {
+        alignItems: 'flex-start',
+        marginTop: -(height / 14.9333333),
+        width: '100%'
     }
 });
 

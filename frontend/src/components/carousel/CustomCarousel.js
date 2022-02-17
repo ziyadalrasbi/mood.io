@@ -107,7 +107,7 @@ const CustomCarousel = ({ onPressLogin }) => {
     <SafeAreaView style={CustomCarouselStyles.mainContainer}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
         <Carousel
-        removeClippedSubviews={false}
+          removeClippedSubviews={false}
           layout="default"
           ref={ref}
           data={data}

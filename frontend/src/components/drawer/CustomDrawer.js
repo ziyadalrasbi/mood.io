@@ -83,7 +83,7 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
             <DrawerContentScrollView
                 {...props}
             >
-                <View style={{ alignItems: 'flex-start', marginTop: -50, width: '100%' }}>
+                <View style={CustomDrawerStyles.drawerContainer}>
                     <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Home')}>
                         <Text style={CustomDrawerStyles.optionText}>
                             Home

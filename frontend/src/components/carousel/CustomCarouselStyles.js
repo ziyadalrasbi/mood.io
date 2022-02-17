@@ -17,7 +17,7 @@ export default StyleSheet.create({
         position: 'relative',
         marginTop: height / 59.7333333,
         width: width / 9.2,
-        height: height / 19.9111111,
+        height: width / 9.2,
         backgroundColor: 'transparent',
         alignSelf: 'center'
     },
