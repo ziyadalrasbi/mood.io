@@ -77,7 +77,7 @@ function Login({ navigation }) {
                                     getUserTopArtistsLogin(accessToken)
                                         .then((res) => res.json())
                                         .then(data => {
-                                            if (Object.keys(data.topArtists).length > 0) {
+                                            if (data != null) {
                                                 saveUserArtists(userId, data.topArtists);
                                             }
                                             navigation.reset({ index: 0, routes: [{ name: 'Home' }] });

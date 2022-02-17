@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import UserStatsStyles from './UserStatsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { getUserProfile, getUserTopTracks, getUserTopArtists, refreshAccessToken } from '../../fetch';
+import { getUserProfile, getUserTopTracksStats, getUserTopArtistsStats, refreshAccessToken } from '../../fetch';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
@@ -149,14 +149,14 @@ function UserStats({ navigation, route }) {
                         .then(data => {
                             setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
                         })
-                    getUserTopArtists(accessToken, 'medium_term')
+                    getUserTopArtistsStats(accessToken, 'medium_term')
                         .then(res => res.json())
                         .then(data => {
                             if (data != null) {
                                 setTopArtists(data.artistNames);
                             }
                         })
-                    getUserTopTracks(accessToken, 'medium_term')
+                    getUserTopTracksStats(accessToken, 'medium_term')
                         .then(res => res.json())
                         .then(data => {
                             if (data != null) {
@@ -183,20 +183,20 @@ function UserStats({ navigation, route }) {
         await refreshAccessToken(token, refreshToken)
             .then(res => res.json())
             .then(data => {
-                if (data.token != "Null") {
+                if (data.token != null) {
                     accessToken = data.token;
                     SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                 }
             })
             .then(() => {
-                getUserTopArtists(accessToken, range)
+                getUserTopArtistsStats(accessToken, range)
                     .then(res => res.json())
                     .then(data => {
                         if (data != null) {
                             setTopArtists(data.artistNames);
                         }
                     })
-                getUserTopTracks(accessToken, range)
+                getUserTopTracksStats(accessToken, range)
                     .then(res => res.json())
                     .then(data => {
                         if (data != null) {

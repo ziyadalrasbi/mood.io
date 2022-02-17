@@ -57,7 +57,9 @@ const getUserTopArtists = async (req, res, next) => {
                     topArtists.push(data.body.items[i].id);
                 }
                 res.json({ topArtists: topArtists });
-            } 
+            } else {
+                res.json({ topArtists: topArtists });
+            }
         }), function (err) {
             console.log('There was an error getting the top genres, please try again. \n', err);
             res.json({ status: 400 });

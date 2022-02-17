@@ -9,7 +9,7 @@ import { useFonts } from 'expo-font';
 import { getUserId, searchForArtists } from '../../fetch';
 import * as SecureStore from 'expo-secure-store';
 import { Searchbar } from 'react-native-paper';
-import { saveUserGenres } from '../../fetch';
+import { saveUserArtists } from '../../fetch';
 import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
 import addimg from '../../../assets/icons/genreselect/add.png';
@@ -73,7 +73,7 @@ const GenreSelect = ({ navigation }) => {
     await getUserId(token)
       .then(res => res.json())
       .then(data => {
-        saveUserGenres(data.id, artists);
+        saveUserArtists(data.id, artists);
         navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
       })
 

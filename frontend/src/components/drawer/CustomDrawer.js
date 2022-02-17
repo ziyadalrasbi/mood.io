@@ -32,7 +32,7 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
                 await refreshAccessToken(token, refreshToken)
                     .then(res => res.json())
                     .then(data => {
-                        if (data.token != "Null") {
+                        if (data.token != null) {
                             accessToken = data.token;
                             SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                         }
