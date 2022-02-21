@@ -196,3 +196,112 @@ export const getTopTracksStats = (token, range) => (dispatch, getState) => Promi
             return dispatch({ type: 'GET_TOP_TRACKS_STATS', getTopTracksStats: data.topTracks });
         })
 })
+
+export const createLibrary = (token, artists, features) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialArtists = { artists };
+    const initialFeatures = { features };
+    return fetch(`${baseUrl}/spotify/results/createLibrary`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            artists: initialArtists.artists,
+            features: initialFeatures.features
+        })
+    })
+        .then(res => res.json())
+        .then((data) => {
+            return dispatch({ type: 'CREATE_LIBRARY', createLibrary: data.trackIds });
+        })
+})
+
+export const getRecommendations = (token, tracks, features) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialTracks = { tracks };
+    const initialFeatures = { features };
+    return fetch(`${baseUrl}/spotify/results/getRecommendations`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            tracks: initialTracks.tracks,
+            features: initialFeatures.features
+        })
+    })
+        .then(res => res.json())
+        .then((data) => {
+            return dispatch({ type: 'GET_RECOMMENDATIONS', getRecommendations: data });
+        })
+})
+
+export const createPlaylist = (token, name, description) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialName = { name };
+    const initialDescription = { description };
+    return fetch(`${baseUrl}/spotify/results/createPlaylist`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            name: initialName.name,
+            description: initialDescription.description
+        })
+    })
+        .then(res => res.json())
+        .then((data) => {
+            return dispatch({ type: 'CREATE_PLAYLIST', createPlaylist: data.playlist });
+        })
+})
+
+export const addTracksToPlaylist = (token, id, uris) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialId = { id };
+    const initialUris = { uris };
+    return fetch(`${baseUrl}/spotify/results/addTracksToPlaylist`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            id: initialId.id,
+            uris: initialUris.uris
+        })
+    })
+        .then(res => res.json())
+        .then((data) => {
+            return dispatch({ type: 'ADD_TRACKS_TO_PLAYLIST', addTracksToPlaylist: data });
+        })
+})
+
+export const searchForArtists = (token, artist) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialArtist = { artist };
+    return fetch(`${baseUrl}/spotify/home/searchForArtists`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            search: initialArtist.artist
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'SEARCH_FOR_ARTISTS', searchForArtists: data.artists });
+        })
+})
+

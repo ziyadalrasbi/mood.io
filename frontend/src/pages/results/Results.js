@@ -9,24 +9,16 @@ import { Dimensions } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import Loading from '../../components/loading/Loading';
-
-import {
-    createLibrary,
-    getUserDatabaseArtists,
-    getUserId,
-    refreshAccessToken,
-    saveRecommendations,
-    saveUserRating,
-    getRecommendations,
-    createPlaylist,
-    addTracksToPlaylist
-} from '../../fetch';
+import { refreshAccessToken, createLibrary, getRecommendations, createPlaylist, addTracksToPlaylist } from '../../client/src/actions/spotifyActions';
+import { getUserDatabaseArtists, saveRecommendations, saveUserRating } from '../../client/src/actions/dbActions';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import StarRating from 'react-native-star-rating';
 const { width } = Dimensions.get('window');
 
-
-
 function Results({ navigation, route }) {
+
+    const dispatch = useDispatch();
 
     const getMood = (maxMood) => {
         if (maxMood) {
@@ -181,50 +173,23 @@ function Results({ navigation, route }) {
     const fetchData = async () => {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        var accessToken;
-        try {
-            await refreshAccessToken(token, refreshToken)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.token != null) {
-                        accessToken = data.token;
-                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                    }
-                })
-                .then(() => {
-                    getUserId(accessToken)
-                        .then(res => res.json())
-                        .then(data => {
-                            const id = data.id;
-                            getUserDatabaseArtists(id)
-                                .then(res => res.json())
-                                .then((data) => {
-                                    const artists = data.topGenres;
-                                    const features = filterFeaturesByMaxEmotion(route.params.maxMood);
-                                    console.log(features);
-                                    createLibrary(accessToken, artists, features.object)
-                                        .then(res => res.json())
-                                        .then((data) => {
-                                            console.log(features.array);
-                                            getRecommendations(accessToken, data.trackIds, features.array)
-                                                .then(res => res.json())
-                                                .then((data) => {
-                                                    setLength(data.recommendations.length + 1);
-                                                    setRecommendations(data.recommendations);
-                                                    setUris(data.uris);
-                                                    setRLoading(false);
-                                                    saveRecommendations(id, route.params.maxMood, JSON.stringify(data.recommendations));
+        const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+        const accessToken = getToken.refreshAccessToken;
+        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
-                                                })
+        const id = await SecureStore.getItemAsync('user_id');
+        const getArtists = await dispatch(getUserDatabaseArtists(id));
+        const artists = getArtists.getUserDatabaseArtists;
+        const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
-                                        })
-                                })
-                        })
-                })
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
+        const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object));
+        const trackIds = getLibrary.createLibrary;
+        const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array));
+        setLength(getRec.getRecommendations.recommendations.length + 1);
+        setRecommendations(getRec.getRecommendations.recommendations);
+        setUris(getRec.getRecommendations.uris);
+        await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations)));
+        setRLoading(false);
     }
 
     useEffect(() => {
@@ -236,7 +201,7 @@ function Results({ navigation, route }) {
 
     const onStarRatingPress = async (rating) => {
         setCount(rating);
-        await saveUserRating(rating);
+        await dispatch(saveUserRating(rating));
     }
 
     if (loading || rloading) {
@@ -250,29 +215,14 @@ function Results({ navigation, route }) {
         setSaving(true);
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        var accessToken;
-        await refreshAccessToken(token, refreshToken)
-            .then(res => res.json())
-            .then(data => {
-                if (data.token != null) {
-                    accessToken = data.token;
-                    SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                }
-            })
-            .then(() => {
-                createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!')
-                    .then(res => res.json())
-                    .then((data) => {
-                        const id = data.playlist.id;
-                        addTracksToPlaylist(accessToken, id, uris)
-                            .then(res => res.json())
-                            .then((data) => {
-                                console.log(data);
-                                setSaving(false);
-                                setComplete(true);
-                            })
-                    })
-            })
+        const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+        const accessToken = getToken.refreshAccessToken;
+        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+        const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!'));
+        const id = getPlaylist.createPlaylist.id;
+        await dispatch(addTracksToPlaylist(accessToken, id, uris));
+        setSaving(false);
+        setComplete(true);
     }
 
     return (
@@ -381,4 +331,28 @@ function Results({ navigation, route }) {
     );
 }
 
-export default Results;
+const mapStateToProps = (state) => {
+    return {
+        refreshAccessToken: state.spotifyReducer.refreshAccessToken,
+        createLibrary: state.spotifyReducer.createLibrary,
+        getRecommendations: state.spotifyReducer.getRecommendations,
+        createPlaylist: state.spotifyReducer.createPlaylist,
+        addTracksToPlaylist: state.spotifyReducer.addTracksToPlaylist,
+        getUserDatabaseArtists: state.dbReducer.getUserDatabaseArtists,
+        saveRecommendations: state.dbReducer.saveRecommendations,
+        saveUserRating: state.dbReducer.saveUserRating
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    refreshAccessToken,
+    createLibrary,
+    getRecommendations,
+    createPlaylist,
+    addTracksToPlaylist,
+    getUserDatabaseArtists,
+    saveRecommendations,
+    saveUserRating
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Results);

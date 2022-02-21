@@ -8,7 +8,6 @@ import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { LinearGradient } from 'expo-linear-gradient';
-import { saveRecentMood, getUserId } from '../../fetch';
 import happy from '../../../assets/icons/selectmood/happy.png';
 import angry from '../../../assets/icons/selectmood/angry.png';
 import sad from '../../../assets/icons/selectmood/sad.png';
@@ -16,8 +15,13 @@ import neutral from '../../../assets/icons/selectmood/neutral.png';
 import confused from '../../../assets/icons/selectmood/thinking.png';
 import surprised from '../../../assets/icons/selectmood/surprised.png';
 import LottieView from 'lottie-react-native';
+import { saveRecentMood } from '../../client/src/actions/dbActions';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 function SelectMood({ navigation }) {
+
+    const dispatch = useDispatch();
 
     const [index, setIndex] = useState({ index: -1, mood: "" });
 
@@ -75,18 +79,18 @@ function SelectMood({ navigation }) {
             };
             tempAverages.push(getAverages);
         }
-        const id = await SecureStore.getItemAsync('user_id');
-        await saveRecentMood(id, tempProp)
-            .then(() => {
-                navigation.navigate('Results', {
-                    results: mood,
-                    maxMood: index.mood,
-                    averages: tempAverages,
-                    values: getValues
-                });
-            })
-    }
 
+        const id = await SecureStore.getItemAsync('user_id');
+        await dispatch(saveRecentMood(id, tempProp));
+
+        navigation.navigate('Results', {
+            results: mood,
+            maxMood: index.mood,
+            averages: tempAverages,
+            values: getValues
+        });
+
+    }
 
     return (
         <ScrollView style={SelectMoodStyles.scroll} showsVerticalScrollIndicator={false}>
@@ -197,4 +201,14 @@ function SelectMood({ navigation }) {
     );
 }
 
-export default SelectMood;
+const mapStateToProps = (state) => {
+    return {
+        saveRecentMood: state.dbReducer.saveRecentMood
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    saveRecentMood
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectMood);

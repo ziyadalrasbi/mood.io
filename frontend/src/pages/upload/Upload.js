@@ -7,12 +7,17 @@ import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { detectFace, saveRecentMood } from '../../fetch';
+import { detectFace } from '../../client/src/actions/detectActions';
+import { saveRecentMood } from '../../client/src/actions/dbActions';
 import uploadimg from '../../../assets/icons/upload/upload.png';
 import LottieView from 'lottie-react-native';
 import * as SecureStore from 'expo-secure-store';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 function Upload({ navigation }) {
+
+  const dispatch = useDispatch();
 
   const [selectedImage, setSelectedImage] = useState({ base64: "", uri: "" });
   const [moodAnalysis, setMoodAnalysis] = useState({ moodAnalysis: [] });
@@ -54,24 +59,19 @@ function Upload({ navigation }) {
   }
 
   const analyseImage = async () => {
-    openImagePicker()
-      .then((res) => {
-        if (res.base64 != "") {
-          setLoading(true);
-          detectFace(res.base64)
-            .then((res) => res.json())
-            .then(data => {
-              if (data.image[0] != null) {
-                setMoodAnalysis({ moodAnalysis: data.image[0].expressions });
-                console.log(data.image[0].expressions)
-                setLoading(false);
-              } else {
-                setMoodAnalysis({ moodAnalysis: null });
-                setLoading(false);
-              }
-            })
-        }
-      })
+    const res = await openImagePicker();
+    if (res.base64 != "") {
+      setLoading(true);
+      const getFace = await dispatch(detectFace(res.base64))
+      if (getFace.detectFace[0] != null) {
+        setMoodAnalysis({ moodAnalysis: getFace.detectFace[0].expressions });
+        console.log(getFace.detectFace[0].expressions)
+        setLoading(false);
+      } else {
+        setMoodAnalysis({ moodAnalysis: null });
+        setLoading(false);
+      }
+    }
   }
 
 
@@ -104,15 +104,15 @@ function Upload({ navigation }) {
       tempAverages.push(getAverages);
     }
     const id = await SecureStore.getItemAsync('user_id');
-    await saveRecentMood(id, tempProp)
-      .then(() => {
-        navigation.navigate('Results', {
-          results: moodAnalysis.moodAnalysis,
-          maxMood: tempProp,
-          averages: tempAverages,
-          values: getValues
-        });
-      })
+    await dispatch(saveRecentMood(id, tempProp));
+
+    navigation.navigate('Results', {
+      results: moodAnalysis.moodAnalysis,
+      maxMood: tempProp,
+      averages: tempAverages,
+      values: getValues
+    });
+
   }
 
 
@@ -186,4 +186,16 @@ function Upload({ navigation }) {
   );
 }
 
-export default Upload;
+const mapStateToProps = (state) => {
+  return {
+    detectFace: state.detectReducer.detectFace,
+    saveRecentMood: state.dbReducer.saveRecentMood
+  }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  detectFace,
+  saveRecentMood
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Upload);

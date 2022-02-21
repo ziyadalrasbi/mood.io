@@ -52,6 +52,20 @@ export const loginUser = (id) => (dispatch, getState) => Promise.resolve().then(
         })
 })
 
+export const signOut = () => (dispatch, getState) => Promise.resolve().then(() => {
+    return fetch(`${baseUrl}/database/login/signOut`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then(data => {
+            return dispatch({ type: 'SIGN_OUT', signOut: data });
+        })
+})
+
 export const saveUserArtists = (user, artists) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialArtists = { artists };
@@ -82,11 +96,11 @@ export const getUserDatabaseArtists = (id) => (dispatch, getState) => Promise.re
     })
         .then(res => res.json())
         .then(data => {
+            console.log(data.topGenres == null);
             if (data.topGenres == null) {
-                var isNew = true;
-                return dispatch({ type: 'GET_USER_DATABASE_ARTISTS', getUserDatabaseArtists: isNew });
+                return dispatch({ type: 'GET_USER_DATABASE_ARTISTS', getUserDatabaseArtists: [] });
             } else {
-                return dispatch({ type: 'GET_USER_DATABASE_ARTISTS', getUserDatabaseArtists: false });
+                return dispatch({ type: 'GET_USER_DATABASE_ARTISTS', getUserDatabaseArtists: data.topGenres });
             }
         })
 })
@@ -123,5 +137,65 @@ export const getRecentMood = (user) => (dispatch, getState) => Promise.resolve()
         .then(res => res.json())
         .then(data => {
             return dispatch({ type: 'GET_RECENT_MOOD', getRecentMood: data.recentMood });
+        })
+})
+
+export const saveRecentMood = (user, mood) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUser = { user };
+    const initialMood = { mood };
+    return fetch(`${baseUrl}/database/results/saveRecentMood`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: initialUser.user,
+            mood: initialMood.mood
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'SAVE_RECENT_MOOD', saveRecentMood: data });
+        })
+})
+
+export const saveRecommendations = (user, mood, tracks) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUser = { user };
+    const initialMood = { mood };
+    const initialTracks = { tracks };
+    return fetch(`${baseUrl}/database/results/saveRecommendations`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: initialUser.user,
+            mood: initialMood.mood,
+            tracks: initialTracks.tracks
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'SAVE_RECOMMENDATIONS', saveRecommendations: data });
+        })
+})
+
+export const saveUserRating = (rating) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialRating = { rating };
+    return fetch(`${baseUrl}/database/results/saveUserRating`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            rating: initialRating.rating
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'SAVE_USER_RATING', saveUserRating: data });
         })
 })

@@ -6,17 +6,21 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import GenreSelectStyles from './GenreSelectStyles';
 import { useFonts } from 'expo-font';
-import { getUserId, searchForArtists } from '../../fetch';
+import { searchForArtists } from '../../client/src/actions/spotifyActions';
+import { saveUserArtists } from '../../client/src/actions/dbActions';
 import * as SecureStore from 'expo-secure-store';
 import { Searchbar } from 'react-native-paper';
-import { saveUserArtists } from '../../fetch';
 import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
 import addimg from '../../../assets/icons/genreselect/add.png';
 import removeimg from '../../../assets/icons/genreselect/remove.png';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const GenreSelect = ({ navigation }) => {
 
+
+  const dispatch = useDispatch();
 
   const [loaded] = useFonts({
     InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -38,13 +42,8 @@ const GenreSelect = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false);
   const search = async (query) => {
     const token = await SecureStore.getItemAsync('spotify_access_token');
-    await searchForArtists(token, query)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data.artists);
-        setItems(data.artists);
-      })
-
+    const searchQuery = await dispatch(searchForArtists(token, query));
+    setItems(searchQuery.searchForArtists);;
   }
 
   const selectItem = async (item) => {
@@ -67,16 +66,11 @@ const GenreSelect = ({ navigation }) => {
   }
 
   const saveSelected = async () => {
-    const token = await SecureStore.getItemAsync('spotify_access_token');
+    const id = await SecureStore.getItemAsync('user_id');
     const currItems = [...selectedItems];
     const artists = currItems.map(artist => artist.id);
-    await getUserId(token)
-      .then(res => res.json())
-      .then(data => {
-        saveUserArtists(data.id, artists);
-        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-      })
-
+    await dispatch(saveUserArtists(id, artists));
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   }
 
   return (
@@ -123,7 +117,7 @@ const GenreSelect = ({ navigation }) => {
                   >
                   </Image>
                 </TouchableOpacity>
-               
+
               </View>
             )}
           />
@@ -147,12 +141,12 @@ const GenreSelect = ({ navigation }) => {
                 {item.title}
               </Text>
               <TouchableOpacity onPress={() => removeItem(item)}>
-                  <Image
-                    style={GenreSelectStyles.removeImage}
-                    source={removeimg}
-                  >
-                  </Image>
-                </TouchableOpacity>
+                <Image
+                  style={GenreSelectStyles.removeImage}
+                  source={removeimg}
+                >
+                </Image>
+              </TouchableOpacity>
             </View>
           )}
         />
@@ -183,5 +177,16 @@ const GenreSelect = ({ navigation }) => {
 
   )
 }
+const mapStateToProps = (state) => {
+  return {
+    searchForArtists: state.spotifyReducer.searchForArtists,
+    saveUserArtists: state.spotifyReducer.saveUserArtists
+  }
+}
 
-export default GenreSelect;
+const mapDispatchToProps = dispatch => bindActionCreators({
+  searchForArtists,
+  saveUserArtists
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(GenreSelect);

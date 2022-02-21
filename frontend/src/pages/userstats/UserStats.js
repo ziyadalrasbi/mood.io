@@ -141,7 +141,6 @@ function UserStats({ navigation, route }) {
 
             const getToken = await dispatch(refreshAccessToken(token, refreshToken));
             const accessToken = getToken.refreshAccessToken;
-            console.log(accessToken)
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
             const getProfile = await dispatch(getUserProfile(accessToken));
             setProfile({
@@ -159,7 +158,7 @@ function UserStats({ navigation, route }) {
             }
         }
         fetchData().then(() => setLoading(false));
-    }, [loading])
+    }, [loading, dispatch])
 
     if (!loaded || loading) {
         return (

@@ -66,17 +66,18 @@ function Home({ navigation, route }) {
       setName(getUserName.getName);
       setTopTracks(getTracks.getTopTracksHome.topTracks);
       setTrackIds(getTracks.getTopTracksHome.trackIds);
-      setNewUser({ newUser: getDbArtists.getUserDatabaseArtists });
+
+      // STILL NEEDS FIXING 
+      setNewUser({ newUser: getDbArtists.getUserDatabaseArtists.length > 0 ? false : true });
 
       var recommendation = [];
 
-      for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && getRecommendations.getPreviousRecommendations.length < 6; i++) {
+      for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && recommendation.length < 6; i++) {
         const current = getRecommendations.getPreviousRecommendations[i].tracks[0];
         if (!isArrayInArray(recommendation, current)) {
           recommendation.push(current);
         }
       }
-
       setRecommendations(recommendation);
     }
 

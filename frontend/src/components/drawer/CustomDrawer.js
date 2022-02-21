@@ -4,16 +4,20 @@ import { DrawerContentScrollView, useDrawerStatus } from '@react-navigation/draw
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomDrawerStyles from './CustomDrawerStyles';
 import * as SecureStore from 'expo-secure-store';
-import { signOut, refreshAccessToken, getUserProfile } from '../../fetch';
+import { signOut } from '../../client/src/actions/dbActions';
+import { refreshAccessToken, getUserProfile } from '../../client/src/actions/spotifyActions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
 import defaultimg from '../../../assets/icons/stats/default.png';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+const CustomDrawer = ({ props, navigation }) => {
 
-const CustomDrawer = ({ props, navigation, route, options }) => {
+    const dispatch = useDispatch();
 
     const isDrawerOpen = useDrawerStatus() === 'open';
-    console.log(isDrawerOpen)
+
     const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState({ name: "", picture: "", followers: "" });
     const [loaded] = useFonts({
@@ -28,27 +32,19 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
         const fetchData = async () => {
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            var accessToken;
-            await refreshAccessToken(token, refreshToken)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.token != null) {
-                        accessToken = data.token;
-                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                    }
-                })
-                .then(() => {
-                    getUserProfile(accessToken)
-                        .then(res => res.json())
-                        .then(data => {
-                            setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-                        })
-                })
 
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+            const accessToken = getToken.refreshAccessToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            const getProfile = await dispatch(getUserProfile(accessToken));
+            setProfile({
+                name: getProfile.getUserProfile.profile.name,
+                picture: getProfile.getUserProfile.profile.picture,
+                followers: getProfile.getUserProfile.profile.followers
+            });
         }
-        if (isDrawerOpen) {
-            fetchData();
-        }
+
+        fetchData();
         setLoading(false);
     }, [loading]);
 
@@ -57,19 +53,12 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
     }
 
     const signOutUser = async () => {
-        try {
-            await SecureStore.deleteItemAsync('spotify_access_token');
-            await SecureStore.deleteItemAsync('spotify_refresh_token');
-            await SecureStore.deleteItemAsync('database_access_token');
-            await SecureStore.deleteItemAsync('user_id');
-            await signOut()
-                .then(() => {
-                    navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
-                })
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
+        await SecureStore.deleteItemAsync('spotify_access_token');
+        await SecureStore.deleteItemAsync('spotify_refresh_token');
+        await SecureStore.deleteItemAsync('database_access_token');
+        await SecureStore.deleteItemAsync('user_id');
+        await dispatch(signOut());
+        navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
     }
 
     return (
@@ -133,4 +122,18 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
     );
 }
 
-export default CustomDrawer;
+const mapStateToProps = (state) => {
+    return {
+        refreshAccessToken: state.spotifyReducer.refreshAccessToken,
+        getUserProfile: state.spotifyReducer.getUserProfile,
+        signOut: state.dbReducer.signOut
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    refreshAccessToken,
+    getUserProfile,
+    signOut
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer);

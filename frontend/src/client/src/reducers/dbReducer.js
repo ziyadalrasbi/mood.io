@@ -1,10 +1,14 @@
 export const initialState = {
     initUser: {},
     loginUser: {},
+    signOut: {},
     saveUserArtists: {},
     getUserDatabaseArtists: {},
     getPreviousRecommendations: {},
-    getRecentMood: {}
+    getRecentMood: {},
+    saveRecentMood: {},
+    saveUserRating: {},
+    saveRecommendations: {}
 }
 
 export const dbReducer = (state = initialState, action) => {
@@ -15,6 +19,11 @@ export const dbReducer = (state = initialState, action) => {
                 initUser: action.initUser
             }
         case 'LOGIN_USER':
+            return {
+                ...state,
+                loginUser: action.loginUser
+            }
+        case 'SIGN_OUT':
             return {
                 ...state,
                 loginUser: action.loginUser
@@ -38,6 +47,21 @@ export const dbReducer = (state = initialState, action) => {
             return {
                 ...state,
                 getRecentMood: action.getRecentMood
+            }
+        case 'SAVE_RECENT_MOOD':
+            return {
+                ...state,
+                saveRecentMood: action.saveRecentMood
+            }
+        case 'SAVE_USER_RATING':
+            return {
+                ...state,
+                saveUserRating: action.saveUserRating
+            }
+        case 'SAVE_RECOMMENDATIONS':
+            return {
+                ...state,
+                saveRecommendations: action.saveRecommendations
             }
         default:
             return state

@@ -11,7 +11,7 @@ function GenreModal({ newUser, navigation }) {
 
   return (
     <View style={[GenreModalStyles.modalContainer, { display: newUser == true ? 'flex' : 'none' }]}>
-      <View style={GenreModalStyles.centeredView}>
+      <View style={[GenreModalStyles.centeredView, { display: newUser == true ? 'flex' : 'none' }]}>
         <Modal
           animationType="slide"
           transparent={true}
