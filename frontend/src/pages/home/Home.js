@@ -68,7 +68,9 @@ function Home({ navigation, route }) {
       setTrackIds(getTracks.getTopTracksHome.trackIds);
 
       // STILL NEEDS FIXING 
-      setNewUser({ newUser: getDbArtists.getUserDatabaseArtists.length > 0 ? false : true });
+      if (getDbArtists.getUserDatabaseArtists.length == 0) {
+        setNewUser({ newUser: true });
+      }
 
       var recommendation = [];
 
@@ -88,7 +90,7 @@ function Home({ navigation, route }) {
       throw error;
     });
 
-  }, [dispatch]);
+  }, []);
 
   if (!loaded || loading) {
     return (

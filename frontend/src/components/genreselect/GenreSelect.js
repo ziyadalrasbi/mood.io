@@ -180,7 +180,7 @@ const GenreSelect = ({ navigation }) => {
 const mapStateToProps = (state) => {
   return {
     searchForArtists: state.spotifyReducer.searchForArtists,
-    saveUserArtists: state.spotifyReducer.saveUserArtists
+    saveUserArtists: state.dbReducer.saveUserArtists
   }
 }
 

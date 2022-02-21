@@ -80,6 +80,10 @@ export const saveUserArtists = (user, artists) => (dispatch, getState) => Promis
             artists: initialArtists.artists
         })
     })
+        .then((res) => res.json())
+        .then(data => {
+            return dispatch({ type: 'SAVE_USER_ARTISTS', saveUserArtists: data });
+        })
 })
 
 export const getUserDatabaseArtists = (id) => (dispatch, getState) => Promise.resolve().then(() => {

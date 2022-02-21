@@ -55,7 +55,6 @@ const CustomDrawer = ({ props, navigation }) => {
     const signOutUser = async () => {
         await SecureStore.deleteItemAsync('spotify_access_token');
         await SecureStore.deleteItemAsync('spotify_refresh_token');
-        await SecureStore.deleteItemAsync('database_access_token');
         await SecureStore.deleteItemAsync('user_id');
         await dispatch(signOut());
         navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });

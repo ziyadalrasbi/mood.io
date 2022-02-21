@@ -8,18 +8,15 @@ import GenreSelect from '../genreselect/GenreSelect';
 function GenreModal({ newUser, navigation }) {
 
   const [modalVisible, setModalVisible] = useState(newUser);
-
+  console.log('modal is ' + modalVisible)
   return (
-    <View style={[GenreModalStyles.modalContainer, { display: newUser == true ? 'flex' : 'none' }]}>
-      <View style={[GenreModalStyles.centeredView, { display: newUser == true ? 'flex' : 'none' }]}>
+    <View style={[GenreModalStyles.modalContainer, { display: modalVisible == true ? 'flex' : 'none' }]}>
+      <View style={GenreModalStyles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
-          visible={newUser}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
+          visible={modalVisible}
+        >
           <View style={GenreModalStyles.centeredView}>
             <View style={GenreModalStyles.modalView}>
               <Text style={GenreModalStyles.modalTitleText}>Before continuing...</Text>
