@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import UserStatsStyles from './UserStatsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { getUserProfile, getUserTopTracksStats, getUserTopArtistsStats, refreshAccessToken } from '../../fetch';
+import { refreshAccessToken, getUserProfile, getTopArtistsStats, getTopTracksStats } from '../../client/src/actions/spotifyActions';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
@@ -13,8 +13,12 @@ import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
 import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 function UserStats({ navigation, route }) {
+
+    const dispatch = useDispatch();
 
     const FirstRoute = () => (
         <ScrollView style={UserStatsStyles.tabView} showsVerticalScrollIndicator={false}>
@@ -134,36 +138,25 @@ function UserStats({ navigation, route }) {
         const fetchData = async () => {
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            var accessToken;
-            await refreshAccessToken(token, refreshToken)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.token != null) {
-                        accessToken = data.token;
-                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                    }
-                })
-                .then(() => {
-                    getUserProfile(accessToken)
-                        .then(res => res.json())
-                        .then(data => {
-                            setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-                        })
-                    getUserTopArtistsStats(accessToken, 'medium_term')
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data != null) {
-                                setTopArtists(data.artistNames);
-                            }
-                        })
-                    getUserTopTracksStats(accessToken, 'medium_term')
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data != null) {
-                                setTopTracks(data.topTracks);
-                            }
-                        })
-                })
+
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+            const accessToken = getToken.refreshAccessToken;
+            console.log(accessToken)
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            const getProfile = await dispatch(getUserProfile(accessToken));
+            setProfile({
+                name: getProfile.getUserProfile.profile.name,
+                picture: getProfile.getUserProfile.profile.picture,
+                followers: getProfile.getUserProfile.profile.followers
+            });
+            const getArtists = await dispatch(getTopArtistsStats(accessToken, 'medium_term'));
+            if (getArtists.getTopArtistsStats != null) {
+                setTopArtists(getArtists.getTopArtistsStats);
+            }
+            const getTracks = await dispatch(getTopTracksStats(accessToken, 'medium_term'));
+            if (getTracks.getTopTracksStats != null) {
+                setTopTracks(getTracks.getTopTracksStats);
+            }
         }
         fetchData().then(() => setLoading(false));
     }, [loading])
@@ -179,32 +172,26 @@ function UserStats({ navigation, route }) {
         setSelectedIndex(i);
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        var accessToken;
-        await refreshAccessToken(token, refreshToken)
-            .then(res => res.json())
-            .then(data => {
-                if (data.token != null) {
-                    accessToken = data.token;
-                    SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                }
-            })
-            .then(() => {
-                getUserTopArtistsStats(accessToken, range)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data != null) {
-                            setTopArtists(data.artistNames);
-                        }
-                    })
-                getUserTopTracksStats(accessToken, range)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data != null) {
-                            setTopTracks(data.topTracks);
-                        }
-                    })
-                setRLoading(false);
-            })
+
+        const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+        const accessToken = getToken.refreshAccessToken;
+        console.log(accessToken)
+        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+        const getProfile = await dispatch(getUserProfile(accessToken));
+        setProfile({
+            name: getProfile.getUserProfile.profile.name,
+            picture: getProfile.getUserProfile.profile.picture,
+            followers: getProfile.getUserProfile.profile.followers
+        });
+        const getArtists = await dispatch(getTopArtistsStats(accessToken, range));
+        if (getArtists.getTopArtistsStats != null) {
+            setTopArtists(getArtists.getTopArtistsStats);
+        }
+        const getTracks = await dispatch(getTopTracksStats(accessToken, range));
+        if (getTracks.getTopTracksStats != null) {
+            setTopTracks(getTracks.getTopTracksStats);
+        }
+        setRLoading(false);
     }
 
     const renderTabBar = props => {
@@ -287,4 +274,20 @@ function UserStats({ navigation, route }) {
     );
 }
 
-export default UserStats;
+const mapStateToProps = (state) => {
+    return {
+        refreshAccessToken: state.spotifyReducer.refreshAccessToken,
+        getUserProfile: state.spotifyReducer.getUserProfile,
+        getTopArtistsStats: state.spotifyReducer.getTopArtistsStats,
+        getTopTracksStats: state.spotifyReducer.getTopTracksStats
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    refreshAccessToken,
+    getUserProfile,
+    getTopArtistsStats,
+    getTopTracksStats
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserStats);

@@ -11,21 +11,17 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
-import {
-  getTopArtistsHome,
-  getName,
-  getTopTracksHome,
-  signOut,
-  getUserDatabaseArtists,
-  getUserId,
-  getPreviousRecommendations
-} from '../../fetch';
+import { getTopArtistsHome, getName, getTopTracksHome } from '../../client/src/actions/spotifyActions';
+import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client/src/actions/dbActions';
+import { connect, useDispatch } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
+import { bindActionCreators } from 'redux';
 
 function Home({ navigation, route }) {
 
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
 
@@ -38,8 +34,6 @@ function Home({ navigation, route }) {
   const [newUser, setNewUser] = useState({ newUser: false });
 
   const [recommendations, setRecommendations] = useState({ recommendations: [] });
-  const [artistImgLoaded, setArtistImgLoaded] = useState(false);
-  const [trackImgLoaded, setTrackImgLoaded] = useState(false);
 
   const [loaded] = useFonts({
     MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -51,7 +45,6 @@ function Home({ navigation, route }) {
 
   function isArrayInArray(arr, item) {
     var item_as_string = JSON.stringify(item);
-
     var contains = arr.some(function (ele) {
       return JSON.stringify(ele) === item_as_string;
     });
@@ -61,81 +54,32 @@ function Home({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       const token = await SecureStore.getItemAsync('spotify_access_token');
-      await getTopArtistsHome(token)
-        .then((res) => res.json())
-        .then(data => {
-          if (data != null) {
-            setTopArtists(data.artistNames);
-          }
-        }).catch((error) => {
-          console.log('Error fetching top artists, please try again. \n' + error);
-          throw error;
-        })
-      await getName(token)
-        .then((res) => res.json())
-        .then(data => {
-          setName(data.name);
-        }).catch((error) => {
-          console.log('Error fetching name, please try again. \n' + error);
-          throw error;
-        })
-      await getTopTracksHome(token)
-        .then((res) => res.json())
-        .then(data => {
-          if (data != null) {
-            setTopTracks(data.topTracks);
-            setTrackIds(data.trackIds);
-          }
-        }).catch((error) => {
-          console.log('Error fetching top tracks, please try again. \n' + error);
-          throw error;
-        })
-      /* ----- ENDPOINT CAUSING ERRORS, MUST FIX ------
-       .then(() => {
-         getListeningHabits(token, trackIds)
-          .then((res) => res.json())
-           .then(data => {
-            setHabits({ habits: data.habits });
-          })
-           .catch((error) => {
-             console.log('Error fetching habits, please try again. \n' + error);
-             throw error;
-           })
-     })*/
-      await getUserId(token)
-        .then(res => res.json())
-        .then(data => {
-          getUserDatabaseArtists(data.id)
-            .then(res => res.json())
-            .then(data => {
-              if (data.topGenres == null) {
-                var isNew = true;
-                setNewUser({ newUser: isNew });
-              }
-            })
-          getPreviousRecommendations(data.id)
-            .then(res => res.json())
-            .then(data => {
-              var recommendation = [];
-              for (var i = 0; i < data.recommendations.length && recommendation.length < 6; i++) {
-                const current = data.recommendations[i].tracks[0];
-                if (!isArrayInArray(recommendation, current)) {
-                  recommendation.push(current);
-                }
-              }
-              setRecommendations(recommendation);
-            })
-            .catch((error) => {
-              console.log('Error fetching user genres, please try again. \n' + error);
-              throw error;
-            })
-        }).catch((error) => {
-          console.log('Error fetching user ID, please try again. \n' + error);
-          throw error;
-        })
+      const userId = await SecureStore.getItemAsync('user_id');
 
+      const getArtists = await dispatch(getTopArtistsHome(token));
+      const getUserName = await dispatch(getName(token));
+      const getTracks = await dispatch(getTopTracksHome(token));
+      const getDbArtists = await dispatch(getUserDatabaseArtists(userId));
+      const getRecommendations = await dispatch(getPreviousRecommendations(userId));
 
+      setTopArtists(getArtists.getTopArtistsHome);
+      setName(getUserName.getName);
+      setTopTracks(getTracks.getTopTracksHome.topTracks);
+      setTrackIds(getTracks.getTopTracksHome.trackIds);
+      setNewUser({ newUser: getDbArtists.getUserDatabaseArtists });
+
+      var recommendation = [];
+
+      for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && getRecommendations.getPreviousRecommendations.length < 6; i++) {
+        const current = getRecommendations.getPreviousRecommendations[i].tracks[0];
+        if (!isArrayInArray(recommendation, current)) {
+          recommendation.push(current);
+        }
+      }
+
+      setRecommendations(recommendation);
     }
+
     fetchData().then(() => {
       setLoading(false)
     }).catch((error) => {
@@ -143,45 +87,12 @@ function Home({ navigation, route }) {
       throw error;
     });
 
-  }, []);
+  }, [dispatch]);
 
   if (!loaded || loading) {
     return (
       <Loading page={"home"} />
     )
-  }
-
-  const changeArtistImageLoadedTrue = () => {
-    setArtistImgLoaded(true);
-  }
-
-  const changeArtistImageLoadedFalse = () => {
-    setArtistImgLoaded(false);
-  }
-
-  const changeTrackImageLoadedTrue = () => {
-    setTrackImgLoaded(true);
-  }
-
-  const changeTrackImageLoadedFalse = () => {
-    setTrackImgLoaded(true);
-  }
-
-
-
-  const signOutUser = async () => {
-    try {
-      await SecureStore.deleteItemAsync('spotify_access_token');
-      await SecureStore.deleteItemAsync('spotify_refresh_token');
-      await SecureStore.deleteItemAsync('database_access_token');
-      await signOut()
-        .then(() => {
-          navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
-        })
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
   }
 
   return (
@@ -194,7 +105,7 @@ function Home({ navigation, route }) {
       <GenreModal newUser={newUser.newUser} navigation={navigation} />
       <View style={HomeStyles.mainContainer}>
         <View style={HomeStyles.topContainer}>
-          <Navbar navigation={navigation} name={name} page={'home'} signOut={signOutUser} />
+          <Navbar navigation={navigation} name={name} page={'home'} />
         </View>
         <View style={HomeStyles.firstContainer}>
           <Text style={HomeStyles.firstHeader}>
@@ -239,8 +150,6 @@ function Home({ navigation, route }) {
                   }}
                   onPress={() => Linking.openURL(track[3])}>
                   <Image
-                    onLoadStart={changeArtistImageLoadedFalse}
-                    onLoad={changeArtistImageLoadedTrue}
                     style={HomeStyles.recommendationImage}
                     source={{ uri: track[2] }}
                   />
@@ -257,7 +166,6 @@ function Home({ navigation, route }) {
               No recommendations yet. To get recommendations, press the "get started" button above!
             </Text>}
         </View>
-
         <View style={HomeStyles.thirdContainer}>
           <View style={HomeStyles.headerContainer}>
             <Text style={HomeStyles.thirdHeader}>
@@ -275,7 +183,6 @@ function Home({ navigation, route }) {
               </View>
             </TouchableOpacity>
           </View>
-
           <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
             {topArtists.length > 0 && topArtists.map((artist, index) =>
               <View key={index}>
@@ -288,8 +195,6 @@ function Home({ navigation, route }) {
                   }}
                   onPress={() => Linking.openURL(artist[2])}>
                   <Image
-                    onLoadStart={changeArtistImageLoadedFalse}
-                    onLoad={changeArtistImageLoadedTrue}
                     style={HomeStyles.topTrackArtistImage}
                     source={{ uri: artist[1] }}
                   />
@@ -298,7 +203,6 @@ function Home({ navigation, route }) {
               </View>
             )}
           </ScrollView>
-
           {topArtists.length == 0 &&
             <Text style={HomeStyles.noDataText}>
               It seems like you haven't listened to much music on your Spotify account. Listen to some more music
@@ -335,8 +239,6 @@ function Home({ navigation, route }) {
                   }}
                   onPress={() => Linking.openURL(track[3])}>
                   <Image
-                    onLoadStart={changeTrackImageLoadedFalse}
-                    onLoad={changeTrackImageLoadedTrue}
                     style={HomeStyles.topTrackImage}
                     source={{ uri: track[2] }}
                   />
@@ -349,13 +251,10 @@ function Home({ navigation, route }) {
                   style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
                   onPress={() => Linking.openURL(track[3])}>
                   <Image
-
                     style={HomeStyles.playImage}
                     source={playimg}
                   />
-
                 </TouchableOpacity>
-
               </View>
             </View>
           )}
@@ -365,8 +264,7 @@ function Home({ navigation, route }) {
               and come back at a later date to view this data!
             </Text>
           }
-          <View style={{ height: newUser.newUser == true? 500 : 30 }} />
-                  
+          <View style={{ height: newUser.newUser == true ? 500 : 30 }} />
         </View>
         <StatusBar style="auto" />
       </View>
@@ -376,4 +274,22 @@ function Home({ navigation, route }) {
   );
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    getTopArtistsHome: state.spotifyReducer.getTopArtistsHome,
+    getName: state.spotifyReducer.getName,
+    getTopTracksHome: state.spotifyReducer.getTopTracksHome,
+    getUserDatabaseArtists: state.dbReducer.getUserDatabaseArtists,
+    getPreviousRecommendations: state.dbReducer.getPreviousRecommendations
+  }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getTopArtistsHome,
+  getName,
+  getTopTracksHome,
+  getUserDatabaseArtists,
+  getPreviousRecommendations
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

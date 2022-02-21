@@ -1,20 +1,23 @@
 import * as React from 'react';
 import { makeRedirectUri, useAuthRequest, ResponseType, Prompt, startAsync } from 'expo-auth-session';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper';
 import LoginStyles from './LoginStyles';
 import * as SecureStore from 'expo-secure-store';
-import spotifylogo from '../../../assets/icons/login/spotifylogo.png';
 import { useFonts } from 'expo-font';
 import CustomCarousel from '../../components/carousel/CustomCarousel';
 import { LinearGradient } from 'expo-linear-gradient';
-import { loginUser, initUser, getUserId, getUserTopArtistsLogin, saveUserArtists, requestAccessToken, getGenreSeeds } from '../../fetch';
+import { requestAccessToken, getUserId, getTopArtistsLogin, } from '../../client/src/actions/spotifyActions';
+import { initUser, loginUser, saveUserArtists } from '../../client/src/actions/dbActions';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as WebBrowser from 'expo-web-browser';
 
 if (Platform.OS === 'web') {
     WebBrowser.maybeCompleteAuthSession();
 }
 function Login({ navigation }) {
+
+    const dispatch = useDispatch();
 
     const discovery = {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
@@ -57,39 +60,25 @@ function Login({ navigation }) {
     const onPressLogin = async () => {
         await SecureStore.deleteItemAsync('spotify_access_token');
         await SecureStore.deleteItemAsync('spotify_refresh_token');
-        await promptAsync()
-            .then((res) => {
-                if (res && res.type == 'success') {
-                    requestAccessToken(request.redirectUri, res.params.code)
-                        .then(res => res.json())
-                        .then(data => {
-                            const accessToken = data.accessToken;
-                            const refreshToken = data.refreshToken;
-                            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                            SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                            getUserId(accessToken)
-                                .then(res => res.json())
-                                .then(data => {
-                                    const userId = data.id;
-                                    SecureStore.setItemAsync('user_id', userId, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                                    initUser(userId);
-                                    loginUser(userId);
-                                    getUserTopArtistsLogin(accessToken)
-                                        .then((res) => res.json())
-                                        .then(data => {
-                                            if (Object.keys(data.topArtists).length > 0) {
-                                                saveUserArtists(userId, data.topArtists);
-                                            }
-                                            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-                                        })
-                                })
-                                .catch((error) => {
-                                    console.log('Error logging in, please try again. \n' + error);
-                                    throw error;
-                                });
-                        });
-                }
-            });
+        const res = await promptAsync();
+        if (res && res.type == 'success') {
+            const getTokens = await dispatch(requestAccessToken(request.redirectUri, res.params.code));
+            const accessToken = getTokens.requestAccessToken.accessToken;
+            const refreshToken = getTokens.requestAccessToken.refreshToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            const getUser = await dispatch(getUserId(accessToken));
+            const userId = getUser.getUserId;
+            SecureStore.setItemAsync('user_id', userId, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            console.log('id is ' + userId)
+            await dispatch(initUser(userId));
+            await dispatch(loginUser(userId));
+            const getTopArtists = await dispatch(getTopArtistsLogin(accessToken));
+            if (getTopArtists.getTopArtistsLogin != null) {
+                await dispatch(saveUserArtists(userId, getTopArtists.getTopArtistsLogin));
+            }
+            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+        }
     }
 
     if (!loaded) {
@@ -118,4 +107,22 @@ function Login({ navigation }) {
     );
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+    return {
+        requestAccessToken: state.spotifyReducer.requestAccessToken,
+        initUser: state.dbReducer.initUser,
+        loginUser: state.dbReducer.loginUser,
+        getTopArtistsLogin: state.spotifyReducer.getTopArtistsLogin,
+        saveUserArtists: state.dbReducer.saveUserArtists
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    requestAccessToken,
+    initUser,
+    loginUser,
+    getTopArtistsLogin,
+    saveUserArtists
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

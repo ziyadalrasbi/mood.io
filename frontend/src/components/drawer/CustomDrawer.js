@@ -10,9 +10,10 @@ import { useFonts } from 'expo-font';
 import defaultimg from '../../../assets/icons/stats/default.png';
 
 
-
 const CustomDrawer = ({ props, navigation, route, options }) => {
-    const isOpen = useDrawerStatus();
+
+    const isDrawerOpen = useDrawerStatus() === 'open';
+    console.log(isDrawerOpen)
     const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState({ name: "", picture: "", followers: "" });
     const [loaded] = useFonts({
@@ -25,27 +26,29 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-                const token = await SecureStore.getItemAsync('spotify_access_token');
-                const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-                var accessToken;
-                await refreshAccessToken(token, refreshToken)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.token != null) {
-                            accessToken = data.token;
-                            SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                        }
-                    })
-                    .then(() => {
-                        getUserProfile(accessToken)
-                            .then(res => res.json())
-                            .then(data => {
-                                setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
-                            })
-                    })
-            
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            var accessToken;
+            await refreshAccessToken(token, refreshToken)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.token != null) {
+                        accessToken = data.token;
+                        SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                    }
+                })
+                .then(() => {
+                    getUserProfile(accessToken)
+                        .then(res => res.json())
+                        .then(data => {
+                            setProfile({ name: data.profile.name, picture: data.profile.picture, followers: data.profile.followers });
+                        })
+                })
+
         }
-        isOpen == 'open' && fetchData();
+        if (isDrawerOpen) {
+            fetchData();
+        }
         setLoading(false);
     }, [loading]);
 
@@ -61,7 +64,7 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
             await SecureStore.deleteItemAsync('user_id');
             await signOut()
                 .then(() => {
-                    navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+                    navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
                 })
         } catch (error) {
             console.log(error);
@@ -71,15 +74,17 @@ const CustomDrawer = ({ props, navigation, route, options }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#0d324d' }}>
-            <View style={CustomDrawerStyles.firstContainer}>
-                <Image
-                    style={CustomDrawerStyles.profilePicture}
-                    source={profile.picture != null ? { uri: profile.picture } : defaultimg}
-                />
-                <Text style={CustomDrawerStyles.firstHeader}>
-                    {profile.name}
-                </Text>
-            </View>
+            {isDrawerOpen &&
+                <View style={CustomDrawerStyles.firstContainer}>
+                    <Image
+                        style={CustomDrawerStyles.profilePicture}
+                        source={profile.picture != null ? { uri: profile.picture } : defaultimg}
+                    />
+                    <Text style={CustomDrawerStyles.firstHeader}>
+                        {profile.name}
+                    </Text>
+                </View>
+            }
             <DrawerContentScrollView
                 {...props}
             >

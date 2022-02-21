@@ -7,6 +7,8 @@ import HomeStyles from './src/pages/home/HomeStyles';
 import { Text, View } from 'react-native';
 import { refreshAccessToken, getUserId, getUserTopArtistsLogin, saveUserArtists } from './src/fetch';
 import DrawerStack from './src/components/drawer/DrawerStack';
+import store from './src/client/src/store';
+import { Provider } from 'react-redux';
 
 function App({ navigation }) {
 
@@ -63,9 +65,11 @@ function App({ navigation }) {
     }
 
     return (
-        <NavigationContainer>
-            <DrawerStack loading={loading} verified={verified} />
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <DrawerStack loading={loading} verified={verified} />
+            </NavigationContainer>
+        </Provider>
     );
 }
 

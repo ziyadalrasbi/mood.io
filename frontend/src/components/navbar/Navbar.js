@@ -7,7 +7,7 @@ import NavbarStyles from './NavbarStyles';
 import React from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 
-function Navbar({ navigation, name, page, signOut }) {
+function Navbar({ navigation, name, page }) {
 
   return (
     <View>

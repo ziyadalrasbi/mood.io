@@ -24,7 +24,6 @@ const getName = async (req, res, next) => {
 
 const getTopArtists = async (req, res, next) => {
     var artistNames = [];
-    console.log(req.body.token);
     api.setAccessToken(req.body.token);
     try {
         await api.getMyTopArtists({ limit: 6, time_range: 'medium_term' })
@@ -43,7 +42,7 @@ const getTopArtists = async (req, res, next) => {
                 console.log('There was an error getting the top artists, please try again.', err);
             }
     } catch (error) {
-        console.log('There was an error getting the top artists, please try again.', err);
+        console.log('There was an error getting the top artists, please try again.', error);
         res.json({ status: 400 });
     }
 }
@@ -71,7 +70,7 @@ const getTopTracks = async (req, res, next) => {
                 console.log('There was an error getting the top tracks, please try again.', err);
             }
     } catch (error) {
-        console.log('There was an error getting the top tracks, please try again.', err);
+        console.log('There was an error getting the top tracks, please try again.', error);
         res.json({ status: 400 });
     }
 }

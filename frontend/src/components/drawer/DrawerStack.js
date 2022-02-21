@@ -9,8 +9,18 @@ import Results from '../../pages/results/Results';
 import UploadOptions from '../../pages/UploadOptions/UploadOptions';
 import SelectMood from '../../pages/selectmood/SelectMood';
 import Recommendations from '../../pages/recommendations/Recommendations';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
+
+const LoginStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='Login' component={Login} options={{unmountOnBlur:true}} />
+        </Stack.Navigator>
+    )
+}
 
 const DrawerStack = ({loading, verified}) => {
     return (
@@ -22,8 +32,8 @@ const DrawerStack = ({loading, verified}) => {
             backBehavior='history'
             defaultStatus='closed'
         >
+            <Drawer.Screen name='LoginStack' component={LoginStack} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='UserStats' component={UserStats} initialParams={{ index: 0 }} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='Login' component={Login} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Home' component={Home} />
             <Drawer.Screen name='UploadOptions' component={UploadOptions} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Upload' component={Upload} options={{unmountOnBlur:true}} />

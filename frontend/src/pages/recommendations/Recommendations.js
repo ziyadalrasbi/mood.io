@@ -5,15 +5,19 @@ import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import RecommendationsStyles from './RecommendationsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { getRecentMood, getPreviousRecommendations } from '../../fetch';
+import { getRecentMood, getPreviousRecommendations } from '../../client/src/actions/dbActions';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
 import defaultimg from '../../../assets/icons/stats/default.png';
+import { connect, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 function Recommendations({ navigation, route }) {
+
+    const dispatch = useDispatch();
 
     const [loaded] = useFonts({
         InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
@@ -30,20 +34,15 @@ function Recommendations({ navigation, route }) {
     useEffect(() => {
         const fetchData = async () => {
             const userId = await SecureStore.getItemAsync('user_id');
-            await getRecentMood(userId)
-                .then(res => res.json())
-                .then(data => {
-                    setRecentMood({ recentMood: data.recentMood });
-                })
-            await getPreviousRecommendations(userId)
-                .then(res => res.json())
-                .then(data => {
-                    setRecommendations(data.recommendations);
-                })
-
+            const getMood = await dispatch(getRecentMood(userId));
+            const getRecommendations = await dispatch(getPreviousRecommendations(userId));
+            setRecentMood({ recentMood: getMood.getRecentMood });
+            setRecommendations(getRecommendations.getPreviousRecommendations);
         }
+
         fetchData().then(() => setLoading(false));
-    }, [loading])
+
+    }, [loading, dispatch])
 
     if (!loaded || loading) {
         return (
@@ -144,4 +143,16 @@ function Recommendations({ navigation, route }) {
     );
 }
 
-export default Recommendations;
+const mapStateToProps = (state) => {
+    return {
+        getRecentMood: state.dbReducer.getRecentMood,
+        getPreviousRecommendations: state.dbReducer.getPreviousRecommendations
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getRecentMood,
+    getPreviousRecommendations
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Recommendations);
