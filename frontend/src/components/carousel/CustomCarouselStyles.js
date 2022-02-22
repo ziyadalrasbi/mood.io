@@ -1,8 +1,115 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, PixelRatio, Platform } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
-export default StyleSheet.create({
+const getRatio = (value) => {
+    return Math.min(PixelRatio.get() * value, value);
+}
+
+const ios = StyleSheet.create({
+    mainContainer: {
+        position: 'relative',
+        height: getRatio(520),
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        borderRadius: 7
+    },
+    icon: {
+        resizeMode: 'contain',
+        position: 'relative',
+        marginTop: getRatio(15),
+        width: getRatio(45),
+        height: getRatio(45),
+        backgroundColor: 'transparent',
+        alignSelf: 'center'
+    },
+    welcome: {
+        fontFamily: 'MontserratBold',
+        color: '#191414',
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontSize: getRatio(18)
+    },
+    subWelcome: {
+        padding: getRatio(10),
+        fontFamily: 'InconsolataLight',
+        color: 'grey',
+        fontSize: getRatio(13),
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    loginButton: {
+        backgroundColor: '#454B1B',
+        alignSelf: 'flex-start',
+    },
+    spotifyLogo: {
+        width: getRatio(25),
+        height: getRatio(25),
+        resizeMode: 'contain',
+        backgroundColor: 'transparent'
+    },
+    buttonContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: getRatio(35),
+        padding: getRatio(10),
+        justifyContent: 'center',
+        backgroundColor: '#1DB954',
+        borderWidth: 0.5,
+        borderColor: '#fff',
+        height: getRatio(40),
+        borderRadius: 5,
+    },
+    mainFont: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: getRatio(13),
+        color: 'white'
+    },
+    signUpContainer: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginTop: getRatio(15)
+    },
+    signUp: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: 11,
+        color: 'black'
+    },
+    signUpLink: {
+        fontFamily: 'MontserratBold',
+        fontSize: 11,
+        color: 'black'
+    },
+    carouselItem: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        alignSelf: 'center',
+        height: getRatio(410),
+        width: getRatio(300),
+        padding: getRatio(15)
+    },
+    dotStyle: {
+        width: getRatio(6),
+        height: getRatio(6),
+        borderRadius: 5,
+        marginHorizontal: getRatio(6),
+        backgroundColor: 'black'
+    },
+    inactiveDotStyle: {
+        width: getRatio(5),
+        height: getRatio(5),
+        borderRadius: 5,
+        marginHorizontal: getRatio(6),
+        backgroundColor: 'grey'
+    },
+});
+
+const android = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         height: height / 1.72307692,
@@ -22,7 +129,6 @@ export default StyleSheet.create({
         alignSelf: 'center'
     },
     welcome: {
-        padding: width / 41.4,
         fontFamily: 'MontserratBold',
         color: '#191414',
         alignSelf: 'center',
@@ -42,8 +148,8 @@ export default StyleSheet.create({
         alignSelf: 'flex-start',
     },
     spotifyLogo: {
-        width: width / 16.56,
-        height: height / 35.84,
+        width: width / 18.56,
+        height: width / 18.56,
         resizeMode: 'contain',
         backgroundColor: 'transparent'
     },
@@ -86,7 +192,7 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         alignSelf: 'center',
-        height: height / 2.18536585,
+        height: height/2,
         width: width / 1.38,
         padding: height / 59.7333333
     },
@@ -105,3 +211,5 @@ export default StyleSheet.create({
         backgroundColor: 'grey'
     },
 });
+
+export default Platform.OS == 'android' ? android : ios;

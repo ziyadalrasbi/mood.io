@@ -1,10 +1,14 @@
 import { PieChart } from "react-native-chart-kit";
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, PixelRatio, Platform } from 'react-native';
 import MoodGraphStyles from "./MoodGraphStyles";
 const { width, height } = Dimensions.get('window');
 import { useFonts } from 'expo-font';
 function MoodGraph({ data }) {
+
+    const getRatio = (value) => {
+        return Math.min(PixelRatio.get() * value, value);
+    }
 
     const [loaded] = useFonts({
         InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -40,8 +44,8 @@ function MoodGraph({ data }) {
                 <PieChart
                     data={data}
                     width={width}
-                    height={width/2.3}
-                    center={[Dimensions.get('window').width * 0.5, 300]}
+                    height={Platform.OS == 'android' ? width / 2.3 : getRatio(180)}
+                    center={[getRatio(207), Platform.OS == 'android' ? height / 2 : getRatio(448)]}
                     accessor='percentage'
                     chartConfig={chartConfig}
                     backgroundColor="transparent"
@@ -51,9 +55,9 @@ function MoodGraph({ data }) {
                 />
                 <PieChart
                     data={data}
-                    width={Dimensions.get('window').width}
-                    height={width/2.07}
-                    center={[Dimensions.get('window').width * 0.03, 0]}
+                    width={width}
+                    height={Platform.OS == 'android' ? width / 2.07 : getRatio(200)}
+                    center={[0, 0]}
                     accessor='percentage'
                     chartConfig={chartConfig}
                     backgroundColor="transparent"

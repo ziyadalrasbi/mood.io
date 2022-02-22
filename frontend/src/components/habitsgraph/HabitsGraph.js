@@ -1,9 +1,13 @@
 import { BarChart } from "react-native-chart-kit";
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, PixelRatio, Platform } from 'react-native';
 import HabitsGraphStyles from "./HabitsGraphStyles";
 
 function HabitsGraph() {
+
+    const getRatio = (value) => {
+        return Math.min(PixelRatio.get() * value, value);
+    }
 
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
@@ -34,8 +38,8 @@ function HabitsGraph() {
             <View style={HabitsGraphStyles.topContainer}>
                 <BarChart
                     data={data}
-                    width={Dimensions.get('window').width * 0.8}
-                    height={220}
+                    width={getRatio(380.2)}
+                    height={Platform.OS == 'android' ? 220 : getRatio(220)}
                     chartConfig={chartConfig}
                     yAxisLabel="$"
                     horizontalLabelRotation={20}

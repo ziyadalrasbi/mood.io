@@ -15,7 +15,7 @@ function GenreModal({ newUser, navigation }) {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={modalVisible}
+          visible={newUser}
         >
           <View style={GenreModalStyles.centeredView}>
             <View style={GenreModalStyles.modalView}>

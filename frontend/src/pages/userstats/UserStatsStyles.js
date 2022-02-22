@@ -1,8 +1,247 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, PixelRatio } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
-export default StyleSheet.create({
+const getRatio = (value) => {
+    return Math.min(PixelRatio.get() * value, value);
+  }
+
+  const ios = StyleSheet.create({
+    topContainer: {
+        position: 'relative',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: getRatio(110),
+        width: '100%',
+        justifyContent: 'flex-start',
+        backgroundColor: 'transparent',
+    },
+    welcome: {
+        marginLeft: getRatio(10),
+        fontFamily: 'MontserratBold',
+        marginTop: getRatio(130),
+        color: 'white',
+        fontSize: getRatio(25)
+    },
+    subWelcome: {
+        padding: getRatio(10),
+        fontFamily: 'InconsolataLight',
+        color: 'white',
+        fontSize: getRatio(18)
+    },
+    firstContainer: {
+        position: 'relative',
+        left: 0,
+        right: 0,
+        top: 0,
+        marginBottom: getRatio(22),
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: getRatio(23),
+        backgroundColor: 'transparent',
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%'
+    },
+    profilePicture: {
+        width: getRatio(100),
+        height: getRatio(100),
+        marginTop: getRatio(10),
+        borderRadius: getRatio(100),
+        borderWidth: 1,
+        borderColor: 'white'
+    },
+    firstHeader: {
+        fontFamily: 'MontserratBold',
+        color: 'white',
+        fontSize: getRatio(15),
+        padding: getRatio(10),
+        marginBottom: -(getRatio(12)),
+        marginTop: getRatio(5)
+    },
+    topTrackArtistImage: {
+        width: getRatio(115),
+        height: getRatio(115),
+        marginTop: getRatio(10),
+        borderRadius: 100
+    },
+    firstSubHeader: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: getRatio(14),
+        padding: getRatio(10),
+        color: '#dbdbdb'
+    },
+    selectContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '80%',
+        marginLeft: -getRatio(10),
+        marginTop: getRatio(5),
+    },
+    selectButtonContainer: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    selectIcon: {
+        padding: getRatio(5),
+        width: getRatio(15),
+        height: getRatio(15),
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: 'grey'
+    },
+    selectText: {
+        color: 'white',
+        fontFamily: 'InconsolataMedium',
+        fontSize: getRatio(11),
+        paddingHorizontal: getRatio(5)
+    },
+    mainContainer: {
+        position: 'relative',
+        flex: 1,
+        backgroundColor: 'transparent',
+        flexDirection: 'column',
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        height: '100%',
+        marginBottom: -(getRatio(300))
+    },
+    topArtistsContainer: {
+        marginHorizontal: getRatio(10),
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        borderRadius: getRatio(10)
+    },
+    topArtistText: {
+        fontFamily: 'InconsolataMedium',
+        color: 'white',
+        alignSelf: 'center',
+        textAlign: 'center',
+        marginTop: getRatio(10),
+        marginBottom: getRatio(5),
+        fontSize: getRatio(12),
+        fontStyle: 'italic',
+        maxWidth: getRatio(100)
+    },
+    topSongsContainer: {
+        padding: getRatio(10),
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between'
+    },
+    topTracksContainer: {
+        padding: getRatio(10),
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    topTrackText: {
+        fontFamily: 'InconsolataMedium',
+        color: 'white',
+        alignSelf: 'flex-start',
+        textAlign: 'left',
+        marginTop: getRatio(8),
+        marginBottom: getRatio(5),
+        fontSize: getRatio(12),
+        fontStyle: 'italic',
+        maxWidth: getRatio(300),
+        marginRight: getRatio(20)
+    },
+    topTrackTextContainer: {
+        alignSelf: 'center'
+    },
+    topTrackArtistText: {
+        fontFamily: 'InconsolataMedium',
+        color: '#dbdbdb',
+        alignSelf: 'flex-start',
+        textAlign: 'left',
+        fontSize: getRatio(12),
+        fontStyle: 'italic',
+        marginRight: getRatio(20),
+        maxWidth: getRatio(300)
+    },
+    topTrackImage: {
+        width: getRatio(60),
+        height: getRatio(60),
+        marginRight: getRatio(20),
+        marginTop: getRatio(10),
+        borderRadius: 5
+    },
+    playImage: {
+        width: getRatio(22),
+        height: getRatio(22)
+    },
+    mainFont: {
+        fontFamily: 'InconsolataMedium',
+        fontSize: getRatio(16)
+    },
+    scroll: {
+        flex: 1,
+        height: '100%',
+        backgroundColor: '#0d324d'
+    },
+    tabView: {
+        flex: 1,
+        height: '100%',
+        backgroundColor: '#09263b',
+    },
+    noDataText: {
+        marginTop: getRatio(5),
+        fontFamily: 'MontserratBold',
+        color: 'grey',
+        fontSize: getRatio(13),
+        marginRight: getRatio(10),
+        padding: getRatio(10),
+        maxWidth: getRatio(390)
+    },
+    gradientContainer: {
+        height: '100%',
+        left: 0,
+        right: 0,
+        top: 0,
+        flex: 1,
+        position: 'absolute'
+    },
+    next: {
+        width: getRatio(17),
+        height: getRatio(17),
+        marginLeft: -(getRatio(10)),
+        marginTop: getRatio(7.5)
+    },
+    artistsRouteContainer: {
+        display: "flex",
+        flexDirection: 'row',
+        flexWrap: "wrap",
+        flex: 1,
+        justifyContent: 'center'
+    },
+    tracksRouteContainer: {
+        display: "flex",
+        flexDirection: 'column',
+        flexWrap: "wrap",
+        flex: 1
+    },
+    tabBarText: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(14)
+    },
+    tabContainer: {
+        marginTop: 2
+    }
+});
+
+const android = StyleSheet.create({
     topContainer: {
         position: 'relative',
         left: 0,
@@ -76,13 +315,13 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         width: '80%',
         marginLeft: -10,
-        marginTop: 5
+        marginTop: 5,
     },
     selectButtonContainer: {
         flexDirection: 'row',
         alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     selectIcon: {
         padding: width / 82.8,
@@ -298,6 +537,11 @@ export default StyleSheet.create({
     tabBarText: {
         fontFamily: 'MontserratBold',
         fontSize: width / 29.5714286
+    },
+    tabContainer: {
+        marginTop: height / 7.9333333
     }
 });
+
+export default Platform.OS == 'android' ? android : ios;
 

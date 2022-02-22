@@ -265,7 +265,7 @@ function UserStats({ navigation, route }) {
                 renderScene={renderScene}
                 onIndexChange={setIndex}
                 initialLayout={{ width: '100%' }}
-                style={{ color: 'black' }}
+                style={UserStatsStyles.tabContainer}
                 renderTabBar={renderTabBar}
             />
             <StatusBar style="auto" />
