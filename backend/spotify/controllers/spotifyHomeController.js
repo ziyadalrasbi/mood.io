@@ -80,22 +80,20 @@ const getListeningHabits = async (req, res, next) => {
     try {
         await api.getAudioFeaturesForTracks(req.body.tracks)
             .then((data) => {
-                var getHabits = { danceability: 0, energy: 0, valence: 0,  tempo: 0, mode: 0 };
+                var getHabits = { danceability: 0, energy: 0, valence: 0, instrumentalness: 0 };
                 for (var i = 0; i < data.body.audio_features.length; i++) {
                     getHabits = {
                         danceability: getHabits.danceability + data.body.audio_features[i].danceability,
                         energy: getHabits.energy + data.body.audio_features[i].energy,
                         valence: getHabits.valence + data.body.audio_features[i].valence,
-                        tempo: getHabits.tempo + data.body.audio_features[i].tempo,
-                        mode: getHabits.mode + data.body.audio_features[i].mode
+                        instrumentalness: getHabits.instrumentalness + data.body.audio_features[i].instrumentalness
                     };
                 }
                 getHabits = {
                     danceability: getHabits.danceability / 6,
                     energy: getHabits.energy / 6,
                     valence: getHabits.valence / 6,
-                    tempo: getHabits.tempo / 6,
-                    mode: getHabits.mode / 6
+                    instrumentalness: getHabits.instrumentalness / 6
                 }
 
                 var keys = [];
