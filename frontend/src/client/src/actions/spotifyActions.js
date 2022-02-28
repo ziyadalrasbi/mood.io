@@ -139,6 +139,27 @@ export const getTopTracksHome = (token) => (dispatch, getState) => Promise.resol
         })
 })
 
+export const getListeningHabits = (token, trackIds) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialTrackIds = { trackIds };
+    return fetch(`${baseUrl}/spotify/home/getListeningHabits`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            tracks: initialTrackIds.trackIds
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.habits);
+            return dispatch({ type: 'GET_LISTENING_HABITS', getListeningHabits: data.habits });
+        })
+})
+
 
 export const getUserProfile = (token) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };

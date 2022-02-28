@@ -11,7 +11,7 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
-import { getTopArtistsHome, getName, getTopTracksHome } from '../../client/src/actions/spotifyActions';
+import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabits } from '../../client/src/actions/spotifyActions';
 import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client/src/actions/dbActions';
 import { connect, useDispatch } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
@@ -61,7 +61,8 @@ function Home({ navigation, route }) {
       const getTracks = await dispatch(getTopTracksHome(token));
       const getDbArtists = await dispatch(getUserDatabaseArtists(userId));
       const getRecommendations = await dispatch(getPreviousRecommendations(userId));
-
+      const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds));
+      console.log(getHabits.getListeningHabits);
       setTopArtists(getArtists.getTopArtistsHome);
       setName(getUserName.getName);
       setTopTracks(getTracks.getTopTracksHome.topTracks);

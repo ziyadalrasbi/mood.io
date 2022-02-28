@@ -119,9 +119,12 @@ function UserStats({ navigation, route }) {
 
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(false);
+
     const [topArtists, setTopArtists] = useState({ topArtists: [] });
     const [topTracks, setTopTracks] = useState({ topTracks: [] });
+
     const [index, setIndex] = useState(route.params.index);
+    
     const [routes] = useState([
         { key: 'first', title: 'Top Artists' },
         { key: 'second', title: 'Top Tracks' },

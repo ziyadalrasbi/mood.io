@@ -6,6 +6,7 @@ export const initialState = {
     getTopArtistsHome: {},
     getName: {},
     getTopTracksHome: {},
+    getListeningHabits: {},
     getUserProfile: {},
     getTopArtistsStats: {},
     getTopTracksStats: {},
@@ -42,6 +43,11 @@ export const spotifyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 getTopArtistsHome: action.getTopArtistsHome
+            }
+        case 'GET_LISTENING_HABITS':
+            return {
+                ...state,
+                getListeningHabits: action.getListeningHabits
             }
         case 'GET_NAME':
             return {
