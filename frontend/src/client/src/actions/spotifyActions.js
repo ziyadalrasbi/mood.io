@@ -63,6 +63,7 @@ export const getUserId = (token) => (dispatch, getState) => Promise.resolve().th
 })
 
 export const getTopArtistsLogin = (token) => (dispatch, getState) => Promise.resolve().then(() => {
+    console.log(getState());
     const initialToken = { token };
     return fetch(`${baseUrl}/spotify/login/getUserTopArtists`, {
         method: 'post',
@@ -303,5 +304,9 @@ export const searchForArtists = (token, artist) => (dispatch, getState) => Promi
         .then(data => {
             return dispatch({ type: 'SEARCH_FOR_ARTISTS', searchForArtists: data.artists });
         })
+})
+
+export const spotifySignOut = () => (dispatch, getState) => Promise.resolve().then(() => {
+    return dispatch({ type: 'SIGN_OUT' });
 })
 

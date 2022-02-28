@@ -14,7 +14,6 @@ export const initUser = (user) => (dispatch, getState) => Promise.resolve().then
     })
         .then((res) => res.json())
         .then(data => {
-            console.log('success initializing user');
             return dispatch({ type: 'INIT_USER', initUser: data });
         })
 })
@@ -47,8 +46,7 @@ export const loginUser = (id) => (dispatch, getState) => Promise.resolve().then(
         })
         .then((res) => res.json())
         .then(data => {
-            console.log('success logging in user');
-            return dispatch({ type: 'LOGIN_USER', loginUser: data.user });
+            return dispatch({ type: 'LOGIN_USER', loginUser: data.user, isLoggedIn: true });
         })
 })
 

@@ -267,8 +267,15 @@ function Home({ navigation, route }) {
               and come back at a later date to view this data!
             </Text>
           }
-          <View style={{ height: newUser.newUser == true ? 500 : 30 }} />
+
         </View>
+        <View style={HomeStyles.firstContainer}>
+          <Text style={HomeStyles.firstHeader}>
+            Your Listening Habits
+          </Text>
+         <HabitsGraph />
+        </View>
+        <View style={{ height: newUser.newUser == true ? 500 : 40 }} />
         <StatusBar style="auto" />
       </View>
       <View style={{ height: '100%', backgroundColor: '#4e4376' }} />

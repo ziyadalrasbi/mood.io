@@ -13,7 +13,7 @@ import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
 import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 function UserStats({ navigation, route }) {
@@ -115,7 +115,8 @@ function UserStats({ navigation, route }) {
         second: SecondRoute,
     });
 
-    const [profile, setProfile] = useState({ name: "", picture: null, followers: null });
+    const userProfile = useSelector(state => state.spotifyReducer.getUserProfile);
+
     const [loading, setLoading] = useState(true);
     const [rloading, setRLoading] = useState(false);
     const [topArtists, setTopArtists] = useState({ topArtists: [] });
@@ -142,12 +143,7 @@ function UserStats({ navigation, route }) {
             const getToken = await dispatch(refreshAccessToken(token, refreshToken));
             const accessToken = getToken.refreshAccessToken;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-            const getProfile = await dispatch(getUserProfile(accessToken));
-            setProfile({
-                name: getProfile.getUserProfile.profile.name,
-                picture: getProfile.getUserProfile.profile.picture,
-                followers: getProfile.getUserProfile.profile.followers
-            });
+
             const getArtists = await dispatch(getTopArtistsStats(accessToken, 'medium_term'));
             if (getArtists.getTopArtistsStats != null) {
                 setTopArtists(getArtists.getTopArtistsStats);
@@ -176,12 +172,6 @@ function UserStats({ navigation, route }) {
         const accessToken = getToken.refreshAccessToken;
         console.log(accessToken)
         SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-        const getProfile = await dispatch(getUserProfile(accessToken));
-        setProfile({
-            name: getProfile.getUserProfile.profile.name,
-            picture: getProfile.getUserProfile.profile.picture,
-            followers: getProfile.getUserProfile.profile.followers
-        });
         const getArtists = await dispatch(getTopArtistsStats(accessToken, range));
         if (getArtists.getTopArtistsStats != null) {
             setTopArtists(getArtists.getTopArtistsStats);
@@ -218,13 +208,13 @@ function UserStats({ navigation, route }) {
                 <View style={UserStatsStyles.firstContainer}>
                     <Image
                         style={UserStatsStyles.profilePicture}
-                        source={profile.picture != null ? { uri: profile.picture } : defaultimg}
+                        source={userProfile.profile.picture != null ? { uri: userProfile.profile.picture } : defaultimg}
                     />
                     <Text style={UserStatsStyles.firstHeader}>
-                        {profile.name}
+                        {userProfile.profile.name}
                     </Text>
                     <Text style={UserStatsStyles.firstSubHeader}>
-                        Followers: {profile.followers}
+                        Followers: {userProfile.profile.followers}
                     </Text>
                 </View>
                 <View style={UserStatsStyles.selectContainer}>

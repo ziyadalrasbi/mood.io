@@ -83,16 +83,18 @@ export const spotifyReducer = (state = initialState, action) => {
                 ...state,
                 createPlaylist: action.createPlaylist
             }
-            case 'ADD_TRACKS_TO_PLAYLIST':
+        case 'ADD_TRACKS_TO_PLAYLIST':
             return {
                 ...state,
                 addTracksToPlaylist: action.addTracksToPlaylist
             }
-            case 'SEARCH_FOR_ARTISTS': 
+        case 'SEARCH_FOR_ARTISTS':
             return {
                 ...state,
                 searchForArtists: action.searchForArtists
             }
+        case 'SIGN_OUT':
+            return initialState;
         default:
             return state
     }

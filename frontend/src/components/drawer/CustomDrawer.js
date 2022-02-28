@@ -5,71 +5,38 @@ import { LinearGradient } from 'expo-linear-gradient';
 import CustomDrawerStyles from './CustomDrawerStyles';
 import * as SecureStore from 'expo-secure-store';
 import { signOut } from '../../client/src/actions/dbActions';
-import { refreshAccessToken, getUserProfile } from '../../client/src/actions/spotifyActions';
+import { refreshAccessToken, getUserProfile, spotifySignOut } from '../../client/src/actions/spotifyActions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
 import defaultimg from '../../../assets/icons/stats/default.png';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 const CustomDrawer = ({ props, navigation }) => {
 
     const dispatch = useDispatch();
 
-    const isDrawerOpen = useDrawerStatus() === 'open';
-
-    const [loading, setLoading] = useState(true);
-    const [profile, setProfile] = useState({ name: "", picture: "", followers: "" });
-    const [loaded] = useFonts({
-        MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-        InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
-        InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
-        InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
-        InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-    });
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const token = await SecureStore.getItemAsync('spotify_access_token');
-            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken));
-            const accessToken = getToken.refreshAccessToken;
-            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-            const getProfile = await dispatch(getUserProfile(accessToken));
-            setProfile({
-                name: getProfile.getUserProfile.profile.name,
-                picture: getProfile.getUserProfile.profile.picture,
-                followers: getProfile.getUserProfile.profile.followers
-            });
-        }
-
-        fetchData();
-        setLoading(false);
-    }, [loading]);
-
-    if (!loaded || loading) {
-        return null;
-    }
+    const userProfile = useSelector(state => state.spotifyReducer.getUserProfile);
 
     const signOutUser = async () => {
         await SecureStore.deleteItemAsync('spotify_access_token');
         await SecureStore.deleteItemAsync('spotify_refresh_token');
         await SecureStore.deleteItemAsync('user_id');
         await dispatch(signOut());
+        await dispatch(spotifySignOut());
         navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
     }
 
     return (
         <View style={{ flex: 1, backgroundColor: '#0d324d' }}>
-            {isDrawerOpen &&
+            {userProfile.profile != null &&
                 <View style={CustomDrawerStyles.firstContainer}>
                     <Image
                         style={CustomDrawerStyles.profilePicture}
-                        source={profile.picture != null ? { uri: profile.picture } : defaultimg}
+                        source={userProfile.profile.picture != null ? { uri: userProfile.profile.picture } : defaultimg}
                     />
                     <Text style={CustomDrawerStyles.firstHeader}>
-                        {profile.name}
+                        {userProfile.profile.name}
                     </Text>
                 </View>
             }
@@ -125,6 +92,7 @@ const mapStateToProps = (state) => {
     return {
         refreshAccessToken: state.spotifyReducer.refreshAccessToken,
         getUserProfile: state.spotifyReducer.getUserProfile,
+        spotifySignOut: state.spotifyReducer.spotifySignOut,
         signOut: state.dbReducer.signOut
     }
 }
@@ -132,6 +100,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
     refreshAccessToken,
     getUserProfile,
+    spotifySignOut,
     signOut
 }, dispatch);
 

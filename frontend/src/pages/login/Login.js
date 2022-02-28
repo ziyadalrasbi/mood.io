@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useFonts } from 'expo-font';
 import CustomCarousel from '../../components/carousel/CustomCarousel';
 import { LinearGradient } from 'expo-linear-gradient';
-import { requestAccessToken, getUserId, getTopArtistsLogin, } from '../../client/src/actions/spotifyActions';
+import { requestAccessToken, getUserId, getTopArtistsLogin, getUserProfile } from '../../client/src/actions/spotifyActions';
 import { initUser, loginUser, saveUserArtists } from '../../client/src/actions/dbActions';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -68,9 +68,9 @@ function Login({ navigation }) {
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
             SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
             const getUser = await dispatch(getUserId(accessToken));
+            await dispatch(getUserProfile(accessToken));
             const userId = getUser.getUserId;
             SecureStore.setItemAsync('user_id', userId, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-            console.log('id is ' + userId)
             await dispatch(initUser(userId));
             await dispatch(loginUser(userId));
             const getTopArtists = await dispatch(getTopArtistsLogin(accessToken));
@@ -113,7 +113,8 @@ const mapStateToProps = (state) => {
         initUser: state.dbReducer.initUser,
         loginUser: state.dbReducer.loginUser,
         getTopArtistsLogin: state.spotifyReducer.getTopArtistsLogin,
-        saveUserArtists: state.dbReducer.saveUserArtists
+        saveUserArtists: state.dbReducer.saveUserArtists,
+        getUserProfile: state.spotifyReducer.getUserProfile
     }
 }
 
@@ -122,7 +123,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     initUser,
     loginUser,
     getTopArtistsLogin,
-    saveUserArtists
+    saveUserArtists,
+    getUserProfile
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

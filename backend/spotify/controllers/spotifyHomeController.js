@@ -97,7 +97,24 @@ const getListeningHabits = async (req, res, next) => {
                     liveness: getHabits.liveness / 4,
                     valence: getHabits.valence / 4
                 }
-                res.json({ habits: getHabits });
+
+                var keys = [];
+                var values = [];
+
+                Object.keys(getHabits).forEach((key) => {
+                    keys.push(key);
+                })
+
+                Object.values(getHabits).forEach((value) => {
+                    values.push(value);
+                })
+
+                var habits = {
+                    keys: keys,
+                    values: values
+                };
+
+                res.json({ habits: habits });
             })
 
     } catch (error) {
