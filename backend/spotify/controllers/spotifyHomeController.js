@@ -90,10 +90,10 @@ const getListeningHabits = async (req, res, next) => {
                     };
                 }
                 getHabits = {
-                    danceability: getHabits.danceability / 6,
-                    energy: getHabits.energy / 6,
-                    valence: getHabits.valence / 6,
-                    instrumentalness: getHabits.instrumentalness / 6
+                    danceability: getHabits.danceability / req.body.amount,
+                    energy: getHabits.energy / req.body.amount,
+                    valence: getHabits.valence / req.body.amount,
+                    instrumentalness: getHabits.instrumentalness / req.body.amount
                 }
 
                 var keys = [];
