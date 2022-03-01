@@ -6,7 +6,6 @@ export default StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        marginBottom: 25,
         width: '100%',
         justifyContent: 'flex-start',
     },

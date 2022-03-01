@@ -4,29 +4,35 @@ import { View, Text, Dimensions, PixelRatio, Platform } from 'react-native';
 import HabitsGraphStyles from "./HabitsGraphStyles";
 const { width, height } = Dimensions.get('window');
 
-function HabitsGraph() {
+function HabitsGraph({ data }) {
 
     const getRatio = (value) => {
         return Math.min(PixelRatio.get() * value, value);
     }
 
     const chartConfig = {
-        backgroundGradientFrom: "#1E2923",
+        backgroundColor: '#ffffff',
+        backgroundGradientToOpacity: 0,
         backgroundGradientFromOpacity: 0,
-        backgroundGradientTo: "#08130D",
-        backgroundGradientToOpacity: 0.5,
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-        strokeWidth: 2, // optional, default 3
-        barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
+        color: (opacity = 1) => `rgba(0, 110, 199, ${opacity})`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        barRadius: 5,
+        fillShadowGradientOpacity:1,
     };
-    const data = {
-        labels: ["January", "February", "March", "April", "May", "June"],
+    const parsedData = {
+        labels: data.keys,
         datasets: [
             {
-                data: [20, 45, 28, 80, 99, 43]
+                data: data.values,
+                colors: [
+                    (opacity = 1) => `rgba(235, 235, 52, ${opacity})`,
+                    (opacity = 1) => `rgba(240, 46, 62, ${opacity})`,
+                    (opacity = 1) => `rgba(45, 235, 190, ${opacity})`,
+                    (opacity = 1) => `rgba(20, 44, 222, ${opacity})`,
+                ]
             }
-        ]
+        ],
+        
     };
 
     const style = {
@@ -38,13 +44,14 @@ function HabitsGraph() {
         <View style={HabitsGraphStyles.mainContainer}>
             <View style={HabitsGraphStyles.topContainer}>
                 <BarChart
-                    data={data}
+                    data={parsedData}
                     width={width}
-                    height={Platform.OS == 'android' ? 220 : getRatio(300)}
+                    height={Platform.OS == 'android' ? 220 : getRatio(340)}
                     chartConfig={chartConfig}
-                    yAxisLabel="$"
-
-                    style={{ backgroundColor: 'black' }}
+                    fromZero={true}
+                    withCustomBarColorFromData={true}
+                    flatColor={true}
+                    showBarTops={false}
                 />
             </View>
         </View>

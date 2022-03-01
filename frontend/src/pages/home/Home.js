@@ -29,7 +29,7 @@ function Home({ navigation, route }) {
   const [topTracks, setTopTracks] = useState({ topTracks: [] });
 
   const [trackIds, setTrackIds] = useState({ trackIds: [] });
-  const [habits, setHabits] = useState({ habits: [] });
+  const [habits, setHabits] = useState([]);
 
   const [newUser, setNewUser] = useState({ newUser: false });
 
@@ -62,12 +62,13 @@ function Home({ navigation, route }) {
       const getDbArtists = await dispatch(getUserDatabaseArtists(userId));
       const getRecommendations = await dispatch(getPreviousRecommendations(userId));
       const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds));
-      console.log(getHabits.getListeningHabits);
+
       setTopArtists(getArtists.getTopArtistsHome);
       setName(getUserName.getName);
       setTopTracks(getTracks.getTopTracksHome.topTracks);
       setTrackIds(getTracks.getTopTracksHome.trackIds);
-
+      setHabits(getHabits.getListeningHabits);
+      console.log(getArtists.getTopArtistsHome.length)
       // STILL NEEDS FIXING 
       if (getDbArtists.getUserDatabaseArtists.length == 0) {
         setNewUser({ newUser: true });
@@ -270,13 +271,21 @@ function Home({ navigation, route }) {
           }
 
         </View>
-        <View style={HomeStyles.firstContainer}>
-          <Text style={HomeStyles.firstHeader}>
+        <View style={HomeStyles.fifthContainer}>
+          <Text style={HomeStyles.fifthHeader}>
             Your Listening Habits
           </Text>
-         <HabitsGraph />
+          {habits != null &&
+            <HabitsGraph data={habits} />
+          }
+          {habits == null &&
+            <Text style={HomeStyles.noDataText}>
+              It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+              and come back at a later date to view this data!
+            </Text>
+          }
         </View>
-        <View style={{ height: newUser.newUser == true ? 500 : 40 }} />
+        <View style={{ height: newUser.newUser == true ? 500 : 5 }} />
         <StatusBar style="auto" />
       </View>
       <View style={{ height: '100%', backgroundColor: '#4e4376' }} />

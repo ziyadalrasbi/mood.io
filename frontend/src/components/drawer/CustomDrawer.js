@@ -16,7 +16,37 @@ const CustomDrawer = ({ props, navigation }) => {
 
     const dispatch = useDispatch();
 
+    
     const userProfile = useSelector(state => state.spotifyReducer.getUserProfile);
+    const [loading, setLoading] = useState(true);
+
+    const [loaded] = useFonts({
+        MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+        InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
+        InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
+        InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
+        InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
+    });
+
+    useEffect(() => {
+        const fetchData = async () => {
+
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+            const accessToken = getToken.refreshAccessToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            await dispatch(getUserProfile(accessToken));
+        }
+
+        fetchData();
+        setLoading(false);
+    }, [loading, dispatch]);
+
+    if (!loaded || loading) {
+        return null;
+    }
 
     const signOutUser = async () => {
         await SecureStore.deleteItemAsync('spotify_access_token');

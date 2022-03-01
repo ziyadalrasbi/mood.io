@@ -272,7 +272,24 @@ const ios = StyleSheet.create({
   allContainer: {
     flexDirection: 'row',
     marginRight: getRatio(10)
-  }
+  },
+  fifthContainer: {
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    width: '100%',
+    marginBottom: getRatio(25),
+    justifyContent: 'flex-start',
+  },
+  fifthHeader: {
+    marginTop: getRatio(20),
+    marginBottom: getRatio(20),
+    fontFamily: 'MontserratBold',
+    color: 'white',
+    fontSize: getRatio(15),
+    padding: getRatio(10),
+  },
 });
 
 const android = StyleSheet.create({
@@ -557,7 +574,24 @@ const android = StyleSheet.create({
   allContainer: {
     flexDirection: 'row',
     marginRight: width / 41.4
-  }
+  },
+  fifthContainer: {
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    width: '100%',
+    marginBottom: height / 35.84,
+    justifyContent: 'flex-start',
+  },
+  fifthHeader: {
+    marginTop: height / 44.8,
+    marginBottom: height / 44.8,
+    fontFamily: 'MontserratBold',
+    color: 'white',
+    fontSize: width / 27.6,
+    padding: width / 41.4,
+  },
 });
 
 export default Platform.OS == 'android' ? android : ios;
