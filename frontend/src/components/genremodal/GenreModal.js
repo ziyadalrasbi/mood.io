@@ -8,7 +8,7 @@ import GenreSelect from '../genreselect/GenreSelect';
 function GenreModal({ newUser, navigation }) {
 
   const [modalVisible, setModalVisible] = useState(newUser);
-  console.log('modal is ' + modalVisible)
+
   return (
     <View style={[GenreModalStyles.modalContainer, { display: modalVisible == true ? 'flex' : 'none' }]}>
       <View style={GenreModalStyles.centeredView}>

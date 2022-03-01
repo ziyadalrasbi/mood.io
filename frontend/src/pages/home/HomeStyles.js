@@ -265,6 +265,12 @@ const ios = StyleSheet.create({
     marginLeft: -(getRatio(10)),
     marginTop: getRatio(16.5)
   },
+  more: {
+    width: getRatio(17),
+    height: getRatio(17),
+    marginLeft: -(getRatio(10)),
+    marginTop: getRatio(32.5)
+  },
   playImage: {
     width: getRatio(22),
     height: getRatio(22)
@@ -566,6 +572,12 @@ const android = StyleSheet.create({
     height: width / 24.3529412,
     marginLeft: -(width / 41.4),
     marginTop: height / 54.3030303
+  },
+  more: {
+    width: width / 24.3529412,
+    height: width / 24.3529412,
+    marginLeft: -(width / 41.4),
+    marginTop: height / 27.5692308
   },
   playImage: {
     width: 20,

@@ -61,14 +61,15 @@ function Home({ navigation, route }) {
       const getTracks = await dispatch(getTopTracksHome(token));
       const getDbArtists = await dispatch(getUserDatabaseArtists(userId));
       const getRecommendations = await dispatch(getPreviousRecommendations(userId));
-      const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds));
+      const amount = getArtists.getTopArtistsHome.length;
+      const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount));
 
       setTopArtists(getArtists.getTopArtistsHome);
       setName(getUserName.getName);
       setTopTracks(getTracks.getTopTracksHome.topTracks);
       setTrackIds(getTracks.getTopTracksHome.trackIds);
       setHabits(getHabits.getListeningHabits);
-      console.log(getArtists.getTopArtistsHome.length)
+
       // STILL NEEDS FIXING 
       if (getDbArtists.getUserDatabaseArtists.length == 0) {
         setNewUser({ newUser: true });
@@ -272,9 +273,22 @@ function Home({ navigation, route }) {
 
         </View>
         <View style={HomeStyles.fifthContainer}>
-          <Text style={HomeStyles.fifthHeader}>
-            Your Listening Habits
-          </Text>
+          <View style={HomeStyles.headerContainer}>
+            <Text style={HomeStyles.fifthHeader}>
+              Your Listening Habits
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
+              <View style={HomeStyles.allContainer}>
+                <Text style={HomeStyles.fifthHeader}>
+                  More
+                </Text>
+                <Image
+                  style={HomeStyles.more}
+                  source={nextimg}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
           {habits != null &&
             <HabitsGraph data={habits} />
           }
