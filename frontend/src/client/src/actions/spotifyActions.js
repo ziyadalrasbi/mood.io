@@ -145,7 +145,7 @@ export const getTopTracksHome = (token, signal) => (dispatch, getState) => Promi
         })
 })
 
-export const getListeningHabits = (token, trackIds, amount, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getListeningHabitsHome = (token, trackIds, amount, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     const initialTrackIds = { trackIds };
     const initialAmount = { amount };
@@ -164,7 +164,7 @@ export const getListeningHabits = (token, trackIds, amount, signal) => (dispatch
     })
         .then(res => res.json())
         .then(data => {
-            return dispatch({ type: 'GET_LISTENING_HABITS', getListeningHabits: data.habits });
+            return dispatch({ type: 'GET_LISTENING_HABITS_HOME', getListeningHabitsHome: data.habits });
         })
 })
 

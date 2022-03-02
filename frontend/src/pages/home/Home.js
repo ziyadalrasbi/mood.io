@@ -11,7 +11,7 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
-import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabits } from '../../client/src/actions/spotifyActions';
+import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabitsHome } from '../../client/src/actions/spotifyActions';
 import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client/src/actions/dbActions';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
@@ -63,13 +63,13 @@ function Home({ navigation, route }) {
         const getDbArtists = await dispatch(getUserDatabaseArtists(userId, getDbArtistsController.signal));
         const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
         const amount = getArtists.getTopArtistsHome.length;
-        const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
+        const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
         setTopArtists(getArtists.getTopArtistsHome);
         setName(getUserName.getName);
         setTopTracks(getTracks.getTopTracksHome.topTracks);
         setTrackIds(getTracks.getTopTracksHome.trackIds);
-        setHabits(getHabits.getListeningHabits);
+        setHabits(getHabits.getListeningHabitsHome);
 
         if (getDbArtists.getUserDatabaseArtists.length == 0) {
           setNewUser({ newUser: true });

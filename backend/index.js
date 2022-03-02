@@ -36,7 +36,7 @@ app.use('/spotify/login', spotifyLoginRoutes.routes);
 app.use('/spotify/home', spotifyHomeRoutes.routes);
 app.use('/spotify/results', spotifyResultsRoutes.routes);
 app.use('/spotify/stats', spotifyStatsRoutes.routes);
-app.use('/spotify/habits', spotifyStatsRoutes.routes);
+app.use('/spotify/habits', spotifyHabitsRoutes.routes);
 
 app.listen(process.env.PORT || 19001, () => {
     console.log(`Server listening on ${PORT}`)
