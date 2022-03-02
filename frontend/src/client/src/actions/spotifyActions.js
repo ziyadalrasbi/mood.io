@@ -226,7 +226,7 @@ export const getTopTracksStats = (token, range, signal) => (dispatch, getState) 
     })
         .then(res => res.json())
         .then(data => {
-            return dispatch({ type: 'GET_TOP_TRACKS_STATS', getTopTracksStats: data.topTracks });
+            return dispatch({ type: 'GET_TOP_TRACKS_STATS', getTopTracksStats: data });
         })
 })
 
@@ -340,6 +340,29 @@ export const searchForArtists = (token, artist, signal) => (dispatch, getState) 
         .then(res => res.json())
         .then(data => {
             return dispatch({ type: 'SEARCH_FOR_ARTISTS', searchForArtists: data.artists });
+        })
+})
+
+export const getListeningHabits = (token, trackIds, amount, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialToken = { token };
+    const initialTrackIds = { trackIds };
+    const initialAmount = { amount };
+    return fetch(`${baseUrl}/spotify/habits/getListeningHabits`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: initialToken.token,
+            tracks: initialTrackIds.trackIds,
+            amount: initialAmount.amount
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'GET_LISTENING_HABITS', getListeningHabits: data });
         })
 })
 

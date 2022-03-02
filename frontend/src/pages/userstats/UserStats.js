@@ -151,10 +151,10 @@ function UserStats({ navigation, route }) {
                 }
                 const getTracks = await dispatch(getTopTracksStats(accessToken, 'medium_term', getTracksController.signal));
                 if (getTracks.getTopTracksStats != null) {
-                    setTopTracks(getTracks.getTopTracksStats);
+                    setTopTracks(getTracks.getTopTracksStats.topTracks);
                 }
             } catch (error) {
-
+                console.log('Error getting user stats, please try again. '+ error);
             }
         }
         fetchData().then(() => setLoading(false));
@@ -193,7 +193,7 @@ function UserStats({ navigation, route }) {
 
             const getTracks = await dispatch(getTopTracksStats(accessToken, range, getTracksController.signal));
             if (getTracks.getTopTracksStats != null) {
-                setTopTracks(getTracks.getTopTracksStats);
+                setTopTracks(getTracks.getTopTracksStats.topTracks);
             }
 
             setRLoading(false);

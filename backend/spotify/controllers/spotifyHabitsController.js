@@ -21,29 +21,29 @@ const getListeningHabits = async (req, res, next) => {
                 }
                 for (var i = 0; i < data.body.audio_features.length; i++) {
                     getGraphHabits = {
-                        danceability: getHabits.danceability + data.body.audio_features[i].danceability,
-                        energy: getHabits.energy + data.body.audio_features[i].energy,
-                        valence: getHabits.valence + data.body.audio_features[i].valence,
-                        instrumentalness: getHabits.instrumentalness + data.body.audio_features[i].instrumentalness
+                        danceability: getGraphHabits.danceability + data.body.audio_features[i].danceability,
+                        energy: getGraphHabits.energy + data.body.audio_features[i].energy,
+                        valence: getGraphHabits.valence + data.body.audio_features[i].valence,
+                        instrumentalness: getGraphHabits.instrumentalness + data.body.audio_features[i].instrumentalness
                     };
                     getCardHabits = {
-                        loudness: getHabits.loudness + data.body.audio_features[i].loudness,
-                        tempo: getHabits.tempo + data.body.audio_features[i].tempo,
-                        speechiness: getHabits.speechiness + data.body.audio_features[i].speechiness,
-                        acousticness: getHabits.acousticness + data.body.audio_features[i].acousticness
+                        loudness: getCardHabits.loudness + data.body.audio_features[i].loudness,
+                        tempo: getCardHabits.tempo + data.body.audio_features[i].tempo,
+                        speechiness: getCardHabits.speechiness + data.body.audio_features[i].speechiness,
+                        acousticness: getCardHabits.acousticness + data.body.audio_features[i].acousticness
                     };
                 }
                 getGraphHabits = {
-                    danceability: getHabits.danceability / req.body.amount,
-                    energy: getHabits.energy / req.body.amount,
-                    valence: getHabits.valence / req.body.amount,
-                    instrumentalness: getHabits.instrumentalness / req.body.amount
+                    danceability: getGraphHabits.danceability / req.body.amount,
+                    energy: getGraphHabits.energy / req.body.amount,
+                    valence: getGraphHabits.valence / req.body.amount,
+                    instrumentalness: getGraphHabits.instrumentalness / req.body.amount
                 }
                 getCardHabits = {
-                    loudness: getHabits.loudness / req.body.amount,
-                    tempo: getHabits.tempo / req.body.amount,
-                    speechiness: getHabits.speechiness / req.body.amount,
-                    acousticness: getHabits.acousticness / req.body.amount
+                    loudness: getCardHabits.loudness / req.body.amount,
+                    tempo: getCardHabits.tempo / req.body.amount,
+                    speechiness: getCardHabits.speechiness / req.body.amount,
+                    acousticness: getCardHabits.acousticness / req.body.amount
                 }
 
                 var keys = [];

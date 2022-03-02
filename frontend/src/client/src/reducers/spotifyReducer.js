@@ -14,7 +14,8 @@ export const initialState = {
     getRecommendations: {},
     createPlaylist: {},
     addTracksToPlaylist: {},
-    searchForArtists: {}
+    searchForArtists: {},
+    getListeningHabits: {}
 }
 
 export const spotifyReducer = (state = initialState, action) => {
@@ -98,6 +99,11 @@ export const spotifyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 searchForArtists: action.searchForArtists
+            }
+        case 'GET_LISTENING_HABITS':
+            return {
+                ...state,
+                getListeningHabits: action.getListeningHabits
             }
         case 'SIGN_OUT':
             return initialState;

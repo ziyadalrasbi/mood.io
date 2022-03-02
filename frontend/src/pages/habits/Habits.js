@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import HabitsStyles from './HabitsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { refreshAccessToken, getUserProfile, getTopArtistsStats, getTopTracksStats } from '../../client/src/actions/spotifyActions';
+import { refreshAccessToken, getUserProfile, getTopArtistsStats, getTopTracksStats, getListeningHabits } from '../../client/src/actions/spotifyActions';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
@@ -16,19 +16,56 @@ import LottieView from 'lottie-react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-function Habits({ navigation, route }) {
+function Habits({ navigation }) {
 
     const dispatch = useDispatch();
 
-    // if (loading) {
-    //     return (
-    //         <Loading page={"home"} />
-    //     );
-    // }
+    const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
+    const [selectedIndex, setSelectedIndex] = useState(2);
 
-    // })
+    useEffect(() => {
+        const tokenController = new AbortController();
+        const getArtistsController = new AbortController();
+        const getTracksController = new AbortController();
+        const getHabitsController = new AbortController();
+
+        const fetchData = async () => {
+            try {
+                const token = await SecureStore.getItemAsync('spotify_access_token');
+                const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+
+                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+                const accessToken = getToken.refreshAccessToken;
+                SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+
+                const getTracks = await dispatch(getTopTracksStats(accessToken, 'medium_term', getTracksController.signal));
+                const trackIds = getTracks.getTopTracksStats.trackIds;
+                const amount = getTracks.getTopTracksStats.trackIds.length;
+
+                const getHabits = await dispatch(getListeningHabits(accessToken, trackIds, amount, getHabitsController.signal));
+                console.log(getHabits.getListeningHabits);
+
+
+            } catch (error) {
+                console.log('Error getting users listening habits, please try again. ' + error);
+            }
+        }
+        fetchData().then(() => setLoading(false));
+
+        return () => {
+            tokenController.abort();
+            getArtistsController.abort();
+            getTracksController.abort();
+            getHabitsController.abort();
+        }
+    }, [loading, dispatch])
+
+    if (loading) {
+        return (
+            <Loading page={"home"} />
+        );
+    }
 
     return (
         <ScrollView style={HabitsStyles.scroll}>
