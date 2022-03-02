@@ -23,10 +23,14 @@ const android = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-end'
   },
-  logo: {
+  logoContainer: {
     flex: 1,
     justifyContent: 'center'
   },
+  logo: {
+    width: 50,
+    height: 50
+  },  
   gradientContainer: {
     height: '100%', 
     left: 0,
@@ -53,10 +57,14 @@ const ios = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-end'
   },
-  logo: {
+  logoContainer: {
     flex: 1,
     justifyContent: 'center'
   },
+  logo: {
+    width: getRatio(250),
+    height: getRatio(70)
+  }, 
   gradientContainer: {
     height: '100%', 
     left: 0,

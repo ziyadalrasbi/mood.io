@@ -4,6 +4,7 @@ export const initialState = {
     isLoggedIn: false,
     signOut: {},
     saveUserArtists: {},
+    newUser: true,
     getUserDatabaseArtists: {},
     getPreviousRecommendations: {},
     getRecentMood: {},
@@ -30,7 +31,8 @@ export const dbReducer = (state = initialState, action) => {
         case 'SAVE_USER_ARTISTS':
             return {
                 ...state,
-                saveUserArtists: action.saveUserArtists
+                saveUserArtists: action.saveUserArtists,
+                newUser: false
             }
         case 'GET_USER_DATABASE_ARTISTS':
             return {

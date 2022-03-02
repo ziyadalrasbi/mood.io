@@ -65,7 +65,6 @@ function Upload({ navigation }) {
       const getFace = await dispatch(detectFace(res.base64))
       if (getFace.detectFace[0] != null) {
         setMoodAnalysis({ moodAnalysis: getFace.detectFace[0].expressions });
-        console.log(getFace.detectFace[0].expressions)
         setLoading(false);
       } else {
         setMoodAnalysis({ moodAnalysis: null });
@@ -73,7 +72,6 @@ function Upload({ navigation }) {
       }
     }
   }
-
 
   const navigateResults = async () => {
     var jsonText = JSON.stringify(moodAnalysis.moodAnalysis);
@@ -147,13 +145,13 @@ function Upload({ navigation }) {
         }
         <View style={UploadStyles.buttonContainer}>
           <Button
-            style={UploadStyles.uploadButton}
+            style={[UploadStyles.uploadButton, loading || (selectedImage.uri == "") ? { display:'none' } : {}]}
             uppercase={false}
             mode="contained"
             labelStyle={UploadStyles.mainFont}
             onPress={() => analyseImage()}
           >
-            upload image
+            Reupload
           </Button>
           {moodAnalysis.moodAnalysis != null ?
             <Button
@@ -164,7 +162,7 @@ function Upload({ navigation }) {
               disabled={Object.keys(moodAnalysis.moodAnalysis).length > 0 ? false : true}
               onPress={() => navigateResults()}
             >
-              continue
+              Continue
             </Button>
             :
             <Text style={{ display: !loading && selectedImage.uri != "" ? "flex" : "none", color: 'red', fontFamily: 'MontserratBold', marginTop: 10, paddingHorizontal: 10 }}>
@@ -173,10 +171,10 @@ function Upload({ navigation }) {
           }
           {loading &&
             <LottieView
-              source={require('./animations/142-loading-animation.json')}
+              source={require('./animations/loading.json')}
               autoPlay
-              loop={true}
-              style={{ marginTop: -5, width: 75, height: 75 }}
+              loop
+              style={{ width: 55, height: 55 }}
             />
           }
         </View>

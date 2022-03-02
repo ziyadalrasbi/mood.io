@@ -46,7 +46,7 @@ export const loginUser = (id) => (dispatch, getState) => Promise.resolve().then(
         })
         .then((res) => res.json())
         .then(data => {
-            return dispatch({ type: 'LOGIN_USER', loginUser: data.user, isLoggedIn: true });
+            return dispatch({ type: 'LOGIN_USER', loginUser: data.user });
         })
 })
 
@@ -80,13 +80,14 @@ export const saveUserArtists = (user, artists) => (dispatch, getState) => Promis
     })
         .then((res) => res.json())
         .then(data => {
-            return dispatch({ type: 'SAVE_USER_ARTISTS', saveUserArtists: data });
+            return dispatch({ type: 'SAVE_USER_ARTISTS', saveUserArtists: data, newUser: false });
         })
 })
 
-export const getUserDatabaseArtists = (id) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getUserDatabaseArtists = (id, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialId = { id };
     return fetch(`${baseUrl}/database/results/getUserArtists`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -98,7 +99,6 @@ export const getUserDatabaseArtists = (id) => (dispatch, getState) => Promise.re
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data.topGenres == null);
             if (data.topGenres == null) {
                 return dispatch({ type: 'GET_USER_DATABASE_ARTISTS', getUserDatabaseArtists: [] });
             } else {
@@ -107,8 +107,9 @@ export const getUserDatabaseArtists = (id) => (dispatch, getState) => Promise.re
         })
 })
 
-export const getPreviousRecommendations = (id) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getPreviousRecommendations = (id, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     return fetch(`${baseUrl}/database/home/getRecommendations`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',

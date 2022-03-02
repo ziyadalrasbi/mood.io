@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import LoadingStyles from './LoadingStyles';
 import AnimatedLoader from 'react-native-animated-loader';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
+import logo from '../../../assets/icons/testlogo.png'
 
 function Loading({ page }) {
 
@@ -18,6 +19,13 @@ function Loading({ page }) {
 
     return (
         <View style={LoadingStyles.mainContainer}>
+            {page == 'main' &&
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={['#185a9d', '#4ca1af']}
+                    style={LoadingStyles.gradientContainer}
+                />
+            }
             {page == "results" &&
                 <LinearGradient
                     // Background Linear Gradient
@@ -28,7 +36,7 @@ function Loading({ page }) {
             {page == "home" &&
                 <LinearGradient
                     // Background Linear Gradient
-                    colors={['#4ca1af', '#c4e0e5']}
+                    colors={['#09203f', '#537895']}
                     style={LoadingStyles.gradientContainer}
                 />
             }
@@ -40,7 +48,7 @@ function Loading({ page }) {
                     source={require('./animations/1579-music-loading.json')}
                     speed={1}>
                     <View style={LoadingStyles.loadingContainer}>
-                        <Text style={LoadingStyles.loadingText}>generating recommendations</Text>
+                        <Text style={LoadingStyles.loadingText}>Generating Recommendations</Text>
                         <AnimatedEllipsis
                             minOpacity={0.2}
                             animationDelay={200}
@@ -54,10 +62,10 @@ function Loading({ page }) {
                     visible={true}
                     overlayColor="transparent"
                     animationStyle={LoadingStyles.lottie}
-                    source={require('./animations/46472-lurking-cat.json')}
+                    source={require('./animations/27-loading.json')}
                     speed={1}>
                     <View style={LoadingStyles.loadingContainer}>
-                        <Text style={LoadingStyles.loadingText}>loading your profile</Text>
+                        <Text style={LoadingStyles.loadingText}>Loading Your Profile</Text>
                         <AnimatedEllipsis
                             minOpacity={0.2}
                             animationDelay={200}
@@ -65,6 +73,14 @@ function Loading({ page }) {
                         />
                     </View>
                 </AnimatedLoader>
+            }
+            {page == 'main' &&
+                <View style={LoadingStyles.firstContainer}>
+                    <Image
+                    style={LoadingStyles.logo}
+                    source={logo}
+                  />
+                </View>
             }
 
         </View>

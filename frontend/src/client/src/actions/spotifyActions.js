@@ -63,7 +63,6 @@ export const getUserId = (token) => (dispatch, getState) => Promise.resolve().th
 })
 
 export const getTopArtistsLogin = (token) => (dispatch, getState) => Promise.resolve().then(() => {
-    console.log(getState());
     const initialToken = { token };
     return fetch(`${baseUrl}/spotify/login/getUserTopArtists`, {
         method: 'post',
@@ -85,9 +84,10 @@ export const getTopArtistsLogin = (token) => (dispatch, getState) => Promise.res
         })
 })
 
-export const getTopArtistsHome = (token) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getTopArtistsHome = (token, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     return fetch(`${baseUrl}/spotify/home/getTopArtists`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -103,9 +103,10 @@ export const getTopArtistsHome = (token) => (dispatch, getState) => Promise.reso
         })
 })
 
-export const getName = (token) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getName = (token, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     return fetch(`${baseUrl}/spotify/home/getName`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -121,9 +122,10 @@ export const getName = (token) => (dispatch, getState) => Promise.resolve().then
         })
 })
 
-export const getTopTracksHome = (token) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getTopTracksHome = (token, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     return fetch(`${baseUrl}/spotify/home/getTopTracks`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -139,11 +141,12 @@ export const getTopTracksHome = (token) => (dispatch, getState) => Promise.resol
         })
 })
 
-export const getListeningHabits = (token, trackIds, amount) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getListeningHabits = (token, trackIds, amount, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     const initialTrackIds = { trackIds };
     const initialAmount = { amount };
     return fetch(`${baseUrl}/spotify/home/getListeningHabits`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',

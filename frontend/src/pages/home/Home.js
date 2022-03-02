@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font';
@@ -13,12 +13,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
 import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabits } from '../../client/src/actions/spotifyActions';
 import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client/src/actions/dbActions';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
 import { bindActionCreators } from 'redux';
+import cacheAssests from '../../../cacheAssets';
 
 function Home({ navigation, route }) {
+
+  const [newUser, setNewUser] = useState({ newUser: false });
 
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -31,17 +34,7 @@ function Home({ navigation, route }) {
   const [trackIds, setTrackIds] = useState({ trackIds: [] });
   const [habits, setHabits] = useState([]);
 
-  const [newUser, setNewUser] = useState({ newUser: false });
-
   const [recommendations, setRecommendations] = useState({ recommendations: [] });
-
-  const [loaded] = useFonts({
-    MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-    InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
-    InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
-    InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
-    InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-  });
 
   function isArrayInArray(arr, item) {
     var item_as_string = JSON.stringify(item);
@@ -52,17 +45,18 @@ function Home({ navigation, route }) {
   }
 
   useEffect(() => {
+    let controller = new AbortController();
     const fetchData = async () => {
       const token = await SecureStore.getItemAsync('spotify_access_token');
       const userId = await SecureStore.getItemAsync('user_id');
 
-      const getArtists = await dispatch(getTopArtistsHome(token));
-      const getUserName = await dispatch(getName(token));
-      const getTracks = await dispatch(getTopTracksHome(token));
-      const getDbArtists = await dispatch(getUserDatabaseArtists(userId));
-      const getRecommendations = await dispatch(getPreviousRecommendations(userId));
+      const getArtists = await dispatch(getTopArtistsHome(token, controller.signal));
+      const getUserName = await dispatch(getName(token, controller.signal));
+      const getTracks = await dispatch(getTopTracksHome(token, controller.signal));
+      const getDbArtists = await dispatch(getUserDatabaseArtists(userId, controller.signal));
+      const getRecommendations = await dispatch(getPreviousRecommendations(userId, controller.signal));
       const amount = getArtists.getTopArtistsHome.length;
-      const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount));
+      const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount, controller.signal));
 
       setTopArtists(getArtists.getTopArtistsHome);
       setName(getUserName.getName);
@@ -70,7 +64,6 @@ function Home({ navigation, route }) {
       setTrackIds(getTracks.getTopTracksHome.trackIds);
       setHabits(getHabits.getListeningHabits);
 
-      // STILL NEEDS FIXING 
       if (getDbArtists.getUserDatabaseArtists.length == 0) {
         setNewUser({ newUser: true });
       }
@@ -83,228 +76,233 @@ function Home({ navigation, route }) {
           recommendation.push(current);
         }
       }
+
       setRecommendations(recommendation);
     }
+
 
     fetchData().then(() => {
       setLoading(false)
     }).catch((error) => {
-      console.log('Error fetching top tracks, please try again. \n' + error);
+      console.log('Error fetching home data, please try again. \n' + error);
       throw error;
     });
 
-  }, []);
+    return () => controller?.abort;
 
-  if (!loaded || loading) {
+  }, [dispatch]);
+
+  if (loading) {
     return (
       <Loading page={"home"} />
     )
   }
 
   return (
-    <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
-      <LinearGradient
-        // Background Linear Gradient
-        colors={['#2b5876', '#4e4376']}
-        style={HomeStyles.gradientContainer}
-      />
-      <GenreModal newUser={newUser.newUser} navigation={navigation} />
-      <View style={HomeStyles.mainContainer}>
-        <View style={HomeStyles.topContainer}>
-          <Navbar navigation={navigation} name={name} page={'home'} />
-        </View>
-        <View style={HomeStyles.firstContainer}>
-          <Text style={HomeStyles.firstHeader}>
-            Discover Music
-          </Text>
-          <Button
-            style={HomeStyles.startButton}
-            uppercase={false}
-            mode="contained"
-            labelStyle={HomeStyles.mainFont}
-            onPress={() => navigation.navigate('UploadOptions')}
-          >
-            get started
-          </Button>
-        </View>
-        <View style={HomeStyles.secondContainer}>
-          <View style={HomeStyles.headerContainer}>
-            <Text style={HomeStyles.secondHeader}>
-              Recent Recommendations
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
-              <View style={HomeStyles.allContainer}>
-                <Text style={HomeStyles.thirdHeader}>
-                  All
-                </Text>
-                <Image
-                  style={HomeStyles.next}
-                  source={nextimg}
-                />
-              </View>
-            </TouchableOpacity>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['#2b5876', '#4e4376']}
+          style={HomeStyles.gradientContainer}
+        />
+        <View style={HomeStyles.mainContainer}>
+          <View style={HomeStyles.topContainer}>
+            <Navbar navigation={navigation} name={name} page={'home'} />
           </View>
-          <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
-            {recommendations.length > 0 && recommendations.map((track, index) =>
-              <View key={index}>
-                <TouchableOpacity
-                  style={{
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 2, elevation: 5
-                  }}
-                  onPress={() => Linking.openURL(track[3])}>
+          <View style={HomeStyles.firstContainer}>
+            <Text style={HomeStyles.firstHeader}>
+              Discover Music
+            </Text>
+            <Button
+              style={HomeStyles.startButton}
+              uppercase={false}
+              mode="contained"
+              labelStyle={HomeStyles.mainFont}
+              onPress={() => navigation.navigate('UploadOptions')}
+            >
+              Get started
+            </Button>
+          </View>
+          <View style={HomeStyles.secondContainer}>
+            <View style={HomeStyles.headerContainer}>
+              <Text style={HomeStyles.secondHeader}>
+                Recent Recommendations
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
+                <View style={HomeStyles.allContainer}>
+                  <Text style={HomeStyles.thirdHeader}>
+                    All
+                  </Text>
                   <Image
-                    style={HomeStyles.recommendationImage}
-                    source={{ uri: track[2] }}
+                    style={HomeStyles.next}
+                    source={nextimg}
                   />
-                </TouchableOpacity>
-                <View style={HomeStyles.topTrackTextContainer}>
-                  <Text style={HomeStyles.topRecommendationTrackText}>{track[0]}</Text>
-                  <Text style={HomeStyles.topRecommendationTrackArtistText}>{track[1]}</Text>
                 </View>
-              </View>
-            )}
-          </ScrollView>
-          {recommendations.length == 0 &&
-            <Text style={HomeStyles.noDataText}>
-              No recommendations yet. To get recommendations, press the "get started" button above!
-            </Text>}
-        </View>
-        <View style={HomeStyles.thirdContainer}>
-          <View style={HomeStyles.headerContainer}>
-            <Text style={HomeStyles.thirdHeader}>
-              Your Top Artists
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
-              <View style={HomeStyles.allContainer}>
-                <Text style={HomeStyles.thirdHeader}>
-                  All
-                </Text>
-                <Image
-                  style={HomeStyles.next}
-                  source={nextimg}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-          <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
-            {topArtists.length > 0 && topArtists.map((artist, index) =>
-              <View key={index}>
-                <TouchableOpacity
-                  style={{
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 2, elevation: 5
-                  }}
-                  onPress={() => Linking.openURL(artist[2])}>
-                  <Image
-                    style={HomeStyles.topTrackArtistImage}
-                    source={{ uri: artist[1] }}
-                  />
-                </TouchableOpacity>
-                <Text style={HomeStyles.topArtistText}>{artist[0]}</Text>
-              </View>
-            )}
-          </ScrollView>
-          {topArtists.length == 0 &&
-            <Text style={HomeStyles.noDataText}>
-              It seems like you haven't listened to much music on your Spotify account. Listen to some more music
-              and come back at a later date to view this data!
-            </Text>}
-        </View>
-        <View style={HomeStyles.fourthContainer}>
-          <View style={HomeStyles.headerContainer}>
-            <Text style={HomeStyles.fourthHeader}>
-              Your Top Tracks
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 1 })}>
-              <View style={HomeStyles.allContainer}>
-                <Text style={HomeStyles.thirdHeader}>
-                  All
-                </Text>
-                <Image
-                  style={HomeStyles.next}
-                  source={nextimg}
-                />
-              </View>
-            </TouchableOpacity>
-
-          </View>
-          {topTracks.length > 0 && topTracks.map((track, index) =>
-            <View key={index}>
-              <View style={HomeStyles.topTracksContainer}>
-                <TouchableOpacity
-                  style={{
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 2, elevation: 5
-                  }}
-                  onPress={() => Linking.openURL(track[3])}>
-                  <Image
-                    style={HomeStyles.topTrackImage}
-                    source={{ uri: track[2] }}
-                  />
-                </TouchableOpacity>
-                <View style={HomeStyles.topTrackTextContainer}>
-                  <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
-                  <Text style={HomeStyles.topTrackArtistText}>{track[1]}</Text>
-                </View>
-                <TouchableOpacity
-                  style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
-                  onPress={() => Linking.openURL(track[3])}>
-                  <Image
-                    style={HomeStyles.playImage}
-                    source={playimg}
-                  />
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
-          )}
-          {topTracks.length == 0 &&
-            <Text style={HomeStyles.noDataText}>
-              It seems like you haven't listened to much music on your Spotify account. Listen to some more music
-              and come back at a later date to view this data!
-            </Text>
-          }
-
-        </View>
-        <View style={HomeStyles.fifthContainer}>
-          <View style={HomeStyles.headerContainer}>
-            <Text style={HomeStyles.fifthHeader}>
-              Your Listening Habits
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
-              <View style={HomeStyles.allContainer}>
-                <Text style={HomeStyles.fifthHeader}>
-                  More
-                </Text>
-                <Image
-                  style={HomeStyles.more}
-                  source={nextimg}
-                />
-              </View>
-            </TouchableOpacity>
+            <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+              {recommendations.length > 0 && recommendations.map((track, index) =>
+                <View key={index}>
+                  <TouchableOpacity
+                    style={{
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.5,
+                      shadowRadius: 2, elevation: 5
+                    }}
+                    onPress={() => Linking.openURL(track[3])}>
+                    <Image
+                      style={HomeStyles.recommendationImage}
+                      source={{ uri: track[2] }}
+                    />
+                  </TouchableOpacity>
+                  <View style={HomeStyles.topTrackTextContainer}>
+                    <Text style={HomeStyles.topRecommendationTrackText}>{track[0]}</Text>
+                    <Text style={HomeStyles.topRecommendationTrackArtistText}>{track[1]}</Text>
+                  </View>
+                </View>
+              )}
+            </ScrollView>
+            {recommendations.length == 0 &&
+              <Text style={HomeStyles.noDataText}>
+                No recommendations yet. To get recommendations, press the "get started" button above!
+              </Text>}
           </View>
-          {habits != null &&
-            <HabitsGraph data={habits} />
-          }
-          {habits == null &&
-            <Text style={HomeStyles.noDataText}>
-              It seems like you haven't listened to much music on your Spotify account. Listen to some more music
-              and come back at a later date to view this data!
-            </Text>
-          }
-        </View>
-        <View style={{ height: newUser.newUser == true ? 500 : 5 }} />
-        <StatusBar style="auto" />
-      </View>
-      <View style={{ height: '100%', backgroundColor: '#4e4376' }} />
-    </ScrollView>
+          <View style={HomeStyles.thirdContainer}>
+            <View style={HomeStyles.headerContainer}>
+              <Text style={HomeStyles.thirdHeader}>
+                Your Top Artists
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 0 })}>
+                <View style={HomeStyles.allContainer}>
+                  <Text style={HomeStyles.thirdHeader}>
+                    All
+                  </Text>
+                  <Image
+                    style={HomeStyles.next}
+                    source={nextimg}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={HomeStyles.topArtistsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+              {topArtists.length > 0 && topArtists.map((artist, index) =>
+                <View key={index}>
+                  <TouchableOpacity
+                    style={{
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.5,
+                      shadowRadius: 2, elevation: 5
+                    }}
+                    onPress={() => Linking.openURL(artist[2])}>
+                    <Image
+                      style={HomeStyles.topTrackArtistImage}
+                      source={{ uri: artist[1] }}
+                    />
+                  </TouchableOpacity>
+                  <Text style={HomeStyles.topArtistText}>{artist[0]}</Text>
+                </View>
+              )}
+            </ScrollView>
+            {topArtists.length == 0 &&
+              <Text style={HomeStyles.noDataText}>
+                It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+                and come back at a later date to view this data!
+              </Text>}
+          </View>
+          <View style={HomeStyles.fourthContainer}>
+            <View style={HomeStyles.headerContainer}>
+              <Text style={HomeStyles.fourthHeader}>
+                Your Top Tracks
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('UserStats', { index: 1 })}>
+                <View style={HomeStyles.allContainer}>
+                  <Text style={HomeStyles.thirdHeader}>
+                    All
+                  </Text>
+                  <Image
+                    style={HomeStyles.next}
+                    source={nextimg}
+                  />
+                </View>
+              </TouchableOpacity>
 
+            </View>
+            {topTracks.length > 0 && topTracks.map((track, index) =>
+              <View key={index}>
+                <View style={HomeStyles.topTracksContainer}>
+                  <TouchableOpacity
+                    style={{
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.5,
+                      shadowRadius: 2, elevation: 5
+                    }}
+                    onPress={() => Linking.openURL(track[3])}>
+                    <Image
+                      style={HomeStyles.topTrackImage}
+                      source={{ uri: track[2] }}
+                    />
+                  </TouchableOpacity>
+                  <View style={HomeStyles.topTrackTextContainer}>
+                    <Text style={HomeStyles.topTrackText}>{track[0]}</Text>
+                    <Text style={HomeStyles.topTrackArtistText}>{track[1]}</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                    onPress={() => Linking.openURL(track[3])}>
+                    <Image
+                      style={HomeStyles.playImage}
+                      source={playimg}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+            {topTracks.length == 0 &&
+              <Text style={HomeStyles.noDataText}>
+                It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+                and come back at a later date to view this data!
+              </Text>
+            }
+
+          </View>
+          <View style={HomeStyles.fifthContainer}>
+            <View style={HomeStyles.headerContainer}>
+              <Text style={HomeStyles.fifthHeader}>
+                Your Listening Habits
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
+                <View style={HomeStyles.allContainer}>
+                  <Text style={HomeStyles.fifthHeader}>
+                    More
+                  </Text>
+                  <Image
+                    style={HomeStyles.more}
+                    source={nextimg}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            {habits != null &&
+              <HabitsGraph data={habits} />
+            }
+            {habits == null &&
+              <Text style={HomeStyles.noDataText}>
+                It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+                and come back at a later date to view this data!
+              </Text>
+            }
+          </View>
+          <View style={{ height: newUser.newUser == true ? 500 : 5 }} />
+          <StatusBar style="auto" />
+        </View>
+        <View style={{ height: '100%', backgroundColor: '#4e4376' }} />
+      </ScrollView>
+      <GenreModal newUser={newUser.newUser} navigation={navigation} />
+    </View>
   );
 }
 

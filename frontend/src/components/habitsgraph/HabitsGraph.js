@@ -35,11 +35,6 @@ function HabitsGraph({ data }) {
         
     };
 
-    const style = {
-        marginVertical: 8,
-        borderRadius: 16
-    }
-
     return (
         <View style={HabitsGraphStyles.mainContainer}>
             <View style={HabitsGraphStyles.topContainer}>
@@ -52,6 +47,7 @@ function HabitsGraph({ data }) {
                     withCustomBarColorFromData={true}
                     flatColor={true}
                     showBarTops={false}
+                    style={{marginLeft: -5}}
                 />
             </View>
         </View>

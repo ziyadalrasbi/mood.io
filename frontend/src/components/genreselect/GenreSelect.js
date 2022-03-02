@@ -50,7 +50,6 @@ const GenreSelect = ({ navigation }) => {
     const prevItem = [...selectedItems];
     prevItem.unshift(item);
     setSelectedItems(prevItem);
-    console.log(selectedItems);
   }
 
   const removeItem = async (item) => {

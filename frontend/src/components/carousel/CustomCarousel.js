@@ -49,7 +49,7 @@ const CustomCarousel = ({ onPressLogin }) => {
     },
     {
       title: 'Your Listening Habits',
-      text: 'View statistics on your listening habits, such as your top artists and tracks.',
+      text: 'View your listening habits, such as your top artists and tracks.',
       icon: statsicon
     },
   ];
@@ -94,14 +94,7 @@ const CustomCarousel = ({ onPressLogin }) => {
   ), []);
 
   if (!loaded) {
-    return (
-      <View>
-        <Text>
-          Loading...
-        </Text>
-      </View>
-
-    )
+    return null;
   }
   return (
     <SafeAreaView style={CustomCarouselStyles.mainContainer}>

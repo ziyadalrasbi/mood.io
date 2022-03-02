@@ -1,5 +1,4 @@
 import hamburger from '../../../assets/icons/home/hamburger.png';
-import scanimg from '../../../assets/icons/home/scan.png';
 import closeimg from '../../../assets/icons/home/close.png';
 import aboutimg from '../../../assets/icons/home/about.png';
 import backimg from '../../../assets/icons/upload/back.png';

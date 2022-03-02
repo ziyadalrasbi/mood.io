@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Text, View, Image, ScrollView, TouchableOpacity, Pressable } from 'react-native';
+import { Button, Modal } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import GenreModalStyles from './GenreModalStyles';
 import GenreSelect from '../genreselect/GenreSelect';
+import { StatusBar } from 'expo-status-bar';
 
 function GenreModal({ newUser, navigation }) {
 
   const [modalVisible, setModalVisible] = useState(newUser);
 
   return (
-    <View style={[GenreModalStyles.modalContainer, { display: modalVisible == true ? 'flex' : 'none' }]}>
+    <View style={[GenreModalStyles.modalContainer, { display: newUser == true ? 'flex' : 'none' }]}>
+      <StatusBar style="auto" />
       <View style={GenreModalStyles.centeredView}>
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={newUser}
+          visible={modalVisible}
         >
           <View style={GenreModalStyles.centeredView}>
             <View style={GenreModalStyles.modalView}>

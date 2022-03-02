@@ -11,6 +11,7 @@ import { initUser, loginUser, saveUserArtists } from '../../client/src/actions/d
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as WebBrowser from 'expo-web-browser';
+import logo from '../../../assets/icons/testlogo.png';
 
 if (Platform.OS === 'web') {
     WebBrowser.maybeCompleteAuthSession();
@@ -31,9 +32,7 @@ function Login({ navigation }) {
         InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
         InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     });
-    const REDIRECT_URI = makeRedirectUri({
-        scheme: "moodio://oauthredirect"
-    });
+
     const [request, response, promptAsync] = useAuthRequest(
         {
             responseType: 'code',
@@ -95,10 +94,11 @@ function Login({ navigation }) {
                 colors={['#185a9d', '#4ca1af']}
                 style={LoginStyles.gradientContainer}
             />
-            <View style={LoginStyles.logo}>
-                <Text>
-                    LOGO HERE
-                </Text>
+            <View style={LoginStyles.logoContainer}>
+                <Image
+                style={LoginStyles.logo}
+                source={logo}
+                />
             </View>
             <View style={LoginStyles.bottomContainer}>
                 <CustomCarousel onPressLogin={onPressLogin} />

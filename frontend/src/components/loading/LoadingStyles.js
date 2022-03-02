@@ -26,7 +26,7 @@ export default StyleSheet.create({
     },
     loadingContainer: {
         flexDirection: 'row',
-        marginTop: height/44.8
+        marginTop: height / 44.8
     },
     loadingText: {
         fontFamily: 'MontserratBold',
@@ -39,5 +39,12 @@ export default StyleSheet.create({
         color: 'white',
         fontSize: width / 31.8461538,
         marginTop: height / 89.6
+    },
+    firstContainer: {
+        alignItems: 'center'
+    },
+    logo: {
+        width: 230,
+        height: 60
     }
 });

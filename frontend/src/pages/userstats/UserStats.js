@@ -168,21 +168,23 @@ function UserStats({ navigation, route }) {
     const changeRange = async (range, i) => {
         setRLoading(true);
         setSelectedIndex(i);
+
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-
         const getToken = await dispatch(refreshAccessToken(token, refreshToken));
         const accessToken = getToken.refreshAccessToken;
-        console.log(accessToken)
         SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+
         const getArtists = await dispatch(getTopArtistsStats(accessToken, range));
         if (getArtists.getTopArtistsStats != null) {
             setTopArtists(getArtists.getTopArtistsStats);
         }
+
         const getTracks = await dispatch(getTopTracksStats(accessToken, range));
         if (getTracks.getTopTracksStats != null) {
             setTopTracks(getTracks.getTopTracksStats);
         }
+        
         setRLoading(false);
     }
 

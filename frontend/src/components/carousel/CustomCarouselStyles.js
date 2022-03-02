@@ -34,7 +34,7 @@ const ios = StyleSheet.create({
     },
     subWelcome: {
         padding: getRatio(10),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratMedium',
         color: 'grey',
         fontSize: getRatio(13),
         textAlign: 'center',
@@ -65,7 +65,7 @@ const ios = StyleSheet.create({
         borderRadius: 5,
     },
     mainFont: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(13),
         color: 'white'
     },
@@ -76,7 +76,7 @@ const ios = StyleSheet.create({
         marginTop: getRatio(15)
     },
     signUp: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: 11,
         color: 'black'
     },
@@ -137,7 +137,7 @@ const android = StyleSheet.create({
     },
     subWelcome: {
         padding: width / 41.4,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratMedium',
         color: 'grey',
         fontSize: width / 31.8461538,
         textAlign: 'center',
@@ -168,7 +168,7 @@ const android = StyleSheet.create({
         borderRadius: 5,
     },
     mainFont: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 31.8461538,
         color: 'white'
     },
@@ -179,7 +179,7 @@ const android = StyleSheet.create({
         marginTop: height/59.7333333
     },
     signUp: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: 11,
         color: 'black'
     },

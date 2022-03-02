@@ -15,7 +15,16 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/icons/carousel/*",
+      "assets/icons/genreselect/*",
+      "assets/icons/home/*",
+      "assets/icons/login/*",
+      "assets/icons/selectmood/*",
+      "assets/icons/stats/*",
+      "assets/icons/upload/*",
+      "assets/icons/*",
+      "assets/fonts/Montserrat/*",
+      "assets/fonts/Montserrat/static/*"
     ],
     "ios": {
       "bundleIdentifier": "com.app.moodio",

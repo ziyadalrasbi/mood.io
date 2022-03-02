@@ -41,7 +41,7 @@ const ios = StyleSheet.create({
     marginTop: getRatio(15)
   },
   firstSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14),
     padding: getRatio(10),
     color: '#dbdbdb'
@@ -71,7 +71,7 @@ const ios = StyleSheet.create({
     marginBottom: -(getRatio(10))
   },
   secondSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14),
     padding: 10,
     color: '#dbdbdb'
@@ -103,7 +103,7 @@ const ios = StyleSheet.create({
     padding: getRatio(10),
   },
   thirdSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14),
     padding: getRatio(10),
     color: '#dbdbdb'
@@ -116,14 +116,13 @@ const ios = StyleSheet.create({
     borderRadius: getRatio(10),
   },
   topArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'center',
     textAlign: 'center',
     marginTop: getRatio(10),
     marginBottom: getRatio(5),
     fontSize: getRatio(12),
-    fontStyle: 'italic',
     maxWidth: width / 4.14,
     marginRight: getRatio(20),
   },
@@ -144,7 +143,7 @@ const ios = StyleSheet.create({
     padding: getRatio(10),
   },
   fourthSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14),
     padding: getRatio(10),
     color: '#dbdbdb'
@@ -166,7 +165,7 @@ const ios = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   topTrackText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -178,7 +177,7 @@ const ios = StyleSheet.create({
     marginRight: getRatio(20)
   },
   topRecommendationTrackText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'center',
     textAlign: 'center',
@@ -190,7 +189,7 @@ const ios = StyleSheet.create({
     marginRight: getRatio(25),
   },
   topRecommendationTrackArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: '#dbdbdb',
     alignSelf: 'center',
     textAlign: 'center',
@@ -203,7 +202,7 @@ const ios = StyleSheet.create({
     alignSelf: 'center'
   },
   topTrackArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: '#dbdbdb',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -234,7 +233,7 @@ const ios = StyleSheet.create({
     borderRadius: 5
   },
   mainFont: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(16)
   },
   scroll: {
@@ -318,7 +317,7 @@ const android = StyleSheet.create({
   },
   subWelcome: {
     padding: width / 41.4,
-    fontFamily: 'InconsolataLight',
+    fontFamily: 'MontserratLight',
     color: 'white',
     fontSize: width / 23
   },
@@ -347,7 +346,7 @@ const android = StyleSheet.create({
     marginTop: height / 59.7333333
   },
   firstSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286,
     padding: width / 41.4,
     color: '#dbdbdb'
@@ -377,7 +376,7 @@ const android = StyleSheet.create({
     marginBottom: -(width / 41.4)
   },
   secondSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286,
     padding: 10,
     color: '#dbdbdb'
@@ -409,7 +408,7 @@ const android = StyleSheet.create({
     padding: width / 41.4,
   },
   thirdSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286,
     padding: width / 41.4,
     color: '#dbdbdb'
@@ -422,7 +421,7 @@ const android = StyleSheet.create({
     borderRadius: width / 41.4,
   },
   topArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'center',
     textAlign: 'center',
@@ -450,7 +449,7 @@ const android = StyleSheet.create({
     padding: width / 41.4,
   },
   fourthSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286,
     padding: width / 41.4,
     color: '#dbdbdb'
@@ -472,7 +471,7 @@ const android = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   topTrackText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -484,7 +483,7 @@ const android = StyleSheet.create({
     marginRight: width / 20.7
   },
   topRecommendationTrackText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'center',
     textAlign: 'center',
@@ -496,7 +495,7 @@ const android = StyleSheet.create({
     marginRight: width / 16.56,
   },
   topRecommendationTrackArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: '#dbdbdb',
     alignSelf: 'center',
     textAlign: 'center',
@@ -509,7 +508,7 @@ const android = StyleSheet.create({
     alignSelf: 'center'
   },
   topTrackArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: '#dbdbdb',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -542,7 +541,7 @@ const android = StyleSheet.create({
     borderRadius: 5,
   },
   mainFont: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 25.875
   },
   scroll: {

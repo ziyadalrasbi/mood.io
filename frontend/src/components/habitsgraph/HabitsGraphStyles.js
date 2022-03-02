@@ -16,7 +16,7 @@ export default StyleSheet.create({
         top: 0,
         width: '100%',
         justifyContent: 'center',
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent'
     },
     mainFont: {
         fontFamily: 'InconsolataMedium',
