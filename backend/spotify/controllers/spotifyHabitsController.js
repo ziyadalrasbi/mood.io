@@ -34,16 +34,16 @@ const getListeningHabits = async (req, res, next) => {
                     };
                 }
                 getGraphHabits = {
-                    danceability: getGraphHabits.danceability / req.body.amount,
-                    energy: getGraphHabits.energy / req.body.amount,
-                    valence: getGraphHabits.valence / req.body.amount,
-                    instrumentalness: getGraphHabits.instrumentalness / req.body.amount
+                    danceability: (getGraphHabits.danceability / req.body.amount).toFixed(2),
+                    energy: (getGraphHabits.energy / req.body.amount).toFixed(2),
+                    valence: (getGraphHabits.valence / req.body.amount).toFixed(2),
+                    instrumentalness: (getGraphHabits.instrumentalness / req.body.amount).toFixed(2)
                 }
                 getCardHabits = {
-                    loudness: getCardHabits.loudness / req.body.amount,
-                    tempo: getCardHabits.tempo / req.body.amount,
-                    speechiness: getCardHabits.speechiness / req.body.amount,
-                    acousticness: getCardHabits.acousticness / req.body.amount
+                    loudness: (getCardHabits.loudness / req.body.amount).toFixed(2),
+                    tempo: (getCardHabits.tempo / req.body.amount).toFixed(2),
+                    speechiness: (getCardHabits.speechiness / req.body.amount).toFixed(2),
+                    acousticness: (getCardHabits.acousticness / req.body.amount).toFixed(2)
                 }
 
                 var keys = [];

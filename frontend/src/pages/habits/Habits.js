@@ -24,6 +24,9 @@ function Habits({ navigation }) {
 
     const [selectedIndex, setSelectedIndex] = useState(2);
 
+    const [graphHabits, setGraphHabits] = useState([]);
+    const [cardHabits, setCardHabits] = useState();
+
     useEffect(() => {
         const tokenController = new AbortController();
         const getArtistsController = new AbortController();
@@ -44,8 +47,29 @@ function Habits({ navigation }) {
                 const amount = getTracks.getTopTracksStats.trackIds.length;
 
                 const getHabits = await dispatch(getListeningHabits(accessToken, trackIds, amount, getHabitsController.signal));
-                console.log(getHabits.getListeningHabits);
 
+                var parsedGraphValues = getHabits.getListeningHabits.graphHabits.values;
+                var cardValues = getHabits.getListeningHabits.cardHabits;
+
+                var parsedCardValues = [];
+
+                Object.keys(cardValues).forEach(function(n) {
+                    var test2 = {};
+                    test2[n] = cardValues[n].toFixed(2);
+                    parsedCardValues.push(test2);
+                })
+
+                const finalCardValues = Object.assign({}, ...parsedCardValues);
+                
+                setCardHabits(finalCardValues);
+
+                parsedGraphValues = parsedGraphValues.map(n => n.toFixed(2));
+
+                console.log(getHabits.getListeningHabits.graphHabits.values);
+                console.log(parsedGraphValues);
+
+                
+  
 
             } catch (error) {
                 console.log('Error getting users listening habits, please try again. ' + error);
@@ -122,7 +146,7 @@ function Habits({ navigation }) {
                             </Text>
                         </View>
                         <Text style={HabitsStyles.habitDescription}>
-                            -45 dB
+                        {cardHabits.loudness} dB
                         </Text>
                     </View>
                     <View style={HabitsStyles.habitContainer}>
@@ -138,7 +162,7 @@ function Habits({ navigation }) {
                             </Text>
                         </View>
                         <Text style={HabitsStyles.habitDescription}>
-                            110 BPM
+                        {cardHabits.tempo} BPM
                         </Text>
                     </View>
                     <View style={HabitsStyles.habitContainer}>
@@ -154,7 +178,7 @@ function Habits({ navigation }) {
                             </Text>
                         </View>
                         <Text style={HabitsStyles.habitDescription}>
-                            0.047
+                        {cardHabits.speechiness}
                         </Text>
                     </View>
                     <View style={HabitsStyles.habitContainer}>
@@ -170,7 +194,7 @@ function Habits({ navigation }) {
                             </Text>
                         </View>
                         <Text style={HabitsStyles.habitDescription}>
-                            0.8
+                        {cardHabits.acousticness}
                         </Text>
                     </View>
                 </ScrollView>
