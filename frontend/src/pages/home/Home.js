@@ -290,7 +290,7 @@ function Home({ navigation, route }) {
               <Text style={HomeStyles.fifthHeader}>
                 Your Listening Habits
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Recommendations', { index: 0 })}>
+              <TouchableOpacity onPress={() => navigation.navigate('Habits')}>
                 <View style={HomeStyles.allContainer}>
                   <Text style={HomeStyles.fifthHeader}>
                     More

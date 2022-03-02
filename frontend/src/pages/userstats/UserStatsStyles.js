@@ -97,7 +97,6 @@ const ios = StyleSheet.create({
         borderColor: 'grey'
     },
     selectText: {
-        color: 'white',
         fontFamily: 'InconsolataMedium',
         fontSize: getRatio(11),
         paddingHorizontal: getRatio(5)
@@ -345,7 +344,6 @@ const android = StyleSheet.create({
         borderColor: 'grey'
     },
     selectText: {
-        color: 'white',
         fontFamily: 'InconsolataMedium',
         fontSize: width / 37.6363636,
         paddingHorizontal: width / 82.8

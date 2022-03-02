@@ -9,6 +9,7 @@ import Results from '../../pages/results/Results';
 import UploadOptions from '../../pages/UploadOptions/UploadOptions';
 import SelectMood from '../../pages/selectmood/SelectMood';
 import Recommendations from '../../pages/recommendations/Recommendations';
+import Habits from '../../pages/habits/Habits';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Drawer = createDrawerNavigator();
@@ -40,6 +41,7 @@ const DrawerStack = ({loading, verified}) => {
             <Drawer.Screen name='SelectMood' component={SelectMood} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Results' component={Results} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Recommendations' component={Recommendations} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='Habits' component={Habits} options={{unmountOnBlur:true}} />
         </Drawer.Navigator>
     );
 }

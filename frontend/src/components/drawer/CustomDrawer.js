@@ -111,9 +111,11 @@ const CustomDrawer = ({ props, navigation }) => {
                             Previous Recommendations
                         </Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Habits')}>
                     <Text style={CustomDrawerStyles.optionText}>
                         Listening Habits
                     </Text>
+                    </TouchableOpacity>
                     <Text style={CustomDrawerStyles.optionText}>
                         About mood.io
                     </Text>

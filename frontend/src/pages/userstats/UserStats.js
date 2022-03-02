@@ -248,7 +248,7 @@ function UserStats({ navigation, route }) {
                             <View
                                 style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 1 ? '#0e219c' : 'grey' }]}
                             />
-                            <Text style={UserStatsStyles.selectText}>
+                            <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
                                 Past 4 weeks
                             </Text>
                         </View>
@@ -258,7 +258,7 @@ function UserStats({ navigation, route }) {
                             <View
                                 style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 2 ? '#0e219c' : 'grey' }]}
                             />
-                            <Text style={UserStatsStyles.selectText}>
+                            <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 2 ? 'white' : 'grey' }]}>
                                 Past 6 months
                             </Text>
                         </View>
@@ -268,7 +268,7 @@ function UserStats({ navigation, route }) {
                             <View
                                 style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 3 ? '#0e219c' : 'grey' }]}
                             />
-                            <Text style={UserStatsStyles.selectText}>
+                            <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 3 ? 'white' : 'grey' }]}>
                                 All time
                             </Text>
                         </View>

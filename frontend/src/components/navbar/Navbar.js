@@ -59,6 +59,17 @@ function Navbar({ navigation, name, page }) {
           <View style={{ width: 30, height: 30 }} />
         </View>
       }
+      {page == 'habits' &&
+        <View style={NavbarStyles.topBar}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image style={NavbarStyles.back} source={backimg} />
+          </TouchableOpacity>
+          {/* <Text style={NavbarStyles.welcome}>
+            Your Listening Habits
+          </Text> */}
+          <View style={{ width: 30, height: 30 }} />
+        </View>
+      }
       {page == 'results' &&
         <View style={NavbarStyles.topBar}>
           <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Home' }] })}>
