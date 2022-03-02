@@ -8,10 +8,10 @@ const saveRecentMood = async (req, res, next) => {
         response.set({
             recentMood: req.body.mood
         }, { merge: true });
-        res.json({ status: 200 });
+        return res.json({ status: 200 });
     } catch (error) {
         console.log('Error saving user\'s recent mood, please try again. \n' + error);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 
@@ -20,7 +20,7 @@ const getUserArtists = async (req, res, next) => {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
-                res.json({ topGenres: doc.data().topArtists });
+                return res.json({ topGenres: doc.data().topArtists });
             })
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);
@@ -39,10 +39,10 @@ const saveRecommendations = async (req, res, next) => {
                 tracks: req.body.tracks,
                 time: Date.now()
             })
-        res.json({ status: 200 });
+        return res.json({ status: 200 });
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 
@@ -69,7 +69,7 @@ const getRecentMood = async (req, res, next) => {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
-                res.json({ recentMood: doc.data().recentMood });
+                return res.json({ recentMood: doc.data().recentMood });
             })
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);

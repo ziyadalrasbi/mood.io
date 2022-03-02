@@ -13,7 +13,7 @@ const getProfile = async (req, res, next) => {
                     picture: data.body.images[0] && data.body.images[0].url,
                     followers: data.body.followers.total
                 }
-                res.json({ profile: userProfile });
+                return res.json({ profile: userProfile });
             }, function (err) {
                 console.log('There was an error getting user\'s profile, please try again. \n', err);
             });
@@ -38,7 +38,7 @@ const getTopArtists = async (req, res, next) => {
                         artistNames.push(tempArtist);
                     }
                 }
-                res.json({ artistNames: artistNames });
+                return res.json({ artistNames: artistNames });
             }), function (err) {
                 console.log('There was an error getting the top artists, please try again.', err);
             }
@@ -65,7 +65,7 @@ const getTopTracks = async (req, res, next) => {
                         topTracks.push(tempTrack);
                     }
                 }
-                res.json({ topTracks: topTracks, trackIds: trackIds });
+                return res.json({ topTracks: topTracks, trackIds: trackIds });
             }), function (err) {
                 console.log('There was an error getting the top tracks, please try again.', err);
             }

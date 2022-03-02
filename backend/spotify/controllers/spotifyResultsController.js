@@ -76,7 +76,7 @@ const createLibrary = async (req, res, next) => {
                 console.log('There was an error getting recommendations, please try again.', err);
             })
     }
-    res.json({ recommendations: recommendations, trackIds: trackIds });
+    return res.json({ recommendations: recommendations, trackIds: trackIds });
 }
 
 const getRecommendations = async (req, res, next) => {
@@ -143,7 +143,7 @@ const getRecommendations = async (req, res, next) => {
                     console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
                 }
             }
-            res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
+            return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
         }, function (err) {
             console.log('There was an error getting audio features2, please try again.', err);
         })
@@ -166,7 +166,7 @@ const createPlaylist = async (req, res, next) => {
                     id: data.body.id,
                     link: data.body.external_urls.spotify
                 };
-                res.json({ playlist: playlist });
+                return res.json({ playlist: playlist });
             })
     } catch (error) {
         console.log('There was an error creating playlist for user, please try again.', err);
@@ -178,11 +178,11 @@ const addTracksToPlaylist = async (req, res, next) => {
     try {
         await api.addTracksToPlaylist(req.body.id, req.body.uris)
         .then(() => {
-            res.json({ status: 200 });
+            return res.json({ status: 200 });
         })
     } catch (error) {
         console.log('There was an error adding tracks to playlist, please try again.', err);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 

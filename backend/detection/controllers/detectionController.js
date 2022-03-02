@@ -36,9 +36,9 @@ const detectFace = async (req, res, next) => {
         const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
             .withFaceLandmarks()
             .withFaceExpressions();
-
+        console.log('Results are '+ results);
         fs.unlinkSync(fileName);
-        res.json({ image: results });
+        return res.json({ image: results });
     } catch (error) {
         console.log('Error detecting facial expressions, please try again. \n' + error);
         res.status(400).send(error.message);
