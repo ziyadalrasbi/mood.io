@@ -43,10 +43,10 @@ function UserStats({ navigation, route }) {
                 )
                     :
                     <LottieView
-                        source={require('./animations/142-loading-animation.json')}
+                        source={require('./animations/8707-loading.json')}
                         autoPlay
                         loop={true}
-                        style={{ marginTop: 50, width: 150, height: 150, alignSelf: 'center' }}
+                        style={UserStatsStyles.lottieView}
                     />
                 }
             </View>
@@ -94,10 +94,10 @@ function UserStats({ navigation, route }) {
             )
                 :
                 <LottieView
-                    source={require('./animations/142-loading-animation.json')}
+                    source={require('./animations/8707-loading.json')}
                     autoPlay
                     loop={true}
-                    style={{ marginTop: 50, width: 150, height: 150, alignSelf: 'center' }}
+                    style={UserStatsStyles.lottieViewTracks}
                 />
             }
             {topTracks.length == 0 &&
@@ -124,68 +124,88 @@ function UserStats({ navigation, route }) {
     const [topTracks, setTopTracks] = useState({ topTracks: [] });
 
     const [index, setIndex] = useState(route.params.index);
-    
+
     const [routes] = useState([
         { key: 'first', title: 'Top Artists' },
         { key: 'second', title: 'Top Tracks' },
     ]);
     const [selectedIndex, setSelectedIndex] = useState(2);
 
-    const [loaded] = useFonts({
-        InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-        InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-        InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-        InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
-    });
-
     useEffect(() => {
+        const tokenController = new AbortController();
+        const getArtistsController = new AbortController();
+        const getTracksController = new AbortController();
+
         const fetchData = async () => {
-            const token = await SecureStore.getItemAsync('spotify_access_token');
-            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            try {
+                const token = await SecureStore.getItemAsync('spotify_access_token');
+                const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
 
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken));
-            const accessToken = getToken.refreshAccessToken;
-            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+                const accessToken = getToken.refreshAccessToken;
+                SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
-            const getArtists = await dispatch(getTopArtistsStats(accessToken, 'medium_term'));
-            if (getArtists.getTopArtistsStats != null) {
-                setTopArtists(getArtists.getTopArtistsStats);
-            }
-            const getTracks = await dispatch(getTopTracksStats(accessToken, 'medium_term'));
-            if (getTracks.getTopTracksStats != null) {
-                setTopTracks(getTracks.getTopTracksStats);
+                const getArtists = await dispatch(getTopArtistsStats(accessToken, 'medium_term', getArtistsController.signal));
+                if (getArtists.getTopArtistsStats != null) {
+                    setTopArtists(getArtists.getTopArtistsStats);
+                }
+                const getTracks = await dispatch(getTopTracksStats(accessToken, 'medium_term', getTracksController.signal));
+                if (getTracks.getTopTracksStats != null) {
+                    setTopTracks(getTracks.getTopTracksStats);
+                }
+            } catch (error) {
+
             }
         }
         fetchData().then(() => setLoading(false));
+
+        return () => {
+            tokenController.abort();
+            getArtistsController.abort();
+            getTracksController.abort();
+        }
     }, [loading, dispatch])
 
-    if (!loaded || loading) {
+    if (loading) {
         return (
             <Loading page={"home"} />
         );
     }
 
     const changeRange = async (range, i) => {
-        setRLoading(true);
-        setSelectedIndex(i);
+        const tokenController = new AbortController();
+        const getArtistsController = new AbortController();
+        const getTracksController = new AbortController();
+        try {
+            setRLoading(true);
+            setSelectedIndex(i);
 
-        const token = await SecureStore.getItemAsync('spotify_access_token');
-        const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        const getToken = await dispatch(refreshAccessToken(token, refreshToken));
-        const accessToken = getToken.refreshAccessToken;
-        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
-        const getArtists = await dispatch(getTopArtistsStats(accessToken, range));
-        if (getArtists.getTopArtistsStats != null) {
-            setTopArtists(getArtists.getTopArtistsStats);
+            const getArtists = await dispatch(getTopArtistsStats(accessToken, range, getArtistsController.signal));
+            if (getArtists.getTopArtistsStats != null) {
+                setTopArtists(getArtists.getTopArtistsStats);
+            }
+
+            const getTracks = await dispatch(getTopTracksStats(accessToken, range, getTracksController.signal));
+            if (getTracks.getTopTracksStats != null) {
+                setTopTracks(getTracks.getTopTracksStats);
+            }
+
+            setRLoading(false);
+
+            tokenController.abort();
+            getArtistsController.abort();
+            getTracksController.abort();
+
+        } catch (error) {
+            console.log('Error changing range, please try again. ' + error);
         }
 
-        const getTracks = await dispatch(getTopTracksStats(accessToken, range));
-        if (getTracks.getTopTracksStats != null) {
-            setTopTracks(getTracks.getTopTracksStats);
-        }
-        
-        setRLoading(false);
     }
 
     const renderTabBar = props => {

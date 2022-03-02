@@ -32,15 +32,26 @@ function Recommendations({ navigation, route }) {
     const [toggle, setToggle] = useState({});
 
     useEffect(() => {
+        const getRecommendationsController = new AbortController();
+
         const fetchData = async () => {
-            const userId = await SecureStore.getItemAsync('user_id');
-            const getMood = await dispatch(getRecentMood(userId));
-            const getRecommendations = await dispatch(getPreviousRecommendations(userId));
-            setRecentMood({ recentMood: getMood.getRecentMood });
-            setRecommendations(getRecommendations.getPreviousRecommendations);
+            try {
+                const userId = await SecureStore.getItemAsync('user_id');
+                const getMood = await dispatch(getRecentMood(userId, getRecommendationsController.signal));
+                const getRecommendations = await dispatch(getPreviousRecommendations(userId));
+                setRecentMood({ recentMood: getMood.getRecentMood });
+                setRecommendations(getRecommendations.getPreviousRecommendations);
+            } catch (error) {
+                console.log('Error aborting recommendations, please try again. ' + error);
+            }
+
         }
 
         fetchData().then(() => setLoading(false));
+
+        return () => {
+            getRecommendationsController.abort();
+        }
 
     }, [loading, dispatch])
 
@@ -64,6 +75,7 @@ function Recommendations({ navigation, route }) {
         var finalDate = date.toLocaleDateString('en', format);
         return finalDate.toString();
     }
+    
     return (
 
         <View style={RecommendationsStyles.scroll}>

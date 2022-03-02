@@ -23,21 +23,6 @@ function Upload({ navigation }) {
   const [moodAnalysis, setMoodAnalysis] = useState({ moodAnalysis: [] });
   const [loading, setLoading] = useState(false);
 
-
-  const [loaded] = useFonts({
-    InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-    InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-    InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-    InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
-  });
-
-  if (!loaded) {
-    return (
-      <View style={{ height: '100%', backgroundColor: '#0d324d' }} />
-    )
-  }
-
-
   const openImagePicker = async () => {
     let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -171,10 +156,10 @@ function Upload({ navigation }) {
           }
           {loading &&
             <LottieView
-              source={require('./animations/loading.json')}
+              source={require('./animations/8707-loading.json')}
               autoPlay
               loop
-              style={{ width: 55, height: 55 }}
+              style={UploadStyles.lottieView}
             />
           }
         </View>

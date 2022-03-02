@@ -157,6 +157,13 @@ const ios = StyleSheet.create({
     fontFamily: 'InconsolataMedium',
     fontSize: getRatio(14),
     color: 'white',
+  },
+  lottieView: {
+    marginLeft: getRatio(25),
+    marginTop: getRatio(-5),
+    width: getRatio(60),
+    height: getRatio(60),
+    alignSelf: 'center'
   }
 });
 
@@ -310,6 +317,13 @@ const android = StyleSheet.create({
     fontFamily: 'InconsolataMedium',
     fontSize: width / 29.5714286,
     color: 'white',
+  },
+  lottieView: {
+    marginLeft: width / 16.56,
+    marginTop: -(height / 179.2),
+    width: width / 6.9,
+    height: width / 6.9,
+    alignSelf: 'center'
   }
 });
 

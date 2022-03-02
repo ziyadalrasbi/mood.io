@@ -45,7 +45,6 @@ function Home({ navigation, route }) {
   }
 
   useEffect(() => {
-
     const getArtistsController = new AbortController();
     const getUserNameController = new AbortController();
     const getTracksController = new AbortController();
@@ -54,10 +53,10 @@ function Home({ navigation, route }) {
     const getHabitsController = new AbortController();
 
     const fetchData = async () => {
-      const token = await SecureStore.getItemAsync('spotify_access_token');
-      const userId = await SecureStore.getItemAsync('user_id');
-
       try {
+        const token = await SecureStore.getItemAsync('spotify_access_token');
+        const userId = await SecureStore.getItemAsync('user_id');
+
         const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
         const getUserName = await dispatch(getName(token, getUserNameController.signal));
         const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
@@ -65,6 +64,7 @@ function Home({ navigation, route }) {
         const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
         const amount = getArtists.getTopArtistsHome.length;
         const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
+
         setTopArtists(getArtists.getTopArtistsHome);
         setName(getUserName.getName);
         setTopTracks(getTracks.getTopTracksHome.topTracks);
@@ -88,9 +88,6 @@ function Home({ navigation, route }) {
       } catch (error) {
         console.log('Error aborting' + error);
       }
-
-
-
     }
 
     fetchData().then(() => {

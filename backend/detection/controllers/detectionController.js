@@ -36,7 +36,7 @@ const detectFace = async (req, res, next) => {
         const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
             .withFaceLandmarks()
             .withFaceExpressions();
-        console.log('Results are '+ results);
+        console.log('Results are '+ JSON.stringify(results));
         fs.unlinkSync(fileName);
         return res.json({ image: results });
     } catch (error) {

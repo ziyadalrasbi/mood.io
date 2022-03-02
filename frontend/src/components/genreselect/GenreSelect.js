@@ -22,15 +22,6 @@ const GenreSelect = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const [loaded] = useFonts({
-    InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-    InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
-    InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
-    InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
-    InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-  });
-
-  const ref = useRef(null);
   const [items, setItems] = React.useState([]);
 
   const [query, setQuery] = React.useState('');
@@ -41,9 +32,15 @@ const GenreSelect = ({ navigation }) => {
 
   const [loading, setLoading] = React.useState(false);
   const search = async (query) => {
-    const token = await SecureStore.getItemAsync('spotify_access_token');
-    const searchQuery = await dispatch(searchForArtists(token, query));
-    setItems(searchQuery.searchForArtists);;
+    const searchController = new AbortController();
+    try {
+      const token = await SecureStore.getItemAsync('spotify_access_token');
+      const searchQuery = await dispatch(searchForArtists(token, query, searchController.signal));
+      setItems(searchQuery.searchForArtists);
+      searchController.abort();
+    } catch (error) {
+      console.log('Error searching for artists, please try again. ' + error);
+    }
   }
 
   const selectItem = async (item) => {
@@ -65,11 +62,18 @@ const GenreSelect = ({ navigation }) => {
   }
 
   const saveSelected = async () => {
-    const id = await SecureStore.getItemAsync('user_id');
-    const currItems = [...selectedItems];
-    const artists = currItems.map(artist => artist.id);
-    await dispatch(saveUserArtists(id, artists));
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    const saveArtistsController = new AbortController();
+    try {
+      const id = await SecureStore.getItemAsync('user_id');
+      const currItems = [...selectedItems];
+      const artists = currItems.map(artist => artist.id);
+      await dispatch(saveUserArtists(id, artists, saveArtistsController.signal));
+      saveArtistsController.abort();
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    } catch (error) {
+      console.log('Error saving artists, please try again. ' + error);
+    }
+
   }
 
   return (

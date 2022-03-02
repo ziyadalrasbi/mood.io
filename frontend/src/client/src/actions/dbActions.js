@@ -1,8 +1,9 @@
 const baseUrl = "https://mood-io-app.herokuapp.com";
 
-export const initUser = (user) => (dispatch, getState) => Promise.resolve().then(() => {
+export const initUser = (user, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     return fetch(`${baseUrl}/database/login/addUser`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -18,9 +19,10 @@ export const initUser = (user) => (dispatch, getState) => Promise.resolve().then
         })
 })
 
-export const loginUser = (id) => (dispatch, getState) => Promise.resolve().then(() => {
+export const loginUser = (id, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialId = { id };
     return fetch(`${baseUrl}/database/admin/createToken`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -50,8 +52,9 @@ export const loginUser = (id) => (dispatch, getState) => Promise.resolve().then(
         })
 })
 
-export const signOut = () => (dispatch, getState) => Promise.resolve().then(() => {
+export const signOut = (signal) => (dispatch, getState) => Promise.resolve().then(() => {
     return fetch(`${baseUrl}/database/login/signOut`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -64,10 +67,11 @@ export const signOut = () => (dispatch, getState) => Promise.resolve().then(() =
         })
 })
 
-export const saveUserArtists = (user, artists) => (dispatch, getState) => Promise.resolve().then(() => {
+export const saveUserArtists = (user, artists, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialArtists = { artists };
     return fetch(`${baseUrl}/database/login/saveUserArtists`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -125,9 +129,10 @@ export const getPreviousRecommendations = (id, signal) => (dispatch, getState) =
         })
 })
 
-export const getRecentMood = (user) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getRecentMood = (user, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     return fetch(`${baseUrl}/database/results/getRecentMood`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -185,9 +190,10 @@ export const saveRecommendations = (user, mood, tracks) => (dispatch, getState) 
         })
 })
 
-export const saveUserRating = (rating) => (dispatch, getState) => Promise.resolve().then(() => {
+export const saveUserRating = (rating, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialRating = { rating };
     return fetch(`${baseUrl}/database/results/saveUserRating`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',

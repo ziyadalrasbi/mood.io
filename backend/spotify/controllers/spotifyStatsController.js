@@ -19,7 +19,7 @@ const getProfile = async (req, res, next) => {
             });
     } catch (error) {
         console.log('There was an error getting user\'s profile, please try again. \n' + error);
-        res.status(400).send(error.message);
+        return res.status(400).send(error.message);
     }
 }
 
@@ -43,7 +43,8 @@ const getTopArtists = async (req, res, next) => {
                 console.log('There was an error getting the top artists, please try again.', err);
             }
     } catch (error) {
-        console.log('There was an error getting the top artists, please try again.', err);
+        console.log('There was an error getting the top artists, please try again.', error);
+        return res.status(400).send(error.message);
     }
 }
 
@@ -70,7 +71,8 @@ const getTopTracks = async (req, res, next) => {
                 console.log('There was an error getting the top tracks, please try again.', err);
             }
     } catch (error) {
-        console.log('There was an error getting the top tracks, please try again.', err);
+        console.log('There was an error getting the top tracks, please try again.', error);
+        return res.status(400).send(error.message);
     }
 }
 

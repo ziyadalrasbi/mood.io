@@ -42,7 +42,7 @@ const CustomDrawer = ({ props, navigation }) => {
 
                 await dispatch(getUserProfile(accessToken, getProfileController.signal));
             } catch (error) {
-                console.log(error);
+                console.log( error);
             }
 
         }
@@ -60,12 +60,18 @@ const CustomDrawer = ({ props, navigation }) => {
     }
 
     const signOutUser = async () => {
-        await SecureStore.deleteItemAsync('spotify_access_token');
-        await SecureStore.deleteItemAsync('spotify_refresh_token');
-        await SecureStore.deleteItemAsync('user_id');
-        await dispatch(signOut());
-        await dispatch(spotifySignOut());
-        navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
+        const signOutController = new AbortController();
+        try {
+            await SecureStore.deleteItemAsync('spotify_access_token');
+            await SecureStore.deleteItemAsync('spotify_refresh_token');
+            await SecureStore.deleteItemAsync('user_id');
+            await dispatch(signOut(signOutController.signal));
+            await dispatch(spotifySignOut());
+            signOutController.abort();
+            navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
+        } catch (error) {
+            console.log('Error signing out, please try again. '+ error);
+        }
     }
 
     return (

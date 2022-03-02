@@ -101,6 +101,11 @@ const ios = StyleSheet.create({
     top: 0,
     flex: 1,
     position: 'absolute'
+  },
+  lottieView: { 
+    marginLeft: -(getRatio(15)), 
+    width: getRatio(85), 
+    height: getRatio(85) 
   }
 });
 
@@ -144,7 +149,7 @@ const android = StyleSheet.create({
   },
   uploadContainer: {
     position: 'relative',
-    height: height/1.99111111,
+    height: height / 1.99111111,
     width: '100%',
     backgroundColor: 'transparent',
     alignItems: 'center',
@@ -200,6 +205,11 @@ const android = StyleSheet.create({
     top: 0,
     flex: 1,
     position: 'absolute'
+  },
+  lottieView: {
+    marginLeft: width / 27.6,
+    width: width / 4.87058824,
+    height: width / 4.87058824
   }
 });
 

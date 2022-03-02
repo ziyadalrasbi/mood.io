@@ -8,6 +8,7 @@ import MoodGraph from '../../components/moodgraph/MoodGraph';
 import { Dimensions } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
+import LottieView from 'lottie-react-native';
 import Loading from '../../components/loading/Loading';
 import { refreshAccessToken, createLibrary, getRecommendations, createPlaylist, addTracksToPlaylist } from '../../client/src/actions/spotifyActions';
 import { getUserDatabaseArtists, saveRecommendations, saveUserRating } from '../../client/src/actions/dbActions';
@@ -81,7 +82,6 @@ function Results({ navigation, route }) {
         }
     }
 
-
     const [moodHeader, setMoodHeader] = useState({ moodHeader: "" });
     const [moodDescription, setMoodDescription] = useState({ moodDescription: "" });
 
@@ -90,7 +90,7 @@ function Results({ navigation, route }) {
     const [uris, setUris] = useState([]);
 
     const [count, setCount] = useState(0);
-    const numRef = useRef(0);
+
     const [detectedMood, setDetectedMood] = useState(getMood(route.params.maxMood));
 
     const [loading, setLoading] = useState(true);
@@ -170,38 +170,67 @@ function Results({ navigation, route }) {
         return features;
     }
 
-    const fetchData = async () => {
+    const fetchData = async (tokenSignal, dbArtistsSignal, librarySignal, getRecommendationsSignal, saveRecommendationsSignal) => {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        const getToken = await dispatch(refreshAccessToken(token, refreshToken));
+        const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenSignal));
         const accessToken = getToken.refreshAccessToken;
         SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
         const id = await SecureStore.getItemAsync('user_id');
-        const getArtists = await dispatch(getUserDatabaseArtists(id));
+        const getArtists = await dispatch(getUserDatabaseArtists(id, dbArtistsSignal));
         const artists = getArtists.getUserDatabaseArtists;
         const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
-        const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object));
+        const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, librarySignal));
         const trackIds = getLibrary.createLibrary;
-        const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array));
+        const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
         setLength(getRec.getRecommendations.recommendations.length + 1);
         setRecommendations(getRec.getRecommendations.recommendations);
         setUris(getRec.getRecommendations.uris);
-        await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations)));
+        await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), saveRecommendationsSignal));
         setRLoading(false);
     }
 
     useEffect(() => {
-        fetchData();
-        setMoodHeader({ moodHeader: detectedMood.moodHeader });
-        setMoodDescription({ moodDescription: detectedMood.moodDescription });
-        setLoading(false);
-    }, [])
+        const tokenController = new AbortController();
+        const getArtistsController = new AbortController();
+        const createLibraryController = new AbortController();
+        const getRecommendationsController = new AbortController();
+        const saveRecommendationsController = new AbortController();
+        try {
+            fetchData(
+                tokenController.signal,
+                getArtistsController.signal,
+                createLibraryController.signal,
+                getRecommendationsController.signal,
+                saveRecommendationsController.signal
+            );
+            setMoodHeader({ moodHeader: detectedMood.moodHeader });
+            setMoodDescription({ moodDescription: detectedMood.moodDescription });
+            setLoading(false);
+        } catch (error) {
+            console.log('Error creating recommendations, please try again. ' + error);
+        }
+
+        return () => {
+            tokenController.abort();
+            getArtistsController.abort();
+            createLibraryController.abort();
+            getRecommendationsController.abort();
+            saveRecommendationsController.abort();
+        }
+    }, [dispatch])
 
     const onStarRatingPress = async (rating) => {
-        setCount(rating);
-        await dispatch(saveUserRating(rating));
+        const saveRatingController = new AbortController();
+        try {
+            setCount(rating);
+            await dispatch(saveUserRating(rating, saveRatingController.signal));
+        } catch (error) {
+            console.log('Error saving rating, please try again. ' + error);
+        }
+        saveRatingController.abort();
     }
 
     if (loading || rloading) {
@@ -211,18 +240,28 @@ function Results({ navigation, route }) {
     }
 
     const savePlaylist = async () => {
-        setPLoading(true);
-        setSaving(true);
-        const token = await SecureStore.getItemAsync('spotify_access_token');
-        const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        const getToken = await dispatch(refreshAccessToken(token, refreshToken));
-        const accessToken = getToken.refreshAccessToken;
-        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-        const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!'));
-        const id = getPlaylist.createPlaylist.id;
-        await dispatch(addTracksToPlaylist(accessToken, id, uris));
-        setSaving(false);
-        setComplete(true);
+        const tokenController = new AbortController();
+        const createPlaylistController = new AbortController();
+        const addTracksController = new AbortController();
+        try {
+            setPLoading(true);
+            setSaving(true);
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
+            const id = getPlaylist.createPlaylist.id;
+            await dispatch(addTracksToPlaylist(accessToken, id, uris, addTracksController.signal));
+            setSaving(false);
+            setComplete(true);
+        } catch (error) {
+            console.log('Error saving playlist, please try again. ' + error);
+        }
+        tokenController.abort();
+        createPlaylistController.abort();
+        addTracksController.abort();
     }
 
     return (
@@ -288,9 +327,12 @@ function Results({ navigation, route }) {
                         </Button>
                     }
                     {saving == true &&
-                        <Text style={[ResultsStyles.rateText, { marginLeft: 20 }]}>
-                            Saving playlist...
-                        </Text>
+                        <LottieView
+                            source={require('./animations/8707-loading.json')}
+                            autoPlay
+                            loop={true}
+                            style={ResultsStyles.lottieView}
+                        />
                     }
                     {complete == true &&
                         <Text style={[ResultsStyles.rateText, { marginLeft: 20 }]}>

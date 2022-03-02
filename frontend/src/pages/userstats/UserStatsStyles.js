@@ -4,9 +4,9 @@ const { width, height } = Dimensions.get('window');
 
 const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
-  }
+}
 
-  const ios = StyleSheet.create({
+const ios = StyleSheet.create({
     topContainer: {
         position: 'relative',
         left: 0,
@@ -238,6 +238,19 @@ const getRatio = (value) => {
     },
     tabContainer: {
         marginTop: 2
+    },
+    lottieView: {
+        marginTop: getRatio(50),
+        marginLeft: getRatio(26),
+        width: getRatio(100),
+        height: getRatio(100),
+        alignSelf: 'center'
+    },
+    lottieViewTracks: {
+        marginTop: getRatio(50),
+        width: getRatio(100),
+        height: getRatio(100),
+        alignSelf: 'center'
     }
 });
 
@@ -540,6 +553,19 @@ const android = StyleSheet.create({
     },
     tabContainer: {
         marginTop: height / 7.9333333
+    },
+    lottieView: {
+        marginTop: height / 17.92,
+        marginLeft: width / 15.9230769,
+        width: width / 4.14,
+        height: width / 4.14,
+        alignSelf: 'center'
+    },
+    lottieViewTracks: {
+        marginTop: height / 17.92,
+        width: width / 4.14,
+        height: width / 4.14,
+        alignSelf: 'center'
     }
 });
 
