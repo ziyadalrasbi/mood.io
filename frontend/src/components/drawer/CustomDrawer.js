@@ -16,7 +16,7 @@ const CustomDrawer = ({ props, navigation }) => {
 
     const dispatch = useDispatch();
 
-    
+
     const userProfile = useSelector(state => state.spotifyReducer.getUserProfile);
     const [loading, setLoading] = useState(true);
 
@@ -29,19 +29,30 @@ const CustomDrawer = ({ props, navigation }) => {
     });
 
     useEffect(() => {
+        const tokenController = new AbortController();
+        const getProfileController = new AbortController();
+
         const fetchData = async () => {
+            try {
+                const token = await SecureStore.getItemAsync('spotify_access_token');
+                const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+                const accessToken = getToken.refreshAccessToken;
+                SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
-            const token = await SecureStore.getItemAsync('spotify_access_token');
-            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+                await dispatch(getUserProfile(accessToken, getProfileController.signal));
+            } catch (error) {
+                console.log(error);
+            }
 
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken));
-            const accessToken = getToken.refreshAccessToken;
-            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-            await dispatch(getUserProfile(accessToken));
         }
-
         fetchData();
         setLoading(false);
+
+        return () => {
+            tokenController.abort();
+            getProfileController.abort();
+        }
     }, [loading, dispatch]);
 
     if (!loaded || loading) {

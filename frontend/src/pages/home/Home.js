@@ -45,41 +45,53 @@ function Home({ navigation, route }) {
   }
 
   useEffect(() => {
-    let controller = new AbortController();
+
+    const getArtistsController = new AbortController();
+    const getUserNameController = new AbortController();
+    const getTracksController = new AbortController();
+    const getDbArtistsController = new AbortController();
+    const getRecommendationsController = new AbortController();
+    const getHabitsController = new AbortController();
+
     const fetchData = async () => {
       const token = await SecureStore.getItemAsync('spotify_access_token');
       const userId = await SecureStore.getItemAsync('user_id');
 
-      const getArtists = await dispatch(getTopArtistsHome(token, controller.signal));
-      const getUserName = await dispatch(getName(token, controller.signal));
-      const getTracks = await dispatch(getTopTracksHome(token, controller.signal));
-      const getDbArtists = await dispatch(getUserDatabaseArtists(userId, controller.signal));
-      const getRecommendations = await dispatch(getPreviousRecommendations(userId, controller.signal));
-      const amount = getArtists.getTopArtistsHome.length;
-      const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount, controller.signal));
+      try {
+        const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
+        const getUserName = await dispatch(getName(token, getUserNameController.signal));
+        const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
+        const getDbArtists = await dispatch(getUserDatabaseArtists(userId, getDbArtistsController.signal));
+        const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
+        const amount = getArtists.getTopArtistsHome.length;
+        const getHabits = await dispatch(getListeningHabits(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
+        setTopArtists(getArtists.getTopArtistsHome);
+        setName(getUserName.getName);
+        setTopTracks(getTracks.getTopTracksHome.topTracks);
+        setTrackIds(getTracks.getTopTracksHome.trackIds);
+        setHabits(getHabits.getListeningHabits);
 
-      setTopArtists(getArtists.getTopArtistsHome);
-      setName(getUserName.getName);
-      setTopTracks(getTracks.getTopTracksHome.topTracks);
-      setTrackIds(getTracks.getTopTracksHome.trackIds);
-      setHabits(getHabits.getListeningHabits);
-
-      if (getDbArtists.getUserDatabaseArtists.length == 0) {
-        setNewUser({ newUser: true });
-      }
-
-      var recommendation = [];
-
-      for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && recommendation.length < 6; i++) {
-        const current = getRecommendations.getPreviousRecommendations[i].tracks[0];
-        if (!isArrayInArray(recommendation, current)) {
-          recommendation.push(current);
+        if (getDbArtists.getUserDatabaseArtists.length == 0) {
+          setNewUser({ newUser: true });
         }
+
+        var recommendation = [];
+
+        for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && recommendation.length < 6; i++) {
+          const current = getRecommendations.getPreviousRecommendations[i].tracks[0];
+          if (!isArrayInArray(recommendation, current)) {
+            recommendation.push(current);
+          }
+        }
+
+        setRecommendations(recommendation);
+      } catch (error) {
+        console.log('Error aborting' + error);
       }
 
-      setRecommendations(recommendation);
-    }
 
+
+    }
 
     fetchData().then(() => {
       setLoading(false)
@@ -88,7 +100,14 @@ function Home({ navigation, route }) {
       throw error;
     });
 
-    return () => controller?.abort;
+    return () => {
+      getArtistsController.abort();
+      getUserNameController.abort();
+      getTracksController.abort();
+      getDbArtistsController.abort();
+      getRecommendationsController.abort();
+      getHabitsController.abort();
+    };
 
   }, [dispatch]);
 

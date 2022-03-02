@@ -12,13 +12,13 @@ const getName = async (req, res, next) => {
                 let fullName = data.body.display_name;
                 let tmp = fullName.split(' ');
                 name = tmp[0].toString();
-                res.json({ name: name });
+                return res.json({ name: name });
             }, function (err) {
                 console.log('There was an error getting username, please try again.', err);
             });
     } catch (error) {
         console.log('Error getting user\'s Spotify name, please try again. \n' + error);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 
@@ -37,13 +37,13 @@ const getTopArtists = async (req, res, next) => {
                         artistNames.push(tempArtist);
                     }
                 }
-                res.json({ artistNames: artistNames });
+                return res.json({ artistNames: artistNames });
             }), function (err) {
                 console.log('There was an error getting the top artists, please try again.', err);
             }
     } catch (error) {
         console.log('There was an error getting the top artists, please try again.', error);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 
@@ -65,13 +65,13 @@ const getTopTracks = async (req, res, next) => {
                         topTracks.push(tempTrack);
                     }
                 }
-                res.json({ topTracks: topTracks, trackIds: trackIds });
+                return res.json({ topTracks: topTracks, trackIds: trackIds });
             }), function (err) {
                 console.log('There was an error getting the top tracks, please try again.', err);
             }
     } catch (error) {
         console.log('There was an error getting the top tracks, please try again.', error);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 
@@ -111,12 +111,12 @@ const getListeningHabits = async (req, res, next) => {
                     keys: keys,
                     values: values
                 };
-                res.json({ habits: habits });
+                return res.json({ habits: habits });
             })
 
     } catch (error) {
         console.log('There was an error getting user\'s listening habits, please try again. \n' + error);
-        res.json({ status: 400 });
+        return res.json({ status: 400 });
     }
 }
 
@@ -135,11 +135,11 @@ const searchForArtists = async (req, res, next) => {
                         };
                         artists.push(artist);
                     }
-                    res.json({ artists: artists });
+                    return res.json({ artists: artists });
                 })
         } catch (error) {
             console.log('There was an error searching for artists, please try again. \n' + JSON.stringify(error));
-            res.json({ status: 400 });
+            return res.json({ status: 400 });
         }
     }
 }

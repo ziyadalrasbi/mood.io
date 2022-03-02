@@ -20,10 +20,11 @@ export const requestAccessToken = (uri, code) => (dispatch, getState) => Promise
         })
 })
 
-export const refreshAccessToken = (token, refreshToken) => (dispatch, getState) => Promise.resolve().then(() => {
+export const refreshAccessToken = (token, refreshToken, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialAccessToken = { token };
     const initialRefreshToken = { refreshToken };
     return fetch(`${baseUrl}/spotify/login/refreshAccessToken`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -165,9 +166,10 @@ export const getListeningHabits = (token, trackIds, amount, signal) => (dispatch
 })
 
 
-export const getUserProfile = (token) => (dispatch, getState) => Promise.resolve().then(() => {
+export const getUserProfile = (token, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     return fetch(`${baseUrl}/spotify/stats/getProfile`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
