@@ -264,13 +264,13 @@ const ios = StyleSheet.create({
     width: getRatio(17),
     height: getRatio(17),
     marginLeft: -(getRatio(10)),
-    marginTop: getRatio(16.5)
+    marginTop: getRatio(6)
   },
   more: {
     width: getRatio(17),
     height: getRatio(17),
     marginLeft: -(getRatio(10)),
-    marginTop: getRatio(32.5)
+    marginTop: getRatio(1)
   },
   playImage: {
     width: getRatio(22),
@@ -278,6 +278,8 @@ const ios = StyleSheet.create({
   },
   allContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: getRatio(10)
   },
   fifthContainer: {
@@ -574,13 +576,13 @@ const android = StyleSheet.create({
     width: width / 24.3529412,
     height: width / 24.3529412,
     marginLeft: -(width / 41.4),
-    marginTop: height / 54.3030303
+    marginTop: height / 149.333333
   },
   more: {
     width: width / 24.3529412,
     height: width / 24.3529412,
     marginLeft: -(width / 41.4),
-    marginTop: height / 27.5692308
+    marginTop: height / height
   },
   playImage: {
     width: 20,
@@ -588,7 +590,10 @@ const android = StyleSheet.create({
   },
   allContainer: {
     flexDirection: 'row',
-    marginRight: width / 41.4
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: width / 41.4,
+
   },
   fifthContainer: {
     position: 'relative',

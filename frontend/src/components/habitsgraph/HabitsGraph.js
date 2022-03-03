@@ -17,7 +17,11 @@ function HabitsGraph({ data }) {
         color: (opacity = 1) => `rgba(0, 110, 199, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         barRadius: 5,
-        fillShadowGradientOpacity:1,
+        fillShadowGradientOpacity: 1,
+        barPercentage: width / 591.428571,
+        propsForLabels: {
+            fontSize: width / 37.6363636
+        },
     };
     const parsedData = {
         labels: data.keys,
@@ -32,7 +36,7 @@ function HabitsGraph({ data }) {
                 ]
             }
         ],
-        
+
     };
 
     return (
@@ -40,14 +44,14 @@ function HabitsGraph({ data }) {
             <View style={HabitsGraphStyles.topContainer}>
                 <BarChart
                     data={parsedData}
-                    width={width}
-                    height={Platform.OS == 'android' ? 220 : getRatio(340)}
+                    width={width + 20}
+                    height={Platform.OS == 'android' ? height / 2.63529412 : getRatio(340)}
                     chartConfig={chartConfig}
                     fromZero={true}
                     withCustomBarColorFromData={true}
                     flatColor={true}
                     showBarTops={false}
-                    style={{marginLeft: -5}}
+                    style={{ marginLeft: Platform.OS == 'android' ? -20 : -5 }}
                 />
             </View>
         </View>

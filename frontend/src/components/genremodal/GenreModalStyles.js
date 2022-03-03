@@ -10,17 +10,17 @@ export default StyleSheet.create({
     height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
-centeredView: {
+  centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: height / 40.7272727,
   },
   modalView: {
-    margin: 20,
+    margin: width / 20.7,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: width / 11.8285714,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -30,11 +30,11 @@ centeredView: {
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: 700
+    height: height / 1.28
   },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: width / 41.4,
     elevation: 2,
   },
   buttonOpen: {
@@ -49,15 +49,15 @@ centeredView: {
     textAlign: 'center',
   },
   modalTitleText: {
-    fontFamily: 'InconsolataBold',
-    fontSize: 15,
-    marginBottom: 15,
+    fontFamily: 'MontserratBold',
+    fontSize: width / 27.6,
+    marginBottom: height / 59.7333333,
     textAlign: 'center',
   },
   modalSubText: {
-    fontFamily: 'InconsolataMedium',
-    fontSize: 12,
-    marginBottom: 15,
+    fontFamily: 'MontserratMedium',
+    fontSize: width / 34.5,
+    marginBottom: height / 59.7333333,
     textAlign: 'center',
   }
 });

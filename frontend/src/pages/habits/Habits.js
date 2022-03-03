@@ -26,7 +26,7 @@ function Habits({ navigation }) {
     const [selectedIndex, setSelectedIndex] = useState(2);
 
     const [graphHabits, setGraphHabits] = useState([]);
-    const [cardHabits, setCardHabits] = useState();
+    const [cardHabits, setCardHabits] = useState([]);
 
     useEffect(() => {
         const tokenController = new AbortController();
@@ -125,11 +125,9 @@ function Habits({ navigation }) {
                 </Text>
                 <View style={HabitsStyles.selectContainer}>
                     <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
-
                             <Text style={[HabitsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
                                 4 weeks
                             </Text>
-
                     </TouchableOpacity>
                     <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]}  onPress={() => changeRange('medium_term', 2)}>
                         <View style={HabitsStyles.selectButtonContainer}>
@@ -153,7 +151,7 @@ function Habits({ navigation }) {
                                 source={require('./animations/60897-line-sound-icon-animations.json')}
                                 autoPlay
                                 loop={false}
-                                style={{ width: 40, height: 40, marginTop: -3 }}
+                                style={HabitsStyles.habitAnimation}
                             />
 
                             <Text style={HabitsStyles.habitName}>
@@ -166,12 +164,17 @@ function Habits({ navigation }) {
                                 {cardHabits.loudness} dB
                             </Text>
                             :
+                            rloading == true ?
                             <LottieView
                                 source={require('./animations/27-loading.json')}
                                 autoPlay
                                 loop
-                                style={{ width: 40, height: 40 }}
+                                style={HabitsStyles.loading}
                             />
+                            :
+                            <Text style={HabitsStyles.habitDescription}>
+                                --
+                            </Text>
                         }
                     </View>
                     <View style={[HabitsStyles.habitContainer, { backgroundColor:'#5311d6' }]}>
@@ -180,7 +183,7 @@ function Habits({ navigation }) {
                                 source={require('./animations/12730-sound-wave.json')}
                                 autoPlay
                                 loop={false}
-                                style={{ width: 40, height: 40, marginTop: -3 }}
+                                style={HabitsStyles.habitAnimation}
                             />
                             <Text style={HabitsStyles.habitName}>
                                 Tempo
@@ -191,12 +194,17 @@ function Habits({ navigation }) {
                                 {cardHabits.tempo} BPM
                             </Text>
                             :
+                            rloading == true ?
                             <LottieView
                                 source={require('./animations/27-loading.json')}
                                 autoPlay
                                 loop
                                 style={{ width: 40, height: 40 }}
                             />
+                            :
+                            <Text style={HabitsStyles.habitDescription}>
+                                --
+                            </Text>
                         }
                     </View>
                     <View style={[HabitsStyles.habitContainer, { backgroundColor:'#16b5c9' }]}>
@@ -205,7 +213,7 @@ function Habits({ navigation }) {
                                 source={require('./animations/71410-speech-bubbles.json')}
                                 autoPlay
                                 loop={false}
-                                style={{ width: 40, height: 40, marginTop: -3 }}
+                                style={HabitsStyles.habitAnimation}
                             />
                             <Text style={HabitsStyles.habitName}>
                                 Speechiness
@@ -216,12 +224,17 @@ function Habits({ navigation }) {
                                 {cardHabits.speechiness}
                             </Text>
                             :
+                            rloading == true ?
                             <LottieView
                                 source={require('./animations/27-loading.json')}
                                 autoPlay
                                 loop
                                 style={{ width: 40, height: 40 }}
                             />
+                            :
+                            <Text style={HabitsStyles.habitDescription}>
+                                --
+                            </Text>
                         }
                     </View>
                     <View style={[HabitsStyles.habitContainer, { backgroundColor:'#20bd52' }]}>
@@ -230,7 +243,7 @@ function Habits({ navigation }) {
                                 source={require('./animations/lf30_editor_eskm9u1h.json')}
                                 autoPlay
                                 loop={false}
-                                style={{ width: 40, height: 40, marginTop: -3 }}
+                                style={HabitsStyles.habitAnimation}
                             />
                             <Text style={HabitsStyles.habitName}>
                                 Acousticness
@@ -241,12 +254,17 @@ function Habits({ navigation }) {
                                 {cardHabits.acousticness}
                             </Text>
                             :
+                            rloading == true ?
                             <LottieView
                                 source={require('./animations/27-loading.json')}
                                 autoPlay
                                 loop
                                 style={{ width: 40, height: 40 }}
                             />
+                            :
+                            <Text style={HabitsStyles.habitDescription}>
+                                --
+                            </Text>
                         }
                     </View>
                 </ScrollView>

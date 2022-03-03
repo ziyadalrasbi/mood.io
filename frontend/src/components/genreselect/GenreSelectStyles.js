@@ -44,7 +44,7 @@ export default StyleSheet.create({
         height: width / 13.8
     },
     removeImage: {
-        width:23,
-        height:23
+        width: width / 18,
+        height: width / 18
     }
 });

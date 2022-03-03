@@ -42,20 +42,21 @@ function UserStats({ navigation, route }) {
                     </View>
                 )
                     :
-                    <LottieView
-                        source={require('./animations/8707-loading.json')}
-                        autoPlay
-                        loop={true}
-                        style={UserStatsStyles.lottieView}
-                    />
+                    rloading == true ?
+                        <LottieView
+                            source={require('./animations/8707-loading.json')}
+                            autoPlay
+                            loop={true}
+                            style={UserStatsStyles.lottieView}
+                        />
+                        :
+                        <Text style={UserStatsStyles.noDataText}>
+                            No data found for this time frame. Try a different time frame, or listen to some more
+                            music on Spotify and come back at a later date to view this data!
+                        </Text>
                 }
             </View>
-            {topArtists.length == 0 &&
-                <Text style={UserStatsStyles.noDataText}>
-                    No data found for this time frame. Try a different time frame, or listen to some more
-                    music on Spotify and come back at a later date to view this data!
-                </Text>
-            }
+
             <View style={{ height: 20 }} />
         </ScrollView>
     );
@@ -93,18 +94,18 @@ function UserStats({ navigation, route }) {
                 </View>
             )
                 :
-                <LottieView
-                    source={require('./animations/8707-loading.json')}
-                    autoPlay
-                    loop={true}
-                    style={UserStatsStyles.lottieViewTracks}
-                />
-            }
-            {topTracks.length == 0 &&
-                <Text style={UserStatsStyles.noDataText}>
-                    No data found for this time frame. Try a different time frame, or listen to some more
-                    music on Spotify and come back at a later date to view this data!
-                </Text>
+                rloading == true ?
+                    <LottieView
+                        source={require('./animations/8707-loading.json')}
+                        autoPlay
+                        loop={true}
+                        style={UserStatsStyles.lottieView}
+                    />
+                    :
+                    <Text style={UserStatsStyles.noDataText}>
+                        No data found for this time frame. Try a different time frame, or listen to some more
+                        music on Spotify and come back at a later date to view this data!
+                    </Text>
             }
             <View style={{ height: 20 }} />
         </ScrollView>

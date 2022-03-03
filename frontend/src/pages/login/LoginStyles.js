@@ -28,8 +28,8 @@ const android = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-    width: 50,
-    height: 50
+    width: width/1.656,
+    height: width/5.91428571
   },  
   gradientContainer: {
     height: '100%', 

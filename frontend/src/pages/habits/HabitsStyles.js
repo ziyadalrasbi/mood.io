@@ -160,6 +160,15 @@ const ios = StyleSheet.create({
         borderRadius: 10,
         height: 35,
         justifyContent: 'center'
+    },
+    habitAnimation: { 
+        width: getRatio(40), 
+        height: getRatio(40), 
+        marginTop: -getRatio(3) 
+    },
+    loading: { 
+        width: getRatio(40), 
+        height: getRatio(40) 
     }
 });
 
@@ -177,7 +186,6 @@ const android = StyleSheet.create({
     welcome: {
         marginLeft: width / 41.4,
         fontFamily: 'MontserratBold',
-        marginTop: height / 6.89230769,
         color: 'white',
         fontSize: width / 16.56
     },
@@ -282,6 +290,17 @@ const android = StyleSheet.create({
         padding: 10,
         color: '#dbdbdb'
     },
+    habitName: {
+        paddingHorizontal: width/41.4,
+        fontFamily: 'InconsolataLight',
+        color: 'white',
+        fontSize: width/29.5714286
+    },
+    habitDescription: {
+        fontFamily: 'MontserratBold',
+        color: 'white',
+        fontSize: width/15.3333333
+    },
     mainContainer: {
         position: 'relative',
         flex: 1,
@@ -291,7 +310,7 @@ const android = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         height: '100%',
-        padding: 10,
+        padding: width/41.4,
         backgroundColor: '#0d324d'
     },
     thirdContainer: {
@@ -478,30 +497,45 @@ const android = StyleSheet.create({
         alignSelf: 'center'
     },
     habitContainer: {
+        marginRight: width/27.6,
+        marginLeft: width/82.8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
         borderRadius: 5,
-        marginTop: 50,
+        marginTop: height/29.8666667,
+        marginBottom: height/179.2,
         backgroundColor: '#045de9',
-        width: '100%',
-        height: 50,
+        width: width/2.5875,
+        height: height/7.79130435,
         shadowColor: '#000000',
         shadowOffset: {
             width: 0,
-            height: 3
+            height: 1
         },
-        shadowRadius: 5,
+        shadowRadius: 3,
         shadowOpacity: 1.0,
-        elevation: 5
+        elevation: 3
     },
     habitsScrollContainer: {
-        marginHorizontal: getRatio(5),
+        marginHorizontal: width/82.8,
         display: 'flex',
         flexDirection: 'row',
         width: '100%'
     },
     opacityContainer: {
         borderRadius: 10,
-        height: 30,
+        height: height/25.6,
         justifyContent: 'center'
+    },
+    habitAnimation: { 
+        width: width/10.35, 
+        height: width/10.35, 
+        marginTop: -(height/298.666667) 
+    },
+    loading: { 
+        width: width/10.35, 
+        height: width/10.35 
     }
 });
 

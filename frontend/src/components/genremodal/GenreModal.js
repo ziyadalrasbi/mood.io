@@ -11,24 +11,20 @@ function GenreModal({ newUser, navigation }) {
   const [modalVisible, setModalVisible] = useState(newUser);
 
   return (
-    <View style={[GenreModalStyles.modalContainer, { display: newUser == true ? 'flex' : 'none' }]}>
-      <StatusBar style="auto" />
-      <View style={GenreModalStyles.centeredView}>
-        <Modal
-          visible={modalVisible}
-        >
-          <View style={GenreModalStyles.centeredView}>
-            <View style={GenreModalStyles.modalView}>
-              <Text style={GenreModalStyles.modalTitleText}>Before continuing...</Text>
-              <Text style={GenreModalStyles.modalSubText}>It seems that you have signed in with a new or unused Spotify account.
-                Before proceeding, please enter your top 5 music artists below (this is a one time setup). After using Spotify more,
-                we can extract your top artists automatically!</Text>
-              <GenreSelect navigation={navigation} />
-            </View>
+      <Modal
+        visible={modalVisible}
+        dismissable={false}
+      >
+        <View style={GenreModalStyles.centeredView}>
+          <View style={GenreModalStyles.modalView}>
+            <Text style={GenreModalStyles.modalTitleText}>Before continuing...</Text>
+            <Text style={GenreModalStyles.modalSubText}>It seems that you have signed in with a new or unused Spotify account.
+              Before proceeding, please enter your top 5 music artists below (this is a one time setup). After using Spotify more,
+              we can extract your top artists automatically!</Text>
+            <GenreSelect navigation={navigation} />
           </View>
-        </Modal>
-      </View>
-    </View>
+        </View>
+      </Modal>
   )
 }
 

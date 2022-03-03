@@ -253,8 +253,8 @@ const ios = StyleSheet.create({
         alignSelf: 'center'
     },
     opacityContainer: {
-        borderRadius: 10,
-        height: 35,
+        borderRadius: getRatio(10),
+        height: getRatio(35),
         justifyContent: 'center'
     }
 });
@@ -332,8 +332,8 @@ const android = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '80%',
-        marginLeft: -10,
-        marginTop: 5,
+        marginLeft: -(width/41.4),
+        marginTop: height/179.2,
     },
     selectButtonContainer: {
         flexDirection: 'row',
@@ -352,7 +352,7 @@ const android = StyleSheet.create({
     selectText: {
         fontFamily: 'InconsolataMedium',
         fontSize: width / 37.6363636,
-        paddingHorizontal: width / 82.8
+        paddingHorizontal: width / 41.4
     },
     secondContainer: {
         position: 'relative',
@@ -573,7 +573,7 @@ const android = StyleSheet.create({
     },
     opacityContainer: {
         borderRadius: 10,
-        height: 35,
+        height: height/25.6,
         justifyContent: 'center'
     }
 });

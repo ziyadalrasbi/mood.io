@@ -19,7 +19,7 @@ import playimg from '../../../assets/icons/home/play.png';
 import { bindActionCreators } from 'redux';
 import cacheAssests from '../../../cacheAssets';
 
-function Home({ navigation, route }) {
+function Home({ navigation }) {
 
   const [newUser, setNewUser] = useState({ newUser: false });
 
@@ -322,22 +322,4 @@ function Home({ navigation, route }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    getTopArtistsHome: state.spotifyReducer.getTopArtistsHome,
-    getName: state.spotifyReducer.getName,
-    getTopTracksHome: state.spotifyReducer.getTopTracksHome,
-    getUserDatabaseArtists: state.dbReducer.getUserDatabaseArtists,
-    getPreviousRecommendations: state.dbReducer.getPreviousRecommendations
-  }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-  getTopArtistsHome,
-  getName,
-  getTopTracksHome,
-  getUserDatabaseArtists,
-  getPreviousRecommendations
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

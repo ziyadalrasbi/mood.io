@@ -16,6 +16,8 @@ import addimg from '../../../assets/icons/genreselect/add.png';
 import removeimg from '../../../assets/icons/genreselect/remove.png';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 const GenreSelect = ({ navigation }) => {
 
@@ -77,9 +79,9 @@ const GenreSelect = ({ navigation }) => {
   }
 
   return (
-    <View style={{ height: 400 }}>
+    <View style={{ height: height/3.24 }}>
       <Searchbar
-        placeholder='search'
+        placeholder='Search'
         onChangeText={(text => {
           if (searchTimer) {
             clearTimeout(searchTimer);
@@ -100,9 +102,9 @@ const GenreSelect = ({ navigation }) => {
         {!loading ?
           <FlatList
             data={items}
-            style={{ marginTop: 10 }}
+            style={{ marginTop: height/89.6 }}
             renderItem={({ item }) => (
-              <View style={{ borderWidth: 1, borderColor: 'grey', padding: 10, backgroundColor: 'transparent', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={{ borderWidth: 1, borderColor: 'grey', padding: width/41.4, backgroundColor: 'transparent', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image
                     style={GenreSelectStyles.artistImage}
@@ -129,7 +131,7 @@ const GenreSelect = ({ navigation }) => {
             source={require('./animations/142-loading-animation.json')}
             autoPlay
             loop={true}
-            style={{ marginTop: 30, width: 100, height: 100, alignSelf: 'center' }}
+            style={{ marginTop: height/29.8666667, width: width/4.14, height: width/4.14, alignSelf: 'center' }}
           />
         }
 
@@ -139,7 +141,7 @@ const GenreSelect = ({ navigation }) => {
           numColumns={1}
           style={{ paddingVertical: 10 }}
           renderItem={({ item }) => (
-            <View style={{ borderRadius: 5, borderWidth: 1, borderColor: 'grey', padding: 10, marginRight: 10, height: 60, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
+            <View style={{ borderRadius: 5, borderWidth: 1, borderColor: 'grey', padding: width/41.4, marginRight: width/41.4, height: height/14.9333333, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
               <Text style={GenreSelectStyles.removeArtistText}>
                 {item.title}
               </Text>
