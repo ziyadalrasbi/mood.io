@@ -97,9 +97,10 @@ const ios = StyleSheet.create({
         borderColor: 'grey'
     },
     selectText: {
+        color: 'white',
         fontFamily: 'InconsolataMedium',
-        fontSize: getRatio(11),
-        paddingHorizontal: getRatio(5)
+        fontSize: getRatio(14),
+        paddingHorizontal: getRatio(10)
     },
     mainContainer: {
         position: 'relative',
@@ -250,6 +251,11 @@ const ios = StyleSheet.create({
         width: getRatio(100),
         height: getRatio(100),
         alignSelf: 'center'
+    },
+    opacityContainer: {
+        borderRadius: 10,
+        height: 35,
+        justifyContent: 'center'
     }
 });
 
@@ -564,6 +570,11 @@ const android = StyleSheet.create({
         width: width / 4.14,
         height: width / 4.14,
         alignSelf: 'center'
+    },
+    opacityContainer: {
+        borderRadius: 10,
+        height: 35,
+        justifyContent: 'center'
     }
 });
 

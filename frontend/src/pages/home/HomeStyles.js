@@ -215,6 +215,7 @@ const ios = StyleSheet.create({
     width: getRatio(100),
     height: getRatio(100),
     marginRight: getRatio(20),
+    marginLeft: getRatio(2),
     marginTop: getRatio(10),
     borderRadius: 100
   },
@@ -229,6 +230,7 @@ const ios = StyleSheet.create({
     width: getRatio(120),
     height: getRatio(120),
     marginRight: getRatio(25),
+    marginLeft: getRatio(2),
     marginTop: getRatio(20),
     borderRadius: 5
   },
@@ -521,6 +523,7 @@ const android = StyleSheet.create({
     width: width / 4.14,
     height: width / 4.14,
     marginRight: width / 20.7,
+    marginLeft: width / 207,
     marginTop: height / 89.6,
     borderRadius: 100
   },
@@ -537,6 +540,7 @@ const android = StyleSheet.create({
     maxWidth: 200,
     maxHeight: 200,
     marginRight: width / 16.56,
+    marginLeft: width / 207,
     marginTop: height / 44.8,
     borderRadius: 5,
   },

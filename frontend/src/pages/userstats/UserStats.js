@@ -154,7 +154,7 @@ function UserStats({ navigation, route }) {
                     setTopTracks(getTracks.getTopTracksStats.topTracks);
                 }
             } catch (error) {
-                console.log('Error getting user stats, please try again. '+ error);
+                console.log('Error getting user stats, please try again. ' + error);
             }
         }
         fetchData().then(() => setLoading(false));
@@ -198,14 +198,12 @@ function UserStats({ navigation, route }) {
 
             setRLoading(false);
 
-            tokenController.abort();
-            getArtistsController.abort();
-            getTracksController.abort();
-
         } catch (error) {
             console.log('Error changing range, please try again. ' + error);
         }
-
+        tokenController.abort();
+        getArtistsController.abort();
+        getTracksController.abort();
     }
 
     const renderTabBar = props => {
@@ -243,31 +241,20 @@ function UserStats({ navigation, route }) {
                     </Text>
                 </View>
                 <View style={UserStatsStyles.selectContainer}>
-                    <TouchableOpacity onPress={() => changeRange('short_term', 1)}>
-                        <View style={UserStatsStyles.selectButtonContainer}>
-                            <View
-                                style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 1 ? '#0e219c' : 'grey' }]}
-                            />
-                            <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
-                                Past 4 weeks
-                            </Text>
-                        </View>
+                    <TouchableOpacity style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
+                        <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
+                            4 weeks
+                        </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeRange('medium_term', 2)}>
+                    <TouchableOpacity style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('medium_term', 2)}>
                         <View style={UserStatsStyles.selectButtonContainer}>
-                            <View
-                                style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 2 ? '#0e219c' : 'grey' }]}
-                            />
                             <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 2 ? 'white' : 'grey' }]}>
-                                Past 6 months
+                                6 months
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeRange('long_term', 3)}>
+                    <TouchableOpacity style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('long_term', 3)}>
                         <View style={UserStatsStyles.selectButtonContainer}>
-                            <View
-                                style={[UserStatsStyles.selectIcon, { backgroundColor: selectedIndex == 3 ? '#0e219c' : 'grey' }]}
-                            />
                             <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 3 ? 'white' : 'grey' }]}>
                                 All time
                             </Text>

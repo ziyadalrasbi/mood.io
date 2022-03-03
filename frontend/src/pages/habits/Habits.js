@@ -15,13 +15,14 @@ import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 
 function Habits({ navigation }) {
 
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(true);
-
+    const [rloading, setRLoading] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(2);
 
     const [graphHabits, setGraphHabits] = useState([]);
@@ -29,7 +30,6 @@ function Habits({ navigation }) {
 
     useEffect(() => {
         const tokenController = new AbortController();
-        const getArtistsController = new AbortController();
         const getTracksController = new AbortController();
         const getHabitsController = new AbortController();
 
@@ -48,28 +48,12 @@ function Habits({ navigation }) {
 
                 const getHabits = await dispatch(getListeningHabits(accessToken, trackIds, amount, getHabitsController.signal));
 
-                var parsedGraphValues = getHabits.getListeningHabits.graphHabits.values;
-                var cardValues = getHabits.getListeningHabits.cardHabits;
+                const graphValues = getHabits.getListeningHabits.graphHabits;
+                const cardValues = getHabits.getListeningHabits.cardHabits;
 
-                var parsedCardValues = [];
+                setGraphHabits(graphValues);
+                setCardHabits(cardValues);
 
-                Object.keys(cardValues).forEach(function(n) {
-                    var test2 = {};
-                    test2[n] = cardValues[n].toFixed(2);
-                    parsedCardValues.push(test2);
-                })
-
-                const finalCardValues = Object.assign({}, ...parsedCardValues);
-                
-                setCardHabits(finalCardValues);
-
-                parsedGraphValues = parsedGraphValues.map(n => n.toFixed(2));
-
-                console.log(getHabits.getListeningHabits.graphHabits.values);
-                console.log(parsedGraphValues);
-
-                
-  
 
             } catch (error) {
                 console.log('Error getting users listening habits, please try again. ' + error);
@@ -79,7 +63,6 @@ function Habits({ navigation }) {
 
         return () => {
             tokenController.abort();
-            getArtistsController.abort();
             getTracksController.abort();
             getHabitsController.abort();
         }
@@ -91,6 +74,43 @@ function Habits({ navigation }) {
         );
     }
 
+    const changeRange = async (range, i) => {
+        const tokenController = new AbortController();
+        const getTracksController = new AbortController();
+        const getHabitsController = new AbortController();
+
+        try {
+            setRLoading(true);
+            setSelectedIndex(i);
+
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+
+            const getTracks = await dispatch(getTopTracksStats(accessToken, range, getTracksController.signal));
+            const trackIds = getTracks.getTopTracksStats.trackIds;
+            const amount = getTracks.getTopTracksStats.trackIds.length;
+
+            const getHabits = await dispatch(getListeningHabits(accessToken, trackIds, amount, getHabitsController.signal));
+
+            const graphValues = getHabits.getListeningHabits.graphHabits;
+            const cardValues = getHabits.getListeningHabits.cardHabits;
+
+            setGraphHabits(graphValues);
+            setCardHabits(cardValues);
+
+            setRLoading(false);
+
+        } catch (error) {
+            console.log('Error changing range, please try again. ' + error);
+        }
+        tokenController.abort();
+        getTracksController.abort();
+        getHabitsController.abort();
+    }
+
     return (
         <ScrollView style={HabitsStyles.scroll}>
             <View style={HabitsStyles.topContainer}>
@@ -100,33 +120,27 @@ function Habits({ navigation }) {
                 <Text style={HabitsStyles.welcome}>
                     Your Listening Habits
                 </Text>
+                <Text style={HabitsStyles.subWelcome}>
+                    Habits are averaged using your top 15 tracks from the given time range.
+                </Text>
                 <View style={HabitsStyles.selectContainer}>
-                    <TouchableOpacity onPress={() => changeRange('short_term', 1)}>
+                    <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
+
+                            <Text style={[HabitsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
+                                4 weeks
+                            </Text>
+
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]}  onPress={() => changeRange('medium_term', 2)}>
                         <View style={HabitsStyles.selectButtonContainer}>
-                            <View
-                                style={[HabitsStyles.selectIcon]}
-                            />
-                            <Text style={[HabitsStyles.selectText]}>
-                                Past 4 weeks
+                            <Text style={[HabitsStyles.selectText, { color: selectedIndex == 2 ? 'white' : 'grey' }]}>
+                                6 months
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeRange('medium_term', 2)}>
+                    <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]}  onPress={() => changeRange('long_term', 3)}>
                         <View style={HabitsStyles.selectButtonContainer}>
-                            <View
-                                style={[HabitsStyles.selectIcon]}
-                            />
-                            <Text style={[HabitsStyles.selectText]}>
-                                Past 6 months
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeRange('long_term', 3)}>
-                        <View style={HabitsStyles.selectButtonContainer}>
-                            <View
-                                style={[HabitsStyles.selectIcon]}
-                            />
-                            <Text style={[HabitsStyles.selectText]}>
+                            <Text style={[HabitsStyles.selectText, { color: selectedIndex == 3 ? 'white' : 'grey' }]}>
                                 All time
                             </Text>
                         </View>
@@ -138,85 +152,112 @@ function Habits({ navigation }) {
                             <LottieView
                                 source={require('./animations/60897-line-sound-icon-animations.json')}
                                 autoPlay
-                                loop
+                                loop={false}
                                 style={{ width: 40, height: 40, marginTop: -3 }}
                             />
+
                             <Text style={HabitsStyles.habitName}>
                                 Loudness
                             </Text>
+
                         </View>
-                        <Text style={HabitsStyles.habitDescription}>
-                        {cardHabits.loudness} dB
-                        </Text>
+                        {(rloading == false && cardHabits != null) ?
+                            <Text style={HabitsStyles.habitDescription}>
+                                {cardHabits.loudness} dB
+                            </Text>
+                            :
+                            <LottieView
+                                source={require('./animations/27-loading.json')}
+                                autoPlay
+                                loop
+                                style={{ width: 40, height: 40 }}
+                            />
+                        }
                     </View>
-                    <View style={HabitsStyles.habitContainer}>
+                    <View style={[HabitsStyles.habitContainer, { backgroundColor:'#5311d6' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
                                 source={require('./animations/12730-sound-wave.json')}
                                 autoPlay
-                                loop
+                                loop={false}
                                 style={{ width: 40, height: 40, marginTop: -3 }}
                             />
                             <Text style={HabitsStyles.habitName}>
                                 Tempo
                             </Text>
                         </View>
-                        <Text style={HabitsStyles.habitDescription}>
-                        {cardHabits.tempo} BPM
-                        </Text>
+                        {(rloading == false && cardHabits != null) ?
+                            <Text style={HabitsStyles.habitDescription}>
+                                {cardHabits.tempo} BPM
+                            </Text>
+                            :
+                            <LottieView
+                                source={require('./animations/27-loading.json')}
+                                autoPlay
+                                loop
+                                style={{ width: 40, height: 40 }}
+                            />
+                        }
                     </View>
-                    <View style={HabitsStyles.habitContainer}>
+                    <View style={[HabitsStyles.habitContainer, { backgroundColor:'#16b5c9' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
                                 source={require('./animations/71410-speech-bubbles.json')}
                                 autoPlay
-                                loop
+                                loop={false}
                                 style={{ width: 40, height: 40, marginTop: -3 }}
                             />
                             <Text style={HabitsStyles.habitName}>
                                 Speechiness
                             </Text>
                         </View>
-                        <Text style={HabitsStyles.habitDescription}>
-                        {cardHabits.speechiness}
-                        </Text>
+                        {(rloading == false && cardHabits != null) ?
+                            <Text style={HabitsStyles.habitDescription}>
+                                {cardHabits.speechiness}
+                            </Text>
+                            :
+                            <LottieView
+                                source={require('./animations/27-loading.json')}
+                                autoPlay
+                                loop
+                                style={{ width: 40, height: 40 }}
+                            />
+                        }
                     </View>
-                    <View style={HabitsStyles.habitContainer}>
+                    <View style={[HabitsStyles.habitContainer, { backgroundColor:'#20bd52' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
                                 source={require('./animations/lf30_editor_eskm9u1h.json')}
                                 autoPlay
-                                loop
+                                loop={false}
                                 style={{ width: 40, height: 40, marginTop: -3 }}
                             />
                             <Text style={HabitsStyles.habitName}>
                                 Acousticness
                             </Text>
                         </View>
-                        <Text style={HabitsStyles.habitDescription}>
-                        {cardHabits.acousticness}
-                        </Text>
+                        {(rloading == false && cardHabits != null) ?
+                            <Text style={HabitsStyles.habitDescription}>
+                                {cardHabits.acousticness}
+                            </Text>
+                            :
+                            <LottieView
+                                source={require('./animations/27-loading.json')}
+                                autoPlay
+                                loop
+                                style={{ width: 40, height: 40 }}
+                            />
+                        }
                     </View>
                 </ScrollView>
+            </View>
+            <View style={{ marginTop: 30 }}>
+                {graphHabits != null &&
+                    <HabitsGraph data={graphHabits} />
+                }
             </View>
         </ScrollView>
     );
 }
-
-// const mapStateToProps = (state) => {
-//     return {
-//         refreshAccessToken: state.spotifyReducer.refreshAccessToken,
-//         getUserProfile: state.spotifyReducer.getUserProfile,
-//         getTopArtistsStats: state.spotifyReducer.getTopArtistsStats,
-//         getTopTracksStats: state.spotifyReducer.getTopTracksStats
-//     }
-// }
-
-// const mapDispatchToProps = dispatch => bindActionCreators({
-//     refreshAccessToken,
-//     getUserProfile,
-//     getTopArtistsStats,
-//     getTopTracksStats
-// }, dispatch);
 
 export default Habits;

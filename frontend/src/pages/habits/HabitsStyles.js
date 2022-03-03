@@ -24,6 +24,7 @@ const ios = StyleSheet.create({
         fontSize: getRatio(27)
     },
     subWelcome: {
+        marginTop: getRatio(20),
         paddingHorizontal: getRatio(10),
         fontFamily: 'InconsolataLight',
         color: 'white',
@@ -102,8 +103,8 @@ const ios = StyleSheet.create({
     selectText: {
         color: 'white',
         fontFamily: 'InconsolataMedium',
-        fontSize: getRatio(11),
-        paddingHorizontal: getRatio(5)
+        fontSize: getRatio(14),
+        paddingHorizontal: getRatio(10)
     },
     habitName: {
         paddingHorizontal: getRatio(10),
@@ -135,7 +136,8 @@ const ios = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
         borderRadius: 5,
-        marginTop: 50,
+        marginTop: 30,
+        marginBottom: 5,
         backgroundColor: '#045de9',
         width: 160,
         height: 115,
@@ -154,6 +156,11 @@ const ios = StyleSheet.create({
         flexDirection: 'row',
         width: '100%'
     },
+    opacityContainer: {
+        borderRadius: 10,
+        height: 35,
+        justifyContent: 'center'
+    }
 });
 
 const android = StyleSheet.create({
@@ -484,6 +491,17 @@ const android = StyleSheet.create({
         shadowRadius: 5,
         shadowOpacity: 1.0,
         elevation: 5
+    },
+    habitsScrollContainer: {
+        marginHorizontal: getRatio(5),
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%'
+    },
+    opacityContainer: {
+        borderRadius: 10,
+        height: 30,
+        justifyContent: 'center'
     }
 });
 
