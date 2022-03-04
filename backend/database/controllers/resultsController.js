@@ -24,7 +24,33 @@ const getUserArtists = async (req, res, next) => {
             })
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);
-        res.status(400).send(error.message);
+        return res.json({ status: 400 });
+    }
+}
+
+const getPlaylistsAmount = async (req, res, next) => {
+    try {
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.get()
+            .then((doc) => {
+                return res.json({ amount: doc.data().playlists });
+            })
+    } catch (error) {
+        console.log('Error getting playlists amount, please try again. \n' + error);
+        return res.json({ status: 400 });
+    }
+}
+
+const incrementPlaylistsAmount = async (req, res, next) => {
+    try {
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.update({
+            playlists: firebase.firestore().FieldValue.increment(1)
+        });
+        return res.json({ status: 200 });
+    } catch (error) {
+        console.log('Error incrementing playlists amount, please try again. \n' + error);
+        return res.json({ status: 400 });
     }
 }
 
@@ -37,11 +63,29 @@ const saveRecommendations = async (req, res, next) => {
             .add({
                 mood: req.body.mood,
                 tracks: req.body.tracks,
-                time: Date.now()
+                time: Date.now(),
+                playlisted: false,
+                id: req.body.id
             })
         return res.json({ status: 200 });
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);
+        return res.json({ status: 400 });
+    }
+}
+
+const setPlaylisted = async (req, res, next) => {
+    try {
+        const response = await firebase.firestore()
+            .collection('users')
+            .doc(JSON.stringify(req.body.user))
+            .collection('recommendations')
+            .where('id', '==', req.body.id);
+        response.set({
+            playlisted: true
+        }, { merge: true });
+    } catch (error) {
+        console.log('Error setting playlisted status, please try again. \n' + error);
         return res.json({ status: 400 });
     }
 }
@@ -60,7 +104,7 @@ const saveUserRating = async (req, res, next) => {
         res.send('User added successfully!');
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);
-        res.status(400).send(error.message);
+        return res.json({ status: 400 });
     }
 }
 
@@ -73,15 +117,17 @@ const getRecentMood = async (req, res, next) => {
             })
     } catch (error) {
         console.log('Error getting user top genres from database, please try again. \n' + error);
-        res.status(400).send(error.message);
+        return res.json({ status: 400 });
     }
 }
-
 
 module.exports = {
     saveRecentMood,
     getUserArtists,
+    getPlaylistsAmount,
+    incrementPlaylistsAmount,
     saveRecommendations,
+    setPlaylisted,
     saveUserRating,
     getRecentMood
 }

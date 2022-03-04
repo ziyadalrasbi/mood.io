@@ -62,7 +62,7 @@ function Home({ navigation }) {
         const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
         const getDbArtists = await dispatch(getUserDatabaseArtists(userId, getDbArtistsController.signal));
         const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
-        const amount = getArtists.getTopArtistsHome.length;
+        const amount = getTracks.getTopTracksHome.trackIds.length;
         const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
         setTopArtists(getArtists.getTopArtistsHome);
@@ -79,7 +79,7 @@ function Home({ navigation }) {
 
         for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && recommendation.length < 6; i++) {
           const current = getRecommendations.getPreviousRecommendations[i].tracks[0];
-          if (!isArrayInArray(recommendation, current)) {
+          if (!isArrayInArray(recommendation, current) || getRecommendations.getPreviousRecommendations.length == 1) {
             recommendation.push(current);
           }
         }

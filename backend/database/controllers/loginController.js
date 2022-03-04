@@ -31,11 +31,19 @@ const signOut = async (req, res, next) => {
 
 const addUser = async (req, res, next) => {
     try {
+        var playlists = 0;
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.get()
+            .then((doc) => {
+                if (doc.data().playlists != null) {
+                    playlists = doc.data().playlists;
+                }
+            });
         response.set({
-            username: JSON.stringify(req.body.user)
+            username: JSON.stringify(req.body.user),
+            playlists: playlists
         }, { merge: true });
-        return res.json({ status: 'User added successfully!' });
+        return res.json({ status: 200 });
     } catch (error) {
         console.log('Error initializing the user for the first time, please try again. \n' + error);
         return res.json({ status: 400 });
