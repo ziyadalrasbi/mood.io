@@ -38,11 +38,11 @@ const addUser = async (req, res, next) => {
                 if (doc.data().playlists != null) {
                     playlists = doc.data().playlists;
                 }
+                response.set({
+                    username: JSON.stringify(req.body.user),
+                    playlists: playlists
+                }, { merge: true });
             });
-        response.set({
-            username: JSON.stringify(req.body.user),
-            playlists: playlists
-        }, { merge: true });
         return res.json({ status: 200 });
     } catch (error) {
         console.log('Error initializing the user for the first time, please try again. \n' + error);
