@@ -93,7 +93,8 @@ const setPlaylisted = async (req, res, next) => {
                         playlisted: true
                     }, { merge: true });
                 })
-            })
+            });
+        return res.json({ status: 200 });
     } catch (error) {
         console.log('Error setting playlisted status, please try again. \n' + error);
         return res.json({ status: 400 });
