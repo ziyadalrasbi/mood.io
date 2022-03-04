@@ -48,10 +48,10 @@ const incrementPlaylistsAmount = async (req, res, next) => {
         response.get()
             .then((doc) => {
                 amount = doc.data().playlists + 1;
+                response.set({
+                    playlists: amount
+                }, { merge: true });
             })
-        response.update({
-            playlists: amount
-        });
         return res.json({ status: 200 });
     } catch (error) {
         console.log('Error incrementing playlists amount, please try again. \n' + error);
