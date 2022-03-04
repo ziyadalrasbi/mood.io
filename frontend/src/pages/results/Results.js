@@ -10,8 +10,14 @@ import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import LottieView from 'lottie-react-native';
 import Loading from '../../components/loading/Loading';
-import { refreshAccessToken, createLibrary, getRecommendations, createPlaylist, addTracksToPlaylist } from '../../client/src/actions/spotifyActions';
-import { getUserDatabaseArtists, saveRecommendations, saveUserRating } from '../../client/src/actions/dbActions';
+import {
+    refreshAccessToken,
+    createLibrary,
+    getRecommendations,
+    createPlaylist,
+    addTracksToPlaylist,
+} from '../../client/src/actions/spotifyActions';
+import { getUserDatabaseArtists, saveRecommendations, saveUserRating, getPlaylistsAmount, incrementPlaylistsAmount, setPlaylisted } from '../../client/src/actions/dbActions';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import StarRating from 'react-native-star-rating';
@@ -100,6 +106,8 @@ function Results({ navigation, route }) {
     const [saving, setSaving] = useState(false);
     const [complete, setComplete] = useState(false);
 
+    const [playlistsAmount, setPlaylistsAmount] = useState(0);
+
     const filterFeaturesByMaxEmotion = (emotion) => {
         const maxEmotion = emotion;
 
@@ -170,7 +178,15 @@ function Results({ navigation, route }) {
         return features;
     }
 
-    const fetchData = async (tokenSignal, dbArtistsSignal, librarySignal, getRecommendationsSignal, saveRecommendationsSignal) => {
+    const fetchData = async (
+        tokenSignal,
+        dbArtistsSignal,
+        librarySignal,
+        getRecommendationsSignal,
+        saveRecommendationsSignal,
+        incrementPlaylistsAmountSignal,
+        getPlaylistsAmountSignal
+    ) => {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
         const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenSignal));
@@ -182,13 +198,18 @@ function Results({ navigation, route }) {
         const artists = getArtists.getUserDatabaseArtists;
         const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
+        const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
+        const amount = getAmount.getPlaylistsAmount + 1;
+        setPlaylistsAmount(amount);
+        await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal))
+
         const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, librarySignal));
         const trackIds = getLibrary.createLibrary;
         const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
         setLength(getRec.getRecommendations.recommendations.length + 1);
         setRecommendations(getRec.getRecommendations.recommendations);
         setUris(getRec.getRecommendations.uris);
-        await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), saveRecommendationsSignal));
+        await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), amount, saveRecommendationsSignal));
         setRLoading(false);
     }
 
@@ -198,13 +219,17 @@ function Results({ navigation, route }) {
         const createLibraryController = new AbortController();
         const getRecommendationsController = new AbortController();
         const saveRecommendationsController = new AbortController();
+        const getPlaylistsAmountController = new AbortController();
+        const incrementPlaylistsAmountController = new AbortController();
         try {
             fetchData(
                 tokenController.signal,
                 getArtistsController.signal,
                 createLibraryController.signal,
                 getRecommendationsController.signal,
-                saveRecommendationsController.signal
+                saveRecommendationsController.signal,
+                incrementPlaylistsAmountController.signal,
+                getPlaylistsAmountController.signal
             );
             setMoodHeader({ moodHeader: detectedMood.moodHeader });
             setMoodDescription({ moodDescription: detectedMood.moodDescription });
@@ -219,6 +244,8 @@ function Results({ navigation, route }) {
             createLibraryController.abort();
             getRecommendationsController.abort();
             saveRecommendationsController.abort();
+            getPlaylistsAmountController.abort();
+            incrementPlaylistsAmountController.abort();
         }
     }, [dispatch])
 
@@ -243,17 +270,22 @@ function Results({ navigation, route }) {
         const tokenController = new AbortController();
         const createPlaylistController = new AbortController();
         const addTracksController = new AbortController();
+        const setPlaylistedController = new AbortController();
         try {
             setPLoading(true);
             setSaving(true);
+            const userId = await SecureStore.getItemAsync('user_id');
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
             const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
             const accessToken = getToken.refreshAccessToken;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-            const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + length, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
+            
+            const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + playlistsAmount, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
             const id = getPlaylist.createPlaylist.id;
             await dispatch(addTracksToPlaylist(accessToken, id, uris, addTracksController.signal));
+
+            await dispatch(setPlaylisted(userId, playlistsAmount, setPlaylistedController.signal));
             setSaving(false);
             setComplete(true);
         } catch (error) {
@@ -262,6 +294,7 @@ function Results({ navigation, route }) {
         tokenController.abort();
         createPlaylistController.abort();
         addTracksController.abort();
+        setPlaylistedController.abort();
     }
 
     return (

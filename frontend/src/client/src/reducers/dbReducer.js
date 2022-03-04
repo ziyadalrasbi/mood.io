@@ -12,7 +12,8 @@ export const initialState = {
     saveUserRating: {},
     getPlaylistsAmount: {},
     incrementPlaylistsAmount: {},
-    saveRecommendations: {}
+    saveRecommendations: {},
+    setPlaylisted: {}
 }
 
 export const dbReducer = (state = initialState, action) => {
@@ -75,6 +76,11 @@ export const dbReducer = (state = initialState, action) => {
             return {
                 ...state,
                 saveRecommendations: action.saveRecommendations
+            }
+            case 'SET_PLAYLISTED':
+            return {
+                ...state,
+                setPlaylisted: action.setPlaylisted
             }
         default:
             return state

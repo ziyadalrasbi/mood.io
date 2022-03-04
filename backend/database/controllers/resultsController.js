@@ -81,14 +81,19 @@ const saveRecommendations = async (req, res, next) => {
 
 const setPlaylisted = async (req, res, next) => {
     try {
-        const response = await firebase.firestore()
+        await firebase.firestore()
             .collection('users')
             .doc(JSON.stringify(req.body.user))
             .collection('recommendations')
-            .where('id', '==', req.body.id);
-        response.set({
-            playlisted: true
-        }, { merge: true });
+            .where('id', '==', req.body.id)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    doc.ref.set({
+                        playlisted: true
+                    }, { merge: true });
+                })
+            })
     } catch (error) {
         console.log('Error setting playlisted status, please try again. \n' + error);
         return res.json({ status: 400 });

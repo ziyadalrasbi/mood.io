@@ -51,16 +51,12 @@ function Home({ navigation }) {
     const getDbArtistsController = new AbortController();
     const getRecommendationsController = new AbortController();
     const getHabitsController = new AbortController();
-    const getPlaylistsAmountController = new AbortController();
-    const incrementPlaylistsAmountController = new AbortController();
+
     const fetchData = async () => {
       try {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const userId = await SecureStore.getItemAsync('user_id');
 
-        await dispatch(incrementPlaylistsAmount(userId, incrementPlaylistsAmountController.signal));
-        const getAmount = await dispatch(getPlaylistsAmount(userId, getPlaylistsAmountController.signal));
-        console.log(getAmount.getPlaylistsAmount);
         const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
         const getUserName = await dispatch(getName(token, getUserNameController.signal));
         const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
@@ -108,8 +104,6 @@ function Home({ navigation }) {
       getDbArtistsController.abort();
       getRecommendationsController.abort();
       getHabitsController.abort();
-      getPlaylistsAmountController.abort();
-      incrementPlaylistsAmountController.abort();
     };
 
   }, [dispatch]);

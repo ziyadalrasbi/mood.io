@@ -206,11 +206,13 @@ export const incrementPlaylistsAmount = (user, signal) => (dispatch, getState) =
         })
 })
 
-export const saveRecommendations = (user, mood, tracks) => (dispatch, getState) => Promise.resolve().then(() => {
+export const saveRecommendations = (user, mood, tracks, playlistId, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialMood = { mood };
     const initialTracks = { tracks };
+    const initialPlaylistId = { playlistId };
     return fetch(`${baseUrl}/database/results/saveRecommendations`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -219,12 +221,34 @@ export const saveRecommendations = (user, mood, tracks) => (dispatch, getState) 
         body: JSON.stringify({
             user: initialUser.user,
             mood: initialMood.mood,
-            tracks: initialTracks.tracks
+            tracks: initialTracks.tracks,
+            id: initialPlaylistId.playlistId
         })
     })
         .then(res => res.json())
         .then(data => {
             return dispatch({ type: 'SAVE_RECOMMENDATIONS', saveRecommendations: data });
+        })
+})
+
+export const setPlaylisted = (user, id, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUser = { user };
+    const initialId = { id };
+    return fetch(`${baseUrl}/database/results/setPlaylisted`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: initialUser.user,
+            id: initialId.id
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'SET_PLAYLISTED', setPlaylisted: data });
         })
 })
 
