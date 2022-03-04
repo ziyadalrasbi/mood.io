@@ -168,6 +168,44 @@ export const saveRecentMood = (user, mood) => (dispatch, getState) => Promise.re
         })
 })
 
+export const getPlaylistsAmount = (user, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUser = { user };
+    return fetch(`${baseUrl}/database/results/getPlaylistsAmount`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: initialUser.user
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'GET_PLAYLISTS_AMOUNT', getPlaylistsAmount: data.amount });
+        })
+})
+
+export const incrementPlaylistsAmount = (user, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUser = { user };
+    return fetch(`${baseUrl}/database/results/incrementPlaylistsAmount`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: initialUser.user
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'INCREMENT_PLAYLISTS_AMOUNT', incrementPlaylistsAmount: data });
+        })
+})
+
 export const saveRecommendations = (user, mood, tracks) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialMood = { mood };
