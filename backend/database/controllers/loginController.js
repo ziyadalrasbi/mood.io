@@ -35,7 +35,7 @@ const addUser = async (req, res, next) => {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
-                if (doc.data().playlists != null) {
+                if (doc.exists()) {
                     playlists = doc.data().playlists;
                 }
                 response.set({
