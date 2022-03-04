@@ -43,9 +43,14 @@ const getPlaylistsAmount = async (req, res, next) => {
 
 const incrementPlaylistsAmount = async (req, res, next) => {
     try {
+        var amount = 0;
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.get()
+            .then((doc) => {
+                amount = doc.data().playlists;
+            })
         response.update({
-            playlists: firebase.firestore.FieldValue.increment(1)
+            playlists: amount
         });
         return res.json({ status: 200 });
     } catch (error) {
