@@ -48,7 +48,7 @@ export const loginUser = (id, signal) => (dispatch, getState) => Promise.resolve
         })
         .then((res) => res.json())
         .then(data => {
-            return dispatch({ type: 'LOGIN_USER', loginUser: data.user });
+            return dispatch({ type: 'LOGIN_USER', loginUser: data.user, isLoggedIn: true });
         })
 })
 

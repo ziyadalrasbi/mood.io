@@ -67,11 +67,12 @@ const CustomDrawer = ({ props, navigation }) => {
             await SecureStore.deleteItemAsync('user_id');
             await dispatch(signOut(signOutController.signal));
             await dispatch(spotifySignOut());
-            signOutController.abort();
+            
             navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
         } catch (error) {
             console.log('Error signing out, please try again. '+ error);
         }
+        signOutController.abort();
     }
 
     return (

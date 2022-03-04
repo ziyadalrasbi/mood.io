@@ -18,13 +18,6 @@ const { width, height } = Dimensions.get('window');
 const CustomCarousel = ({ onPressLogin }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
-  const [loaded] = useFonts({
-    InconsolataBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-    InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
-    InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
-    InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
-    InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-  });
 
   const data = [
     {
@@ -93,9 +86,7 @@ const CustomCarousel = ({ onPressLogin }) => {
     </View>
   ), []);
 
-  if (!loaded) {
-    return null;
-  }
+
   return (
     <SafeAreaView style={CustomCarouselStyles.mainContainer}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>

@@ -169,7 +169,7 @@ function UserStats({ navigation, route }) {
 
     if (loading) {
         return (
-            <Loading page={"home"} />
+            <Loading page={"stats"} />
         );
     }
 

@@ -70,7 +70,7 @@ function Habits({ navigation }) {
 
     if (loading) {
         return (
-            <Loading page={"home"} />
+            <Loading page={"habits"} />
         );
     }
 

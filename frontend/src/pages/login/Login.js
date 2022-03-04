@@ -12,6 +12,7 @@ import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as WebBrowser from 'expo-web-browser';
 import logo from '../../../assets/icons/testlogo.png';
+import Loading from '../../components/loading/Loading';
 
 if (Platform.OS === 'web') {
     WebBrowser.maybeCompleteAuthSession();
@@ -20,6 +21,8 @@ function Login({ navigation }) {
 
     const dispatch = useDispatch();
 
+    const [pressed, setPressed] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
     const discovery = {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
         tokenEndpoint: 'https://accounts.spotify.com/api/token',
@@ -69,6 +72,7 @@ function Login({ navigation }) {
             await SecureStore.deleteItemAsync('spotify_refresh_token');
             const res = await promptAsync();
             if (res && res.type == 'success') {
+                setLoading(true);
                 const getTokens = await dispatch(requestAccessToken(request.redirectUri, res.params.code, requestTokenController.signal));
                 const accessToken = getTokens.requestAccessToken.accessToken;
                 const refreshToken = getTokens.requestAccessToken.refreshToken;
@@ -91,18 +95,21 @@ function Login({ navigation }) {
                 loginUserController.abort();
                 getArtistsController.abort();
                 saveArtistsController.abort();
+                setLoading(false);
                 navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
             }
         } catch (error) {
-            console.log('Error logging in, please try again. '+ error);
+            console.log('Error logging in, please try again. ' + error);
         }
     }
 
     if (!loaded) {
+        return <View />;
+    }
+
+    if (loading) {
         return (
-            <View>
-                <Text>Loading...</Text>
-            </View>
+            <Loading page={'login'} />
         )
     }
 
@@ -119,7 +126,7 @@ function Login({ navigation }) {
                 />
             </View>
             <View style={LoginStyles.bottomContainer}>
-                <CustomCarousel onPressLogin={onPressLogin} />
+                <CustomCarousel onPressLogin={onPressLogin} pressed={pressed} />
             </View>
         </View>
     );
