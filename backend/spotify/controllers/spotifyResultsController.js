@@ -33,6 +33,7 @@ const createLibrary = async (req, res, next) => {
             }
         }, function (err) {
             console.log('There was an error getting recommendations, please try again.', err);
+            return res.json({ status: 400 });
         })
 
     for (let i = 0; i < req.body.artists.length; i++) {
@@ -74,6 +75,7 @@ const createLibrary = async (req, res, next) => {
                 }
             }, function (err) {
                 console.log('There was an error getting recommendations, please try again.', err);
+                return res.json({ status: 400 });
             })
     }
     return res.json({ recommendations: recommendations, trackIds: trackIds });
@@ -118,6 +120,7 @@ const getRecommendations = async (req, res, next) => {
                 }
             }, function (err) {
                 console.log('There was an error getting audio features, please try again.', err);
+                return res.json({ status: 400 });
             });
     } catch (error) {
         console.log(error);
@@ -146,6 +149,7 @@ const getRecommendations = async (req, res, next) => {
             return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
         }, function (err) {
             console.log('There was an error getting audio features2, please try again.', err);
+            return res.json({ status: 400 });
         })
 }
 
@@ -170,6 +174,7 @@ const createPlaylist = async (req, res, next) => {
             })
     } catch (error) {
         console.log('There was an error creating playlist for user, please try again.', err);
+        return res.json({ status: 400 });
     }
 }
 

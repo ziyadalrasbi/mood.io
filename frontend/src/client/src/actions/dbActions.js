@@ -1,4 +1,6 @@
-const baseUrl = "https://mood-io-app.herokuapp.com";
+import * as Constants from '../../../Constants';
+
+const baseUrl = Constants.BASE_URL;
 
 export const initUser = (user, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };

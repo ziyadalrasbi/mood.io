@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font';
 import HomeStyles from './HomeStyles';
@@ -35,6 +35,8 @@ function Home({ navigation }) {
   const [habits, setHabits] = useState([]);
 
   const [recommendations, setRecommendations] = useState({ recommendations: [] });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   function isArrayInArray(arr, item) {
     var item_as_string = JSON.stringify(item);
@@ -108,6 +110,62 @@ function Home({ navigation }) {
 
   }, [dispatch]);
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    console.log('refreshed');
+    
+    const getArtistsController = new AbortController();
+    const getUserNameController = new AbortController();
+    const getTracksController = new AbortController();
+    const getDbArtistsController = new AbortController();
+    const getRecommendationsController = new AbortController();
+    const getHabitsController = new AbortController();
+
+    try {
+      const token = await SecureStore.getItemAsync('spotify_access_token');
+      const userId = await SecureStore.getItemAsync('user_id');
+
+      const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
+      const getUserName = await dispatch(getName(token, getUserNameController.signal));
+      const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
+      const getDbArtists = await dispatch(getUserDatabaseArtists(userId, getDbArtistsController.signal));
+      const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
+      const amount = getTracks.getTopTracksHome.trackIds.length;
+      const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
+
+      setTopArtists(getArtists.getTopArtistsHome);
+      setName(getUserName.getName);
+      setTopTracks(getTracks.getTopTracksHome.topTracks);
+      setTrackIds(getTracks.getTopTracksHome.trackIds);
+      setHabits(getHabits.getListeningHabitsHome);
+
+      if (getDbArtists.getUserDatabaseArtists.length == 0) {
+        setNewUser({ newUser: true });
+      }
+
+      var recommendation = [];
+
+      for (var i = 0; i < getRecommendations.getPreviousRecommendations.length && recommendation.length < 6; i++) {
+        const current = getRecommendations.getPreviousRecommendations[i].tracks[0];
+        if (!isArrayInArray(recommendation, current) || getRecommendations.getPreviousRecommendations.length == 1) {
+          recommendation.push(current);
+        }
+      }
+
+      setRecommendations(recommendation);
+    } catch (error) {
+      console.log('Error aborting' + error);
+    }
+
+    getArtistsController.abort();
+    getUserNameController.abort();
+    getTracksController.abort();
+    getDbArtistsController.abort();
+    getRecommendationsController.abort();
+    getHabitsController.abort();
+    setRefreshing(false);
+  }, [refreshing]);
+
   if (loading) {
     return (
       <Loading page={"home"} />
@@ -116,7 +174,7 @@ function Home({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
         <LinearGradient
           // Background Linear Gradient
           colors={['#2b5876', '#4e4376']}

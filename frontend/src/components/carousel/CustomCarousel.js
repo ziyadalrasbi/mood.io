@@ -77,12 +77,6 @@ const CustomCarousel = ({ onPressLogin }) => {
         <View />
         <Text style={CustomCarouselStyles.mainFont}> &nbsp; LOGIN WITH SPOTIFY </Text>
       </TouchableOpacity>
-      <View style={CustomCarouselStyles.signUpContainer}>
-        <Text style={CustomCarouselStyles.signUp}> Don't have a Spotify account? </Text>
-        <TouchableOpacity onPress={() => Linking.openURL('https://www.spotify.com/signup')}>
-          <Text style={CustomCarouselStyles.signUpLink}> Sign Up </Text>
-        </TouchableOpacity>
-      </View>
     </View>
   ), []);
 

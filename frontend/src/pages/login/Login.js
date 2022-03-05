@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { makeRedirectUri, useAuthRequest, ResponseType, Prompt, startAsync } from 'expo-auth-session';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { makeRedirectUri, useAuthRequest, ResponseType, Prompt } from 'expo-auth-session';
+import { View, Image } from 'react-native';
 import LoginStyles from './LoginStyles';
 import * as SecureStore from 'expo-secure-store';
 import { useFonts } from 'expo-font';
@@ -13,6 +13,13 @@ import { bindActionCreators } from 'redux';
 import * as WebBrowser from 'expo-web-browser';
 import logo from '../../../assets/icons/testlogo.png';
 import Loading from '../../components/loading/Loading';
+import * as Constants from '../../Constants';
+
+const REDIRECT_URI = Constants.REDIRECT_URI;
+const AUTHORIZATION_ENDPOINT = Constants.AUTHORIZATION_ENDPOINT;
+const TOKEN_ENDPOINT = Constants.TOKEN_ENDPOINT;
+const CLIENT_ID = Constants.CLIENT_ID;
+const SPOTIFY_SCOPES = Constants.SPOTIFY_SCOPES;
 
 if (Platform.OS === 'web') {
     WebBrowser.maybeCompleteAuthSession();
@@ -24,8 +31,8 @@ function Login({ navigation }) {
     const [pressed, setPressed] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const discovery = {
-        authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-        tokenEndpoint: 'https://accounts.spotify.com/api/token',
+        authorizationEndpoint: AUTHORIZATION_ENDPOINT,
+        tokenEndpoint: TOKEN_ENDPOINT
     };
 
     const [loaded] = useFonts({
@@ -39,21 +46,15 @@ function Login({ navigation }) {
     const [request, response, promptAsync] = useAuthRequest(
         {
             responseType: 'code',
-            clientId: "481af46969f2416e95e9196fa60d808d",
-            scopes: [
-                'user-read-email',
-                'user-read-private',
-                'user-top-read',
-                'playlist-modify-public',
-                'playlist-modify-private'
-            ],
+            clientId: CLIENT_ID,
+            scopes: SPOTIFY_SCOPES,
             prompt: Prompt.Login,
             usePKCE: false,
             extraParams: {
                 show_dialog: 'true'
             },
             redirectUri: makeRedirectUri({
-                native: 'moodio://oauthredirect'
+                native: REDIRECT_URI
             }),
         },
         discovery
@@ -88,19 +89,19 @@ function Login({ navigation }) {
                 if (getTopArtists.getTopArtistsLogin != null) {
                     await dispatch(saveUserArtists(userId, getTopArtists.getTopArtistsLogin, saveArtistsController.signal));
                 }
-                requestTokenController.abort();
-                getUserIdController.abort();
-                getUserProfileController.abort();
-                initUserController.abort();
-                loginUserController.abort();
-                getArtistsController.abort();
-                saveArtistsController.abort();
-                setLoading(false);
-                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
             }
         } catch (error) {
             console.log('Error logging in, please try again. ' + error);
         }
+        requestTokenController.abort();
+        getUserIdController.abort();
+        getUserProfileController.abort();
+        initUserController.abort();
+        loginUserController.abort();
+        getArtistsController.abort();
+        saveArtistsController.abort();
+        setLoading(false);
+        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
     }
 
     if (!loaded) {
@@ -116,7 +117,7 @@ function Login({ navigation }) {
     return (
         <View style={LoginStyles.mainContainer}>
             <LinearGradient
-                colors={['#185a9d', '#4ca1af']}
+                colors={['#141E30', '#243B55']}
                 style={LoginStyles.gradientContainer}
             />
             <View style={LoginStyles.logoContainer}>
@@ -132,24 +133,4 @@ function Login({ navigation }) {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        requestAccessToken: state.spotifyReducer.requestAccessToken,
-        initUser: state.dbReducer.initUser,
-        loginUser: state.dbReducer.loginUser,
-        getTopArtistsLogin: state.spotifyReducer.getTopArtistsLogin,
-        saveUserArtists: state.dbReducer.saveUserArtists,
-        getUserProfile: state.spotifyReducer.getUserProfile
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    requestAccessToken,
-    initUser,
-    loginUser,
-    getTopArtistsLogin,
-    saveUserArtists,
-    getUserProfile
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

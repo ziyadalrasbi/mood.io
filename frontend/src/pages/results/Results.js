@@ -29,7 +29,9 @@ import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import StarRating from 'react-native-star-rating';
 import playimg from '../../../assets/icons/home/play.png';
-const { width } = Dimensions.get('window');
+import spotifylogo from '../../../assets/icons/login/spotifylogo.png';
+
+const { width, height } = Dimensions.get('window');
 
 function Results({ navigation, route }) {
 
@@ -129,9 +131,6 @@ function Results({ navigation, route }) {
         });
         setTimeout(() => {
             setScrolled(true);
-            scrollRef.current.scrollTo({
-                y: 0
-            });
         }, 1000);
     }
 
@@ -325,158 +324,142 @@ function Results({ navigation, route }) {
     }
 
     return (
-        <ScrollView scrollEnabled={scrolled} ref={scrollRef} style={ResultsStyles.scroll}>
+        <ScrollView scrollEnabled={false} nestedScrollEnabled={true} ref={scrollRef} style={ResultsStyles.scroll}>
             <View style={ResultsStyles.topContainer}>
                 <Navbar page={'results'} navigation={navigation} />
             </View>
-            {scrolled == false &&
-                <View style={ResultsStyles.mainContainer}>
-                    <Text style={ResultsStyles.welcome}>
-                        Results
-                    </Text>
-                    <View style={ResultsStyles.firstContainer}>
-                        <Text style={ResultsStyles.firstHeader}>
-                            Your mood analysis showed {moodHeader.moodHeader}
-                        </Text>
-                        <Text style={ResultsStyles.firstSubHeader}>
-                            {moodDescription.moodDescription}
-                        </Text>
-                        {<MoodGraph data={route.params.averages} />}
-                    </View>
-                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={onPressTouch}>
-                        <LottieView
-                            source={require('./animations/90278-arrow-down.json')}
-                            autoPlay
-                            loop={true}
-                            style={ResultsStyles.continueLottie}
-                        />
-                    </TouchableOpacity>
-                    <View style={{ height: 500 }} />
-                </View>
-            }
-            <View ref={secondRef} style={ResultsStyles.mainContainer}>
-                <Text style={ResultsStyles.firstHeader}>
-                    Find a collection of songs below suited to better your mood!
+            <View style={ResultsStyles.mainContainer}>
+                <Text style={ResultsStyles.welcome}>
+                    Results
                 </Text>
-                <Text style={ResultsStyles.firstSubHeader}>
-                    Scroll below to save this collection as a playlist to your Spotify account.
-                </Text>
-                <View style={ResultsStyles.recommendationsContainer}>
-                    {!rloading && recommendations.length > 0 && recommendations.map((track, index) =>
-                        <View key={index} style={ResultsStyles.trackContainer}>
-                            <TouchableOpacity
-                                style={{
-                                    shadowColor: '#000',
-                                    shadowOffset: { width: 0, height: 2 },
-                                    shadowOpacity: 0.5,
-                                    shadowRadius: 2,
-                                    elevation: 5
-                                }}
-                                onPress={() => Linking.openURL(track[3])}>
-                                <Image
-                                    style={ResultsStyles.trackImage}
-                                    source={{ uri: track[2] }}
-                                />
-                            </TouchableOpacity>
-                            <View style={{ alignSelf: 'center' }}>
-                                <Text style={ResultsStyles.trackText}>{track[0]}</Text>
-                                <Text style={ResultsStyles.trackArtistText}>by {track[1]}</Text>
-                            </View>
-                            <TouchableOpacity
-                                style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
-                                onPress={() => Linking.openURL(track[3])}>
-                                <Image
-                                    style={ResultsStyles.playImage}
-                                    source={playimg}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={ResultsStyles.saveText}>
-                        To save this collection of songs as a playlist on your Spotify Profile,
-                        press this button!
+                <View style={ResultsStyles.firstContainer}>
+                    <Text style={ResultsStyles.firstHeader}>
+                        Your mood analysis showed {moodHeader.moodHeader}
                     </Text>
-                    {ploading == false &&
-                        <Button
-                            style={ResultsStyles.saveButton}
-                            mode="contained"
-                            labelStyle={ResultsStyles.saveButtonText}
-                            onPress={() => savePlaylist()}
-                        >
-                            Save playlist
-                        </Button>
-                    }
-                    {saving == true &&
-                        <LottieView
-                            source={require('./animations/8707-loading.json')}
-                            autoPlay
-                            loop={true}
-                            style={ResultsStyles.lottieView}
-                        />
-                    }
-                    {complete == true &&
-                        <Text style={[ResultsStyles.rateText, { marginLeft: 20 }]}>
-                            Playlist saved!
-                        </Text>
-                    }
+                    <Text style={ResultsStyles.firstSubHeader}>
+                        {moodDescription.moodDescription}
+                    </Text>
+                    {<MoodGraph data={route.params.averages} />}
                 </View>
-                <View style={{ alignSelf: 'center', marginTop: 10 }}>
-                    {count == 0 &&
-                        <Text style={ResultsStyles.rateText}>
-                            How would you rate the accuracy of this recommendation?
-                        </Text>
-                    }
-
-                    {count == 0 &&
-                        <View style={{ alignSelf: 'center' }}>
-                            <StarRating
-                                disabled={false}
-                                maxStars={5}
-                                rating={count}
-                                selectedStar={(rating) => onStarRatingPress(rating)}
-                                starSize={30}
-                                fullStarColor='gold'
-                            />
-                        </View>
-                    }
-                    {count > 0 &&
-                        <Text style={ResultsStyles.rateText}>
-                            thank you! ⭐
-                        </Text>
-                    }
-                </View>
-
-                <View style={{ height: 40 }} />
-                <StatusBar style="auto" />
+                <TouchableOpacity style={{ alignSelf: 'center' }} onPress={onPressTouch}>
+                    <LottieView
+                        source={require('./animations/90278-arrow-down.json')}
+                        autoPlay
+                        loop={true}
+                        style={ResultsStyles.continueLottie}
+                    />
+                </TouchableOpacity>
+                <View style={{ height: 415 }} />
             </View>
+            <View style={ResultsStyles.topContainer}>
+                <Navbar page={'results'} navigation={navigation} />
+            </View>
+            <Text style={ResultsStyles.firstHeader}>
+                Find a collection of songs below suited to better your mood!
+            </Text>
+            <Text style={ResultsStyles.firstSubHeader}>
+                Scroll below to save this collection as a playlist to your Spotify account.
+            </Text>
+            <View style={{ borderBottomColor: 'grey', borderBottomWidth: 1 }} />
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }} style={{ height: height - 300, flex: 1 }} nestedScrollEnabled={true}>
+                <View style={ResultsStyles.secondContainer}>
+                    <View style={ResultsStyles.recommendationsContainer}>
+                        {!rloading && recommendations.length > 0 && recommendations.map((track, index) =>
+                            <View key={index} style={ResultsStyles.trackContainer}>
+                                <TouchableOpacity
+                                    style={{
+                                        shadowColor: '#000',
+                                        shadowOffset: { width: 0, height: 2 },
+                                        shadowOpacity: 0.5,
+                                        shadowRadius: 2,
+                                        elevation: 5
+                                    }}
+                                    onPress={() => Linking.openURL(track[3])}>
+                                    <Image
+                                        style={ResultsStyles.trackImage}
+                                        source={{ uri: track[2] }}
+                                    />
+                                </TouchableOpacity>
+                                <View style={{ alignSelf: 'center' }}>
+                                    <Text style={ResultsStyles.trackText}>{track[0]}</Text>
+                                    <Text style={ResultsStyles.trackArtistText}>by {track[1]}</Text>
+                                </View>
+                                <TouchableOpacity
+                                    style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                                    onPress={() => Linking.openURL(track[3])}>
+                                    <Image
+                                        style={ResultsStyles.playImage}
+                                        source={playimg}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+                    <View style={ResultsStyles.mainContainer}>
+                        <Text style={ResultsStyles.secondHeader}>
+                            To save this collection of songs as a playlist on your Spotify Profile,
+                            press this button!
+                        </Text>
+                        {ploading == false &&
+                            <TouchableOpacity
+                                style={ResultsStyles.buttonContainer}
+                                activeOpacity={0.5}
+                                onPress={() => savePlaylist()}
+                            >
+                                <Image
+                                    source={spotifylogo}
+                                    style={ResultsStyles.spotifyLogo}
+                                />
+                                <View />
+                                <Text style={ResultsStyles.mainFont}> &nbsp; SAVE PLAYLIST TO SPOTIFY </Text>
+                            </TouchableOpacity>
+                        }
+                        {saving == true &&
+                            <LottieView
+                                source={require('./animations/8707-loading.json')}
+                                autoPlay
+                                loop={true}
+                                style={ResultsStyles.lottieView}
+                            />
+                        }
+                        {complete == true &&
+                            <Text style={ResultsStyles.rateText}>
+                                Playlist saved!
+                            </Text>
+                        }
+                    </View>
+                    <View style={{ alignSelf: 'center', marginTop: 10 }}>
+                        {count == 0 &&
+                            <Text style={ResultsStyles.rateText}>
+                                How would you rate the accuracy of this recommendation?
+                            </Text>
+                        }
+
+                        {count == 0 &&
+                            <View style={{ alignSelf: 'center' }}>
+                                <StarRating
+                                    disabled={false}
+                                    maxStars={5}
+                                    rating={count}
+                                    selectedStar={(rating) => onStarRatingPress(rating)}
+                                    starSize={30}
+                                    fullStarColor='gold'
+                                />
+                            </View>
+                        }
+                        {count > 0 &&
+                            <Text style={ResultsStyles.rateText}>
+                                thank you! ⭐
+                            </Text>
+                        }
+                        <View style={{ height: 40 }} />
+                    </View>
+
+                    <StatusBar style="auto" />
+                </View>
+            </ScrollView>
         </ScrollView>
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        refreshAccessToken: state.spotifyReducer.refreshAccessToken,
-        createLibrary: state.spotifyReducer.createLibrary,
-        getRecommendations: state.spotifyReducer.getRecommendations,
-        createPlaylist: state.spotifyReducer.createPlaylist,
-        addTracksToPlaylist: state.spotifyReducer.addTracksToPlaylist,
-        getUserDatabaseArtists: state.dbReducer.getUserDatabaseArtists,
-        saveRecommendations: state.dbReducer.saveRecommendations,
-        saveUserRating: state.dbReducer.saveUserRating
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    refreshAccessToken,
-    createLibrary,
-    getRecommendations,
-    createPlaylist,
-    addTracksToPlaylist,
-    getUserDatabaseArtists,
-    saveRecommendations,
-    saveUserRating
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default Results;

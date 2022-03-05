@@ -19,6 +19,17 @@ const ios = StyleSheet.create({
     padding: 10,
     backgroundColor: '#0d324d'
   },
+  secondContainer: {
+    position: 'relative',
+    flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    height: '100%',
+    backgroundColor: '#0d324d'
+  },
   topContainer: {
     position: 'relative',
     left: 0,
@@ -61,7 +72,7 @@ const ios = StyleSheet.create({
   },
   firstSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: getRatio(20),
+    fontSize: getRatio(16),
     padding: getRatio(10),
     color: '#dbdbdb'
   },
@@ -83,8 +94,9 @@ const ios = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   mainFont: {
-    fontFamily: 'InconsolataMedium',
-    fontSize: getRatio(22)
+    fontFamily: 'MontserratMedium',
+    fontSize: getRatio(15),
+    color:'white'
   },
   scroll: {
     flex: 1,
@@ -101,6 +113,9 @@ const ios = StyleSheet.create({
   recommendationsContainer: {
     flex: 1,
     height: '100%',
+    backgroundColor: '#09263b',
+    borderWidth: 1,
+    borderColor: 'grey'
   },
   trackContainer: {
     padding: getRatio(10),
@@ -140,6 +155,7 @@ const ios = StyleSheet.create({
     marginRight: getRatio(20)
   },
   rateText: {
+    marginTop: getRatio(25),
     fontFamily: 'MontserratBold',
     fontSize: 11,
     color: 'white',
@@ -166,8 +182,7 @@ const ios = StyleSheet.create({
     color: 'white',
   },
   lottieView: {
-    marginLeft: getRatio(25),
-    marginTop: getRatio(-5),
+    marginTop: getRatio(10),
     width: getRatio(60),
     height: getRatio(60),
     alignSelf: 'center'
@@ -177,6 +192,26 @@ const ios = StyleSheet.create({
     height: getRatio(170),
     marginTop: getRatio(50),
     alignSelf: 'center'
+  },
+  buttonContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: getRatio(25),
+    padding: getRatio(10),
+    justifyContent: 'center',
+    backgroundColor: '#1DB954',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: getRatio(40),
+    borderRadius: 5,
+  },
+  spotifyLogo: {
+    width: getRatio(25),
+    height: getRatio(25),
+    resizeMode: 'contain',
+    backgroundColor: 'transparent'
   }
 });
 
@@ -279,7 +314,7 @@ const android = StyleSheet.create({
     flex: 2,
     flexDirection: 'row',
     width: '100%',
-    borderRadius: width / 41.4,
+    borderRadius: width / 41.4
   },
   trackImage: {
     width: width / 3.45,
