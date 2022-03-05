@@ -31,7 +31,7 @@ const ios = StyleSheet.create({
   },
   welcome: {
     marginLeft: getRatio(10),
-    fontFamily: 'MontserratBold',
+    fontFamily: 'MontserratLight',
     color: 'white',
     fontSize: getRatio(27)
   },
@@ -39,7 +39,7 @@ const ios = StyleSheet.create({
     marginLeft: getRatio(10),
     marginTop: getRatio(29),
     marginBottom: getRatio(10),
-    fontFamily: 'InconsolataLight',
+    fontFamily: 'MontserratLight',
     color: 'white',
     fontSize: getRatio(16.56)
   },
@@ -54,14 +54,14 @@ const ios = StyleSheet.create({
   firstHeader: {
     fontFamily: 'MontserratBold',
     color: 'white',
-    fontSize: getRatio(15),
+    fontSize: getRatio(26),
     padding: getRatio(10),
     marginTop: getRatio(15),
     marginBottom: getRatio(10)
   },
   firstSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: getRatio(14),
+    fontSize: getRatio(20),
     padding: getRatio(10),
     color: '#dbdbdb'
   },
@@ -99,40 +99,44 @@ const ios = StyleSheet.create({
     position: 'absolute'
   },
   recommendationsContainer: {
-
-    padding: 10,
+    flex: 1,
+    height: '100%',
+  },
+  trackContainer: {
+    padding: getRatio(10),
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    borderRadius: getRatio(10),
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   trackImage: {
-    width: getRatio(120),
-    height: getRatio(120),
+    width: getRatio(60),
+    height: getRatio(60),
     marginRight: getRatio(20),
     marginTop: getRatio(10),
-    borderRadius: 20
+    borderRadius: 5
   },
   trackArtistText: {
-    fontFamily: 'InconsolataSemiExpanded',
-    color: 'grey',
-    alignSelf: 'center',
-    textAlign: 'center',
+    fontFamily: 'InconsolataMedium',
+    color: '#dbdbdb',
+    alignSelf: 'flex-start',
+    textAlign: 'left',
     fontSize: getRatio(12),
     fontStyle: 'italic',
-    maxWidth: getRatio(120),
-    marginRight: width / 20.7
+    marginRight: getRatio(20),
+    maxWidth: getRatio(245)
   },
   trackText: {
-    fontFamily: 'InconsolataSemiExpanded',
-    color: 'red',
-    alignSelf: 'center',
-    textAlign: 'center',
+    fontFamily: 'InconsolataMedium',
+    color: 'white',
+    alignSelf: 'flex-start',
+    textAlign: 'left',
     marginTop: getRatio(8),
     marginBottom: getRatio(5),
     fontSize: getRatio(12),
     fontStyle: 'italic',
-    maxWidth: getRatio(120),
+    maxWidth: getRatio(245),
     marginRight: getRatio(20)
   },
   rateText: {
@@ -150,8 +154,11 @@ const ios = StyleSheet.create({
     maxWidth: getRatio(240)
   },
   saveButton: {
-    backgroundColor: '#1DB954',
-
+    backgroundColor: '#1DB954'
+  },
+  playImage: {
+    width: getRatio(22),
+    height: getRatio(22)
   },
   saveButtonText: {
     fontFamily: 'InconsolataMedium',
@@ -163,6 +170,12 @@ const ios = StyleSheet.create({
     marginTop: getRatio(-5),
     width: getRatio(60),
     height: getRatio(60),
+    alignSelf: 'center'
+  },
+  continueLottie: {
+    width: getRatio(170),
+    height: getRatio(170),
+    marginTop: getRatio(50),
     alignSelf: 'center'
   }
 });
@@ -263,6 +276,7 @@ const android = StyleSheet.create({
   recommendationsContainer: {
     padding: 10,
     display: 'flex',
+    flex: 2,
     flexDirection: 'row',
     width: '100%',
     borderRadius: width / 41.4,

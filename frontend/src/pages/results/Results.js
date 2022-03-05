@@ -17,10 +17,18 @@ import {
     createPlaylist,
     addTracksToPlaylist,
 } from '../../client/src/actions/spotifyActions';
-import { getUserDatabaseArtists, saveRecommendations, saveUserRating, getPlaylistsAmount, incrementPlaylistsAmount, setPlaylisted } from '../../client/src/actions/dbActions';
+import {
+    getUserDatabaseArtists,
+    saveRecommendations,
+    saveUserRating,
+    getPlaylistsAmount,
+    incrementPlaylistsAmount,
+    setPlaylisted
+} from '../../client/src/actions/dbActions';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import StarRating from 'react-native-star-rating';
+import playimg from '../../../assets/icons/home/play.png';
 const { width } = Dimensions.get('window');
 
 function Results({ navigation, route }) {
@@ -31,14 +39,14 @@ function Results({ navigation, route }) {
         if (maxMood) {
             if (maxMood == 'happy') {
                 const mood = {
-                    moodHeader: 'that you are feeling happy. That makes us happy too!',
+                    moodHeader: 'that you are feeling happy!',
                     moodDescription: 'Be sure to spread the happiness with others around you :)'
                 }
                 return mood;
             }
             if (maxMood == 'sad') {
                 const mood = {
-                    moodHeader: 'that you are feeling down. We\'re sorry to hear that.',
+                    moodHeader: 'that you are feeling down.',
                     moodDescription: 'It will get better, keep your head up high!'
                 }
                 return mood;
@@ -46,7 +54,7 @@ function Results({ navigation, route }) {
             if (maxMood == 'angry') {
                 const mood = {
                     moodHeader: 'that you seem tempered and full of energy!',
-                    moodDescription: 'Try to harness your thoughts and energy into something positive!'
+                    moodDescription: 'Try to harness your energy into something positive!'
                 }
                 return mood;
             }
@@ -59,15 +67,15 @@ function Results({ navigation, route }) {
             }
             if (maxMood == 'disgusted') {
                 const mood = {
-                    moodHeader: 'that something may be putting you off. Let\'s change that!',
+                    moodHeader: 'that something may be putting you off.',
                     moodDescription: 'Engage in activities that put you in your comfort zone.'
                 }
                 return mood;
             }
             if (maxMood == 'surprised') {
                 const mood = {
-                    moodHeader: 'that somthing may have caught you off guard recently!',
-                    moodDescription: 'There may be something that is surprising you. We hope it is something positive!'
+                    moodHeader: 'that something may be surprising you!',
+                    moodDescription: 'We hope it is nothing to be concerned about!'
                 }
                 return mood;
             }
@@ -106,7 +114,26 @@ function Results({ navigation, route }) {
     const [saving, setSaving] = useState(false);
     const [complete, setComplete] = useState(false);
 
+    const [scrolled, setScrolled] = useState(false);
+
     const [playlistsAmount, setPlaylistsAmount] = useState(0);
+
+    const scrollRef = useRef();
+    const secondRef = useRef();
+
+    const onPressTouch = () => {
+        scrollRef.current.scrollTo({
+            y: 1230,
+            animated: true,
+            behavior: 'smooth'
+        });
+        setTimeout(() => {
+            setScrolled(true);
+            scrollRef.current.scrollTo({
+                y: 0
+            });
+        }, 1000);
+    }
 
     const filterFeaturesByMaxEmotion = (emotion) => {
         const maxEmotion = emotion;
@@ -280,7 +307,7 @@ function Results({ navigation, route }) {
             const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
             const accessToken = getToken.refreshAccessToken;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-            
+
             const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + playlistsAmount, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
             const id = getPlaylist.createPlaylist.id;
             await dispatch(addTracksToPlaylist(accessToken, id, uris, addTracksController.signal));
@@ -298,33 +325,45 @@ function Results({ navigation, route }) {
     }
 
     return (
-        <ScrollView style={ResultsStyles.scroll}>
+        <ScrollView scrollEnabled={scrolled} ref={scrollRef} style={ResultsStyles.scroll}>
             <View style={ResultsStyles.topContainer}>
                 <Navbar page={'results'} navigation={navigation} />
             </View>
-            <View style={ResultsStyles.mainContainer}>
-                <Text style={ResultsStyles.welcome}>
-                    Results
-                </Text>
-                <Text style={ResultsStyles.subWelcome}>
-                    Your mood analysis can be found below!
-                </Text>
-
-                <View style={ResultsStyles.firstContainer}>
-                    <Text style={ResultsStyles.firstHeader}>
-                        Your result analysis showed {moodHeader.moodHeader}
+            {scrolled == false &&
+                <View style={ResultsStyles.mainContainer}>
+                    <Text style={ResultsStyles.welcome}>
+                        Results
                     </Text>
-                    <Text style={ResultsStyles.firstSubHeader}>
-                        {moodDescription.moodDescription}
-                    </Text>
-                    {<MoodGraph data={route.params.averages} />}
+                    <View style={ResultsStyles.firstContainer}>
+                        <Text style={ResultsStyles.firstHeader}>
+                            Your mood analysis showed {moodHeader.moodHeader}
+                        </Text>
+                        <Text style={ResultsStyles.firstSubHeader}>
+                            {moodDescription.moodDescription}
+                        </Text>
+                        {<MoodGraph data={route.params.averages} />}
+                    </View>
+                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={onPressTouch}>
+                        <LottieView
+                            source={require('./animations/90278-arrow-down.json')}
+                            autoPlay
+                            loop={true}
+                            style={ResultsStyles.continueLottie}
+                        />
+                    </TouchableOpacity>
+                    <View style={{ height: 500 }} />
                 </View>
-                <Text style={ResultsStyles.secondHeader}>
+            }
+            <View ref={secondRef} style={ResultsStyles.mainContainer}>
+                <Text style={ResultsStyles.firstHeader}>
                     Find a collection of songs below suited to better your mood!
                 </Text>
-                <ScrollView style={ResultsStyles.recommendationsContainer} showsHorizontalScrollIndicator={false} horizontal={true}>
+                <Text style={ResultsStyles.firstSubHeader}>
+                    Scroll below to save this collection as a playlist to your Spotify account.
+                </Text>
+                <View style={ResultsStyles.recommendationsContainer}>
                     {!rloading && recommendations.length > 0 && recommendations.map((track, index) =>
-                        <View key={index}>
+                        <View key={index} style={ResultsStyles.trackContainer}>
                             <TouchableOpacity
                                 style={{
                                     shadowColor: '#000',
@@ -339,11 +378,21 @@ function Results({ navigation, route }) {
                                     source={{ uri: track[2] }}
                                 />
                             </TouchableOpacity>
-                            <Text style={ResultsStyles.trackText}>{track[0]}</Text>
-                            <Text style={ResultsStyles.trackArtistText}>by {track[1]}</Text>
+                            <View style={{ alignSelf: 'center' }}>
+                                <Text style={ResultsStyles.trackText}>{track[0]}</Text>
+                                <Text style={ResultsStyles.trackArtistText}>by {track[1]}</Text>
+                            </View>
+                            <TouchableOpacity
+                                style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                                onPress={() => Linking.openURL(track[3])}>
+                                <Image
+                                    style={ResultsStyles.playImage}
+                                    source={playimg}
+                                />
+                            </TouchableOpacity>
                         </View>
                     )}
-                </ScrollView>
+                </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={ResultsStyles.saveText}>
                         To save this collection of songs as a playlist on your Spotify Profile,

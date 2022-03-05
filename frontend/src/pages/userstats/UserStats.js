@@ -90,7 +90,6 @@ function UserStats({ navigation, route }) {
                             source={playimg}
                         />
                     </TouchableOpacity>
-
                 </View>
             )
                 :

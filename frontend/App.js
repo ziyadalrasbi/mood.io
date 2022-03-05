@@ -56,8 +56,6 @@ function App({ navigation }) {
 
         const loadAssets = async () => {
             try {
-
-
                 await cacheAssests({
                     images: [
                         require('./assets/icons/testlogo.png'),
