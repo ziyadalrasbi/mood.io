@@ -123,7 +123,8 @@ const getRecommendations = async (req, res, next) => {
                 return res.json({ status: 400 });
             });
     } catch (error) {
-        console.log(error);
+        console.log('There was an error getting audio features, please try again.', error);
+        return res.json({ status: 400 });
     }
     cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
     var tracksOnly = cosineSimTracks.map(track => track.id);
