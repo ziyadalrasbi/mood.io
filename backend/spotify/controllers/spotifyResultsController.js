@@ -88,74 +88,80 @@ const getRecommendations = async (req, res, next) => {
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
     await api.setAccessToken(req.body.token);
-    try {
-        await api.getAudioFeaturesForTracks(req.body.tracks)
-            .then((data) => {
-                if (data != null) {
-                    for (var i = 0; i < data.body.audio_features.length; i++) {
-                        var currentFeatures = [
-                            data.body.audio_features[i].mode,
-                            data.body.audio_features[i].valence,
-                            data.body.audio_features[i].energy,
-                            data.body.audio_features[i].danceability,
-                            data.body.audio_features[i].loudness,
-                            data.body.audio_features[i].tempo
-                        ];
-                        var dotproduct = 0;
-                        var mA = 0;
-                        var mB = 0;
-                        for (var j = 0; j < currentFeatures.length; j++) {
-                            dotproduct += (currentFeatures[j] * requestedFeatures[j]);
-                            mA += (currentFeatures[j] * currentFeatures[j]);
-                            mB += (requestedFeatures[j] * requestedFeatures[j]);
+    if (req.body.tracks != null) {
+        try {
+
+            await api.getAudioFeaturesForTracks(req.body.tracks)
+                .then((data) => {
+                    if (data != null) {
+                        for (var i = 0; i < data.body.audio_features.length; i++) {
+                            var currentFeatures = [
+                                data.body.audio_features[i].mode,
+                                data.body.audio_features[i].valence,
+                                data.body.audio_features[i].energy,
+                                data.body.audio_features[i].danceability,
+                                data.body.audio_features[i].loudness,
+                                data.body.audio_features[i].tempo
+                            ];
+                            var dotproduct = 0;
+                            var mA = 0;
+                            var mB = 0;
+                            for (var j = 0; j < currentFeatures.length; j++) {
+                                dotproduct += (currentFeatures[j] * requestedFeatures[j]);
+                                mA += (currentFeatures[j] * currentFeatures[j]);
+                                mB += (requestedFeatures[j] * requestedFeatures[j]);
+                            }
+                            mA = Math.sqrt(mA);
+                            mB = Math.sqrt(mB);
+                            var similarity = (dotproduct) / ((mA) * (mB));
+                            const currentSimilarity = {
+                                id: data.body.audio_features[i].id,
+                                uri: data.body.audio_features[i].uri,
+                                similarity: similarity
+                            }
+                            cosineSimTracks.push(currentSimilarity);
                         }
-                        mA = Math.sqrt(mA);
-                        mB = Math.sqrt(mB);
-                        var similarity = (dotproduct) / ((mA) * (mB));
-                        const currentSimilarity = {
-                            id: data.body.audio_features[i].id,
-                            uri: data.body.audio_features[i].uri,
-                            similarity: similarity
-                        }
-                        cosineSimTracks.push(currentSimilarity);
                     }
-                }
-            }, function (err) {
-                console.log('There was an error getting audio features, please try again.', err);
-                return res.json({ status: 400 });
-            });
-    } catch (error) {
-        console.log('There was an error getting audio features, please try again.', error);
+                }, function (err) {
+                    console.log('There was an error getting audio features, please try again.', err);
+                    return res.json({ status: 400 });
+                });
+        } catch (error) {
+            console.log('There was an error getting audio features, please try again.', error);
+            return res.json({ status: 400 });
+        }
+        if (cosineSimTracks.length > 0) {
+            cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
+            var tracksOnly = cosineSimTracks.map(track => track.id);
+            var urisOnly = cosineSimTracks.map(track => track.uri);
+            var uniqueTracks = tracksOnly.filter(onlyUnique);
+            var uniqueUris = urisOnly.filter(onlyUnique);
+            uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
+            uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
+            await api.getTracks(uniqueTracks)
+                .then((data) => {
+                    for (var i = 0; i < data.body.tracks.length; i++) {
+                        if (data.body.tracks[i]['album'].images[0]) {
+                            let recommendation = [];
+                            recommendation.push(data.body.tracks[i].name);
+                            recommendation.push(data.body.tracks[i].artists[0].name);
+                            recommendation.push(data.body.tracks[i]['album'].images[0].url);
+                            recommendation.push(data.body.tracks[i].external_urls.spotify);
+                            recommendations.push(recommendation);
+                        } else {
+                            console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
+                        }
+                    }
+                    return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
+                }, function (err) {
+                    console.log('There was an error getting audio features2, please try again.', err);
+                    return res.json({ status: 400 });
+                })
+        }
+    } else {
         return res.json({ status: 400 });
     }
-    if (cosineSimTracks.length > 0) {
-        cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
-        var tracksOnly = cosineSimTracks.map(track => track.id);
-        var urisOnly = cosineSimTracks.map(track => track.uri);
-        var uniqueTracks = tracksOnly.filter(onlyUnique);
-        var uniqueUris = urisOnly.filter(onlyUnique);
-        uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
-        uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
-        await api.getTracks(uniqueTracks)
-            .then((data) => {
-                for (var i = 0; i < data.body.tracks.length; i++) {
-                    if (data.body.tracks[i]['album'].images[0]) {
-                        let recommendation = [];
-                        recommendation.push(data.body.tracks[i].name);
-                        recommendation.push(data.body.tracks[i].artists[0].name);
-                        recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                        recommendation.push(data.body.tracks[i].external_urls.spotify);
-                        recommendations.push(recommendation);
-                    } else {
-                        console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
-                    }
-                }
-                return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
-            }, function (err) {
-                console.log('There was an error getting audio features2, please try again.', err);
-                return res.json({ status: 400 });
-            })
-    }
+
 }
 
 function onlyUnique(value, index, self) {
