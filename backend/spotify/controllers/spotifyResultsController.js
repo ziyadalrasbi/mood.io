@@ -78,7 +78,9 @@ const createLibrary = async (req, res, next) => {
                 return res.json({ status: 400 });
             })
     }
-    return res.json({ recommendations: recommendations, trackIds: trackIds });
+    if (recommendations.length > 0) {
+        return res.json({ recommendations: recommendations, trackIds: trackIds });
+    }
 }
 
 const getRecommendations = async (req, res, next) => {
@@ -126,32 +128,34 @@ const getRecommendations = async (req, res, next) => {
         console.log('There was an error getting audio features, please try again.', error);
         return res.json({ status: 400 });
     }
-    cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
-    var tracksOnly = cosineSimTracks.map(track => track.id);
-    var urisOnly = cosineSimTracks.map(track => track.uri);
-    var uniqueTracks = tracksOnly.filter(onlyUnique);
-    var uniqueUris = urisOnly.filter(onlyUnique);
-    uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
-    uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
-    await api.getTracks(uniqueTracks)
-        .then((data) => {
-            for (var i = 0; i < data.body.tracks.length; i++) {
-                if (data.body.tracks[i]['album'].images[0]) {
-                    let recommendation = [];
-                    recommendation.push(data.body.tracks[i].name);
-                    recommendation.push(data.body.tracks[i].artists[0].name);
-                    recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                    recommendation.push(data.body.tracks[i].external_urls.spotify);
-                    recommendations.push(recommendation);
-                } else {
-                    console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
+    if (cosineSimTracks.length > 0) {
+        cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
+        var tracksOnly = cosineSimTracks.map(track => track.id);
+        var urisOnly = cosineSimTracks.map(track => track.uri);
+        var uniqueTracks = tracksOnly.filter(onlyUnique);
+        var uniqueUris = urisOnly.filter(onlyUnique);
+        uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
+        uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
+        await api.getTracks(uniqueTracks)
+            .then((data) => {
+                for (var i = 0; i < data.body.tracks.length; i++) {
+                    if (data.body.tracks[i]['album'].images[0]) {
+                        let recommendation = [];
+                        recommendation.push(data.body.tracks[i].name);
+                        recommendation.push(data.body.tracks[i].artists[0].name);
+                        recommendation.push(data.body.tracks[i]['album'].images[0].url);
+                        recommendation.push(data.body.tracks[i].external_urls.spotify);
+                        recommendations.push(recommendation);
+                    } else {
+                        console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
+                    }
                 }
-            }
-            return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
-        }, function (err) {
-            console.log('There was an error getting audio features2, please try again.', err);
-            return res.json({ status: 400 });
-        })
+                return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
+            }, function (err) {
+                console.log('There was an error getting audio features2, please try again.', err);
+                return res.json({ status: 400 });
+            })
+    }
 }
 
 function onlyUnique(value, index, self) {
@@ -183,9 +187,9 @@ const addTracksToPlaylist = async (req, res, next) => {
     await api.setAccessToken(req.body.token);
     try {
         await api.addTracksToPlaylist(req.body.id, req.body.uris)
-        .then(() => {
-            return res.json({ status: 200 });
-        })
+            .then(() => {
+                return res.json({ status: 200 });
+            })
     } catch (error) {
         console.log('There was an error adding tracks to playlist, please try again.', err);
         return res.json({ status: 400 });
