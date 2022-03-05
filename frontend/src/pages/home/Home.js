@@ -11,7 +11,7 @@ import * as Linking from 'expo-linking';
 import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
-import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabitsHome } from '../../client/src/actions/spotifyActions';
+import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabitsHome, refreshAccessToken } from '../../client/src/actions/spotifyActions';
 import { getUserDatabaseArtists, getPreviousRecommendations, getPlaylistsAmount, incrementPlaylistsAmount } from '../../client/src/actions/dbActions';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
@@ -112,8 +112,7 @@ function Home({ navigation }) {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    console.log('refreshed');
-    
+    const tokenController = new AbortController();
     const getArtistsController = new AbortController();
     const getUserNameController = new AbortController();
     const getTracksController = new AbortController();
@@ -122,8 +121,12 @@ function Home({ navigation }) {
     const getHabitsController = new AbortController();
 
     try {
-      const token = await SecureStore.getItemAsync('spotify_access_token');
       const userId = await SecureStore.getItemAsync('user_id');
+      const accessToken = await SecureStore.getItemAsync('spotify_access_token');
+      const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+      const getToken = await dispatch(refreshAccessToken(accessToken, refreshToken, tokenController.signal));
+      const token = getToken.refreshAccessToken;
+      SecureStore.setItemAsync('spotify_access_token', token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
       const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
       const getUserName = await dispatch(getName(token, getUserNameController.signal));
@@ -157,6 +160,7 @@ function Home({ navigation }) {
       console.log('Error aborting' + error);
     }
 
+    tokenController.abort();
     getArtistsController.abort();
     getUserNameController.abort();
     getTracksController.abort();
@@ -164,6 +168,7 @@ function Home({ navigation }) {
     getRecommendationsController.abort();
     getHabitsController.abort();
     setRefreshing(false);
+    
   }, [refreshing]);
 
   if (loading) {

@@ -231,11 +231,13 @@ function Results({ navigation, route }) {
 
         const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, librarySignal));
         const trackIds = getLibrary.createLibrary;
-        const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
-        setLength(getRec.getRecommendations.recommendations.length + 1);
-        setRecommendations(getRec.getRecommendations.recommendations);
-        setUris(getRec.getRecommendations.uris);
-        await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), amount, saveRecommendationsSignal));
+        if (trackIds != null) {
+            const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
+            setLength(getRec.getRecommendations.recommendations.length + 1);
+            setRecommendations(getRec.getRecommendations.recommendations);
+            setUris(getRec.getRecommendations.uris);
+            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), amount, saveRecommendationsSignal));
+        }
         setRLoading(false);
     }
 
