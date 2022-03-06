@@ -3,9 +3,17 @@ const faceApi = require('@vladmandic/face-api');
 const tf = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 const path = require('path');
+const log = require('@vladmandic/pilogger');
 
 const ssdOptions = { minConfidence: 0.1, maxResults: 10 };
 const optionsSSDMobileNet = new faceApi.SsdMobilenetv1Options(ssdOptions);
+
+function print(face) {
+    const expression = Object.entries(face.expressions).reduce((acc, val) => ((val[1] > acc[1]) ? val : acc), ['', 0]);
+    const box = [face.alignedRect._box._x, face.alignedRect._box._y, face.alignedRect._box._width, face.alignedRect._box._height];
+    const gender = `Gender: ${Math.round(100 * face.genderProbability)}% ${face.gender}`;
+    log.data(`Detection confidence: ${Math.round(100 * face.detection._score)}% ${gender} Age: ${Math.round(10 * face.age) / 10} Expression: ${Math.round(100 * expression[1])}% ${expression[0]} Box: ${box.map((a) => Math.round(a))}`);
+}
 
 const detectFace = async (req, res, next) => {
     try {
@@ -36,7 +44,9 @@ const detectFace = async (req, res, next) => {
         const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
             .withFaceLandmarks()
             .withFaceExpressions();
-        console.log('Results are '+ JSON.stringify(results));
+            
+        for (const face of results) print(face);
+
         fs.unlinkSync(fileName);
         return res.json({ status: 200, image: results });
     } catch (error) {
