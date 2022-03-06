@@ -68,6 +68,7 @@ const saveRecommendations = async (req, res, next) => {
             .add({
                 mood: req.body.mood,
                 tracks: req.body.tracks,
+                uris: req.body.uris,
                 time: Date.now(),
                 playlisted: false,
                 id: req.body.id,

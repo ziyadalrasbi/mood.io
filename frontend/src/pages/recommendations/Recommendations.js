@@ -118,15 +118,17 @@ function Recommendations({ navigation, route }) {
                                 </View>
                                 <View>
                                     {recommendation.playlisted == true ?
-                                        <TouchableOpacity onPress={() => Linking.openURL(recommendation.link)}>
+                                        <TouchableOpacity style={{backgroundColor: 'rgba(120, 120, 120, 0.5)', borderRadius: 5, marginRight: 5 }} onPress={() => Linking.openURL(recommendation.link)}>
                                             <Text style={RecommendationsStyles.firstSubHeader}>
-                                                SAVED
+                                                OPEN SPOTIFY
                                             </Text>
                                         </TouchableOpacity>
                                         :
+                                        <TouchableOpacity style={{backgroundColor: '#1DB954', borderRadius: 5, marginRight: 5 }} onPress={() => Linking.openURL(recommendation.link)}>
                                         <Text style={RecommendationsStyles.firstSubHeader}>
-                                            Save as playlist
+                                            SAVE TO SPOTIFY
                                         </Text>
+                                        </TouchableOpacity>
                                     }
                                 </View>
                             </TouchableOpacity>
