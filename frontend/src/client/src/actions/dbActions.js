@@ -233,9 +233,10 @@ export const saveRecommendations = (user, mood, tracks, playlistId, signal) => (
         })
 })
 
-export const setPlaylisted = (user, id, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+export const setPlaylisted = (user, id, link, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialId = { id };
+    const initialLink = { link };
     return fetch(`${baseUrl}/database/results/setPlaylisted`, {
         signal: signal,
         method: 'post',
@@ -245,7 +246,8 @@ export const setPlaylisted = (user, id, signal) => (dispatch, getState) => Promi
         },
         body: JSON.stringify({
             user: initialUser.user,
-            id: initialId.id
+            id: initialId.id,
+            link: initialLink.link
         })
     })
         .then(res => res.json())

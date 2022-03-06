@@ -102,7 +102,7 @@ function Recommendations({ navigation, route }) {
                         <View key={index} style={[RecommendationsStyles.topTracksContainer, { borderWidth: 1, borderColor: 'grey', backgroundColor: '#0d324d', }]}>
                             <TouchableOpacity
                                 style={{
-                                     alignItems: 'center', width: '100%', backgroundColor: '#09263b', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', flexDirection: 'row', justifyContent: 'space-between'
+                                    alignItems: 'center', width: '100%', backgroundColor: '#09263b', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', flexDirection: 'row', justifyContent: 'space-between'
                                 }}
                                 onPress={() => toggleHide(index)}>
                                 <View>
@@ -118,9 +118,11 @@ function Recommendations({ navigation, route }) {
                                 </View>
                                 <View>
                                     {recommendation.playlisted == true ?
-                                        <Text style={RecommendationsStyles.firstSubHeader}>
-                                            SAVED
-                                        </Text>
+                                        <TouchableOpacity onPress={() => Linking.openURL(recommendation.link)}>
+                                            <Text style={RecommendationsStyles.firstSubHeader}>
+                                                SAVED
+                                            </Text>
+                                        </TouchableOpacity>
                                         :
                                         <Text style={RecommendationsStyles.firstSubHeader}>
                                             Save as playlist

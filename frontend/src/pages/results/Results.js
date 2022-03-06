@@ -315,9 +315,10 @@ function Results({ navigation, route }) {
 
             const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + playlistsAmount, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
             const id = getPlaylist.createPlaylist.id;
+            const link = getPlaylist.createPlaylist.link;
             await dispatch(addTracksToPlaylist(accessToken, id, uris, addTracksController.signal));
 
-            await dispatch(setPlaylisted(userId, playlistsAmount, setPlaylistedController.signal));
+            await dispatch(setPlaylisted(userId, playlistsAmount, link, setPlaylistedController.signal));
             setSaving(false);
             setComplete(true);
         } catch (error) {
