@@ -13,7 +13,9 @@ const getRecommendations = async (req, res, next) => {
                     let recommendation = {
                         mood: doc.data().mood,
                         time: doc.data().time,
-                        tracks: JSON.parse(doc.data().tracks)
+                        tracks: JSON.parse(doc.data().tracks),
+                        id: doc.data().id,
+                        playlisted: doc.data().playlisted
                     }
                     recommendations.push(recommendation);
                 })

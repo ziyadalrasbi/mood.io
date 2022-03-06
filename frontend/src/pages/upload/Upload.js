@@ -44,18 +44,24 @@ function Upload({ navigation }) {
   }
 
   const analyseImage = async () => {
-    const res = await openImagePicker();
-    if (res.base64 != "") {
-      setLoading(true);
-      const getFace = await dispatch(detectFace(res.base64))
-      if (getFace.detectFace[0] != null) {
-        setMoodAnalysis({ moodAnalysis: getFace.detectFace[0].expressions });
-        setLoading(false);
-      } else {
-        setMoodAnalysis({ moodAnalysis: null });
-        setLoading(false);
+    const detectionController = new AbortController();
+    try {
+      const res = await openImagePicker();
+      if (res.base64 != "") {
+        setLoading(true);
+        const getFace = await dispatch(detectFace(res.base64, detectionController.signal));
+        if (getFace.detectFace[0] != null) {
+          setMoodAnalysis({ moodAnalysis: getFace.detectFace[0].expressions });
+          setLoading(false);
+        } else {
+          setMoodAnalysis({ moodAnalysis: null });
+          setLoading(false);
+        }
       }
+    } catch (error) {
+      console.log('Error detecting face, please try again. ' + error);
     }
+    detectionController.abort();
   }
 
   const navigateResults = async () => {
@@ -130,7 +136,7 @@ function Upload({ navigation }) {
         }
         <View style={UploadStyles.buttonContainer}>
           <Button
-            style={[UploadStyles.uploadButton, loading || (selectedImage.uri == "") ? { display:'none' } : {}]}
+            style={[UploadStyles.uploadButton, loading || (selectedImage.uri == "") ? { display: 'none' } : {}]}
             uppercase={false}
             mode="contained"
             labelStyle={UploadStyles.mainFont}

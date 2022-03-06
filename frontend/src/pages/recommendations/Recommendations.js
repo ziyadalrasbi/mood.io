@@ -41,6 +41,7 @@ function Recommendations({ navigation, route }) {
                 const getRecommendations = await dispatch(getPreviousRecommendations(userId));
                 setRecentMood({ recentMood: getMood.getRecentMood });
                 setRecommendations(getRecommendations.getPreviousRecommendations);
+                console.log(getRecommendations.getPreviousRecommendations);
             } catch (error) {
                 console.log('Error aborting recommendations, please try again. ' + error);
             }
@@ -75,7 +76,7 @@ function Recommendations({ navigation, route }) {
         var finalDate = date.toLocaleDateString('en', format);
         return finalDate.toString();
     }
-    
+
     return (
 
         <View style={RecommendationsStyles.scroll}>
@@ -91,20 +92,36 @@ function Recommendations({ navigation, route }) {
                         <Text style={RecommendationsStyles.firstSubHeader}>
                             Recommendations are saved for 4 weeks.
                         </Text>
-                        <Text style={RecommendationsStyles.firstSubHeader}>
-                            Recent mood: {recentMood.recentMood}
-                        </Text>
+                        {recommendations.length > 0 &&
+                            <Text style={RecommendationsStyles.firstSubHeader}>
+                                Recent mood: {recentMood.recentMood}
+                            </Text>
+                        }
                     </View>
 
                     {recommendations.length > 0 && recommendations.map((recommendation, index) =>
-                        <View key={index} style={RecommendationsStyles.topTracksContainer}>
-                            <TouchableOpacity style={{ width: '100%' }} onPress={() => toggleHide(index)}>
+                        <View key={index} style={[RecommendationsStyles.topTracksContainer, { borderWidth: 1, borderColor: 'grey', backgroundColor: '#0d324d', }]}>
+                            <TouchableOpacity style={{
+                                width: '100%', backgroundColor: '#09263b', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', shadowColor: '#000',
+                                shadowOffset: { width: 0, height: 2 },
+                                shadowOpacity: 0.5,
+                                shadowRadius: 2, elevation: 5
+                            }} onPress={() => toggleHide(index)}>
                                 <Text style={RecommendationsStyles.firstHeader}>
-                                    Recommendation from date {convertTimeToDate(recommendation.time)}
+                                    Date: {convertTimeToDate(recommendation.time)}
                                 </Text>
-                                <Text style={RecommendationsStyles.firstHeader}>
-                                    Recommendation mood: {recommendation.mood}
+                                <Text style={RecommendationsStyles.firstSubHeader}>
+                                    Mood: {recommendation.mood}
                                 </Text>
+                                {recommendation.playlisted == true ?
+                                    <Text style={RecommendationsStyles.firstSubHeader}>
+                                        SAVED
+                                    </Text>
+                                    :
+                                    <Text style={RecommendationsStyles.firstSubHeader}>
+                                        Save as playlist
+                                    </Text>
+                                }
                             </TouchableOpacity>
                             {!!toggle[index] &&
                                 <View>

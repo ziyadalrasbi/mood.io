@@ -2,9 +2,10 @@ import * as Constants from '../../../Constants';
 
 const baseUrl = Constants.BASE_URL;
 
-export const detectFace = (base64) => (dispatch, getState) => Promise.resolve().then(() => {
+export const detectFace = (base64, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialBase = { base64 };
     return fetch(`${baseUrl}/detection/detect/detectFace`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',

@@ -56,9 +56,7 @@ export default StyleSheet.create({
         color: 'white',
         fontSize: width / 27.6,
         padding: width / 41.4,
-        marginBottom: -(height / 74.6666667),
-        marginTop: height / 179.2,
-        alignSelf:'center'
+        marginBottom: -(height / 74.6666667)        
     },
     topTrackArtistImage: {
         width: width / 3.6,
@@ -203,7 +201,6 @@ export default StyleSheet.create({
         justifyContent: 'space-between'
     },
     topTracksContainer: {
-        padding: width / 41.4,
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
