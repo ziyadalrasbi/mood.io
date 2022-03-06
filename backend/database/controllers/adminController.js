@@ -6,9 +6,13 @@ const serviceAccount = require('../service-account.json');
 
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 
+const additionalClaims = {
+    normalUser: true
+};
+
 const createToken = async (req, res, next) => {
     try {
-        await admin.auth().createCustomToken(req.body.id)
+        await admin.auth().createCustomToken(req.body.id, additionalClaims)
             .then((customToken) => {
                 return res.json({ status: 200, token: customToken });
             })

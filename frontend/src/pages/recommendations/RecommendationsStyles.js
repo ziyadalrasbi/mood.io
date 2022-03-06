@@ -315,6 +315,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        paddingVertical: height / 89.6
     },
     lottieView: {
         width: width / 6.9,

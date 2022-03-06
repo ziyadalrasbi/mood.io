@@ -211,7 +211,6 @@ function Recommendations({ navigation, route }) {
                                             Playlist saved!
                                         </Text>
                                     }
-                                    
                                 </View>
                             </TouchableOpacity>
                             {!!toggle[index] &&
@@ -254,7 +253,7 @@ function Recommendations({ navigation, route }) {
                             No recommendations yet. To get recommendations, press the "get started" button on the home page!
                         </Text>
                     }
-                    <View style={{ height: 400 }} />
+                    <View style={{ height: Dimensions.get('window').height / 2.56 }} />
                 </View>
                 <StatusBar style="auto" />
             </ScrollView >
