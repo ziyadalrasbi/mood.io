@@ -238,7 +238,7 @@ function Results({ navigation, route }) {
             setLength(getRec.getRecommendations.recommendations.length + 1);
             setRecommendations(getRec.getRecommendations.recommendations);
             setUris(getRec.getRecommendations.uris);
-            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), amount, saveRecommendationsSignal));
+            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), getRec.getRecommendations.uris, amount, saveRecommendationsSignal));
         } else {
             setError(true);
         }

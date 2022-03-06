@@ -1,19 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Nest, Dimensions } from 'react-native';
-import { Button } from 'react-native-paper';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl, Dimensions } from 'react-native';
 import { useFonts } from 'expo-font'
 import RecommendationsStyles from './RecommendationsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { getRecentMood, getPreviousRecommendations } from '../../client/src/actions/dbActions';
+import { getRecentMood, getPreviousRecommendations, setPlaylisted } from '../../client/src/actions/dbActions';
+import { refreshAccessToken, createPlaylist, addTracksToPlaylist } from '../../client/src/actions/spotifyActions';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
-import defaultimg from '../../../assets/icons/stats/default.png';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import LottieView from 'lottie-react-native';
 
 function Recommendations({ navigation, route }) {
 
@@ -28,20 +27,28 @@ function Recommendations({ navigation, route }) {
 
     const [recentMood, setRecentMood] = useState({ recentMood: "" });
     const [recommendations, setRecommendations] = useState({ recommendations: [] });
+
     const [loading, setLoading] = useState(true);
+
     const [toggle, setToggle] = useState({});
 
+    const [ploading, setPLoading] = useState({});
+    const [saving, setSaving] = useState({});
+    const [complete, setComplete] = useState({});
+
+    const [refreshing, setRefreshing] = useState(false);
+
     useEffect(() => {
+        const getRecentMoodController = new AbortController();
         const getRecommendationsController = new AbortController();
 
         const fetchData = async () => {
             try {
                 const userId = await SecureStore.getItemAsync('user_id');
-                const getMood = await dispatch(getRecentMood(userId, getRecommendationsController.signal));
-                const getRecommendations = await dispatch(getPreviousRecommendations(userId));
+                const getMood = await dispatch(getRecentMood(userId, getRecentMoodController.signal));
+                const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
                 setRecentMood({ recentMood: getMood.getRecentMood });
                 setRecommendations(getRecommendations.getPreviousRecommendations);
-                console.log(getRecommendations.getPreviousRecommendations);
             } catch (error) {
                 console.log('Error aborting recommendations, please try again. ' + error);
             }
@@ -51,15 +58,46 @@ function Recommendations({ navigation, route }) {
         fetchData().then(() => setLoading(false));
 
         return () => {
+            getRecentMoodController.abort();
             getRecommendationsController.abort();
         }
 
     }, [loading, dispatch])
 
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        const getRecommendationsController = new AbortController();
+        try {
+            const userId = await SecureStore.getItemAsync('user_id');
+            const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
+            setRecommendations(getRecommendations.getPreviousRecommendations);
+        } catch (error) {
+            console.log('Error refreshing recommendations, please try again. ' + error);
+        }
+        getRecommendationsController.abort();
+        setRefreshing(false);
+    }, [refreshing]);
+
     if (!loaded || loading) {
         return (
             <Loading page={"home"} />
         );
+    }
+
+    const toggleLoading = index => {
+        setPLoading({ ...ploading[index], [index]: true });
+    }
+
+    const toggleSavingTrue = index => {
+        setSaving({ ...saving[index], [index]: true });
+    }
+
+    const toggleSavingFalse = index => {
+        setSaving({ ...saving[index], [index]: false });
+    }
+
+    const toggleComplete = index => {
+        setComplete({ ...complete[index], [index]: true });
     }
 
     const toggleHide = index => {
@@ -77,10 +115,41 @@ function Recommendations({ navigation, route }) {
         return finalDate.toString();
     }
 
-    return (
+    const savePlaylist = async (mood, playlistId, uris, index) => {
+        const tokenController = new AbortController();
+        const createPlaylistController = new AbortController();
+        const addTracksController = new AbortController();
+        const setPlaylistedController = new AbortController();
+        try {
+            toggleLoading(index);
+            toggleSavingTrue(index);
+            const userId = await SecureStore.getItemAsync('user_id');
+            const token = await SecureStore.getItemAsync('spotify_access_token');
+            const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken;
+            SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
+            const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + mood + ' mood.io playlist #' + playlistId, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
+            const id = getPlaylist.createPlaylist.id;
+            const link = getPlaylist.createPlaylist.link;
+            await dispatch(addTracksToPlaylist(accessToken, id, uris, addTracksController.signal));
+
+            await dispatch(setPlaylisted(userId, playlistId, link, setPlaylistedController.signal));
+            toggleSavingFalse(index);
+            toggleComplete(index);
+        } catch (error) {
+            console.log('Error saving playlist, please try again. ' + error);
+        }
+        tokenController.abort();
+        createPlaylistController.abort();
+        addTracksController.abort();
+        setPlaylistedController.abort();
+    }
+
+    return (
         <View style={RecommendationsStyles.scroll}>
-            <ScrollView style={RecommendationsStyles.tabView} showsVerticalScrollIndicator={false}>
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={RecommendationsStyles.tabView} showsVerticalScrollIndicator={false}>
                 <View style={RecommendationsStyles.topContainer}>
                     <Navbar page={'recommendations'} navigation={navigation} />
                 </View>
@@ -90,7 +159,7 @@ function Recommendations({ navigation, route }) {
                             Find your recent recommendations below!
                         </Text>
                         <Text style={RecommendationsStyles.firstSubHeader}>
-                            Recommendations are saved for 4 weeks.
+                            Recommendations are saved for 1 week.
                         </Text>
                         {recommendations.length > 0 &&
                             <Text style={RecommendationsStyles.firstSubHeader}>
@@ -99,11 +168,9 @@ function Recommendations({ navigation, route }) {
                         }
                     </View>
                     {recommendations.length > 0 && recommendations.map((recommendation, index) =>
-                        <View key={index} style={[RecommendationsStyles.topTracksContainer, { borderWidth: 1, borderColor: 'grey', backgroundColor: '#0d324d', }]}>
+                        <View key={index} style={RecommendationsStyles.topTracksContainer}>
                             <TouchableOpacity
-                                style={{
-                                    alignItems: 'center', width: '100%', backgroundColor: '#09263b', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', flexDirection: 'row', justifyContent: 'space-between'
-                                }}
+                                style={RecommendationsStyles.trackContainer}
                                 onPress={() => toggleHide(index)}>
                                 <View>
                                     <Text style={RecommendationsStyles.firstHeader}>
@@ -117,19 +184,34 @@ function Recommendations({ navigation, route }) {
                                     </Text>
                                 </View>
                                 <View>
-                                    {recommendation.playlisted == true ?
-                                        <TouchableOpacity style={{backgroundColor: 'rgba(120, 120, 120, 0.5)', borderRadius: 5, marginRight: 5 }} onPress={() => Linking.openURL(recommendation.link)}>
+                                    {recommendation.playlisted == true &&
+                                        <TouchableOpacity style={RecommendationsStyles.openSpotify} onPress={() => Linking.openURL(recommendation.link)}>
                                             <Text style={RecommendationsStyles.firstSubHeader}>
                                                 OPEN SPOTIFY
                                             </Text>
                                         </TouchableOpacity>
-                                        :
-                                        <TouchableOpacity style={{backgroundColor: '#1DB954', borderRadius: 5, marginRight: 5 }} onPress={() => Linking.openURL(recommendation.link)}>
-                                        <Text style={RecommendationsStyles.firstSubHeader}>
-                                            SAVE TO SPOTIFY
-                                        </Text>
+                                    }
+                                    {recommendation.playlisted == false && !ploading[index] &&
+                                        <TouchableOpacity style={RecommendationsStyles.saveToSpotify} onPress={() => savePlaylist(recommendation.mood, recommendation.id, recommendation.uris, index)}>
+                                            <Text style={RecommendationsStyles.firstSubHeader}>
+                                                SAVE TO SPOTIFY
+                                            </Text>
                                         </TouchableOpacity>
                                     }
+                                    {recommendation.playlisted == false && saving[index] &&
+                                        <LottieView
+                                            source={require('./animations/8707-loading.json')}
+                                            autoPlay
+                                            loop={true}
+                                            style={RecommendationsStyles.lottieView}
+                                        />
+                                    }
+                                    {recommendation.playlisted == false && complete[index] &&
+                                        <Text style={RecommendationsStyles.firstSubHeader}>
+                                            Playlist saved!
+                                        </Text>
+                                    }
+                                    
                                 </View>
                             </TouchableOpacity>
                             {!!toggle[index] &&

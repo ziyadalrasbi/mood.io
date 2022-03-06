@@ -208,10 +208,11 @@ export const incrementPlaylistsAmount = (user, signal) => (dispatch, getState) =
         })
 })
 
-export const saveRecommendations = (user, mood, tracks, playlistId, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+export const saveRecommendations = (user, mood, tracks, uris, playlistId, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialMood = { mood };
     const initialTracks = { tracks };
+    const initialUris = { uris };
     const initialPlaylistId = { playlistId };
     return fetch(`${baseUrl}/database/results/saveRecommendations`, {
         signal: signal,
@@ -224,6 +225,7 @@ export const saveRecommendations = (user, mood, tracks, playlistId, signal) => (
             user: initialUser.user,
             mood: initialMood.mood,
             tracks: initialTracks.tracks,
+            uris: initialUris.uris,
             id: initialPlaylistId.playlistId
         })
     })

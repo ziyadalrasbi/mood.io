@@ -207,6 +207,19 @@ export default StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'grey',
+        backgroundColor: '#0d324d'
+    },
+    trackContainer: {
+        alignItems: 'center',
+        width: '100%',
+        backgroundColor: '#09263b',
+        padding: width / 41.4,
+        borderBottomWidth: 1,
+        borderBottomColor: 'grey',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     topTrackText: {
         fontFamily: 'InconsolataMedium',
@@ -302,6 +315,22 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    lottieView: {
+        width: width / 6.9,
+        height: width / 6.9,
+        marginRight: width / 82.8,
+        alignSelf: 'center'
+    },
+    openSpotify: {
+        backgroundColor: 'rgba(120, 120, 120, 0.5)',
+        borderRadius: 5,
+        marginRight: 5
+    },
+    saveToSpotify: {
+        backgroundColor: '#1DB954',
+        borderRadius: 5,
+        marginRight: width / 82.8
     }
 });
 
