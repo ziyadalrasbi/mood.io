@@ -70,7 +70,8 @@ const saveRecommendations = async (req, res, next) => {
                 tracks: req.body.tracks,
                 time: Date.now(),
                 playlisted: false,
-                id: req.body.id
+                id: req.body.id,
+                link: null
             })
         return res.json({ status: 200 });
     } catch (error) {
@@ -90,7 +91,8 @@ const setPlaylisted = async (req, res, next) => {
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     doc.ref.set({
-                        playlisted: true
+                        playlisted: true,
+                        link: req.body.link
                     }, { merge: true });
                 })
             });

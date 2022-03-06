@@ -55,8 +55,8 @@ export default StyleSheet.create({
         fontFamily: 'MontserratBold',
         color: 'white',
         fontSize: width / 27.6,
-        padding: width / 41.4,
-        marginBottom: -(height / 74.6666667)        
+        paddingHorizontal: width / 41.4,
+        paddingVertical: 5
     },
     topTrackArtistImage: {
         width: width / 3.6,
@@ -67,7 +67,8 @@ export default StyleSheet.create({
     firstSubHeader: {
         fontFamily: 'InconsolataMedium',
         fontSize: width / 29.5714286,
-        padding: width / 41.4,
+        paddingHorizontal: width / 41.4,
+        paddingVertical: 5,
         color: '#dbdbdb'
     },
     selectContainer: {
@@ -216,7 +217,7 @@ export default StyleSheet.create({
         marginBottom: height / 179.2,
         fontSize: width / 34.5,
         fontStyle: 'italic',
-        maxWidth: width / 1.38,
+        maxWidth: width / 1.47857143,
         marginRight: width / 20.7
     },
     topTrackTextContainer: {
@@ -230,7 +231,7 @@ export default StyleSheet.create({
         fontSize: width / 34.5,
         fontStyle: 'italic',
         marginRight: width / 20.7,
-        maxWidth: width / 1.38
+        maxWidth: width / 1.47857143
     },
     topTrackImage: {
         width: width / 6.9,
@@ -298,9 +299,9 @@ export default StyleSheet.create({
         fontSize: width / 29.5714286
     },
     recommendationContainer: {
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
 

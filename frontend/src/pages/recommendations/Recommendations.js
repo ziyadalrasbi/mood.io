@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Nest } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity, Nest, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useFonts } from 'expo-font'
 import RecommendationsStyles from './RecommendationsStyles';
@@ -98,33 +98,38 @@ function Recommendations({ navigation, route }) {
                             </Text>
                         }
                     </View>
-
                     {recommendations.length > 0 && recommendations.map((recommendation, index) =>
                         <View key={index} style={[RecommendationsStyles.topTracksContainer, { borderWidth: 1, borderColor: 'grey', backgroundColor: '#0d324d', }]}>
-                            <TouchableOpacity style={{
-                                width: '100%', backgroundColor: '#09263b', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', shadowColor: '#000',
-                                shadowOffset: { width: 0, height: 2 },
-                                shadowOpacity: 0.5,
-                                shadowRadius: 2, elevation: 5
-                            }} onPress={() => toggleHide(index)}>
-                                <Text style={RecommendationsStyles.firstHeader}>
-                                    Date: {convertTimeToDate(recommendation.time)}
-                                </Text>
-                                <Text style={RecommendationsStyles.firstSubHeader}>
-                                    Mood: {recommendation.mood}
-                                </Text>
-                                {recommendation.playlisted == true ?
-                                    <Text style={RecommendationsStyles.firstSubHeader}>
-                                        SAVED
+                            <TouchableOpacity
+                                style={{
+                                     alignItems: 'center', width: '100%', backgroundColor: '#09263b', padding: 10, borderBottomWidth: 1, borderBottomColor: 'grey', flexDirection: 'row', justifyContent: 'space-between'
+                                }}
+                                onPress={() => toggleHide(index)}>
+                                <View>
+                                    <Text style={RecommendationsStyles.firstHeader}>
+                                        Recommendation #{recommendation.id}
                                     </Text>
-                                    :
                                     <Text style={RecommendationsStyles.firstSubHeader}>
-                                        Save as playlist
+                                        Date: {convertTimeToDate(recommendation.time)}
                                     </Text>
-                                }
+                                    <Text style={RecommendationsStyles.firstSubHeader}>
+                                        Mood: {recommendation.mood}
+                                    </Text>
+                                </View>
+                                <View>
+                                    {recommendation.playlisted == true ?
+                                        <Text style={RecommendationsStyles.firstSubHeader}>
+                                            SAVED
+                                        </Text>
+                                        :
+                                        <Text style={RecommendationsStyles.firstSubHeader}>
+                                            Save as playlist
+                                        </Text>
+                                    }
+                                </View>
                             </TouchableOpacity>
                             {!!toggle[index] &&
-                                <View>
+                                <View style={{ paddingHorizontal: Dimensions.get('window').width / 41.4 }}>
                                     {recommendation.tracks.map((track, i) =>
                                         <View key={i} style={RecommendationsStyles.recommendationContainer}>
                                             <TouchableOpacity
