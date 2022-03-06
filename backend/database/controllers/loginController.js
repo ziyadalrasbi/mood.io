@@ -8,12 +8,12 @@ const signIn = async (req, res, next) => {
             .then((userCredential) => {
                 firebase.auth().currentUser.getIdToken(true)
                     .then((token) => {
-                        return res.json({ user: token });
+                        return res.json({ status: 200, user: token });
                     })
             })
     } catch (error) {
-        console.log('Error signing in user, please try again. \n' + error);
-        return res.json({ status: 400 });
+        const message = 'Error signing in user, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -24,8 +24,8 @@ const signOut = async (req, res, next) => {
                 return res.json({ status: 200 });
             })
     } catch (error) {
-        console.log('There was an error signing out, please try again. \n' + error);
-        return res.json({ status: 400 });
+        const message = 'Error signing out user, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -41,10 +41,10 @@ const addUser = async (req, res, next) => {
                     }, { merge: true });
                 }
             })
-        return res.json({ status: 'User added successfully!' });
+        return res.json({ status: 200 });
     } catch (error) {
-        console.log('Error initializing the user for the first time, please try again. \n' + error);
-        return res.json({ status: 400 });
+        const message = 'Error initializing the user for the first time, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -54,14 +54,14 @@ const getUserArtists = async (req, res, next) => {
         response.get()
             .then((doc) => {
                 if (doc.data().topArtists != null) {
-                    return res.json({ code: 200 });
+                    return res.json({ status: 200 });
                 } else {
-                    return res.json({ code: 404 });
+                    return res.json({ status: 404 });
                 }
             })
     } catch (error) {
-        console.log('Error getting user top genres from database, please try again. \n' + error);
-        return res.json({ status: 400 });
+        const message = 'Error getting user top artists from database, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -73,8 +73,8 @@ const saveUserArtists = async (req, res, next) => {
         }, { merge: true });
         return res.json({ status: 200 });
     } catch (error) {
-        console.log('Error saving user genres, please try again. \n' + error);
-        return res.json({ status: 400 });
+        const message = 'Error saving user top artists, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

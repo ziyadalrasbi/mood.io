@@ -19,10 +19,10 @@ const getRecommendations = async (req, res, next) => {
                 })
             })
         recommendations.sort((a, b) => b.time - a.time);
-        return res.json({ recommendations: recommendations });
+        return res.json({  status: 200, recommendations: recommendations });
     } catch (error) {
-        console.log('There was an error getting recommendations, please try again. ' + error);
-        return res.json({ status: 400 });
+        const message = 'Error getting recommendations, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

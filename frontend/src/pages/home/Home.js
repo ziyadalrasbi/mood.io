@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font';
 import HomeStyles from './HomeStyles';
 import * as SecureStore from 'expo-secure-store';
 import Navbar from '../../components/navbar/Navbar';
@@ -12,12 +11,10 @@ import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
 import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabitsHome, refreshAccessToken } from '../../client/src/actions/spotifyActions';
-import { getUserDatabaseArtists, getPreviousRecommendations, getPlaylistsAmount, incrementPlaylistsAmount } from '../../client/src/actions/dbActions';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client/src/actions/dbActions';
+import { useDispatch } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
-import { bindActionCreators } from 'redux';
-import cacheAssests from '../../../cacheAssets';
 
 function Home({ navigation }) {
 
@@ -168,7 +165,7 @@ function Home({ navigation }) {
     getRecommendationsController.abort();
     getHabitsController.abort();
     setRefreshing(false);
-    
+
   }, [refreshing]);
 
   if (loading) {
@@ -186,6 +183,7 @@ function Home({ navigation }) {
           style={HomeStyles.gradientContainer}
         />
         <View style={HomeStyles.mainContainer}>
+          
           <View style={HomeStyles.topContainer}>
             <Navbar navigation={navigation} name={name} page={'home'} />
           </View>
@@ -202,6 +200,7 @@ function Home({ navigation }) {
             >
               Get started
             </Button>
+            
           </View>
           <View style={HomeStyles.secondContainer}>
             <View style={HomeStyles.headerContainer}>

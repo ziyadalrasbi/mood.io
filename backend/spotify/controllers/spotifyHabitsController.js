@@ -61,12 +61,12 @@ const getListeningHabits = async (req, res, next) => {
                     keys: keys,
                     values: values
                 };
-                return res.json({ graphHabits: finalGraphHabits, cardHabits: getCardHabits });
+                return res.json({ status: 200, graphHabits: finalGraphHabits, cardHabits: getCardHabits });
             })
 
     } catch (error) {
-        console.log('There was an error getting user\'s listening habits, please try again. \n' + error);
-        return res.json({ status: 400 });
+        const message = 'Error getting user\'s listening habits, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

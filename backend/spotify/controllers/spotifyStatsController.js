@@ -13,13 +13,11 @@ const getProfile = async (req, res, next) => {
                     picture: data.body.images[0] && data.body.images[0].url,
                     followers: data.body.followers.total
                 }
-                return res.json({ profile: userProfile });
-            }, function (err) {
-                console.log('There was an error getting user\'s profile, please try again. \n', err);
+                return res.json({ status: 200, profile: userProfile });
             });
     } catch (error) {
-        console.log('There was an error getting user\'s profile, please try again. \n' + error);
-        return res.status(400).send(error.message);
+        const message = 'Error getting user\'s profile for stats, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -38,13 +36,11 @@ const getTopArtists = async (req, res, next) => {
                         artistNames.push(tempArtist);
                     }
                 }
-                return res.json({ artistNames: artistNames });
-            }), function (err) {
-                console.log('There was an error getting the top artists, please try again.', err);
-            }
+                return res.json({ status: 200, artistNames: artistNames });
+            });
     } catch (error) {
-        console.log('There was an error getting the top artists, please try again.', error);
-        return res.status(400).send(error.message);
+        const message = 'Error getting user\'s top artists for stats, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -66,13 +62,11 @@ const getTopTracks = async (req, res, next) => {
                         topTracks.push(tempTrack);
                     }
                 }
-                return res.json({ topTracks: topTracks, trackIds: trackIds });
-            }), function (err) {
-                console.log('There was an error getting the top tracks, please try again.', err);
-            }
+                return res.json({ status: 200, topTracks: topTracks, trackIds: trackIds });
+            });
     } catch (error) {
-        console.log('There was an error getting the top tracks, please try again.', error);
-        return res.status(400).send(error.message);
+        const message = 'Error getting user\'s top tracks for stats, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

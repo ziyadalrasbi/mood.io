@@ -40,6 +40,17 @@ const ios = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: 'transparent',
   },
+  secondTopContainer: {
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: getRatio(87),
+    marginTop: -getRatio(200),
+    width: '100%',
+    justifyContent: 'flex-start',
+    backgroundColor: 'transparent',
+  },
   welcome: {
     marginLeft: getRatio(10),
     fontFamily: 'MontserratLight',
@@ -96,7 +107,7 @@ const ios = StyleSheet.create({
   mainFont: {
     fontFamily: 'MontserratMedium',
     fontSize: getRatio(15),
-    color:'white'
+    color: 'white'
   },
   scroll: {
     flex: 1,
@@ -190,7 +201,7 @@ const ios = StyleSheet.create({
   continueLottie: {
     width: getRatio(170),
     height: getRatio(170),
-    marginTop: getRatio(50),
+
     alignSelf: 'center'
   },
   buttonContainer: {
@@ -212,6 +223,9 @@ const ios = StyleSheet.create({
     height: getRatio(25),
     resizeMode: 'contain',
     backgroundColor: 'transparent'
+  },
+  spacer: {
+    height: getRatio(415)
   }
 });
 
@@ -228,28 +242,49 @@ const android = StyleSheet.create({
     padding: 10,
     backgroundColor: '#0d324d'
   },
+  secondContainer: {
+    position: 'relative',
+    flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    height: '100%',
+    backgroundColor: '#0d324d'
+  },
   topContainer: {
     position: 'relative',
     left: 0,
     right: 0,
     top: 0,
-    height: height / 10.2,
+    height: height / 10.2988506,
+    width: '100%',
+    justifyContent: 'flex-start',
+    backgroundColor: 'transparent',
+  },
+  secondTopContainer: {
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: height / 10.2988506,
+    marginTop: -(height / 4.48),
     width: '100%',
     justifyContent: 'flex-start',
     backgroundColor: 'transparent',
   },
   welcome: {
     marginLeft: width / 41.4,
-    fontFamily: 'MontserratBold',
+    fontFamily: 'MontserratLight',
     color: 'white',
-    fontSize: width / 15.56
+    fontSize: width / 15.3333333
   },
   subWelcome: {
     marginLeft: width / 41.4,
-    marginTop: height / 30.89230769,
-    marginBottom: height / 89.6,
-    maxWidth: width / 1.01764706,
-    fontFamily: 'InconsolataLight',
+    marginTop: height / 30.8965517,
+    marginBottom: width / 41.4,
+    fontFamily: 'MontserratLight',
     color: 'white',
     fontSize: width / 25
   },
@@ -264,24 +299,24 @@ const android = StyleSheet.create({
   firstHeader: {
     fontFamily: 'MontserratBold',
     color: 'white',
-    fontSize: width / 27.6,
+    fontSize: width / 15.9230769,
     padding: width / 41.4,
-    marginBottom: -(width / 41.4),
-    marginTop: height / 59.7333333
+    marginTop: height / 59.7333333,
+    marginBottom: width / 41.4
   },
   firstSubHeader: {
     fontFamily: 'InconsolataMedium',
-    fontSize: width / 29.5714286,
+    fontSize: width / 25.875,
     padding: width / 41.4,
     color: '#dbdbdb'
   },
   secondHeader: {
+    marginTop: height / 179.2,
     fontFamily: 'MontserratBold',
     color: 'white',
     fontSize: width / 27.6,
     padding: width / 41.4,
-    marginBottom: -(width / 41.4),
-
+    marginBottom: -(width / 41.4)
   },
   moodAnalysis: {
     position: 'relative',
@@ -293,8 +328,9 @@ const android = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   mainFont: {
-    fontFamily: 'InconsolataMedium',
-    fontSize: width / 18.8181818
+    fontFamily: 'MontserratMedium',
+    fontSize: width / 27.6,
+    color: 'white'
   },
   scroll: {
     flex: 1,
@@ -309,47 +345,55 @@ const android = StyleSheet.create({
     position: 'absolute'
   },
   recommendationsContainer: {
-    padding: 10,
+    flex: 1,
+    height: '100%',
+    backgroundColor: '#09263b',
+    borderWidth: 1,
+    borderColor: 'grey'
+  },
+  trackContainer: {
+    padding: width / 41.4,
     display: 'flex',
-    flex: 2,
     flexDirection: 'row',
     width: '100%',
-    borderRadius: width / 41.4
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   trackImage: {
-    width: width / 3.45,
-    height: width / 3.45,
+    width: width / 6.9,
+    height: width / 6.9,
     marginRight: width / 20.7,
-    marginTop: height / 89.6,
-    borderRadius: 20
+    marginTop: width / 41.4,
+    borderRadius: 5
   },
   trackArtistText: {
-    fontFamily: 'InconsolataSemiExpanded',
-    color: 'grey',
-    alignSelf: 'center',
-    textAlign: 'center',
+    fontFamily: 'InconsolataMedium',
+    color: '#dbdbdb',
+    alignSelf: 'flex-start',
+    textAlign: 'left',
     fontSize: width / 34.5,
     fontStyle: 'italic',
-    maxWidth: width / 3.45,
-    marginRight: width / 20.7
+    marginRight: width / 20.7,
+    maxWidth: width / 1.68979592
   },
   trackText: {
-    fontFamily: 'InconsolataSemiExpanded',
-    color: 'red',
-    alignSelf: 'center',
-    textAlign: 'center',
+    fontFamily: 'InconsolataMedium',
+    color: 'white',
+    alignSelf: 'flex-start',
+    textAlign: 'left',
     marginTop: height / 112,
     marginBottom: height / 179.2,
     fontSize: width / 34.5,
     fontStyle: 'italic',
-    maxWidth: width / 3.45,
+    maxWidth: width / 1.68979592,
     marginRight: width / 20.7
   },
   rateText: {
+    marginTop: height / 35.84,
     fontFamily: 'MontserratBold',
-    fontSize: 11,
+    fontSize: width / 37.6363636,
     color: 'white',
-    marginBottom: 10,
+    marginBottom: height / 89.6,
     alignSelf: 'center'
   },
   saveText: {
@@ -357,10 +401,14 @@ const android = StyleSheet.create({
     fontSize: width / 29.5714286,
     padding: width / 41.4,
     color: '#dbdbdb',
-    maxWidth: 240
+    maxWidth: width / 1.725
   },
   saveButton: {
-    backgroundColor: '#1DB954',
+    backgroundColor: '#1DB954'
+  },
+  playImage: {
+    width: width / 18.8181818,
+    height: width / 18.8181818
   },
   saveButtonText: {
     fontFamily: 'InconsolataMedium',
@@ -368,11 +416,38 @@ const android = StyleSheet.create({
     color: 'white',
   },
   lottieView: {
-    marginLeft: width / 16.56,
-    marginTop: -(height / 179.2),
+    marginTop: width / 41.4,
     width: width / 6.9,
     height: width / 6.9,
     alignSelf: 'center'
+  },
+  continueLottie: {
+    width: width / 2.43529412,
+    height: width / 2.43529412,
+    alignSelf: 'center'
+  },
+  buttonContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: height / 35.84,
+    padding: width / 41.4,
+    justifyContent: 'center',
+    backgroundColor: '#1DB954',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: height / 22.4,
+    borderRadius: 5,
+  },
+  spotifyLogo: {
+    width: width / 16.56,
+    height: width / 16.56,
+    resizeMode: 'contain',
+    backgroundColor: 'transparent'
+  },
+  spacer: {
+    height: height / 2.15903614
   }
 });
 

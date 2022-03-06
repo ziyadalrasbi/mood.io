@@ -38,10 +38,10 @@ const detectFace = async (req, res, next) => {
             .withFaceExpressions();
         console.log('Results are '+ JSON.stringify(results));
         fs.unlinkSync(fileName);
-        return res.json({ image: results });
+        return res.json({ status: 200, image: results });
     } catch (error) {
-        console.log('Error detecting facial expressions, please try again. \n' + error);
-        res.status(400).send(error.message);
+        const message = 'Error detecting user facial expressions, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

@@ -30,7 +30,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: height / 1.28
+    height: height/1.12
   },
   button: {
     borderRadius: 20,

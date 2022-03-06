@@ -10,11 +10,11 @@ const createToken = async (req, res, next) => {
     try {
         await admin.auth().createCustomToken(req.body.id)
             .then((customToken) => {
-                return res.json({ token: customToken });
+                return res.json({ status: 200, token: customToken });
             })
     } catch (error) {
-        console.log('Error creating custom token, please try again. \n' + error);
-        res.status(400).send(error.message);
+        const message = 'Error creating custom token, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

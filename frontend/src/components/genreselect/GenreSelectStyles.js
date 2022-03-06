@@ -21,14 +21,14 @@ export default StyleSheet.create({
         backgroundColor: 'purple'
     },
     artistText: {
-        fontFamily: 'InconsolataBold',
+        fontFamily: 'MontserratBold',
         fontSize: width / 31.8461538,
         maxWidth: width / 2.26229508,
         textAlign: 'left',
         marginLeft: width / 82.8
     },
     removeArtistText: {
-        fontFamily: 'InconsolataBold',
+        fontFamily: 'MontserratBold',
         fontSize: width / 31.8461538,
         maxWidth: width / 2.26229508,
         textAlign: 'left',

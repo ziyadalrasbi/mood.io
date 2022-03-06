@@ -6,80 +6,75 @@ const createLibrary = async (req, res, next) => {
     var recommendations = [];
     var trackIds = [];
     const features = req.body.features;
-    await api.setAccessToken(req.body.token);
-    await api.getRecommendations({
-        features,
-        seed_artists: req.body.artists,
-        limit: 100
-    })
-        .then((data) => {
-            for (var i = 0; i < data.body.tracks.length; i++) {
-                let currentDate = new Date(Date.now());
-                let trackDate = new Date(data.body.tracks[i]['album'].release_date);
-                let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
-                if (yearsDiff <= 4) {
-                    if (data.body.tracks[i]['album'].images[0]) {
-                        let recommendation = [];
-                        recommendation.push(data.body.tracks[i].name);
-                        recommendation.push(data.body.tracks[i].artists[0].name);
-                        recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                        recommendation.push(data.body.tracks[i].external_urls.spotify);
-                        recommendations.push(recommendation);
-                        trackIds.push(data.body.tracks[i].id);
-                    } else {
-                        console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
-                    }
-                }
-            }
-        }, function (err) {
-            console.log('There was an error getting recommendations, please try again.', err);
-            return res.json({ status: 400 });
-        })
-
-    for (let i = 0; i < req.body.artists.length; i++) {
-        let similarArtists = [];
-        await api.getArtistRelatedArtists(req.body.artists[i])
-            .then((data) => {
-                if (data.body.artists.length > 0) {
-                    for (let j = 0; j < 5 && j < data.body.artists.length; j++) {
-                        similarArtists.push(data.body.artists[j].id);
-                    }
-                }
-            })
-
+    try {
+        await api.setAccessToken(req.body.token);
         await api.getRecommendations({
             features,
-            seed_artists: similarArtists,
+            seed_artists: req.body.artists,
             limit: 100
         })
             .then((data) => {
-                for (var k = 0; k < similarArtists.length; k++) {
+                for (var i = 0; i < data.body.tracks.length; i++) {
                     let currentDate = new Date(Date.now());
-                    let trackDate = new Date(data.body.tracks[k]['album'].release_date);
+                    let trackDate = new Date(data.body.tracks[i]['album'].release_date);
                     let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                     if (yearsDiff <= 4) {
-                        if (data.body.tracks[k]['album'].images[0]) {
+                        if (data.body.tracks[i]['album'].images[0]) {
                             let recommendation = [];
-                            recommendation.push(data.body.tracks[k].name);
-                            recommendation.push(data.body.tracks[k].artists[0].name);
-                            recommendation.push(data.body.tracks[k]['album'].images[0].url);
-                            recommendation.push(data.body.tracks[k].external_urls.spotify);
+                            recommendation.push(data.body.tracks[i].name);
+                            recommendation.push(data.body.tracks[i].artists[0].name);
+                            recommendation.push(data.body.tracks[i]['album'].images[0].url);
+                            recommendation.push(data.body.tracks[i].external_urls.spotify);
                             recommendations.push(recommendation);
-                            if (!trackIds.includes(data.body.tracks[i].id)) {
-                                trackIds.push(data.body.tracks[i].id);
-                            }
-                        } else {
-                            console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[k]));
+                            trackIds.push(data.body.tracks[i].id);
                         }
                     }
                 }
-            }, function (err) {
-                console.log('There was an error getting recommendations, please try again.', err);
-                return res.json({ status: 400 });
+            });
+
+        for (let i = 0; i < req.body.artists.length; i++) {
+            let similarArtists = [];
+            await api.getArtistRelatedArtists(req.body.artists[i])
+                .then((data) => {
+                    if (data.body.artists.length > 0) {
+                        for (let j = 0; j < 5 && j < data.body.artists.length; j++) {
+                            similarArtists.push(data.body.artists[j].id);
+                        }
+                    }
+                });
+
+            await api.getRecommendations({
+                features,
+                seed_artists: similarArtists,
+                limit: 100
             })
-    }
-    if (recommendations.length > 0) {
-        return res.json({ recommendations: recommendations, trackIds: trackIds });
+                .then((data) => {
+                    for (var k = 0; k < similarArtists.length; k++) {
+                        let currentDate = new Date(Date.now());
+                        let trackDate = new Date(data.body.tracks[k]['album'].release_date);
+                        let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
+                        if (yearsDiff <= 4) {
+                            if (data.body.tracks[k]['album'].images[0]) {
+                                let recommendation = [];
+                                recommendation.push(data.body.tracks[k].name);
+                                recommendation.push(data.body.tracks[k].artists[0].name);
+                                recommendation.push(data.body.tracks[k]['album'].images[0].url);
+                                recommendation.push(data.body.tracks[k].external_urls.spotify);
+                                recommendations.push(recommendation);
+                                if (!trackIds.includes(data.body.tracks[i].id)) {
+                                    trackIds.push(data.body.tracks[i].id);
+                                }
+                            }
+                        }
+                    }
+                });
+        }
+        if (recommendations.length > 0) {
+            return res.json({ status: 200, recommendations: recommendations, trackIds: trackIds });
+        }
+    } catch (error) {
+        const message = 'Error creating the library, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -90,7 +85,6 @@ const getRecommendations = async (req, res, next) => {
     await api.setAccessToken(req.body.token);
     if (req.body.tracks != null) {
         try {
-
             await api.getAudioFeaturesForTracks(req.body.tracks)
                 .then((data) => {
                     if (data != null) {
@@ -122,13 +116,10 @@ const getRecommendations = async (req, res, next) => {
                             cosineSimTracks.push(currentSimilarity);
                         }
                     }
-                }, function (err) {
-                    console.log('There was an error getting audio features, please try again.', err);
-                    return res.json({ status: 400 });
                 });
         } catch (error) {
-            console.log('There was an error getting audio features, please try again.', error);
-            return res.json({ status: 400 });
+            const message = 'Error generating recommendations from audio features, please try again. \n' + error;
+            return res.json({ status: 400, message: message });
         }
         if (cosineSimTracks.length > 0) {
             cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
@@ -138,32 +129,30 @@ const getRecommendations = async (req, res, next) => {
             var uniqueUris = urisOnly.filter(onlyUnique);
             uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
             uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
-            await api.getTracks(uniqueTracks)
-                .then((data) => {
-                    for (var i = 0; i < data.body.tracks.length; i++) {
-                        if (data.body.tracks[i]['album'].images[0]) {
-                            let recommendation = [];
-                            recommendation.push(data.body.tracks[i].name);
-                            recommendation.push(data.body.tracks[i].artists[0].name);
-                            recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                            recommendation.push(data.body.tracks[i].external_urls.spotify);
-                            recommendations.push(recommendation);
-                        } else {
-                            console.log('broken recommendation found: ' + JSON.stringify(data.body.tracks[i]));
+            try {
+                await api.getTracks(uniqueTracks)
+                    .then((data) => {
+                        for (var i = 0; i < data.body.tracks.length; i++) {
+                            if (data.body.tracks[i]['album'].images[0]) {
+                                let recommendation = [];
+                                recommendation.push(data.body.tracks[i].name);
+                                recommendation.push(data.body.tracks[i].artists[0].name);
+                                recommendation.push(data.body.tracks[i]['album'].images[0].url);
+                                recommendation.push(data.body.tracks[i].external_urls.spotify);
+                                recommendations.push(recommendation);
+                            }
                         }
-                    }
-                    return res.json({ similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
-                }, function (err) {
-                    console.log('There was an error getting audio features2, please try again.', err);
-                    return res.json({ status: 400 });
-                })
+                        return res.json({ status: 200, similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
+                    });
+            } catch (error) {
+                const message = 'Error getting cosine similarity tracks, please try again. \n' + error;
+                return res.json({ status: 400, message: message });
+            }
         }
-    } else {
-        return res.json({ status: 400 });
     }
-
 }
 
+// Helper function
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
@@ -181,11 +170,11 @@ const createPlaylist = async (req, res, next) => {
                     id: data.body.id,
                     link: data.body.external_urls.spotify
                 };
-                return res.json({ playlist: playlist });
+                return res.json({ status: 200, playlist: playlist });
             })
     } catch (error) {
-        console.log('There was an error creating playlist for user, please try again.', err);
-        return res.json({ status: 400 });
+        const message = 'Error creating playlist, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 
@@ -197,8 +186,8 @@ const addTracksToPlaylist = async (req, res, next) => {
                 return res.json({ status: 200 });
             })
     } catch (error) {
-        console.log('There was an error adding tracks to playlist, please try again.', err);
-        return res.json({ status: 400 });
+        const message = 'Error adding tracks to playlist, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
     }
 }
 

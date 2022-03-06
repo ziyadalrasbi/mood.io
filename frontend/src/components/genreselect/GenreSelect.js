@@ -47,7 +47,9 @@ const GenreSelect = ({ navigation }) => {
 
   const selectItem = async (item) => {
     const prevItem = [...selectedItems];
-    prevItem.unshift(item);
+    if (!prevItem.includes(item)) {
+      prevItem.unshift(item);
+    }
     setSelectedItems(prevItem);
   }
 
@@ -79,7 +81,7 @@ const GenreSelect = ({ navigation }) => {
   }
 
   return (
-    <View style={{ height: height/3.24 }}>
+    <View style={{ flex: 1, height: '100%' }}>
       <Searchbar
         placeholder='Search'
         onChangeText={(text => {
@@ -96,15 +98,15 @@ const GenreSelect = ({ navigation }) => {
           );
         })}
         value={query}
-        style={{ width: '100%' }}
+        style={{ width: '100%', height: height/22.4 }}
       />
       <View style={{ flexDirection: 'column' }}>
         {!loading ?
           <FlatList
             data={items}
-            style={{ marginTop: height/89.6 }}
+            style={{ marginTop: height / 89.6 }}
             renderItem={({ item }) => (
-              <View style={{ borderWidth: 1, borderColor: 'grey', padding: width/41.4, backgroundColor: 'transparent', marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={{ borderWidth: 1, borderColor: 'grey', padding: width / 41.4, backgroundColor: 'transparent', marginBottom: height / 179.2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image
                     style={GenreSelectStyles.artistImage}
@@ -131,7 +133,7 @@ const GenreSelect = ({ navigation }) => {
             source={require('./animations/142-loading-animation.json')}
             autoPlay
             loop={true}
-            style={{ marginTop: height/29.8666667, width: width/4.14, height: width/4.14, alignSelf: 'center' }}
+            style={{ marginTop: height / 29.8666667, width: width / 4.14, height: width / 4.14, alignSelf: 'center' }}
           />
         }
 
@@ -139,45 +141,46 @@ const GenreSelect = ({ navigation }) => {
           data={selectedItems}
           horizontal={true}
           numColumns={1}
-          style={{ paddingVertical: 10 }}
+          style={{ paddingVertical: height / 89.6 }}
           renderItem={({ item }) => (
-            <View style={{ borderRadius: 5, borderWidth: 1, borderColor: 'grey', padding: width/41.4, marginRight: width/41.4, height: height/14.9333333, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
-              <Text style={GenreSelectStyles.removeArtistText}>
-                {item.title}
-              </Text>
-              <TouchableOpacity onPress={() => removeItem(item)}>
+            <TouchableOpacity style={{ marginBottom: height / 89.6 }} onPress={() => removeItem(item)}>
+              <View style={{ borderRadius: 5, padding: width / 41.4, marginRight: width / 41.4, height: height / 14.9333333, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
+                <Text style={GenreSelectStyles.removeArtistText}>
+                  {item.title}
+                </Text>
                 <Image
                   style={GenreSelectStyles.removeImage}
                   source={removeimg}
                 >
                 </Image>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           )}
         />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: height / 89.6, marginBottom: height/44.8 }}>
+          <Button
+            disabled={selectedItems.length > 0 ? false : true}
+            // style={GenreSelectStyles.startButton}
+            uppercase={false}
+            mode="contained"
+            // labelStyle={HomeStyles.mainFont}
+            onPress={clearItems}
+          >
+            clear
+          </Button>
+          <Button
+            disabled={selectedItems.length < 5 ? true : false}
+            // style={GenreSelectStyles.startButton}
+            uppercase={false}
+            mode="contained"
+            // labelStyle={HomeStyles.mainFont}
+            onPress={saveSelected}
+          >
+            continue
+          </Button>
+        </View>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-        <Button
-          disabled={selectedItems.length > 0 ? false : true}
-          // style={HomeStyles.startButton}
-          uppercase={false}
-          mode="contained"
-          // labelStyle={HomeStyles.mainFont}
-          onPress={clearItems}
-        >
-          clear
-        </Button>
-        <Button
-          disabled={selectedItems.length < 5 ? true : false}
-          // style={HomeStyles.startButton}
-          uppercase={false}
-          mode="contained"
-          // labelStyle={HomeStyles.mainFont}
-          onPress={saveSelected}
-        >
-          continue
-        </Button>
-      </View>
+
     </View>
 
   )
