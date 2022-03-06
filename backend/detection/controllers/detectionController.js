@@ -4,6 +4,7 @@ const tf = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 const path = require('path');
 const log = require('@vladmandic/pilogger');
+const image = require('@canvas/image');
 
 const ssdOptions = { minConfidence: 0.1, maxResults: 10 };
 const optionsSSDMobileNet = new faceApi.SsdMobilenetv1Options(ssdOptions);
@@ -19,21 +20,19 @@ const detectFace = async (req, res, next) => {
     try {
         var bitmap = new Buffer.from(req.body.base64, 'base64');
         const fileName = 'img_' + Math.random(5000) + '.jpg';
-        const image = fs.writeFileSync(fileName, bitmap);
+        fs.writeFileSync(fileName, bitmap);
         var buffer = fs.readFileSync(fileName);
-        const tensor = tf.tidy(() => {
-            const decode = faceApi.tf.node.decodeImage(buffer, 3)
-            let expand;
-            if (decode.shape[2] == 4) {
-                const channels = faceApi.tf.split(decode, 4, 2);
-                const rgb = faceApi.tf.stack([channels[0], channels[1], channels[2]], 2);
-                expand = faceApi.tf.reshape(rgb, [1, decode.shape[0], decode.shape[1], 3]);
-            } else {
-                expand = faceApi.tf.expandDims(decode, 0);
-            }
-            const cast = faceApi.tf.cast(expand, 'float32');
-            return cast;
-        })
+        const canvas = await image.imageFromBuffer(buffer);
+        const imageData = image.getImageData(canvas);
+
+        const tensor = tf.tidy(() => { // create tensor from image data
+            const data = tf.tensor(Array.from(imageData?.data || []), [canvas.height, canvas.width, 4], 'int32'); // create rgba image tensor from flat array and flip to height x width
+            const channels = tf.split(data, 4, 2); // split rgba to channels
+            const rgb = tf.stack([channels[0], channels[1], channels[2]], 2); // stack channels back to rgb
+            const reshape = tf.reshape(rgb, [1, canvas.height, canvas.width, 3]); // move extra dim from the end of tensor and use it as batch number instead
+            return reshape;
+        });
+        log.info('tensor:', tensor.shape, tensor.size);
 
         await faceApi.nets.faceLandmark68Net.loadFromDisk(path.join(__dirname, '../weights'));
         await faceApi.nets.faceExpressionNet.loadFromDisk(path.join(__dirname, '../weights'));
@@ -44,8 +43,8 @@ const detectFace = async (req, res, next) => {
         const results = await faceApi.detectAllFaces(tensor, optionsSSDMobileNet)
             .withFaceLandmarks()
             .withFaceExpressions();
-            
-        for (const face of results) print(face);
+
+        log.data('results:', results.length);
 
         fs.unlinkSync(fileName);
         return res.json({ status: 200, image: results });

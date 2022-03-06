@@ -10,6 +10,7 @@
   "author": "Ziyad Alrasbi",
   "license": "ISC",
   "dependencies": {
+    "@canvas/image": "^1.0.1",
     "@tensorflow/tfjs-node": "^3.13.0",
     "@vladmandic/face-api": "^1.6.4",
     "@vladmandic/pilogger": "^0.4.3",
