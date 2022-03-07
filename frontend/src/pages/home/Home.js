@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl, BackHandler } from 'react-native';
 import { Button } from 'react-native-paper';
 import HomeStyles from './HomeStyles';
 import * as SecureStore from 'expo-secure-store';
@@ -183,7 +183,7 @@ function Home({ navigation }) {
           style={HomeStyles.gradientContainer}
         />
         <View style={HomeStyles.mainContainer}>
-          
+
           <View style={HomeStyles.topContainer}>
             <Navbar navigation={navigation} name={name} page={'home'} />
           </View>
@@ -200,7 +200,7 @@ function Home({ navigation }) {
             >
               Get started
             </Button>
-            
+
           </View>
           <View style={HomeStyles.secondContainer}>
             <View style={HomeStyles.headerContainer}>

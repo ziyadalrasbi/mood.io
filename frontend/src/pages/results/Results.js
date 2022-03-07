@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Text, View, Image, ScrollView, TouchableOpacity, Platform, BackHandler } from 'react-native';
 import { Button } from 'react-native-paper';
 import ResultsStyles from './ResultsStyles';
 import Navbar from '../../components/navbar/Navbar';
@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as Linking from 'expo-linking';
 import LottieView from 'lottie-react-native';
 import Loading from '../../components/loading/Loading';
+import { useFocusEffect } from '@react-navigation/native';
 import {
     refreshAccessToken,
     createLibrary,
@@ -226,14 +227,14 @@ function Results({ navigation, route }) {
         const artists = getArtists.getUserDatabaseArtists;
         const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
-        const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
-        const amount = getAmount.getPlaylistsAmount + 1;
-        setPlaylistsAmount(amount);
-        await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal))
-
         const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, librarySignal));
         const trackIds = getLibrary.createLibrary;
         if (trackIds != null) {
+            const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
+            const amount = getAmount.getPlaylistsAmount + 1;
+            setPlaylistsAmount(amount);
+            await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal));
+            
             const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
             setLength(getRec.getRecommendations.recommendations.length + 1);
             setRecommendations(getRec.getRecommendations.recommendations);
@@ -292,6 +293,21 @@ function Results({ navigation, route }) {
         saveRatingController.abort();
     }
 
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => {
+                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+                return true;
+            };
+
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, []),
+    );
+
+
     if (loading || rloading) {
         return (
             <Loading page={"results"} />
@@ -329,6 +345,8 @@ function Results({ navigation, route }) {
         addTracksController.abort();
         setPlaylistedController.abort();
     }
+
+
 
     return (
         error == false ?

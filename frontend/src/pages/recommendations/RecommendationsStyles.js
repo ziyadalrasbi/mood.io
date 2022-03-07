@@ -324,12 +324,11 @@ export default StyleSheet.create({
         alignSelf: 'center'
     },
     openSpotify: {
-        backgroundColor: 'rgba(120, 120, 120, 0.5)',
+        backgroundColor: '#088F8F',
         borderRadius: 5,
         marginRight: 5
     },
     saveToSpotify: {
-        backgroundColor: '#1DB954',
         borderRadius: 5,
         marginRight: width / 82.8
     }

@@ -33,9 +33,8 @@ function Recommendations({ navigation, route }) {
 
     const [toggle, setToggle] = useState({});
 
-    const [ploading, setPLoading] = useState({});
-    const [saving, setSaving] = useState({});
-    const [complete, setComplete] = useState({});
+    const [notSaved, setNotSaved] = useState({});
+    const [saving, setSaving] = useState(false);
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -50,6 +49,21 @@ function Recommendations({ navigation, route }) {
                 const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
                 setRecentMood({ recentMood: getMood.getRecentMood });
                 setRecommendations(getRecommendations.getPreviousRecommendations);
+
+                var getStatus = [];
+
+                for (var i = 0; i < getRecommendations.getPreviousRecommendations.length; i++) {
+                    if (getRecommendations.getPreviousRecommendations[i].playlisted == false) {
+                        var tempRecommendation = {
+                            id: getRecommendations.getPreviousRecommendations[i].id,
+                            loading: false,
+                            saving: false,
+                            complete: false
+                        }
+                        getStatus[getRecommendations.getPreviousRecommendations[i].id] = tempRecommendation;
+                    }
+                }
+                setNotSaved(getStatus);
             } catch (error) {
                 console.log('Error aborting recommendations, please try again. ' + error);
             }
@@ -85,22 +99,6 @@ function Recommendations({ navigation, route }) {
         );
     }
 
-    const toggleLoading = index => {
-        setPLoading({ [index]: true });
-    }
-
-    const toggleSavingTrue = index => {
-        setSaving({ [index]: true });
-    }
-
-    const toggleSavingFalse = index => {
-        setSaving({ [index]: false });
-    }
-
-    const toggleComplete = index => {
-        setComplete({ [index]: true });
-    }
-
     const toggleHide = index => {
         setToggle({ ...toggle[index], [index]: !toggle[index] });
     }
@@ -117,13 +115,24 @@ function Recommendations({ navigation, route }) {
     }
 
     const savePlaylist = async (mood, playlistId, uris, index) => {
+        setSaving(true);
         const tokenController = new AbortController();
         const createPlaylistController = new AbortController();
         const addTracksController = new AbortController();
         const setPlaylistedController = new AbortController();
         try {
-            toggleLoading(index);
-            toggleSavingTrue(index);
+            let updatedSaving = notSaved.map(item => {
+                if (item.id == playlistId) {
+                    return {
+                        id: item.id,
+                        loading: true,
+                        saving: true,
+                        complete: false
+                    }
+                }
+                return item;
+            });
+            setNotSaved(updatedSaving);
             const userId = await SecureStore.getItemAsync('user_id');
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
@@ -137,8 +146,19 @@ function Recommendations({ navigation, route }) {
             await dispatch(addTracksToPlaylist(accessToken, id, uris, addTracksController.signal));
 
             await dispatch(setPlaylisted(userId, playlistId, link, setPlaylistedController.signal));
-            toggleSavingFalse(index);
-            toggleComplete(index);
+
+            let updatedComplete = notSaved.map(item => {
+                if (item.id == playlistId) {
+                    return {
+                        id: item.id,
+                        saving: false,
+                        complete: true,
+                        loading: true
+                    }
+                }
+                return item;
+            });
+            setNotSaved(updatedComplete);
         } catch (error) {
             console.log('Error saving playlist, please try again. ' + error);
         }
@@ -146,6 +166,7 @@ function Recommendations({ navigation, route }) {
         createPlaylistController.abort();
         addTracksController.abort();
         setPlaylistedController.abort();
+        setSaving(false);
     }
 
     return (
@@ -193,14 +214,14 @@ function Recommendations({ navigation, route }) {
                                             </Text>
                                         </TouchableOpacity>
                                     }
-                                    {recommendation.playlisted == false && !ploading[index] &&
-                                        <TouchableOpacity style={RecommendationsStyles.saveToSpotify} onPress={() => savePlaylist(recommendation.mood, recommendation.id, recommendation.uris, index)}>
+                                    {recommendation.playlisted == false && !notSaved[recommendation.id].loading &&
+                                        <TouchableOpacity disabled={saving} style={[RecommendationsStyles.saveToSpotify, {backgroundColor: saving ? 'rgba(120, 120, 120, 0.5)' : '#1DB954'}]} onPress={() => savePlaylist(recommendation.mood, recommendation.id, recommendation.uris, index)}>
                                             <Text style={RecommendationsStyles.firstSubHeader}>
                                                 SAVE TO SPOTIFY
                                             </Text>
                                         </TouchableOpacity>
                                     }
-                                    {recommendation.playlisted == false && saving[index] &&
+                                    {recommendation.playlisted == false && notSaved[recommendation.id].saving &&
                                         <LottieView
                                             source={require('./animations/8707-loading.json')}
                                             autoPlay
@@ -208,7 +229,7 @@ function Recommendations({ navigation, route }) {
                                             style={RecommendationsStyles.lottieView}
                                         />
                                     }
-                                    {recommendation.playlisted == false && complete[index] &&
+                                    {recommendation.playlisted == false && notSaved[recommendation.id].complete &&
                                         <Text style={RecommendationsStyles.firstSubHeader}>
                                             Playlist saved!
                                         </Text>

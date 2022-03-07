@@ -50,7 +50,12 @@ const ios = StyleSheet.create({
     marginLeft: getRatio(10),
     marginTop: getRatio(15),
     padding: getRatio(5),
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2, 
+    elevation: 5
   },
   secondContainer: {
     position: 'relative',
