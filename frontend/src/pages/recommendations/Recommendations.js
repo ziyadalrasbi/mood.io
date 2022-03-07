@@ -136,9 +136,12 @@ function Recommendations({ navigation, route }) {
             const userId = await SecureStore.getItemAsync('user_id');
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-            const accessToken = getToken.refreshAccessToken;
+            const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken.token;
+            const time = getToken.refreshAccessToken.time;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
             const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + mood + ' mood.io playlist #' + playlistId, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
             const id = getPlaylist.createPlaylist.id;
@@ -215,7 +218,7 @@ function Recommendations({ navigation, route }) {
                                         </TouchableOpacity>
                                     }
                                     {recommendation.playlisted == false && !notSaved[recommendation.id].loading &&
-                                        <TouchableOpacity disabled={saving} style={[RecommendationsStyles.saveToSpotify, {backgroundColor: saving ? 'rgba(120, 120, 120, 0.5)' : '#1DB954'}]} onPress={() => savePlaylist(recommendation.mood, recommendation.id, recommendation.uris, index)}>
+                                        <TouchableOpacity disabled={saving} style={[RecommendationsStyles.saveToSpotify, { backgroundColor: saving ? 'rgba(120, 120, 120, 0.5)' : '#1DB954' }]} onPress={() => savePlaylist(recommendation.mood, recommendation.id, recommendation.uris, index)}>
                                             <Text style={RecommendationsStyles.firstSubHeader}>
                                                 SAVE TO SPOTIFY
                                             </Text>
@@ -285,16 +288,4 @@ function Recommendations({ navigation, route }) {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        getRecentMood: state.dbReducer.getRecentMood,
-        getPreviousRecommendations: state.dbReducer.getPreviousRecommendations
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getRecentMood,
-    getPreviousRecommendations
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Recommendations);
+export default Recommendations;

@@ -55,7 +55,7 @@ function Home({ navigation }) {
       try {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const userId = await SecureStore.getItemAsync('user_id');
-
+        
         const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
         const getUserName = await dispatch(getName(token, getUserNameController.signal));
         const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
@@ -119,19 +119,23 @@ function Home({ navigation }) {
 
     try {
       const userId = await SecureStore.getItemAsync('user_id');
-      const accessToken = await SecureStore.getItemAsync('spotify_access_token');
-      const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-      const getToken = await dispatch(refreshAccessToken(accessToken, refreshToken, tokenController.signal));
-      const token = getToken.refreshAccessToken;
-      SecureStore.setItemAsync('spotify_access_token', token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
-      const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
-      const getUserName = await dispatch(getName(token, getUserNameController.signal));
-      const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
+      const token = await SecureStore.getItemAsync('spotify_access_token');
+      const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+      const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+      const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+      const accessToken = getToken.refreshAccessToken.token;
+      const time = getToken.refreshAccessToken.time;
+      SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+      SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+
+      const getArtists = await dispatch(getTopArtistsHome(accessToken, getArtistsController.signal));
+      const getUserName = await dispatch(getName(accessToken, getUserNameController.signal));
+      const getTracks = await dispatch(getTopTracksHome(accessToken, getTracksController.signal));
       const getDbArtists = await dispatch(getUserDatabaseArtists(userId, getDbArtistsController.signal));
       const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
       const amount = getTracks.getTopTracksHome.trackIds.length;
-      const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
+      const getHabits = await dispatch(getListeningHabitsHome(accessToken, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
       setTopArtists(getArtists.getTopArtistsHome);
       setName(getUserName.getName);

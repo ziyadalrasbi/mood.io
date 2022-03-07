@@ -140,10 +140,12 @@ function UserStats({ navigation, route }) {
             try {
                 const token = await SecureStore.getItemAsync('spotify_access_token');
                 const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-
-                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-                const accessToken = getToken.refreshAccessToken;
+                const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+                const accessToken = getToken.refreshAccessToken.token;
+                const time = getToken.refreshAccessToken.time;
                 SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
                 const getArtists = await dispatch(getTopArtistsStats(accessToken, 'medium_term', getArtistsController.signal));
                 if (getArtists.getTopArtistsStats != null) {
@@ -182,9 +184,12 @@ function UserStats({ navigation, route }) {
 
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-            const accessToken = getToken.refreshAccessToken;
+            const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken.token;
+            const time = getToken.refreshAccessToken.time;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
             const getArtists = await dispatch(getTopArtistsStats(accessToken, range, getArtistsController.signal));
             if (getArtists.getTopArtistsStats != null) {

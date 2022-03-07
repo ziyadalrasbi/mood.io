@@ -23,29 +23,46 @@ export const requestAccessToken = (uri, code, signal) => (dispatch, getState) =>
         })
 })
 
-export const refreshAccessToken = (token, refreshToken, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+export const refreshAccessToken = (token, refreshToken, expiry, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialAccessToken = { token };
     const initialRefreshToken = { refreshToken };
-    return fetch(`${baseUrl}/spotify/login/refreshAccessToken`, {
-        signal: signal,
-        method: 'post',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            accessToken: initialAccessToken.token,
-            refreshToken: initialRefreshToken.refreshToken
+    const initialExpiry = { expiry };
+    const timeNow = Date.now();
+
+    if (timeNow > initialExpiry.expiry) {
+        console.log('Needs refreshing');
+        return fetch(`${baseUrl}/spotify/login/refreshAccessToken`, {
+            signal: signal,
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                accessToken: initialAccessToken.token,
+                refreshToken: initialRefreshToken.refreshToken
+            })
         })
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.token != null) {
-                return dispatch({ type: 'REFRESH_ACCESS_TOKEN', refreshAccessToken: data.token });
-            } else {
-                return dispatch({ type: 'REFRESH_ACCESS_TOKEN', refreshAccessToken: null });
-            }
-        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.token != null) {
+                    const newData = {
+                        token: data.token,
+                        time: Date.now() + 3.6e6
+                    }
+                    return dispatch({ type: 'REFRESH_ACCESS_TOKEN', refreshAccessToken: newData });
+                } else {
+                    return dispatch({ type: 'REFRESH_ACCESS_TOKEN', refreshAccessToken: null });
+                }
+            })
+    } else {
+        console.log('No need to refresh');
+        const data = {
+            token: initialAccessToken.token,
+            time: initialExpiry.expiry
+        }
+        return dispatch({ type: 'REFRESH_ACCESS_TOKEN', refreshAccessToken: data });
+    }
 })
 
 export const getUserId = (token, signal) => (dispatch, getState) => Promise.resolve().then(() => {

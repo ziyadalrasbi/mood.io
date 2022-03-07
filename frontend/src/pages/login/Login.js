@@ -75,10 +75,15 @@ function Login({ navigation }) {
             if (res && res.type == 'success') {
                 setLoading(true);
                 const getTokens = await dispatch(requestAccessToken(request.redirectUri, res.params.code, requestTokenController.signal));
+
                 const accessToken = getTokens.requestAccessToken.accessToken;
                 const refreshToken = getTokens.requestAccessToken.refreshToken;
+                const totalExpiry = Date.now() + 3.6e6;
+
                 SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                 SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                SecureStore.setItemAsync('token_expiry', JSON.stringify(totalExpiry), { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+               
                 const getUser = await dispatch(getUserId(accessToken, getUserIdController.signal));
                 await dispatch(getUserProfile(accessToken, getUserProfileController.signal));
                 const userId = getUser.getUserId;

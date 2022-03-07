@@ -37,10 +37,12 @@ function Habits({ navigation }) {
             try {
                 const token = await SecureStore.getItemAsync('spotify_access_token');
                 const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-
-                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-                const accessToken = getToken.refreshAccessToken;
+                const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+                const accessToken = getToken.refreshAccessToken.token;
+                const time = getToken.refreshAccessToken.time;
                 SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
                 const getTracks = await dispatch(getTopTracksStats(accessToken, 'medium_term', getTracksController.signal));
                 const trackIds = getTracks.getTopTracksStats.trackIds;
@@ -85,9 +87,12 @@ function Habits({ navigation }) {
 
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-            const accessToken = getToken.refreshAccessToken;
+            const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken.token;
+            const time = getToken.refreshAccessToken.time;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
             const getTracks = await dispatch(getTopTracksStats(accessToken, range, getTracksController.signal));
             const trackIds = getTracks.getTopTracksStats.trackIds;
@@ -124,19 +129,19 @@ function Habits({ navigation }) {
                     Habits are averaged using your top 15 tracks from the given time range.
                 </Text>
                 <View style={HabitsStyles.selectContainer}>
-                    <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
-                            <Text style={[HabitsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
-                                4 weeks
-                            </Text>
+                    <TouchableOpacity style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
+                        <Text style={[HabitsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
+                            4 weeks
+                        </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]}  onPress={() => changeRange('medium_term', 2)}>
+                    <TouchableOpacity style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('medium_term', 2)}>
                         <View style={HabitsStyles.selectButtonContainer}>
                             <Text style={[HabitsStyles.selectText, { color: selectedIndex == 2 ? 'white' : 'grey' }]}>
                                 6 months
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[HabitsStyles.opacityContainer, {backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]}  onPress={() => changeRange('long_term', 3)}>
+                    <TouchableOpacity style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('long_term', 3)}>
                         <View style={HabitsStyles.selectButtonContainer}>
                             <Text style={[HabitsStyles.selectText, { color: selectedIndex == 3 ? 'white' : 'grey' }]}>
                                 All time
@@ -165,19 +170,19 @@ function Habits({ navigation }) {
                             </Text>
                             :
                             rloading == true ?
-                            <LottieView
-                                source={require('./animations/27-loading.json')}
-                                autoPlay
-                                loop
-                                style={HabitsStyles.loading}
-                            />
-                            :
-                            <Text style={HabitsStyles.habitDescription}>
-                                --
-                            </Text>
+                                <LottieView
+                                    source={require('./animations/27-loading.json')}
+                                    autoPlay
+                                    loop
+                                    style={HabitsStyles.loading}
+                                />
+                                :
+                                <Text style={HabitsStyles.habitDescription}>
+                                    --
+                                </Text>
                         }
                     </View>
-                    <View style={[HabitsStyles.habitContainer, { backgroundColor:'#5311d6' }]}>
+                    <View style={[HabitsStyles.habitContainer, { backgroundColor: '#5311d6' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
                                 source={require('./animations/12730-sound-wave.json')}
@@ -195,19 +200,19 @@ function Habits({ navigation }) {
                             </Text>
                             :
                             rloading == true ?
-                            <LottieView
-                                source={require('./animations/27-loading.json')}
-                                autoPlay
-                                loop
-                                style={{ width: 40, height: 40 }}
-                            />
-                            :
-                            <Text style={HabitsStyles.habitDescription}>
-                                --
-                            </Text>
+                                <LottieView
+                                    source={require('./animations/27-loading.json')}
+                                    autoPlay
+                                    loop
+                                    style={{ width: 40, height: 40 }}
+                                />
+                                :
+                                <Text style={HabitsStyles.habitDescription}>
+                                    --
+                                </Text>
                         }
                     </View>
-                    <View style={[HabitsStyles.habitContainer, { backgroundColor:'#16b5c9' }]}>
+                    <View style={[HabitsStyles.habitContainer, { backgroundColor: '#16b5c9' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
                                 source={require('./animations/71410-speech-bubbles.json')}
@@ -225,19 +230,19 @@ function Habits({ navigation }) {
                             </Text>
                             :
                             rloading == true ?
-                            <LottieView
-                                source={require('./animations/27-loading.json')}
-                                autoPlay
-                                loop
-                                style={{ width: 40, height: 40 }}
-                            />
-                            :
-                            <Text style={HabitsStyles.habitDescription}>
-                                --
-                            </Text>
+                                <LottieView
+                                    source={require('./animations/27-loading.json')}
+                                    autoPlay
+                                    loop
+                                    style={{ width: 40, height: 40 }}
+                                />
+                                :
+                                <Text style={HabitsStyles.habitDescription}>
+                                    --
+                                </Text>
                         }
                     </View>
-                    <View style={[HabitsStyles.habitContainer, { backgroundColor:'#20bd52' }]}>
+                    <View style={[HabitsStyles.habitContainer, { backgroundColor: '#20bd52' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
                                 source={require('./animations/lf30_editor_eskm9u1h.json')}
@@ -255,16 +260,16 @@ function Habits({ navigation }) {
                             </Text>
                             :
                             rloading == true ?
-                            <LottieView
-                                source={require('./animations/27-loading.json')}
-                                autoPlay
-                                loop
-                                style={{ width: 40, height: 40 }}
-                            />
-                            :
-                            <Text style={HabitsStyles.habitDescription}>
-                                --
-                            </Text>
+                                <LottieView
+                                    source={require('./animations/27-loading.json')}
+                                    autoPlay
+                                    loop
+                                    style={{ width: 40, height: 40 }}
+                                />
+                                :
+                                <Text style={HabitsStyles.habitDescription}>
+                                    --
+                                </Text>
                         }
                     </View>
                 </ScrollView>

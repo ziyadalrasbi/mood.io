@@ -218,9 +218,12 @@ function Results({ navigation, route }) {
     ) => {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-        const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenSignal));
-        const accessToken = getToken.refreshAccessToken;
+        const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+        const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenSignal));
+        const accessToken = getToken.refreshAccessToken.token;
+        const time = getToken.refreshAccessToken.time;
         SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+        SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
         const id = await SecureStore.getItemAsync('user_id');
         const getArtists = await dispatch(getUserDatabaseArtists(id, dbArtistsSignal));
@@ -234,7 +237,7 @@ function Results({ navigation, route }) {
             const amount = getAmount.getPlaylistsAmount + 1;
             setPlaylistsAmount(amount);
             await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal));
-            
+
             const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
             setLength(getRec.getRecommendations.recommendations.length + 1);
             setRecommendations(getRec.getRecommendations.recommendations);
@@ -325,9 +328,12 @@ function Results({ navigation, route }) {
             const userId = await SecureStore.getItemAsync('user_id');
             const token = await SecureStore.getItemAsync('spotify_access_token');
             const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-            const accessToken = getToken.refreshAccessToken;
+            const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+            const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+            const accessToken = getToken.refreshAccessToken.token;
+            const time = getToken.refreshAccessToken.time;
             SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+            SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
             const getPlaylist = await dispatch(createPlaylist(accessToken, 'Your ' + route.params.maxMood + ' mood.io playlist #' + playlistsAmount, 'A playlist generated for you on mood.io to better your mood!', createPlaylistController.signal));
             const id = getPlaylist.createPlaylist.id;

@@ -16,7 +16,6 @@ const CustomDrawer = ({ props, navigation }) => {
 
     const dispatch = useDispatch();
 
-
     const userProfile = useSelector(state => state.spotifyReducer.getUserProfile);
     const [loading, setLoading] = useState(true);
 
@@ -36,13 +35,16 @@ const CustomDrawer = ({ props, navigation }) => {
             try {
                 const token = await SecureStore.getItemAsync('spotify_access_token');
                 const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenController.signal));
-                const accessToken = getToken.refreshAccessToken;
+                const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+                const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+                const accessToken = getToken.refreshAccessToken.token;
+                const time = getToken.refreshAccessToken.time;
                 SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
                 await dispatch(getUserProfile(accessToken, getProfileController.signal));
             } catch (error) {
-                console.log( error);
+                console.log(error);
             }
 
         }
@@ -65,12 +67,13 @@ const CustomDrawer = ({ props, navigation }) => {
             await SecureStore.deleteItemAsync('spotify_access_token');
             await SecureStore.deleteItemAsync('spotify_refresh_token');
             await SecureStore.deleteItemAsync('user_id');
+            await SecureStore.deleteItemAsync('token_expiry');
             await dispatch(signOut(signOutController.signal));
             await dispatch(spotifySignOut());
-            
+
             navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
         } catch (error) {
-            console.log('Error signing out, please try again. '+ error);
+            console.log('Error signing out, please try again. ' + error);
         }
         signOutController.abort();
     }
@@ -113,9 +116,9 @@ const CustomDrawer = ({ props, navigation }) => {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Habits')}>
-                    <Text style={CustomDrawerStyles.optionText}>
-                        Listening Habits
-                    </Text>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Listening Habits
+                        </Text>
                     </TouchableOpacity>
                     <Text style={CustomDrawerStyles.optionText}>
                         About mood.io

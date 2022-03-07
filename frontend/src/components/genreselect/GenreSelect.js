@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import GenreSelectStyles from './GenreSelectStyles';
 import { useFonts } from 'expo-font';
-import { searchForArtists } from '../../client/src/actions/spotifyActions';
+import { searchForArtists, refreshAccessToken } from '../../client/src/actions/spotifyActions';
 import { saveUserArtists } from '../../client/src/actions/dbActions';
 import * as SecureStore from 'expo-secure-store';
 import { Searchbar } from 'react-native-paper';
@@ -33,16 +33,27 @@ const GenreSelect = ({ navigation }) => {
   const [selectedItems, setSelectedItems] = React.useState([]);
 
   const [loading, setLoading] = React.useState(false);
+
   const search = async (query) => {
     const searchController = new AbortController();
+    const tokenController = new AbortController();
     try {
       const token = await SecureStore.getItemAsync('spotify_access_token');
-      const searchQuery = await dispatch(searchForArtists(token, query, searchController.signal));
+      const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+      const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+      const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+      const accessToken = getToken.refreshAccessToken.token;
+      const time = getToken.refreshAccessToken.time;
+      SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+      SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+
+      const searchQuery = await dispatch(searchForArtists(accessToken, query, searchController.signal));
       setItems(searchQuery.searchForArtists);
-      searchController.abort();
     } catch (error) {
       console.log('Error searching for artists, please try again. ' + error);
     }
+    searchController.abort();
+    tokenController.abort();
   }
 
   const selectItem = async (item) => {
@@ -72,12 +83,12 @@ const GenreSelect = ({ navigation }) => {
       const currItems = [...selectedItems];
       const artists = currItems.map(artist => artist.id);
       await dispatch(saveUserArtists(id, artists, saveArtistsController.signal));
-      saveArtistsController.abort();
+
       navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
     } catch (error) {
       console.log('Error saving artists, please try again. ' + error);
     }
-
+    saveArtistsController.abort();
   }
 
   return (
@@ -98,7 +109,7 @@ const GenreSelect = ({ navigation }) => {
           );
         })}
         value={query}
-        style={{ width: '100%', height: height/22.4 }}
+        style={{ width: '100%', height: height / 22.4 }}
       />
       <View style={{ flexDirection: 'column' }}>
         {!loading ?
@@ -157,7 +168,7 @@ const GenreSelect = ({ navigation }) => {
             </TouchableOpacity>
           )}
         />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: height / 89.6, marginBottom: height/44.8 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: height / 89.6, marginBottom: height / 44.8 }}>
           <Button
             disabled={selectedItems.length > 0 ? false : true}
             // style={GenreSelectStyles.startButton}
@@ -185,16 +196,5 @@ const GenreSelect = ({ navigation }) => {
 
   )
 }
-const mapStateToProps = (state) => {
-  return {
-    searchForArtists: state.spotifyReducer.searchForArtists,
-    saveUserArtists: state.dbReducer.saveUserArtists
-  }
-}
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  searchForArtists,
-  saveUserArtists
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(GenreSelect);
+export default GenreSelect;

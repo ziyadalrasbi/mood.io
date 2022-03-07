@@ -175,16 +175,5 @@ function Upload({ navigation }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    detectFace: state.detectReducer.detectFace,
-    saveRecentMood: state.dbReducer.saveRecentMood
-  }
-}
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  detectFace,
-  saveRecentMood
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Upload);
+export default Upload;

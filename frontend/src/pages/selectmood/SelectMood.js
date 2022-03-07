@@ -201,14 +201,4 @@ function SelectMood({ navigation }) {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        saveRecentMood: state.dbReducer.saveRecentMood
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    saveRecentMood
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(SelectMood);
+export default SelectMood;

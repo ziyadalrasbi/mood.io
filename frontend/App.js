@@ -20,37 +20,32 @@ function App({ navigation }) {
     const [assetsLoading, setAssetsLoading] = React.useState(true);
 
     React.useEffect(() => {
+        const tokenController = new AbortController();
+        const getUserController = new AbortController();
+        const getTopArtistsController = new AbortController();
+        const saveArtistsController = new AbortController();
         const fetchData = async () => {
-            var tempId;
-            var token;
-            const spotifyAccessToken = await SecureStore.getItemAsync('spotify_access_token');
-            const spotifyRefreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-            if (spotifyAccessToken != null) {
-                try {
-                    await refreshAccessToken(spotifyAccessToken, spotifyRefreshToken)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.token != null) {
-                                token = data.token;
-                                SecureStore.setItemAsync('spotify_access_token', data.token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-                                setVerified(true);
-                            }
-                        })
-                    await getUserId(token)
-                        .then(res => res.json())
-                        .then(data => {
-                            tempId = data.id;
-                        })
-                    await getUserTopArtistsLogin(token)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (Object.keys(data.topArtists).length > 0) {
-                                saveUserArtists(tempId, data.topArtists)
-                            }
-                        })
-                } catch (error) {
-                    console.log('Error fetching home data, please try again. \n' + error);
+            try {
+                const token = await SecureStore.getItemAsync('spotify_access_token');
+                const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+                if (token != null) {
+                    const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+                    const getToken = await refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal);
+                    const accessToken = getToken.token;
+                    const time = getToken.time;
+                    SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                    SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+                    setVerified(true);
+
+                    const userId = await getUserId(accessToken, getUserController.signal);
+
+                    const topArtists = await getUserTopArtistsLogin(accessToken, getTopArtistsController.signal);
+                    if (Object.keys(topArtists).length > 0) {
+                        await saveUserArtists(userId, topArtists, saveArtistsController.signal);
+                    }
                 }
+            } catch (error) {
+                console.log('Error getting user initial info, please try again. ' + error);
             }
         }
 
@@ -99,7 +94,7 @@ function App({ navigation }) {
                     }]
                 })
             } catch (error) {
-                console.log('Error caching assets, please try again. '+ error);
+                console.log('Error caching assets, please try again. ' + error);
             } finally {
                 setAssetsLoading(false);
             }
@@ -107,7 +102,14 @@ function App({ navigation }) {
 
         loadAssets();
         fetchData().then(() => setLoading(false));
-        
+
+        return () => {
+            tokenController.abort();
+            getUserController.abort();
+            getTopArtistsController.abort();
+            saveArtistsController.abort();
+        }
+
     }, [loading])
 
     if (loading || assetsLoading) {
