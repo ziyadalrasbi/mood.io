@@ -214,7 +214,7 @@ export default StyleSheet.create({
     trackContainer: {
         alignItems: 'center',
         width: '100%',
-        backgroundColor: '#09263b',
+        backgroundColor: '#141E30',
         padding: width / 41.4,
         borderBottomWidth: 1,
         borderBottomColor: 'grey',

@@ -13,6 +13,7 @@ import playimg from '../../../assets/icons/home/play.png';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import LottieView from 'lottie-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function Recommendations({ navigation, route }) {
 
@@ -85,19 +86,19 @@ function Recommendations({ navigation, route }) {
     }
 
     const toggleLoading = index => {
-        setPLoading({ ...ploading[index], [index]: true });
+        setPLoading({ [index]: true });
     }
 
     const toggleSavingTrue = index => {
-        setSaving({ ...saving[index], [index]: true });
+        setSaving({ [index]: true });
     }
 
     const toggleSavingFalse = index => {
-        setSaving({ ...saving[index], [index]: false });
+        setSaving({ [index]: false });
     }
 
     const toggleComplete = index => {
-        setComplete({ ...complete[index], [index]: true });
+        setComplete({ [index]: true });
     }
 
     const toggleHide = index => {
@@ -171,7 +172,8 @@ function Recommendations({ navigation, route }) {
                         <View key={index} style={RecommendationsStyles.topTracksContainer}>
                             <TouchableOpacity
                                 style={RecommendationsStyles.trackContainer}
-                                onPress={() => toggleHide(index)}>
+                                onPress={() => toggleHide(index)}
+                            >
                                 <View>
                                     <Text style={RecommendationsStyles.firstHeader}>
                                         Recommendation #{recommendation.id}

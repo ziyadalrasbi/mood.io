@@ -37,8 +37,7 @@ const ios = StyleSheet.create({
     fontFamily: 'MontserratBold',
     color: 'white',
     fontSize: getRatio(15),
-    padding: getRatio(10),
-    marginTop: getRatio(15)
+    padding: getRatio(10)
   },
   firstSubHeader: {
     fontFamily: 'MontserratMedium',
@@ -47,7 +46,7 @@ const ios = StyleSheet.create({
     color: '#dbdbdb'
   },
   startButton: {
-    backgroundColor: '#4ca1af',
+    backgroundColor: '#0d324d',
     marginLeft: getRatio(10),
     marginTop: getRatio(15),
     padding: getRatio(5),
@@ -270,7 +269,7 @@ const ios = StyleSheet.create({
     width: getRatio(17),
     height: getRatio(17),
     marginLeft: -(getRatio(10)),
-    marginTop: getRatio(1)
+    marginTop: getRatio(2.5)
   },
   playImage: {
     width: getRatio(22),
@@ -346,8 +345,6 @@ const android = StyleSheet.create({
     color: 'white',
     fontSize: width / 27.6,
     padding: width / 41.4,
-
-    marginTop: height / 59.7333333
   },
   firstSubHeader: {
     fontFamily: 'MontserratMedium',
@@ -582,7 +579,7 @@ const android = StyleSheet.create({
     width: width / 24.3529412,
     height: width / 24.3529412,
     marginLeft: -(width / 41.4),
-    marginTop: height / height
+    marginTop: height / 358.4
   },
   playImage: {
     width: 20,
