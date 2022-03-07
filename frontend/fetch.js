@@ -1,6 +1,9 @@
 import * as Constants from "./src/Constants";
 const baseUrl = Constants.BASE_URL;
 
+/* Initial methods used in App.js to save a user's artists and to check if the token has expired.
+   App.js cannot make use of dispatch functions, so these functions are used instead. */
+
 export const refreshAccessToken = async (token, refreshToken, expiry, signal) => {
     const initialAccessToken = { token };
     const initialRefreshToken = { refreshToken };
@@ -24,9 +27,10 @@ export const refreshAccessToken = async (token, refreshToken, expiry, signal) =>
             .then(res => res.json())
             .then(data => {
                 if (data.token != null) {
+                    const newExpiry = Date.now() + 3.6e6;
                     const newData = {
                         token: data.token,
-                        time: Date.now() + 3.6e6
+                        time: JSON.stringify(newExpiry)
                     }
                     return newData;
                 } else {

@@ -46,9 +46,10 @@ export const refreshAccessToken = (token, refreshToken, expiry, signal) => (disp
             .then(res => res.json())
             .then(data => {
                 if (data.token != null) {
+                    const newExpiry = Date.now() + 3.6e6;
                     const newData = {
                         token: data.token,
-                        time: Date.now() + 3.6e6
+                        time: JSON.stringify(newExpiry)
                     }
                     return dispatch({ type: 'REFRESH_ACCESS_TOKEN', refreshAccessToken: newData });
                 } else {
