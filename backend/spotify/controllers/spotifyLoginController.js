@@ -12,7 +12,7 @@ const requestAccessToken = async (req, res, next) => {
     try {
         await spotifyApi.authorizationCodeGrant(req.body.code)
             .then((data) => {
-                return res.json({ status: 200, accessToken: data.body.access_token, refreshToken: data.body.refresh_token });
+                return res.json({ status: 200, accessToken: data.body.access_token, refreshToken: data.body.refresh_token, time: data.body.expires_in });
             });
     } catch (error) {
         const message = 'Error requesting access token, please try again. \n' + error;
@@ -33,7 +33,7 @@ const refreshAccessToken = async (req, res, next) => {
             spotifyApi.setRefreshToken(req.body.refreshToken);
             spotifyApi.refreshAccessToken()
                 .then((data) => {
-                    return res.json({ status: 200, token: data.body.access_token });
+                    return res.json({ status: 200, token: data.body.access_token, time: data.body.expires_in });
                 });
         }
     } catch (error) {

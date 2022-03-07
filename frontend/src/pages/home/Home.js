@@ -200,7 +200,6 @@ function Home({ navigation }) {
             >
               Get started
             </Button>
-
           </View>
           <View style={HomeStyles.secondContainer}>
             <View style={HomeStyles.headerContainer}>
