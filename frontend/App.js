@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import HomeStyles from './src/pages/home/HomeStyles';
 import { Text, View } from 'react-native';
-import { refreshAccessToken, getUserId, getUserTopArtistsLogin, saveUserArtists } from './src/fetch';
+import { refreshAccessToken, getUserId, getUserTopArtistsLogin, saveUserArtists } from './fetch';
 import DrawerStack from './src/components/drawer/DrawerStack';
 import store from './src/client/src/store';
 import { Provider } from 'react-redux';
