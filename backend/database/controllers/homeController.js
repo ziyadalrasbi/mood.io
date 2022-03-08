@@ -50,16 +50,14 @@ const getMoodCount = async (req, res, next) => {
                     surprised: (moods.surprised / total)
                 };
 
+                var sortedList = Object.entries(averageMoods).sort((a,b) => b[1]-a[1]);
                 var keys = [];
                 var values = [];
 
-                Object.keys(averageMoods).forEach((key) => {
-                    keys.push(key);
-                })
-
-                Object.values(averageMoods).forEach((value) => {
-                    values.push(value);
-                })
+                for (var i = 0; i < sortedList.length; i++) {
+                    keys.push(sortedList[i][0]);
+                    values.push(sortedList[i][1]);
+                }
 
                 var finalMoods = {
                     keys: keys,

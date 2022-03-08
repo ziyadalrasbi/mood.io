@@ -189,10 +189,11 @@ export const saveRecentMood = (user, mood, signal) => (dispatch, getState) => Pr
         })
 })
 
-export const incrementMoodCount = (user, mood) => (dispatch, getState) => Promise.resolve().then(() => {
+export const incrementMoodCount = (user, mood, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialMood = { mood };
     return fetch(`${baseUrl}/database/results/incrementMoodCount`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',

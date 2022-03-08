@@ -8,7 +8,7 @@ import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { detectFace } from '../../client/src/actions/detectActions';
-import { saveRecentMood } from '../../client/src/actions/dbActions';
+import { incrementMoodCount, saveRecentMood } from '../../client/src/actions/dbActions';
 import uploadimg from '../../../assets/icons/upload/upload.png';
 import LottieView from 'lottie-react-native';
 import * as SecureStore from 'expo-secure-store';
@@ -94,14 +94,16 @@ function Upload({ navigation }) {
     }
 
     const saveMoodController = new AbortController();
+    const incrementMoodController = new AbortController();
     try {
       const id = await SecureStore.getItemAsync('user_id');
       await dispatch(saveRecentMood(id, tempProp, saveMoodController.signal));
+      await dispatch(incrementMoodCount(id, tempProp, incrementMoodController.signal));
     } catch (error) {
       console.log('Error saving recent mood, please try again. ' + error);
     }
     saveMoodController.abort();
-
+    incrementMoodController.abort();
     navigation.navigate('Results', {
       results: moodAnalysis.moodAnalysis,
       maxMood: tempProp,

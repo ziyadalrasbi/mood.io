@@ -15,7 +15,7 @@ import neutral from '../../../assets/icons/selectmood/neutral.png';
 import confused from '../../../assets/icons/selectmood/thinking.png';
 import surprised from '../../../assets/icons/selectmood/surprised.png';
 import LottieView from 'lottie-react-native';
-import { saveRecentMood } from '../../client/src/actions/dbActions';
+import { incrementMoodCount, saveRecentMood } from '../../client/src/actions/dbActions';
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -81,14 +81,17 @@ function SelectMood({ navigation }) {
         }
 
         const saveMoodController = new AbortController();
+        const incrementMoodController = new AbortController();
         try {
             const id = await SecureStore.getItemAsync('user_id');
             await dispatch(saveRecentMood(id, tempProp, saveMoodController.signal));
+            await dispatch(incrementMoodCount(id, tempProp, incrementMoodController.signal));
         } catch (error) {
             console.log('Error saving mood, please try again. ' + error);
         }
         saveMoodController.abort();
-
+        incrementMoodController.abort();
+        
         navigation.navigate('Results', {
             results: mood,
             maxMood: index.mood,

@@ -71,7 +71,6 @@ function Home({ navigation }) {
         const amount = getTracks.getTopTracksHome.trackIds.length;
         const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
-        console.log(getMoods.getMoodCount.moods)
         if (total > 0) setMoods(getMoods.getMoodCount.moods);
         setTopArtists(getArtists.getTopArtistsHome);
         setName(getUserName.getName);
