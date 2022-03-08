@@ -30,7 +30,6 @@ export const refreshAccessToken = (token, refreshToken, expiry, signal) => (disp
     const timeNow = Date.now();
 
     if (timeNow > initialExpiry.expiry) {
-        console.log('Needs refreshing');
         return fetch(`${baseUrl}/spotify/login/refreshAccessToken`, {
             signal: signal,
             method: 'post',
@@ -57,7 +56,6 @@ export const refreshAccessToken = (token, refreshToken, expiry, signal) => (disp
                 }
             })
     } else {
-        console.log('No need to refresh');
         const data = {
             token: initialAccessToken.token,
             time: initialExpiry.expiry

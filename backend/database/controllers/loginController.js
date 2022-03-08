@@ -37,7 +37,15 @@ const addUser = async (req, res, next) => {
                 if (!doc.exists) {
                     response.set({
                         username: JSON.stringify(req.body.user),
-                        playlists: 0
+                        playlists: 0,
+                        moods: {
+                            happy: 0,
+                            neutral: 0,
+                            sad: 0,
+                            angry: 0,
+                            confused: 0,
+                            surprised: 0
+                        }
                     }, { merge: true });
                 }
             })

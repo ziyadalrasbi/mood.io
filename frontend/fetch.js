@@ -11,7 +11,6 @@ export const refreshAccessToken = async (token, refreshToken, expiry, signal) =>
     const timeNow = Date.now();
 
     if (timeNow > initialExpiry.expiry) {
-        console.log('Needs refreshing from start');
         return fetch(`${baseUrl}/spotify/login/refreshAccessToken`, {
             signal: signal,
             method: 'post',
@@ -38,7 +37,6 @@ export const refreshAccessToken = async (token, refreshToken, expiry, signal) =>
                 }
             })
     } else {
-        console.log('No need to refresh from start');
         const data = {
             token: initialAccessToken.token,
             time: initialExpiry.expiry
