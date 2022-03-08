@@ -9,7 +9,6 @@ const createLibrary = async (req, res, next) => {
     try {
         await api.setAccessToken(req.body.token);
         await api.getRecommendations({
-            features,
             seed_artists: req.body.artists,
             limit: 100
         })
@@ -44,7 +43,6 @@ const createLibrary = async (req, res, next) => {
                 });
 
             await api.getRecommendations({
-                features,
                 seed_artists: similarArtists,
                 limit: 100
             })

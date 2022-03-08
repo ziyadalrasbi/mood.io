@@ -139,7 +139,7 @@ function Results({ navigation, route }) {
 
     const filterFeaturesByMaxEmotion = (emotion) => {
         const maxEmotion = emotion;
-
+        console.log(maxEmotion);
         const valence = maxEmotion == 'happy' ? 0.9 :
             (maxEmotion == 'sad' ? 0.4 :
                 (maxEmotion == 'angry' ? 0.4 :
@@ -161,12 +161,12 @@ function Results({ navigation, route }) {
         //                 (maxEmotion == 'surprised' ? 0.5 :
         //                     (maxEmotion == 'confused' && 0.3)))));
 
-        // const loudness = maxEmotion == 'happy' ? -5 :
-        //     (maxEmotion == 'sad' ? -15 :
-        //         (maxEmotion == 'angry' ? -15 :
-        //             (maxEmotion == 'neutral' ? -10 :
-        //                 (maxEmotion == 'surprised' ? -10 :
-        //                     (maxEmotion == 'confused' && -10)))));
+        const loudness = maxEmotion == 'happy' ? -5 :
+            (maxEmotion == 'sad' ? -15 :
+                (maxEmotion == 'angry' ? -15 :
+                    (maxEmotion == 'neutral' ? -10 :
+                        (maxEmotion == 'surprised' ? -10 :
+                            (maxEmotion == 'confused' && -10)))));
 
         const key = maxEmotion == 'happy' ? 9 :
             (maxEmotion == 'sad' ? 4 :
@@ -182,12 +182,14 @@ function Results({ navigation, route }) {
                         (maxEmotion == 'surprised' ? 100 :
                             (maxEmotion == 'confused' && 80)))));
 
-        var arrayOfFeatures = [key, energy, tempo];
+        var arrayOfFeatures = [key, valence, energy, loudness, tempo];
 
         var objectOfFeatures = {
             target_key: key,
-            max_energy: energy,
-            max_tempo: tempo,
+            target_energy: energy,
+            target_tempo: tempo,
+            target_valence: valence,
+            target_loudness: loudness
         }
 
         const features = {
