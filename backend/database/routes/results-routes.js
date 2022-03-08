@@ -1,6 +1,7 @@
 const express = require('express');
 const { 
-    saveRecentMood, 
+    saveRecentMood,
+    incrementMoodCount,
     getUserArtists, 
     getPlaylistsAmount,
     incrementPlaylistsAmount,
@@ -13,6 +14,7 @@ const {
 const router = express.Router();
 
 router.post('/saveRecentMood', saveRecentMood);
+router.post('/incrementMoodCount', incrementMoodCount);
 router.post('/getUserArtists', getUserArtists);
 router.post('/getPlaylistsAmount', getPlaylistsAmount);
 router.post('/incrementPlaylistsAmount', incrementPlaylistsAmount);

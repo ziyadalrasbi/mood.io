@@ -15,6 +15,26 @@ const saveRecentMood = async (req, res, next) => {
     }
 }
 
+const incrementMoodCount = async (req, res, next) => {
+    try {
+        const mood = req.body.mood;
+        const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
+        response.get()
+            .then((doc) => {
+                amount = doc.data().moods[mood];
+                response.set({
+                    moods: {
+                        [mood]: amount + 1
+                    }
+                }, { merge: true });
+            })
+        return res.json({ status: 200 });
+    } catch (error) {
+        const message = 'Error incrementing moods count, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
+    }
+}
+
 const getUserArtists = async (req, res, next) => {
     try {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
@@ -136,6 +156,7 @@ const getRecentMood = async (req, res, next) => {
 
 module.exports = {
     saveRecentMood,
+    incrementMoodCount,
     getUserArtists,
     getPlaylistsAmount,
     incrementPlaylistsAmount,
