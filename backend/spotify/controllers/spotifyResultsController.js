@@ -32,10 +32,12 @@ const createLibrary = async (req, res, next) => {
             });
 
         for (let i = 0; i < req.body.artists.length; i++) {
+            console.log('length is ' + recommendations.length)
             let similarArtists = [];
             await api.getArtistRelatedArtists(req.body.artists[i])
                 .then((data) => {
                     if (data.body.artists.length > 0) {
+                        console.log('hello');
                         for (let j = 0; j < 5 && j < data.body.artists.length; j++) {
                             similarArtists.push(data.body.artists[j].id);
                         }
