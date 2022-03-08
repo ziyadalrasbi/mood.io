@@ -92,7 +92,6 @@ const getRecommendations = async (req, res, next) => {
                             var currentFeatures = [
                                 data.body.audio_features[i].valence,
                                 data.body.audio_features[i].energy,
-                                data.body.audio_features[i].danceability,
                                 data.body.audio_features[i].loudness,
                                 data.body.audio_features[i].tempo
                             ];

@@ -143,44 +143,43 @@ function Results({ navigation, route }) {
         const valence = maxEmotion == 'happy' ? 0.9 :
             (maxEmotion == 'sad' ? 0.4 :
                 (maxEmotion == 'angry' ? 0.4 :
-                    (maxEmotion == 'netutral' ? 0.7 :
+                    (maxEmotion == 'neutral' ? 0.7 :
                         (maxEmotion == 'surprised' ? 0.7 :
                             (maxEmotion == 'confused' && 0.6)))));
 
         const energy = maxEmotion == 'happy' ? 0.8 :
-            (maxEmotion == 'sad' ? 0.2 :
+            (maxEmotion == 'sad' ? 0.3 :
                 (maxEmotion == 'angry' ? 0.3 :
-                    (maxEmotion == 'netutral' ? 0.4 :
+                    (maxEmotion == 'neutral' ? 0.4 :
                         (maxEmotion == 'surprised' ? 0.5 :
                             (maxEmotion == 'confused' && 0.3)))));
 
-        const danceability = maxEmotion == 'happy' ? 0.7 :
-            (maxEmotion == 'sad' ? 0.1 :
-                (maxEmotion == 'angry' ? 0.2 :
-                    (maxEmotion == 'netutral' ? 0.3 :
-                        (maxEmotion == 'surprised' ? 0.5 :
-                            (maxEmotion == 'confused' && 0.3)))));
+        // const danceability = maxEmotion == 'happy' ? 0.7 :
+        //     (maxEmotion == 'sad' ? 0.3 :
+        //         (maxEmotion == 'angry' ? 0.2 :
+        //             (maxEmotion == 'neutral' ? 0.3 :
+        //                 (maxEmotion == 'surprised' ? 0.5 :
+        //                     (maxEmotion == 'confused' && 0.3)))));
 
-        const loudness = maxEmotion == 'happy' ? -10 :
-            (maxEmotion == 'sad' ? -55 :
-                (maxEmotion == 'angry' ? -45 :
-                    (maxEmotion == 'netutral' ? -30 :
-                        (maxEmotion == 'surprised' ? -30 :
-                            (maxEmotion == 'confused' && -40)))));
+        const loudness = maxEmotion == 'happy' ? -5 :
+            (maxEmotion == 'sad' ? -15 :
+                (maxEmotion == 'angry' ? -15 :
+                    (maxEmotion == 'neutral' ? -10 :
+                        (maxEmotion == 'surprised' ? -10 :
+                            (maxEmotion == 'confused' && -10)))));
 
         const tempo = maxEmotion == 'happy' ? 125 :
             (maxEmotion == 'sad' ? 75 :
                 (maxEmotion == 'angry' ? 90 :
-                    (maxEmotion == 'netutral' ? 100 :
+                    (maxEmotion == 'neutral' ? 100 :
                         (maxEmotion == 'surprised' ? 100 :
                             (maxEmotion == 'confused' && 80)))));
 
-        var arrayOfFeatures = [valence, energy, danceability, loudness, tempo];
+        var arrayOfFeatures = [valence, energy, loudness, tempo];
 
         var objectOfFeatures = {
             target_valence: valence,
             target_energy: energy,
-            target_danceability: danceability,
             target_loudness: loudness,
             target_tempo: tempo
         }
