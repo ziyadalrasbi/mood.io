@@ -16,7 +16,6 @@ function TopMoodsGraph({ data }) {
         backgroundGradientFromOpacity: 0,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        barRadius: 5,
         fillShadowGradientOpacity: 1,
         barPercentage: width / 591.428571,
         propsForLabels: {
@@ -32,18 +31,8 @@ function TopMoodsGraph({ data }) {
             "rgba(106, 90, 205,1)",
             "rgba(60, 179, 113,1)",
             "rgba(255, 172, 71 , 1)",
-            "rgba(45, 235, 190, 1)"
-        ],
-        // datasets: [
-        //     {
-        //         data: [0.4, 0.6, 0.8],
-        //         colors: [
-        //             (opacity = 1) => `rgba(235, 235, 52, ${opacity})`,
-        //             (opacity = 1) => `rgba(240, 46, 62, ${opacity})`,
-        //             (opacity = 1) => `rgba(45, 235, 190, ${opacity})`,
-        //         ]
-        //     }
-        // ],
+            "rgba(0, 200, 255 , 1)",
+        ]
     };
 
     return (
@@ -51,11 +40,11 @@ function TopMoodsGraph({ data }) {
             <View style={TopMoodsGraphStyles.topContainer}>
                 <ProgressChart
                     data={parsedData}
-                    width={350}
-                    height={150}
+                    width={width-60}
+                    height={200}
                     strokeWidth={5}
                     chartConfig={chartConfig}
-                    radius={20}
+                    radius={30}
                     withCustomBarColorFromData={true}
                     style={{ marginLeft: Platform.OS == 'android' ? -20 : -5 }}
                 />

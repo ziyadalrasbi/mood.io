@@ -39,7 +39,7 @@ const ios = StyleSheet.create({
     marginLeft: getRatio(10),
     marginTop: getRatio(29),
     marginBottom: getRatio(10),
-    fontFamily: 'InconsolataLight',
+    fontFamily: 'MontserratLight',
     color: 'white',
     fontSize: getRatio(16.56)
   },
@@ -79,7 +79,7 @@ const ios = StyleSheet.create({
     backgroundColor: '#461ad6',
   },
   mainFont: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14)
   },
   gradientContainer: {
@@ -102,10 +102,16 @@ const ios = StyleSheet.create({
     flex: 1,
     position: 'absolute'
   },
-  lottieView: { 
-    marginLeft: -(getRatio(15)), 
-    width: getRatio(85), 
-    height: getRatio(85) 
+  lottieView: {
+    marginLeft: -(getRatio(15)),
+    width: getRatio(85),
+    height: getRatio(85)
+  },
+  noteText: {
+    fontFamily: 'MontserratLight',
+    fontSize: getRatio(13),
+    color: 'white',
+    marginTop: getRatio(30)
   }
 });
 
@@ -210,6 +216,12 @@ const android = StyleSheet.create({
     marginLeft: width / 27.6,
     width: width / 4.87058824,
     height: width / 4.87058824
+  },
+  noteText: {
+    fontFamily: 'MontserratLight',
+    fontSize: width / 31.8461538,
+    color: 'white',
+    marginTop: height / 29.8666667
   }
 });
 

@@ -241,7 +241,6 @@ const ios = StyleSheet.create({
     },
     lottieView: {
         marginTop: getRatio(50),
-        marginLeft: getRatio(26),
         width: getRatio(100),
         height: getRatio(100),
         alignSelf: 'center'

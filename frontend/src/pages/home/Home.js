@@ -72,6 +72,7 @@ function Home({ navigation }) {
         const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
         if (total > 0) setMoods(getMoods.getMoodCount.moods);
+        setMoodsTotal(total);
         setTopArtists(getArtists.getTopArtistsHome);
         setName(getUserName.getName);
         setTopTracks(getTracks.getTopTracksHome.topTracks);
@@ -361,6 +362,22 @@ function Home({ navigation }) {
           </View>
           <View style={HomeStyles.fifthContainer}>
             <View style={HomeStyles.headerContainer}>
+              <Text style={HomeStyles.sixthHeader}>
+                Your Moods
+              </Text>
+            </View>
+            {(moods != null && moodsTotal > 0) &&
+              <TopMoodsGraph data={moods} />
+            }
+            {moodsTotal == 0 &&
+              <Text style={HomeStyles.noDataText}>
+                It seems like you haven't received any recommendations yet. Press "Get started" above to discover
+                your mood and come back later to view this data!
+              </Text>
+            }
+          </View>
+          <View style={HomeStyles.fifthContainer}>
+            <View style={HomeStyles.headerContainer}>
               <Text style={HomeStyles.fifthHeader}>
                 Your Listening Habits
               </Text>
@@ -386,23 +403,7 @@ function Home({ navigation }) {
               </Text>
             }
           </View>
-          <View style={HomeStyles.fifthContainer}>
-            <View style={HomeStyles.headerContainer}>
-              <Text style={HomeStyles.fifthHeader}>
-                Your Moods
-              </Text>
-            </View>
-            {moods != null &&
-              <TopMoodsGraph data={moods} />
-            }
-            {habits == null &&
-              <Text style={HomeStyles.noDataText}>
-                It seems like you haven't listened to much music on your Spotify account. Listen to some more music
-                and come back at a later date to view this data!
-              </Text>
-            }
-          </View>
-          <View style={{ height: newUser.newUser == true ? 500 : 5 }} />
+          <View style={{ height: newUser.newUser == true ? 500 : 40 }} />
           <StatusBar style="auto" />
         </View>
         <View style={{ height: '100%', backgroundColor: '#4e4376' }} />

@@ -27,10 +27,10 @@ function Upload({ navigation }) {
     let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permission.granted === false) {
-      alert('Camera roll permission is required!');
+      return;
     }
 
-    let picker = await ImagePicker.launchImageLibraryAsync({ base64: true });
+    let picker = await ImagePicker.launchImageLibraryAsync({ base64: true, mediaTypes: ImagePicker.MediaTypeOptions.Images });
 
     if (picker.cancelled === true) {
       return;
@@ -47,7 +47,7 @@ function Upload({ navigation }) {
     const detectionController = new AbortController();
     try {
       const res = await openImagePicker();
-      if (res.base64 != "") {
+      if (res.base64 && res.base64 != "" && res.base64 != null) {
         setLoading(true);
         const getFace = await dispatch(detectFace(res.base64, detectionController.signal));
         if (getFace.detectFace[0] != null) {
@@ -178,6 +178,9 @@ function Upload({ navigation }) {
             />
           }
         </View>
+        <Text style={UploadStyles.noteText}>
+          Please note: images are never stored, they are only read.
+        </Text>
         <StatusBar style="auto" />
       </View>
     </ScrollView>

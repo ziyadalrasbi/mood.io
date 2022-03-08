@@ -43,12 +43,14 @@ function UserStats({ navigation, route }) {
                 )
                     :
                     rloading == true ?
-                        <LottieView
-                            source={require('./animations/8707-loading.json')}
-                            autoPlay
-                            loop={true}
-                            style={UserStatsStyles.lottieView}
-                        />
+                        <View>
+                            <LottieView
+                                source={require('./animations/8707-loading.json')}
+                                autoPlay
+                                loop={true}
+                                style={UserStatsStyles.lottieView}
+                            />
+                        </View>
                         :
                         <Text style={UserStatsStyles.noDataText}>
                             No data found for this time frame. Try a different time frame, or listen to some more

@@ -54,7 +54,7 @@ const ios = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
-    shadowRadius: 2, 
+    shadowRadius: 2,
     elevation: 5
   },
   secondContainer: {
@@ -292,7 +292,6 @@ const ios = StyleSheet.create({
     right: 0,
     top: 0,
     width: '100%',
-    marginBottom: getRatio(25),
     justifyContent: 'flex-start',
   },
   fifthHeader: {
@@ -302,6 +301,13 @@ const ios = StyleSheet.create({
     color: 'white',
     fontSize: getRatio(15),
     padding: getRatio(10),
+  },
+  sixthHeader: {
+    fontFamily: 'MontserratBold',
+    color: 'white',
+    fontSize: getRatio(15),
+    padding: getRatio(10),
+    marginTop: getRatio(10)
   },
 });
 
@@ -606,15 +612,13 @@ const android = StyleSheet.create({
     marginBottom: height / 35.84,
     justifyContent: 'flex-start',
   },
-  fifthHeader: {
-    marginTop: height / 44.8,
-    marginBottom: height / 44.8,
+  sixthHeader: {
     fontFamily: 'MontserratBold',
     color: 'white',
     fontSize: width / 27.6,
     padding: width / 41.4,
+    marginTop: height / 89.6
   },
 });
 
 export default Platform.OS == 'android' ? android : ios;
-

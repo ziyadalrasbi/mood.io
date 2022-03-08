@@ -72,6 +72,7 @@ function Login({ navigation }) {
             await SecureStore.deleteItemAsync('spotify_access_token');
             await SecureStore.deleteItemAsync('spotify_refresh_token');
             const res = await promptAsync();
+
             if (res && res.type == 'success') {
                 setLoading(true);
                 const getTokens = await dispatch(requestAccessToken(request.redirectUri, res.params.code, requestTokenController.signal));
@@ -83,7 +84,7 @@ function Login({ navigation }) {
                 SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                 SecureStore.setItemAsync('spotify_refresh_token', refreshToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
                 SecureStore.setItemAsync('token_expiry', JSON.stringify(totalExpiry), { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-               
+
                 const getUser = await dispatch(getUserId(accessToken, getUserIdController.signal));
                 await dispatch(getUserProfile(accessToken, getUserProfileController.signal));
                 const userId = getUser.getUserId;
@@ -94,19 +95,19 @@ function Login({ navigation }) {
                 if (getTopArtists.getTopArtistsLogin != null) {
                     await dispatch(saveUserArtists(userId, getTopArtists.getTopArtistsLogin, saveArtistsController.signal));
                 }
+                requestTokenController.abort();
+                getUserIdController.abort();
+                getUserProfileController.abort();
+                initUserController.abort();
+                loginUserController.abort();
+                getArtistsController.abort();
+                saveArtistsController.abort();
+                setLoading(false);
+                navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
             }
         } catch (error) {
             console.log('Error logging in, please try again. ' + error);
         }
-        requestTokenController.abort();
-        getUserIdController.abort();
-        getUserProfileController.abort();
-        initUserController.abort();
-        loginUserController.abort();
-        getArtistsController.abort();
-        saveArtistsController.abort();
-        setLoading(false);
-        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
     }
 
     if (!loaded) {
