@@ -31,44 +31,45 @@ const createLibrary = async (req, res, next) => {
                 }
             });
 
-        for (let i = 0; i < req.body.artists.length; i++) {
-            console.log('length is ' + recommendations.length)
-            let similarArtists = [];
-            await api.getArtistRelatedArtists(req.body.artists[i])
+        const currentArtists = req.body.artists;
+        var similarArtists = [];
+
+        for (var i = 0; i < req.body.artists.length; i++) {
+            console.log('current artist is ' + currentArtists[i]);
+            await api.getArtistRelatedArtists(currentArtists[i])
                 .then((data) => {
                     if (data.body.artists.length > 0) {
-                        console.log('hello');
-                        for (let j = 0; j < 5 && j < data.body.artists.length; j++) {
-                            similarArtists.push(data.body.artists[j].id);
-                        }
-                    }
-                });
-
-            await api.getRecommendations({
-                seed_artists: similarArtists,
-                limit: 100
-            })
-                .then((data) => {
-                    for (var k = 0; k < similarArtists.length; k++) {
-                        let currentDate = new Date(Date.now());
-                        let trackDate = new Date(data.body.tracks[k]['album'].release_date);
-                        let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
-                        if (yearsDiff <= 4) {
-                            if (data.body.tracks[k]['album'].images[0]) {
-                                let recommendation = [];
-                                recommendation.push(data.body.tracks[k].name);
-                                recommendation.push(data.body.tracks[k].artists[0].name);
-                                recommendation.push(data.body.tracks[k]['album'].images[0].url);
-                                recommendation.push(data.body.tracks[k].external_urls.spotify);
-                                recommendations.push(recommendation);
-                                if (!trackIds.includes(data.body.tracks[i].id)) {
-                                    trackIds.push(data.body.tracks[i].id);
-                                }
-                            }
-                        }
+                        similarArtists.push(data.body.artists[0].id);
                     }
                 });
         }
+
+        console.log('similar artists array is ' + similarArtists);
+        await api.getRecommendations({
+            seed_artists: similarArtists,
+            limit: 100
+        })
+            .then((data) => {
+                for (var k = 0; k < similarArtists.length; k++) {
+                    let currentDate = new Date(Date.now());
+                    let trackDate = new Date(data.body.tracks[k]['album'].release_date);
+                    let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
+                    if (yearsDiff <= 4) {
+                        if (data.body.tracks[k]['album'].images[0]) {
+                            let recommendation = [];
+                            recommendation.push(data.body.tracks[k].name);
+                            recommendation.push(data.body.tracks[k].artists[0].name);
+                            recommendation.push(data.body.tracks[k]['album'].images[0].url);
+                            recommendation.push(data.body.tracks[k].external_urls.spotify);
+                            recommendations.push(recommendation);
+                            if (!trackIds.includes(data.body.tracks[i].id)) {
+                                trackIds.push(data.body.tracks[i].id);
+                            }
+                        }
+                    }
+                }
+            });
+
         if (recommendations.length > 0) {
             console.log(recommendations.length);
             return res.json({ status: 200, recommendations: recommendations, trackIds: trackIds });
