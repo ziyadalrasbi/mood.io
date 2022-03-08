@@ -145,7 +145,7 @@ export const getMoodCount = (id, signal) => (dispatch, getState) => Promise.reso
     })
         .then(res => res.json())
         .then(data => {
-            return dispatch({ type: 'GET_MOOD_COUNT', getMoodCount: data.getMoodCount });
+            return dispatch({ type: 'GET_MOOD_COUNT', getMoodCount: data });
         })
 })
 

@@ -11,7 +11,7 @@ import GenreModal from '../../components/genremodal/GenreModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import Loading from '../../components/loading/Loading';
 import { getTopArtistsHome, getName, getTopTracksHome, getListeningHabitsHome, refreshAccessToken } from '../../client/src/actions/spotifyActions';
-import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client/src/actions/dbActions';
+import { getUserDatabaseArtists, getPreviousRecommendations, getMoodCount } from '../../client/src/actions/dbActions';
 import { useDispatch } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
@@ -32,6 +32,9 @@ function Home({ navigation }) {
   const [trackIds, setTrackIds] = useState({ trackIds: [] });
   const [habits, setHabits] = useState([]);
 
+  const [moods, setMoods] = useState([]);
+  const [moodsTotal, setMoodsTotal] = useState(0);
+  
   const [recommendations, setRecommendations] = useState({ recommendations: [] });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -51,12 +54,15 @@ function Home({ navigation }) {
     const getDbArtistsController = new AbortController();
     const getRecommendationsController = new AbortController();
     const getHabitsController = new AbortController();
+    const getMoodsController = new AbortController();
 
     const fetchData = async () => {
       try {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const userId = await SecureStore.getItemAsync('user_id');
         
+        const getMoods = await dispatch(getMoodCount(userId, getMoodsController.signal));
+        const total = getMoods.getMoodCount.total;
         const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
         const getUserName = await dispatch(getName(token, getUserNameController.signal));
         const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
@@ -65,6 +71,8 @@ function Home({ navigation }) {
         const amount = getTracks.getTopTracksHome.trackIds.length;
         const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
+        console.log(getMoods.getMoodCount.moods)
+        if (total > 0) setMoods(getMoods.getMoodCount.moods);
         setTopArtists(getArtists.getTopArtistsHome);
         setName(getUserName.getName);
         setTopTracks(getTracks.getTopTracksHome.topTracks);
@@ -98,6 +106,7 @@ function Home({ navigation }) {
     });
 
     return () => {
+      getMoodsController.abort();
       getArtistsController.abort();
       getUserNameController.abort();
       getTracksController.abort();
@@ -384,8 +393,8 @@ function Home({ navigation }) {
                 Your Moods
               </Text>
             </View>
-            {habits != null &&
-              <TopMoodsGraph  />
+            {moods != null &&
+              <TopMoodsGraph data={moods} />
             }
             {habits == null &&
               <Text style={HomeStyles.noDataText}>

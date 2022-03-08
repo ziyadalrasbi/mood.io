@@ -37,7 +37,7 @@ const getMoodCount = async (req, res, next) => {
             .then((doc) => {
                 var total = 0;
                 const moods = doc.data().moods;
-                
+
                 for (var mood in moods) {
                     total += moods[mood];
                 }
@@ -50,7 +50,22 @@ const getMoodCount = async (req, res, next) => {
                     surprised: (moods.surprised / total)
                 };
 
-                return res.json({ status: 200, moods: averageMoods, total: total });
+                var keys = [];
+                var values = [];
+
+                Object.keys(averageMoods).forEach((key) => {
+                    keys.push(key);
+                })
+
+                Object.values(averageMoods).forEach((value) => {
+                    values.push(value);
+                })
+
+                var finalMoods = {
+                    keys: keys,
+                    values: values
+                };
+                return res.json({ status: 200, moods: finalMoods, total: total });
             })
     } catch (error) {
         const message = 'Error getting mood count, please try again. \n' + error;
