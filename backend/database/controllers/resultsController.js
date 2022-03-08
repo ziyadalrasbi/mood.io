@@ -21,10 +21,11 @@ const incrementMoodCount = async (req, res, next) => {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
-                amount = doc.data().moods[mood];
+                console.log(doc.data().moods[mood]);
+                amount = doc.data().moods[mood] + 1;
                 response.set({
                     moods: {
-                        [mood]: amount + 1
+                        [mood]: amount
                     }
                 }, { merge: true });
             })
