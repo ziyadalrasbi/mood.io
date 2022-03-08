@@ -161,12 +161,19 @@ function Results({ navigation, route }) {
         //                 (maxEmotion == 'surprised' ? 0.5 :
         //                     (maxEmotion == 'confused' && 0.3)))));
 
-        const loudness = maxEmotion == 'happy' ? -5 :
-            (maxEmotion == 'sad' ? -15 :
-                (maxEmotion == 'angry' ? -15 :
-                    (maxEmotion == 'neutral' ? -10 :
-                        (maxEmotion == 'surprised' ? -10 :
-                            (maxEmotion == 'confused' && -10)))));
+        // const loudness = maxEmotion == 'happy' ? -5 :
+        //     (maxEmotion == 'sad' ? -15 :
+        //         (maxEmotion == 'angry' ? -15 :
+        //             (maxEmotion == 'neutral' ? -10 :
+        //                 (maxEmotion == 'surprised' ? -10 :
+        //                     (maxEmotion == 'confused' && -10)))));
+
+        const key = maxEmotion == 'happy' ? 9 :
+            (maxEmotion == 'sad' ? 4 :
+                (maxEmotion == 'angry' ? 5 :
+                    (maxEmotion == 'neutral' ? 7 :
+                        (maxEmotion == 'surprised' ? 6 :
+                            (maxEmotion == 'confused' && 6)))));
 
         const tempo = maxEmotion == 'happy' ? 125 :
             (maxEmotion == 'sad' ? 75 :
@@ -175,13 +182,12 @@ function Results({ navigation, route }) {
                         (maxEmotion == 'surprised' ? 100 :
                             (maxEmotion == 'confused' && 80)))));
 
-        var arrayOfFeatures = [valence, energy, loudness, tempo];
+        var arrayOfFeatures = [key, energy, tempo];
 
         var objectOfFeatures = {
-            target_valence: valence,
-            target_energy: energy,
-            target_loudness: loudness,
-            target_tempo: tempo
+            target_key: key,
+            max_energy: energy,
+            max_tempo: tempo,
         }
 
         const features = {
