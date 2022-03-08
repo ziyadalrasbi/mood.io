@@ -92,8 +92,15 @@ function Upload({ navigation }) {
       };
       tempAverages.push(getAverages);
     }
-    const id = await SecureStore.getItemAsync('user_id');
-    await dispatch(saveRecentMood(id, tempProp));
+
+    const saveMoodController = new AbortController();
+    try {
+      const id = await SecureStore.getItemAsync('user_id');
+      await dispatch(saveRecentMood(id, tempProp, saveMoodController.signal));
+    } catch (error) {
+      console.log('Error saving recent mood, please try again. ' + error);
+    }
+    saveMoodController.abort();
 
     navigation.navigate('Results', {
       results: moodAnalysis.moodAnalysis,

@@ -15,6 +15,7 @@ import { getUserDatabaseArtists, getPreviousRecommendations } from '../../client
 import { useDispatch } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
+import TopMoodsGraph from '../../components/topmoodsgraph/TopMoodsGraph';
 
 function Home({ navigation }) {
 
@@ -369,6 +370,22 @@ function Home({ navigation }) {
             </View>
             {habits != null &&
               <HabitsGraph data={habits} />
+            }
+            {habits == null &&
+              <Text style={HomeStyles.noDataText}>
+                It seems like you haven't listened to much music on your Spotify account. Listen to some more music
+                and come back at a later date to view this data!
+              </Text>
+            }
+          </View>
+          <View style={HomeStyles.fifthContainer}>
+            <View style={HomeStyles.headerContainer}>
+              <Text style={HomeStyles.fifthHeader}>
+                Your Moods
+              </Text>
+            </View>
+            {habits != null &&
+              <TopMoodsGraph  />
             }
             {habits == null &&
               <Text style={HomeStyles.noDataText}>

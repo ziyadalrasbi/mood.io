@@ -35,7 +35,22 @@ const getMoodCount = async (req, res, next) => {
         const response = await firebase.firestore().collection('users').doc(JSON.stringify(req.body.user));
         response.get()
             .then((doc) => {
-                return res.json({ status: 200, moods: doc.data().moods });
+                var total = 0;
+                const moods = doc.data().moods;
+                
+                for (var mood in moods) {
+                    total += moods[mood];
+                }
+                const averageMoods = {
+                    happy: (moods.happy / total),
+                    sad: (moods.sad / total),
+                    neutral: (moods.neutral / total),
+                    angry: (moods.angry / total),
+                    confused: (moods.confused / total),
+                    surprised: (moods.surprised / total)
+                };
+
+                return res.json({ status: 200, moods: averageMoods, total: total });
             })
     } catch (error) {
         const message = 'Error getting mood count, please try again. \n' + error;

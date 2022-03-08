@@ -139,7 +139,7 @@ const ios = StyleSheet.create({
         marginTop: 30,
         marginBottom: 5,
         backgroundColor: '#045de9',
-        width: 160,
+        minWidth: 160,
         height: 115,
         shadowColor: '#000000',
         shadowOffset: {
@@ -161,15 +161,23 @@ const ios = StyleSheet.create({
         height: 35,
         justifyContent: 'center'
     },
-    habitAnimation: { 
-        width: getRatio(40), 
-        height: getRatio(40), 
-        marginTop: -getRatio(3) 
+    habitAnimation: {
+        width: getRatio(40),
+        height: getRatio(40),
+        marginTop: -getRatio(3)
     },
-    loading: { 
-        width: getRatio(40), 
-        height: getRatio(40) 
-    }
+    loading: {
+        width: getRatio(40),
+        height: getRatio(40)
+    },
+    noDataText: {
+        marginTop: getRatio(5),
+        fontFamily: 'MontserratBold',
+        color: 'grey',
+        fontSize: getRatio(13),
+        marginHorizontal: getRatio(10),
+        padding: getRatio(10),
+    },
 });
 
 const android = StyleSheet.create({
@@ -291,15 +299,15 @@ const android = StyleSheet.create({
         color: '#dbdbdb'
     },
     habitName: {
-        paddingHorizontal: width/41.4,
+        paddingHorizontal: width / 41.4,
         fontFamily: 'InconsolataLight',
         color: 'white',
-        fontSize: width/29.5714286
+        fontSize: width / 29.5714286
     },
     habitDescription: {
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: width/15.3333333
+        fontSize: width / 15.3333333
     },
     mainContainer: {
         position: 'relative',
@@ -310,7 +318,7 @@ const android = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         height: '100%',
-        padding: width/41.4,
+        padding: width / 41.4,
         backgroundColor: '#0d324d'
     },
     thirdContainer: {
@@ -497,17 +505,17 @@ const android = StyleSheet.create({
         alignSelf: 'center'
     },
     habitContainer: {
-        marginRight: width/27.6,
-        marginLeft: width/82.8,
+        marginRight: width / 27.6,
+        marginLeft: width / 82.8,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         borderRadius: 5,
-        marginTop: height/29.8666667,
-        marginBottom: height/179.2,
+        marginTop: height / 29.8666667,
+        marginBottom: height / 179.2,
         backgroundColor: '#045de9',
-        width: width/2.5875,
-        height: height/7.79130435,
+        width: width / 2.5875,
+        height: height / 7.79130435,
         shadowColor: '#000000',
         shadowOffset: {
             width: 0,
@@ -518,24 +526,24 @@ const android = StyleSheet.create({
         elevation: 3
     },
     habitsScrollContainer: {
-        marginHorizontal: width/82.8,
+        marginHorizontal: width / 82.8,
         display: 'flex',
         flexDirection: 'row',
         width: '100%'
     },
     opacityContainer: {
         borderRadius: 10,
-        height: height/25.6,
+        height: height / 25.6,
         justifyContent: 'center'
     },
-    habitAnimation: { 
-        width: width/10.35, 
-        height: width/10.35, 
-        marginTop: -(height/298.666667) 
+    habitAnimation: {
+        width: width / 10.35,
+        height: width / 10.35,
+        marginTop: -(height / 298.666667)
     },
-    loading: { 
-        width: width/10.35, 
-        height: width/10.35 
+    loading: {
+        width: width / 10.35,
+        height: width / 10.35
     }
 });
 

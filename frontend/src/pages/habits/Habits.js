@@ -162,7 +162,6 @@ function Habits({ navigation }) {
                             <Text style={HabitsStyles.habitName}>
                                 Loudness
                             </Text>
-
                         </View>
                         {(rloading == false && cardHabits != null) ?
                             <Text style={HabitsStyles.habitDescription}>
@@ -275,8 +274,13 @@ function Habits({ navigation }) {
                 </ScrollView>
             </View>
             <View style={{ marginTop: 30 }}>
-                {graphHabits != null &&
+                {graphHabits != null ?
                     <HabitsGraph data={graphHabits} />
+                    :
+                    <Text style={HabitsStyles.noDataText}>
+                        No data found for this time frame. Try a different time frame, or listen to some more
+                        music on Spotify and come back at a later date to view this data!
+                    </Text>
                 }
             </View>
         </ScrollView>

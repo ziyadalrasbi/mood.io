@@ -131,6 +131,24 @@ export const getPreviousRecommendations = (id, signal) => (dispatch, getState) =
         })
 })
 
+export const getMoodCount = (id, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    return fetch(`${baseUrl}/database/home/getMoodCount`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: id
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'GET_MOOD_COUNT', getMoodCount: data.getMoodCount });
+        })
+})
+
 export const getRecentMood = (user, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     return fetch(`${baseUrl}/database/results/getRecentMood`, {
@@ -150,10 +168,11 @@ export const getRecentMood = (user, signal) => (dispatch, getState) => Promise.r
         })
 })
 
-export const saveRecentMood = (user, mood) => (dispatch, getState) => Promise.resolve().then(() => {
+export const saveRecentMood = (user, mood, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialMood = { mood };
     return fetch(`${baseUrl}/database/results/saveRecentMood`, {
+        signal: signal,
         method: 'post',
         headers: {
             Accept: 'application/json',
@@ -167,6 +186,26 @@ export const saveRecentMood = (user, mood) => (dispatch, getState) => Promise.re
         .then(res => res.json())
         .then(data => {
             return dispatch({ type: 'SAVE_RECENT_MOOD', saveRecentMood: data });
+        })
+})
+
+export const incrementMoodCount = (user, mood) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUser = { user };
+    const initialMood = { mood };
+    return fetch(`${baseUrl}/database/results/incrementMoodCount`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: initialUser.user,
+            mood: initialMood.mood
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            return dispatch({ type: 'INCREMENT_MOOD_COUNT', incrementMoodCount: data });
         })
 })
 

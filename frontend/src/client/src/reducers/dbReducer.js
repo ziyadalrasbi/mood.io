@@ -7,8 +7,10 @@ export const initialState = {
     newUser: true,
     getUserDatabaseArtists: {},
     getPreviousRecommendations: {},
+    getMoodCount: {},
     getRecentMood: {},
     saveRecentMood: {},
+    incrementMoodCount: {},
     saveUserRating: {},
     getPlaylistsAmount: {},
     incrementPlaylistsAmount: {},
@@ -47,6 +49,11 @@ export const dbReducer = (state = initialState, action) => {
                 ...state,
                 getPreviousRecommendations: action.getPreviousRecommendations
             }
+        case 'GET_MOOD_COUNT':
+            return {
+                ...state,
+                getMoodCount: action.getMoodCount
+            }
         case 'GET_RECENT_MOOD':
             return {
                 ...state,
@@ -56,6 +63,11 @@ export const dbReducer = (state = initialState, action) => {
             return {
                 ...state,
                 saveRecentMood: action.saveRecentMood
+            }
+        case 'INCREMENT_MOOD_COUNT':
+            return {
+                ...state,
+                incrementMoodCount: action.incrementMoodCount
             }
         case 'SAVE_USER_RATING':
             return {
@@ -77,7 +89,7 @@ export const dbReducer = (state = initialState, action) => {
                 ...state,
                 saveRecommendations: action.saveRecommendations
             }
-            case 'SET_PLAYLISTED':
+        case 'SET_PLAYLISTED':
             return {
                 ...state,
                 setPlaylisted: action.setPlaylisted
