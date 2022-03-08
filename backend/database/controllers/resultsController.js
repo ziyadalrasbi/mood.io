@@ -22,7 +22,7 @@ const incrementMoodCount = async (req, res, next) => {
         response.get()
             .then((doc) => {
                 console.log(doc.data().moods[mood]);
-                amount = doc.data().moods[mood] + 1;
+                const amount = doc.data().moods[mood] + 1;
                 response.set({
                     moods: {
                         [mood]: amount
