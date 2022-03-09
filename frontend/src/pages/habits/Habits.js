@@ -1,21 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font'
+import { Text, View, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import HabitsStyles from './HabitsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { refreshAccessToken, getUserProfile, getTopArtistsStats, getTopTracksStats, getListeningHabits } from '../../client/src/actions/spotifyActions';
+import { refreshAccessToken, getTopTracksStats, getListeningHabits } from '../../client/src/actions/spotifyActions';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import * as Linking from 'expo-linking';
-import playimg from '../../../assets/icons/home/play.png';
-import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
+import * as WebBrowser from 'expo-web-browser';
 
 function Habits({ navigation }) {
 
@@ -275,7 +270,19 @@ function Habits({ navigation }) {
             </View>
             <View style={{ marginTop: 30 }}>
                 {graphHabits != null ?
-                    <HabitsGraph data={graphHabits} />
+                    <View>
+                        <HabitsGraph data={graphHabits} />
+                        <View style={{flexDirection:'row', marginLeft: Dimensions.get('window').width/20.7}}>
+                            <Text style={HabitsStyles.learnText}>
+                                To learn more about these values,&nbsp;
+                            </Text>
+                            <TouchableOpacity onPress={() => WebBrowser.openBrowserAsync('https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features')}>
+                            <Text style={HabitsStyles.learnLink}>
+                                visit the Spotify website.
+                            </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                     :
                     <Text style={HabitsStyles.noDataText}>
                         No data found for this time frame. Try a different time frame, or listen to some more
@@ -283,6 +290,7 @@ function Habits({ navigation }) {
                     </Text>
                 }
             </View>
+            <StatusBar style="auto" />
         </ScrollView>
     );
 }

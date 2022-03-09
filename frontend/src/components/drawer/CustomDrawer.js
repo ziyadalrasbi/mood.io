@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import { DrawerContentScrollView, useDrawerStatus } from '@react-navigation/drawer';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomDrawerStyles from './CustomDrawerStyles';
@@ -91,10 +91,11 @@ const CustomDrawer = ({ props, navigation }) => {
                     </Text>
                 </View>
             }
-            <DrawerContentScrollView
+            <ScrollView
                 {...props}
+                style={{marginBottom: -100}}
             >
-                <View style={CustomDrawerStyles.drawerContainer}>
+              
                     <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Home')}>
                         <Text style={CustomDrawerStyles.optionText}>
                             Home
@@ -133,8 +134,8 @@ const CustomDrawer = ({ props, navigation }) => {
                             Log Out
                         </Text>
                     </TouchableOpacity>
-                </View>
-            </DrawerContentScrollView>
+         
+            </ScrollView>
 
         </View>
     );

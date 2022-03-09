@@ -55,21 +55,29 @@ function Home({ navigation }) {
     const getRecommendationsController = new AbortController();
     const getHabitsController = new AbortController();
     const getMoodsController = new AbortController();
+    const tokenController = new AbortController();
 
     const fetchData = async () => {
       try {
         const token = await SecureStore.getItemAsync('spotify_access_token');
+        const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
+        const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+        const getToken = await dispatch(refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal));
+        const accessToken = getToken.refreshAccessToken.token;
+        const time = getToken.refreshAccessToken.time;
+        SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
+        SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
         const userId = await SecureStore.getItemAsync('user_id');
 
         const getMoods = await dispatch(getMoodCount(userId, getMoodsController.signal));
         const total = getMoods.getMoodCount.total;
-        const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
-        const getUserName = await dispatch(getName(token, getUserNameController.signal));
-        const getTracks = await dispatch(getTopTracksHome(token, getTracksController.signal));
+        const getArtists = await dispatch(getTopArtistsHome(accessToken, getArtistsController.signal));
+        const getUserName = await dispatch(getName(accessToken, getUserNameController.signal));
+        const getTracks = await dispatch(getTopTracksHome(accessToken, getTracksController.signal));
         const getDbArtists = await dispatch(getUserDatabaseArtists(userId, getDbArtistsController.signal));
         const getRecommendations = await dispatch(getPreviousRecommendations(userId, getRecommendationsController.signal));
         const amount = getTracks.getTopTracksHome.trackIds.length;
-        const getHabits = await dispatch(getListeningHabitsHome(token, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
+        const getHabits = await dispatch(getListeningHabitsHome(accessToken, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
         if (total > 0) setMoods(getMoods.getMoodCount.moods);
         setMoodsTotal(total);
@@ -106,6 +114,7 @@ function Home({ navigation }) {
     });
 
     return () => {
+      tokenController.abort();
       getMoodsController.abort();
       getArtistsController.abort();
       getUserNameController.abort();

@@ -178,6 +178,18 @@ const ios = StyleSheet.create({
         marginHorizontal: getRatio(10),
         padding: getRatio(10),
     },
+    learnText: {
+        fontFamily: 'MontserratBold',
+        color: 'white',
+        fontSize: 11,
+        marginBottom: 10
+    },
+    learnLink: {
+        fontFamily: 'MontserratBold',
+        color: '#1DB954',
+        fontSize: 11,
+        marginBottom: 10
+    }
 });
 
 const android = StyleSheet.create({
