@@ -95,7 +95,7 @@ function Recommendations({ navigation, route }) {
 
     if (!loaded || loading) {
         return (
-            <Loading page={"home"} />
+            <Loading page={"recommendations"} />
         );
     }
 

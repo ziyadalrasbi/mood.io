@@ -7,6 +7,7 @@ const adminRoutes = require('./database/routes/admin-routes.js');
 const homeRoutes = require('./database/routes/home-routes.js');
 const loginRoutes = require('./database/routes/login-routes.js');
 const resultsRoutes = require('./database/routes/results-routes.js');
+const contactRoutes = require('./database/routes/contact-routes.js');
 /*------------ DETECTION ROUTES ------------*/
 const detectionRoutes = require('./detection/routes/detection-routes.js');
 /*------------ SPOTIFY ROUTES ------------*/
@@ -29,6 +30,7 @@ app.use('/database/admin', adminRoutes.routes);
 app.use('/database/home', homeRoutes.routes);
 app.use('/database/login', loginRoutes.routes);
 app.use('/database/results', resultsRoutes.routes);
+app.use('/database/contact', contactRoutes.routes);
 /*------------ DETECTION ROUTES ------------*/
 app.use('/detection/detect', detectionRoutes.routes);
 /*------------ SPOTIFY ROUTES ------------*/

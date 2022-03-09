@@ -26,7 +26,7 @@ function Loading({ page }) {
                     style={LoadingStyles.gradientContainer}
                 />
             }
-                        {page == "login" &&
+            {page == "login" &&
                 <LinearGradient
                     // Background Linear Gradient
                     colors={['#6a93cb', '#6a93cb']}
@@ -54,6 +54,13 @@ function Loading({ page }) {
                     style={LoadingStyles.gradientContainer}
                 />
             }
+            {page == "recommendations" &&
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={['#2980b9', '#2c3e50']}
+                    style={LoadingStyles.gradientContainer}
+                />
+            }
             {page == "results" &&
                 <LinearGradient
                     // Background Linear Gradient
@@ -61,7 +68,7 @@ function Loading({ page }) {
                     style={LoadingStyles.gradientContainer}
                 />
             }
-            
+
             {page == "login" &&
                 <AnimatedLoader
                     visible={true}
@@ -147,12 +154,29 @@ function Loading({ page }) {
                     </View>
                 </AnimatedLoader>
             }
+            {page == "recommendations" &&
+                <AnimatedLoader
+                    visible={true}
+                    overlayColor="transparent"
+                    animationStyle={LoadingStyles.lottie}
+                    source={require('./animations/lf30_editor_onehe4fu.json')}
+                    speed={1}>
+                    <View style={LoadingStyles.loadingContainer}>
+                        <Text style={LoadingStyles.loadingText}>Loading your recommendations</Text>
+                        <AnimatedEllipsis
+                            minOpacity={0.2}
+                            animationDelay={200}
+                            style={LoadingStyles.ellpsis}
+                        />
+                    </View>
+                </AnimatedLoader>
+            }
             {page == 'main' &&
                 <View style={LoadingStyles.firstContainer}>
                     <Image
-                    style={LoadingStyles.logo}
-                    source={logo}
-                  />
+                        style={LoadingStyles.logo}
+                        source={logo}
+                    />
                 </View>
             }
 

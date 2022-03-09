@@ -30,7 +30,7 @@ function Navbar({ navigation, name, page }) {
           </TouchableOpacity>
         </View>
       }
-      {(page == 'upload' || page == 'select') &&
+      {(page == 'upload' || page == 'select' || page == 'contact') &&
         <View style={NavbarStyles.topBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image style={NavbarStyles.back} source={backimg} />

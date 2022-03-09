@@ -34,7 +34,7 @@ function Home({ navigation }) {
 
   const [moods, setMoods] = useState([]);
   const [moodsTotal, setMoodsTotal] = useState(0);
-  
+
   const [recommendations, setRecommendations] = useState({ recommendations: [] });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -60,7 +60,7 @@ function Home({ navigation }) {
       try {
         const token = await SecureStore.getItemAsync('spotify_access_token');
         const userId = await SecureStore.getItemAsync('user_id');
-        
+
         const getMoods = await dispatch(getMoodCount(userId, getMoodsController.signal));
         const total = getMoods.getMoodCount.total;
         const getArtists = await dispatch(getTopArtistsHome(token, getArtistsController.signal));
@@ -126,7 +126,7 @@ function Home({ navigation }) {
     const getDbArtistsController = new AbortController();
     const getRecommendationsController = new AbortController();
     const getHabitsController = new AbortController();
-
+    const getMoodsController = new AbortController();
     try {
       const userId = await SecureStore.getItemAsync('user_id');
 
@@ -139,6 +139,8 @@ function Home({ navigation }) {
       SecureStore.setItemAsync('spotify_access_token', accessToken, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
       SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
+      const getMoods = await dispatch(getMoodCount(userId, getMoodsController.signal));
+      const total = getMoods.getMoodCount.total;
       const getArtists = await dispatch(getTopArtistsHome(accessToken, getArtistsController.signal));
       const getUserName = await dispatch(getName(accessToken, getUserNameController.signal));
       const getTracks = await dispatch(getTopTracksHome(accessToken, getTracksController.signal));
@@ -147,6 +149,8 @@ function Home({ navigation }) {
       const amount = getTracks.getTopTracksHome.trackIds.length;
       const getHabits = await dispatch(getListeningHabitsHome(accessToken, getTracks.getTopTracksHome.trackIds, amount, getHabitsController.signal));
 
+      if (total > 0) setMoods(getMoods.getMoodCount.moods);
+      setMoodsTotal(total);
       setTopArtists(getArtists.getTopArtistsHome);
       setName(getUserName.getName);
       setTopTracks(getTracks.getTopTracksHome.topTracks);
@@ -171,6 +175,7 @@ function Home({ navigation }) {
       console.log('Error aborting' + error);
     }
 
+    getMoodsController.abort();
     tokenController.abort();
     getArtistsController.abort();
     getUserNameController.abort();

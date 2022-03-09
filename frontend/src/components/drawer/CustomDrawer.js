@@ -123,12 +123,11 @@ const CustomDrawer = ({ props, navigation }) => {
                     <Text style={CustomDrawerStyles.optionText}>
                         About mood.io
                     </Text>
-                    <Text style={CustomDrawerStyles.optionText}>
-                        Contact
-                    </Text>
-                    <Text style={CustomDrawerStyles.optionText}>
-                        Report Issue
-                    </Text>
+                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Contact')}>
+                        <Text style={CustomDrawerStyles.optionText}>
+                            Contact
+                        </Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => signOutUser()}>
                         <Text style={CustomDrawerStyles.logOutText}>
                             Log Out

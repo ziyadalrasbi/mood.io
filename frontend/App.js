@@ -40,7 +40,7 @@ function App({ navigation }) {
                     const userId = await getUserId(accessToken, getUserController.signal);
 
                     const topArtists = await getUserTopArtistsLogin(accessToken, getTopArtistsController.signal);
-                    if (Object.keys(topArtists).length > 0) {
+                    if (topArtists != null) {
                         await saveUserArtists(userId, topArtists, saveArtistsController.signal);
                     }
                 }
