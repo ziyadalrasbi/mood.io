@@ -69,6 +69,25 @@ export const signOut = (signal) => (dispatch, getState) => Promise.resolve().the
         })
 })
 
+export const deleteUser = (uid, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialUid = { uid };
+    return fetch(`${baseUrl}/database/admin/deleteUser`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            uid: initialUid.uid
+        })
+    })
+        .then((res) => res.json())
+        .then(data => {
+            return dispatch({ type: 'DELETE_USER', signOut: data });
+        })
+})
+
 export const saveUserArtists = (user, artists, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialUser = { user };
     const initialArtists = { artists };

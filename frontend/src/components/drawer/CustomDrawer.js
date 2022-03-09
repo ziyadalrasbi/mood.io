@@ -4,7 +4,7 @@ import { DrawerContentScrollView, useDrawerStatus } from '@react-navigation/draw
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomDrawerStyles from './CustomDrawerStyles';
 import * as SecureStore from 'expo-secure-store';
-import { signOut } from '../../client/src/actions/dbActions';
+import { deleteUser, signOut } from '../../client/src/actions/dbActions';
 import { refreshAccessToken, getUserProfile, spotifySignOut } from '../../client/src/actions/spotifyActions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
@@ -78,6 +78,18 @@ const CustomDrawer = ({ props, navigation }) => {
         signOutController.abort();
     }
 
+    const deleteAccount = async () => {
+        const userId = await SecureStore.getItemAsync('user_id');
+        const deleteController = new AbortController();
+        try {
+            await dispatch(deleteUser(userId, deleteController.signal));
+            deleteController.abort();
+            await signOutUser();
+        } catch (error) {
+            console.log('Error deleting user, please try again. ' + error);
+        }
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: '#0d324d' }}>
             {userProfile.profile != null &&
@@ -93,48 +105,53 @@ const CustomDrawer = ({ props, navigation }) => {
             }
             <ScrollView
                 {...props}
-                style={{marginBottom: -100}}
+                style={{ marginBottom: -100 }}
             >
-              
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Home')}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Home
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('UploadOptions')}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Discover Music
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('UserStats', { index: 0 })}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Profile
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Recommendations')}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Previous Recommendations
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Habits')}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Listening Habits
-                        </Text>
-                    </TouchableOpacity>
+
+                <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Home')}>
                     <Text style={CustomDrawerStyles.optionText}>
-                        About mood.io
+                        Home
                     </Text>
-                    <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Contact')}>
-                        <Text style={CustomDrawerStyles.optionText}>
-                            Contact
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => signOutUser()}>
-                        <Text style={CustomDrawerStyles.logOutText}>
-                            Log Out
-                        </Text>
-                    </TouchableOpacity>
-         
+                </TouchableOpacity>
+                <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('UploadOptions')}>
+                    <Text style={CustomDrawerStyles.optionText}>
+                        Discover Music
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('UserStats', { index: 0 })}>
+                    <Text style={CustomDrawerStyles.optionText}>
+                        Profile
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Recommendations')}>
+                    <Text style={CustomDrawerStyles.optionText}>
+                        Previous Recommendations
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Habits')}>
+                    <Text style={CustomDrawerStyles.optionText}>
+                        Listening Habits
+                    </Text>
+                </TouchableOpacity>
+                <Text style={CustomDrawerStyles.optionText}>
+                    About mood.io
+                </Text>
+                <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Contact')}>
+                    <Text style={CustomDrawerStyles.optionText}>
+                        Contact
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => signOutUser()}>
+                    <Text style={CustomDrawerStyles.logOutText}>
+                        Log Out
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => deleteAccount()}>
+                    <Text style={CustomDrawerStyles.logOutText}>
+                        Delete User
+                    </Text>
+                </TouchableOpacity>
+
             </ScrollView>
 
         </View>

@@ -25,6 +25,13 @@ const createToken = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
     try {
         const id = JSON.stringify(req.body.uid);
+        await firebase.firebase().collection('users').doc(id).collection('recommendations')
+            .get()
+            .then((snapShot) => {
+                snapShot.forEach((doc) => {
+                    doc.ref.delete();
+                })
+            });
         await firebase.firestore().collection('users').doc(id).delete()
             .then(() => {
                 admin.auth().deleteUser(req.body.uid)
