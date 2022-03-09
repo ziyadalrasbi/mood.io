@@ -22,28 +22,23 @@ const createToken = async (req, res, next) => {
     }
 }
 
-// const verifyFirebaseToken = async (req, res, next) => {
-//     try {
-//         if (req.body.token != null) {
-//             await admin.auth().verifyIdToken(req.body.token)
-//                 .then((decodeToken) => {
-//                     res.json({ code: 200 });
-//                 })
-//                 .catch((error) => {
-//                     console.log('Token is not valid, must be refreshed. \n' + error);
-//                     res.json({ code: 400 });
-//                 })
-//         } else {
-//             console.log('Token could not be found in AsyncStorage.');
-//             res.json({ code: 404 });
-//         }
-//     } catch (error) {
-//         console.log('Error verifying custom token, please try again. \n' + error);
-//         res.status(403).send(error.message);
-//     }
-// }
+const deleteUser = async (req, res, next) => {
+    try {
+        const id = JSON.stringify(req.body.uid);
+        await firebase.firestore().collection('users').doc(id).delete()
+            .then(() => {
+                admin.auth().deleteUser(req.body.uid)
+                    .then(() => {
+                        return res.json({ status: 200 });
+                    })
+            });
+    } catch (error) {
+        const message = 'Error deleting user, please try again. \n' + error;
+        return res.json({ status: 400, message: message });
+    }
+}
 
 module.exports = {
     createToken,
-    // verifyFirebaseToken,
+    deleteUser
 }
