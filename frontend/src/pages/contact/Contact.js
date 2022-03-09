@@ -4,8 +4,14 @@ import LottieView from 'lottie-react-native';
 import ContactStyles from './ContactStyles';
 import Navbar from '../../components/navbar/Navbar';
 import { useForm, Controller } from "react-hook-form";
+import { submitQuery } from '../../client/src/actions/dbActions';
+import { useDispatch } from 'react-redux';
 
 function Contact({ navigation }) {
+
+    const dispatch = useDispatch();
+
+    const [loading, setLoading] = useState(true);
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -15,7 +21,16 @@ function Contact({ navigation }) {
         }
     });
 
-    const onSubmit = data => console.log(data);
+    const onSubmit = async data => {
+        const submitController = new AbortController();
+        try {
+            await dispatch(submitQuery(data, submitController.signal));
+        } catch (error) {
+            console.log(error);
+        }
+        submitController.abort();
+        navigation.navigate('ContactConfirm');
+    }
 
     return (
         <ScrollView style={ContactStyles.scroll} showsVerticalScrollIndicator={false}>
@@ -43,17 +58,25 @@ function Contact({ navigation }) {
                             onChangeText={onChange}
                             value={value}
                             placeholder='Full Name'
+                            placeholderTextColor={'grey'}
                             autoCapitalize='words'
                         />
                     )}
                     name="fullName"
                 />
-                {errors.firstName && <Text>This is required.</Text>}
+                {errors.fullName && <Text style={styles.error}>This is required.</Text>}
 
                 <Controller
                     control={control}
                     rules={{
-                        maxLength: 100,
+                        required: {
+                            value: true,
+                            message: "This is required."
+                        },
+                        pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: "Invalid email address."
+                        }
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
@@ -62,15 +85,28 @@ function Contact({ navigation }) {
                             onChangeText={onChange}
                             value={value}
                             placeholder='Email'
+                            placeholderTextColor={'grey'}
                             autoCapitalize='none'
                         />
                     )}
                     name="email"
                 />
+                {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
                 <Controller
                     control={control}
                     rules={{
-                        maxLength: 100,
+                        required: {
+                            value: true,
+                            message: "This is required."
+                        },
+                        minLength: {
+                            value: 20,
+                            message: "Minimum 20 characters."
+                        },
+                        maxLength: {
+                            value: 250,
+                            message: "Maximum 250 characters."
+                        }
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
@@ -79,11 +115,13 @@ function Contact({ navigation }) {
                             onChangeText={onChange}
                             value={value}
                             placeholder='Message'
+                            placeholderTextColor={'grey'}
                             multiline={true}
                         />
                     )}
                     name="message"
                 />
+                {errors.message && <Text style={styles.error}>{errors.message.message}</Text>}
             </TouchableOpacity>
             <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </ScrollView>
@@ -132,6 +170,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         marginTop: 20
+    },
+    error: {
+        color: 'red',
+        fontFamily: 'MontserratBold',
+        marginTop: 10
     }
 });
 

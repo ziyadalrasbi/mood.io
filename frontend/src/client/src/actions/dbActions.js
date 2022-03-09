@@ -316,3 +316,23 @@ export const saveUserRating = (rating, signal) => (dispatch, getState) => Promis
             return dispatch({ type: 'SAVE_USER_RATING', saveUserRating: data });
         })
 })
+
+export const submitQuery = (query, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+    const initialQuery = { query };
+    return fetch(`${baseUrl}/database/contact/submitQuery`, {
+        signal: signal,
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            query: initialQuery.query
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log('hello')
+            return dispatch({ type: 'SUBMIT_QUERY', submitQuery: data });
+        })
+})
