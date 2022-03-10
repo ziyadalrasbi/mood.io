@@ -30,10 +30,11 @@ const ios = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     welcome: {
-        marginLeft: getRatio(10),
+
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: getRatio(27)
+        fontSize: getRatio(27),
+        alignSelf:'center'
     },
     subWelcome: {
         marginLeft: getRatio(10),

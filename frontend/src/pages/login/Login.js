@@ -111,7 +111,7 @@ function Login({ navigation }) {
     }
 
     if (!loaded) {
-        return <View />;
+        return <Loading page={'main'} />
     }
 
     if (loading) {

@@ -44,7 +44,7 @@ export default StyleSheet.create({
         alignItems: 'center'
     },
     logo: {
-        width: 230,
-        height: 60
+        width: 348,
+        height: 348
     }
 });

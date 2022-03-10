@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
 import logo from '../../../assets/icons/testlogo.png'
+import AppLoading from 'expo-app-loading';
 
 function Loading({ page }) {
 

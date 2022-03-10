@@ -1,39 +1,9 @@
 import React from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper';
-import LottieView from 'lottie-react-native';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import AboutStyles from './AboutStyles';
 import Navbar from '../../components/navbar/Navbar';
 
 function About({ navigation }) {
-
-    // const data = [
-    //     {
-    //       title: 'mood.io: Music Recommender',
-    //       text: 'Discover new music based on your mood and genre preference.',
-    //       icon: musicicon
-    //     },
-    //     {
-    //       title: 'Unique Playlists',
-    //       text: 'Recommended music can be generated to playlists for you to save.',
-    //       icon: playlisticon
-    //     },
-    //     {
-    //       title: 'Detect Your Mood',
-    //       text: 'Scan your face to detect your current mood instantly.',
-    //       icon: moodicon
-    //     },
-    //     {
-    //       title: 'Improve Your Mood',
-    //       text: 'Feeling down? Receive music tailored to improving your mood.',
-    //       icon: improveicon
-    //     },
-    //     {
-    //       title: 'Your Listening Habits',
-    //       text: 'View your listening habits, such as your top artists and tracks.',
-    //       icon: statsicon
-    //     },
-    //   ];
 
     return (
         <ScrollView style={AboutStyles.scroll} showsVerticalScrollIndicator={false}>
