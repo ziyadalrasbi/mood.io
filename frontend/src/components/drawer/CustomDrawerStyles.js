@@ -21,6 +21,27 @@ export default StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 20
     },
+    confirmDeleteHeader: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(14),
+        color: 'red',
+        paddingHorizontal: 10,
+        paddingVertical: 20
+    },
+    confirmDelete: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(14),
+        color: 'red',
+        paddingHorizontal: 10,
+
+    },
+    cancel: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(14),
+        color: 'white',
+        paddingHorizontal: 10,
+ 
+    },
     profilePicture: {
         width: getRatio(100),
         height: getRatio(100),

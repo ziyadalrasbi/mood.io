@@ -19,6 +19,8 @@ const CustomDrawer = ({ props, navigation }) => {
     const userProfile = useSelector(state => state.spotifyReducer.getUserProfile);
     const [loading, setLoading] = useState(true);
 
+    const [confirmDelete, setConfirmDelete] = useState(false);
+
     const [loaded] = useFonts({
         MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
         InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
@@ -70,12 +72,11 @@ const CustomDrawer = ({ props, navigation }) => {
             await SecureStore.deleteItemAsync('token_expiry');
             await dispatch(signOut(signOutController.signal));
             await dispatch(spotifySignOut());
-
-            navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
         } catch (error) {
             console.log('Error signing out, please try again. ' + error);
         }
         signOutController.abort();
+        navigation.reset({ index: 0, routes: [{ name: 'LoginStack' }] });
     }
 
     const deleteAccount = async () => {
@@ -85,9 +86,17 @@ const CustomDrawer = ({ props, navigation }) => {
             await dispatch(deleteUser(userId, deleteController.signal));
             deleteController.abort();
             await signOutUser();
+            setConfirmDelete(false);
         } catch (error) {
             console.log('Error deleting user, please try again. ' + error);
         }
+    }
+
+    const toggleDeleteStatus = () => {
+        setConfirmDelete(true);
+        setTimeout(() => {
+            setConfirmDelete(false);
+        }, 10000);
     }
 
     return (
@@ -105,7 +114,6 @@ const CustomDrawer = ({ props, navigation }) => {
             }
             <ScrollView
                 {...props}
-                style={{ marginBottom: -100 }}
             >
 
                 <TouchableOpacity style={CustomDrawerStyles.drawerTouchable} onPress={() => navigation.navigate('Home')}>
@@ -146,11 +154,32 @@ const CustomDrawer = ({ props, navigation }) => {
                         Log Out
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => deleteAccount()}>
-                    <Text style={CustomDrawerStyles.logOutText}>
-                        Delete User
-                    </Text>
-                </TouchableOpacity>
+                {confirmDelete == false &&
+                    <TouchableOpacity onPress={() => toggleDeleteStatus(true)}>
+                        <Text style={CustomDrawerStyles.logOutText}>
+                            Delete mood.io Account
+                        </Text>
+                    </TouchableOpacity>
+                }
+                {confirmDelete == true &&
+                    <View>
+                        <Text style={CustomDrawerStyles.confirmDeleteHeader}>
+                            Are you sure you want to delete your account?
+                        </Text>
+                        <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+                        <TouchableOpacity onPress={() => setConfirmDelete(false)}>
+                            <Text style={CustomDrawerStyles.cancel}>
+                                Cancel
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => deleteAccount()}>
+                            <Text style={CustomDrawerStyles.confirmDelete}>
+                                Delete
+                            </Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                }
 
             </ScrollView>
 
