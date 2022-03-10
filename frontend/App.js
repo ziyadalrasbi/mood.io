@@ -54,6 +54,9 @@ function App({ navigation }) {
                 await cacheAssests({
                     images: [
                         require('./assets/icons/testlogo.png'),
+                        require('./assets/icon.png'),
+                        require('./assets/splash.png'),
+                        require('./assets/adaptive-icon.png'),
                         /* CAROUSEL IMAGES */
                         require('./assets/icons/carousel/improveicon.png'),
                         require('./assets/icons/carousel/moodicon.png'),
