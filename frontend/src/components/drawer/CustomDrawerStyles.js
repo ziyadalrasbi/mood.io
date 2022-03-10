@@ -32,15 +32,13 @@ export default StyleSheet.create({
         fontFamily: 'MontserratBold',
         fontSize: getRatio(14),
         color: 'red',
-        paddingHorizontal: 10,
-
+        paddingHorizontal: 10
     },
     cancel: {
         fontFamily: 'MontserratBold',
         fontSize: getRatio(14),
         color: 'white',
-        paddingHorizontal: 10,
- 
+        paddingHorizontal: 10
     },
     profilePicture: {
         width: getRatio(100),

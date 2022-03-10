@@ -12,6 +12,7 @@ import Recommendations from '../../pages/recommendations/Recommendations';
 import Habits from '../../pages/habits/Habits';
 import Contact from '../../pages/contact/Contact';
 import ContactConfirm from '../../pages/contact/ContactConfirm';
+import About from '../../pages/about/About';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Drawer = createDrawerNavigator();
@@ -46,6 +47,7 @@ const DrawerStack = ({loading, verified}) => {
             <Drawer.Screen name='Habits' component={Habits} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='Contact' component={Contact} options={{unmountOnBlur:true}} />
             <Drawer.Screen name='ContactConfirm' component={ContactConfirm} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='About' component={About} options={{unmountOnBlur:true}} />
         </Drawer.Navigator>
     );
 }
