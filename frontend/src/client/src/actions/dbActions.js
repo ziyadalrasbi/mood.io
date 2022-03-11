@@ -351,7 +351,6 @@ export const submitQuery = (query, signal) => (dispatch, getState) => Promise.re
     })
         .then(res => res.json())
         .then(data => {
-            console.log('hello')
             return dispatch({ type: 'SUBMIT_QUERY', submitQuery: data });
         })
 })

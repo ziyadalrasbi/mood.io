@@ -44,14 +44,13 @@ function HabitsGraph({ data }) {
             <View style={HabitsGraphStyles.topContainer}>
                 <BarChart
                     data={parsedData}
-                    width={width + 20}
-                    height={Platform.OS == 'android' ? height / 2.63529412 : getRatio(340)}
+                    width={width}
+                    height={width > 500 ? getRatio(340) : height / 2.63529412}
                     chartConfig={chartConfig}
                     fromZero={true}
                     withCustomBarColorFromData={true}
                     flatColor={true}
                     showBarTops={false}
-                    style={{ marginLeft: Platform.OS == 'android' ? -20 : -5 }}
                 />
             </View>
         </View>

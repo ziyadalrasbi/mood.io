@@ -6,7 +6,7 @@ const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         flex: 1,
@@ -30,17 +30,15 @@ const ios = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     welcome: {
-
         fontFamily: 'MontserratBold',
         color: 'white',
         fontSize: getRatio(27)
     },
     subWelcome: {
-
         marginTop: getRatio(29),
         fontFamily: 'InconsolataLight',
         color: 'white',
-        textAlign:'center',
+        textAlign: 'center',
         fontSize: getRatio(16.56)
     },
     headerText: {
@@ -72,19 +70,80 @@ const ios = StyleSheet.create({
         height: '100%',
         backgroundColor: '#0d324d'
     },
+    submitButton: {
+        width: getRatio(100),
+        alignSelf: 'center',
+        backgroundColor: '#2b5876'
+    },
+    submitText: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(12)
+    },
+    label: {
+        color: 'white',
+        margin: getRatio(20),
+        marginLeft: 0,
+    },
+    button: {
+        marginTop: getRatio(40),
+        color: 'white',
+        height:  getRatio(40),
+        backgroundColor: '#ec5990',
+        borderRadius:  getRatio(4),
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingTop:  getRatio(10),
+        padding:  getRatio(8),
+        backgroundColor: '#0e101c',
+    },
+    input: {
+        backgroundColor: '#09263b',
+        borderWidth: 1,
+        borderColor: 'grey',
+        height:  getRatio(40),
+        padding:  getRatio(10),
+        color: 'white',
+        fontFamily: 'MontserratBold',
+        width: '100%',
+        marginTop:  getRatio(20)
+    },
+    messageBox: {
+        backgroundColor: '#09263b',
+        borderWidth: 1,
+        borderColor: 'grey',
+        height:  getRatio(40),
+        padding:  getRatio(10),
+        color: 'white',
+        fontFamily: 'MontserratBold',
+        width: '100%',
+        height:  getRatio(200),
+        marginTop:  getRatio(20)
+    },
+    error: {
+        color: 'red',
+        fontFamily: 'MontserratBold',
+        marginTop:  getRatio(10)
+    },
+    loading: {
+        width: getRatio(60), 
+        height: getRatio(60), 
+        alignSelf:'center'
+    }
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         flex: 1,
         backgroundColor: 'transparent',
         flexDirection: 'column',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         display: 'flex',
         justifyContent: 'flex-start',
         height: '100%',
-        padding: 10,
+        padding: width / 41.4,
         backgroundColor: '#0d324d'
     },
     topContainer: {
@@ -92,38 +151,34 @@ const android = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: height / 10.2,
+        height: height / 10.2988506,
         width: '100%',
         justifyContent: 'flex-start',
         backgroundColor: 'transparent',
     },
     welcome: {
-        marginLeft: width / 41.4,
         fontFamily: 'MontserratBold',
-
         color: 'white',
-        fontSize: width / 15.56
+        fontSize: width / 15.3333333
     },
     subWelcome: {
-        marginLeft: width / 41.4,
-        marginTop: height / 30.89230769,
-        maxWidth: width / 1.01764706,
+        marginTop: height / 30.8965517,
         fontFamily: 'InconsolataLight',
-        textAlign:'center',
         color: 'white',
+        textAlign: 'center',
         fontSize: width / 25
     },
     headerText: {
         marginLeft: width / 41.4,
-        marginTop: height / 30.89230769,
+        marginTop: height / 30.8965517,
         maxWidth: width / 1.21764706,
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: width / 26
+        fontSize: width / 25.875
     },
     headerSubText: {
         fontFamily: 'InconsolataMedium',
-        width: width / 1.88181818,
+        maxWidth: width / 1.59230769,
         marginRight: width / 20.7,
         fontSize: width / 29.5714286,
         paddingVertical: width / 41.4,
@@ -142,6 +197,67 @@ const android = StyleSheet.create({
         height: '100%',
         backgroundColor: '#0d324d'
     },
+    submitButton: {
+        width: 100,
+        alignSelf: 'center',
+        backgroundColor: '#2b5876'
+    },
+    submitText: {
+        fontFamily: 'MontserratBold',
+        fontSize: width / 34.5
+    },
+    label: {
+        color: 'white',
+        margin: width / 20.7,
+        marginLeft: 0,
+    },
+    button: {
+        marginTop: height / 22.4,
+        color: 'white',
+        height: 40,
+        backgroundColor: '#ec5990',
+        borderRadius: 4,
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingTop: height / 89.6,
+        padding: width / 51.75,
+        backgroundColor: '#0e101c',
+    },
+    input: {
+        backgroundColor: '#09263b',
+        borderWidth: 1,
+        borderColor: 'grey',
+        height: height / 22.4,
+        padding: width / 41.4,
+        color: 'white',
+        fontFamily: 'MontserratBold',
+        width: '100%',
+        marginTop: height / 44.8
+    },
+    messageBox: {
+        backgroundColor: '#09263b',
+        borderWidth: 1,
+        borderColor: 'grey',
+        height: height / 22.4,
+        padding: width / 41.4,
+        color: 'white',
+        fontFamily: 'MontserratBold',
+        width: '100%',
+        height: height / 4.48,
+        marginTop: height / 44.8
+    },
+    error: {
+        color: 'red',
+        fontFamily: 'MontserratBold',
+        marginTop: height / 89.6
+    },
+    loading: {
+        width: width/6.9, 
+        height: width/6.9, 
+        alignSelf:'center'
+    }
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;

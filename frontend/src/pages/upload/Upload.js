@@ -187,5 +187,4 @@ function Upload({ navigation }) {
   );
 }
 
-
 export default Upload;

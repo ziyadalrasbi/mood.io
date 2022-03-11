@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
 import logo from '../../../assets/icons/testlogo.png'
-
+import LottieView from 'lottie-react-native';
 function Loading({ page }) {
 
     const [loaded] = useFonts({
@@ -173,9 +173,11 @@ function Loading({ page }) {
             }
             {page == 'main' &&
                 <View style={LoadingStyles.firstContainer}>
-                    <Image
-                        style={LoadingStyles.logo}
-                        source={logo}
+                    <LottieView
+                        source={require('./animations/27-loading.json')}
+                        autoPlay
+                        loop
+                        style={LoadingStyles.lottie}
                     />
                 </View>
             }

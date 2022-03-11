@@ -123,7 +123,7 @@ function Login({ navigation }) {
     return (
         <View style={LoginStyles.mainContainer}>
             <LinearGradient
-                colors={['#141E30', '#243B55']}
+                colors={['#7474BF', '#348AC7']}
                 style={LoginStyles.gradientContainer}
             />
             <View style={LoginStyles.logoContainer}>

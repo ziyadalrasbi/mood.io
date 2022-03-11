@@ -6,7 +6,7 @@ const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
     topContainer: {
         position: 'relative',
         left: 0,
@@ -258,13 +258,13 @@ const ios = StyleSheet.create({
     }
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
     topContainer: {
         position: 'relative',
         left: 0,
         right: 0,
         top: 0,
-        height: height / 8.2,
+        height: height / 8.14545455,
         width: '100%',
         justifyContent: 'flex-start',
         backgroundColor: 'transparent',
@@ -287,7 +287,7 @@ const android = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        marginBottom: height / 40.84,
+        marginBottom: height / 40.7272727,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -331,8 +331,8 @@ const android = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '80%',
-        marginLeft: -(width/41.4),
-        marginTop: height/179.2,
+        marginLeft: -width / 41.4,
+        marginTop: height / 179.2,
     },
     selectButtonContainer: {
         flexDirection: 'row',
@@ -343,38 +343,16 @@ const android = StyleSheet.create({
     selectIcon: {
         padding: width / 82.8,
         width: width / 27.6,
-        height: height / 59.7333333,
+        height: width / 27.6,
         borderRadius: 20,
         borderWidth: 2,
         borderColor: 'grey'
     },
     selectText: {
-        fontFamily: 'InconsolataMedium',
-        fontSize: width / 37.6363636,
-        paddingHorizontal: width / 41.4
-    },
-    secondContainer: {
-        position: 'relative',
-        left: 0,
-        right: 0,
-        top: 0,
-        marginBottom: height / 35.84,
-        width: '100%',
-        justifyContent: 'flex-start',
-    },
-    secondHeader: {
-        marginTop: 5,
-        fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: width / 27.6,
-        padding: width / 41.4,
-        marginBottom: -(width / 41.4)
-    },
-    secondSubHeader: {
         fontFamily: 'InconsolataMedium',
         fontSize: width / 29.5714286,
-        padding: 10,
-        color: '#dbdbdb'
+        paddingHorizontal: width / 41.4
     },
     mainContainer: {
         position: 'relative',
@@ -387,34 +365,12 @@ const android = StyleSheet.create({
         height: '100%',
         marginBottom: -(height / 2.98666667)
     },
-    thirdContainer: {
-        position: 'relative',
-        left: 0,
-        right: 0,
-        top: 0,
-        width: '100%',
-        marginBottom: height / 35.84,
-        justifyContent: 'flex-start',
-    },
-    thirdHeader: {
-        marginTop: 5,
-        fontFamily: 'MontserratBold',
-        color: 'white',
-        fontSize: width / 27.6,
-        padding: width / 41.4,
-    },
-    thirdSubHeader: {
-        fontFamily: 'InconsolataMedium',
-        fontSize: width / 29.5714286,
-        padding: 10,
-        color: '#dbdbdb'
-    },
     topArtistsContainer: {
-        marginHorizontal: width / 41.4,
+        marginHorizontal: height / 89.6,
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        borderRadius: width / 41.4,
+        borderRadius: 10
     },
     topArtistText: {
         fontFamily: 'InconsolataMedium',
@@ -426,28 +382,6 @@ const android = StyleSheet.create({
         fontSize: width / 34.5,
         fontStyle: 'italic',
         maxWidth: width / 4.14
-    },
-    fourthContainer: {
-        position: 'relative',
-        left: 0,
-        right: 0,
-        top: 0,
-        width: '100%',
-        justifyContent: 'flex-start',
-    },
-    fourthHeader: {
-        marginTop: height / 179.2,
-        marginBottom: -(width / 89.6),
-        fontFamily: 'MontserratBold',
-        color: 'white',
-        fontSize: width / 27.6,
-        padding: width / 41.4,
-    },
-    fourthSubHeader: {
-        fontFamily: 'InconsolataMedium',
-        fontSize: width / 29.5714286,
-        padding: width / 41.4,
-        color: '#dbdbdb'
     },
     topSongsContainer: {
         padding: width / 41.4,
@@ -518,10 +452,10 @@ const android = StyleSheet.create({
         marginTop: height / 179.2,
         fontFamily: 'MontserratBold',
         color: 'grey',
-        fontSize: width / 31.8461538,
+        fontSize: getRatio(13),
         marginRight: width / 41.4,
         padding: width / 41.4,
-        maxWidth: width / 1.06153846,
+        maxWidth: width / 1.06153846
     },
     gradientContainer: {
         height: '100%',
@@ -533,9 +467,9 @@ const android = StyleSheet.create({
     },
     next: {
         width: width / 24.3529412,
-        height: height / 52.7058824,
+        height: width / 24.3529412,
         marginLeft: -(width / 41.4),
-        marginTop: height / 54.9693252
+        marginTop: height / 119.466667
     },
     artistsRouteContainer: {
         display: "flex",
@@ -555,11 +489,10 @@ const android = StyleSheet.create({
         fontSize: width / 29.5714286
     },
     tabContainer: {
-        marginTop: height / 7.9333333
+        marginTop: 2
     },
     lottieView: {
         marginTop: height / 17.92,
-        marginLeft: width / 15.9230769,
         width: width / 4.14,
         height: width / 4.14,
         alignSelf: 'center'
@@ -572,10 +505,10 @@ const android = StyleSheet.create({
     },
     opacityContainer: {
         borderRadius: 10,
-        height: height/25.6,
+        height: height / 25.6,
         justifyContent: 'center'
     }
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;
 

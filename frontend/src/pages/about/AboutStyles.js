@@ -6,7 +6,7 @@ const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         flex: 1,
@@ -30,11 +30,10 @@ const ios = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     welcome: {
-
         fontFamily: 'MontserratBold',
         color: 'white',
         fontSize: getRatio(27),
-        alignSelf:'center'
+        alignSelf: 'center'
     },
     subWelcome: {
         marginLeft: getRatio(10),
@@ -60,11 +59,6 @@ const ios = StyleSheet.create({
     uploadContainer: {
         alignItems: 'flex-start'
     },
-    lottie: {
-        alignSelf: 'center',
-        width: getRatio(200),
-        height: getRatio(200)
-    },
     scroll: {
         flex: 1,
         height: '100%',
@@ -76,12 +70,12 @@ const ios = StyleSheet.create({
         fontFamily: 'MontserratBold',
         color: 'white',
         fontSize: getRatio(15),
-        textAlign:'center',
-        alignSelf:'center'
+        textAlign: 'center',
+        alignSelf: 'center'
     }
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         flex: 1,
@@ -99,55 +93,55 @@ const android = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: height / 10.2,
+        height: height / 10.2988506,
         width: '100%',
         justifyContent: 'flex-start',
         backgroundColor: 'transparent',
     },
     welcome: {
-        marginLeft: width / 41.4,
         fontFamily: 'MontserratBold',
-
         color: 'white',
-        fontSize: width / 15.56
+        fontSize: width / 15.3333333,
+        alignSelf: 'center'
     },
     subWelcome: {
         marginLeft: width / 41.4,
-        marginTop: height / 30.89230769,
-        maxWidth: width / 1.01764706,
+        marginTop: height / 30.8965517,
         fontFamily: 'InconsolataLight',
         color: 'white',
         fontSize: width / 25
     },
     headerText: {
         marginLeft: width / 41.4,
-        marginTop: height / 30.89230769,
-        maxWidth: width / 1.21764706,
+        marginTop: height / 44.8,
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: width / 26
+        fontSize: width / 25.875
     },
     headerSubText: {
         fontFamily: 'InconsolataMedium',
-        width: width / 1.88181818,
-        marginRight: width / 20.7,
+        paddingHorizontal: width / 41.4,
         fontSize: width / 29.5714286,
-        paddingVertical: width / 41.4,
+        marginTop: height / 89.6,
         color: '#dbdbdb'
     },
     uploadContainer: {
         alignItems: 'flex-start'
-    },
-    lottie: {
-        alignSelf: 'center',
-        width: width / 2.07,
-        height: width / 2.07
     },
     scroll: {
         flex: 1,
         height: '100%',
         backgroundColor: '#0d324d'
     },
+    contactText: {
+        paddingHorizontal: width / 41.4,
+        marginTop: height / 44.8,
+        fontFamily: 'MontserratBold',
+        color: 'white',
+        fontSize: width / 27.6,
+        textAlign: 'center',
+        alignSelf: 'center'
+    }
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;

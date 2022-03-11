@@ -1,11 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font'
 import UserStatsStyles from './UserStatsStyles';
 import Navbar from '../../components/navbar/Navbar';
-import { refreshAccessToken, getUserProfile, getTopArtistsStats, getTopTracksStats } from '../../client/src/actions/spotifyActions';
+import { refreshAccessToken, getTopArtistsStats, getTopTracksStats } from '../../client/src/actions/spotifyActions';
 import * as SecureStore from 'expo-secure-store';
 import Loading from '../../components/loading/Loading';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
@@ -13,8 +11,9 @@ import * as Linking from 'expo-linking';
 import playimg from '../../../assets/icons/home/play.png';
 import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 function UserStats({ navigation, route }) {
 
@@ -24,7 +23,7 @@ function UserStats({ navigation, route }) {
         <ScrollView style={UserStatsStyles.tabView} showsVerticalScrollIndicator={false}>
             <View style={UserStatsStyles.artistsRouteContainer} >
                 {(rloading == false && topArtists.length > 0) ? topArtists.map((artist, index) =>
-                    <View style={{ padding: 10 }} key={index}>
+                    <View style={{ padding: width / 41.4 }} key={index}>
                         <TouchableOpacity
                             style={{
                                 shadowColor: '#000',
@@ -59,7 +58,7 @@ function UserStats({ navigation, route }) {
                 }
             </View>
 
-            <View style={{ height: 20 }} />
+            <View style={{ height: height / 44.8 }} />
         </ScrollView>
     );
 
@@ -85,7 +84,7 @@ function UserStats({ navigation, route }) {
                         <Text style={UserStatsStyles.topTrackArtistText}>{track[1]}</Text>
                     </View>
                     <TouchableOpacity
-                        style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+                        style={{ marginLeft: 'auto', paddingHorizontal: width / 41.4 }}
                         onPress={() => Linking.openURL(track[3])}>
                         <Image
                             style={UserStatsStyles.playImage}
@@ -108,7 +107,7 @@ function UserStats({ navigation, route }) {
                         music on Spotify and come back at a later date to view this data!
                     </Text>
             }
-            <View style={{ height: 20 }} />
+            <View style={{ height: height / 44.8 }} />
         </ScrollView>
     );
 
@@ -282,20 +281,4 @@ function UserStats({ navigation, route }) {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        refreshAccessToken: state.spotifyReducer.refreshAccessToken,
-        getUserProfile: state.spotifyReducer.getUserProfile,
-        getTopArtistsStats: state.spotifyReducer.getTopArtistsStats,
-        getTopTracksStats: state.spotifyReducer.getTopTracksStats
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    refreshAccessToken,
-    getUserProfile,
-    getTopArtistsStats,
-    getTopTracksStats
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserStats);
+export default UserStats;

@@ -44,7 +44,8 @@ export default StyleSheet.create({
         alignItems: 'center'
     },
     logo: {
-        width: 348,
-        height: 348
+        width: width / 1.18965517,
+        height: width / 1.18965517,
+        position:'relative'
     }
 });

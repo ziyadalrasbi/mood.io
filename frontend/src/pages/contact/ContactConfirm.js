@@ -5,6 +5,8 @@ import { Button } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 import ContactStyles from './ContactStyles';
 import Navbar from '../../components/navbar/Navbar';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 function ContactConfirm({ navigation }) {
 
@@ -41,15 +43,17 @@ function ContactConfirm({ navigation }) {
                     Your query has been sent and will be reviewed. Once again,
                     thank you for getting in touch! Press the button below to head back home.
                 </Text>
+                <View style={{marginTop: height/44.8}}>
                 <Button
-                    style={ContactStyles.startButton}
+                    style={ContactStyles.submitButton}
                     uppercase={false}
                     mode="contained"
-                    labelStyle={ContactStyles.mainFont}
+                    labelStyle={ContactStyles.submitText}
                     onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Home' }] })}
                 >
                     Home
                 </Button>
+                </View>
             </View>
         </ScrollView>
     )

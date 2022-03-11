@@ -31,18 +31,18 @@ function UploadOptions({ navigation }) {
                     loop={false}
                     style={UploadOptionsStyles.lottie}
                 />
-                <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', marginTop: 5 }}>
                     <Text style={UploadOptionsStyles.headerSubText}>
-                        Upload a picture of your face and your mood will be detected automatically!
+                        Upload a picture of your face to detect your mood automatically.
                     </Text>
                     <Button
-                        style={UploadOptionsStyles.startButton}
+                        style={UploadOptionsStyles.submitButton}
                         uppercase={false}
                         mode="contained"
-                        labelStyle={UploadOptionsStyles.mainFont}
+                        labelStyle={UploadOptionsStyles.submitText}
                         onPress={() => navigation.navigate('Upload')}
                     >
-                        continue
+                        Continue
                     </Button>
                 </View>
 
@@ -60,13 +60,13 @@ function UploadOptions({ navigation }) {
                         Select the mood that best describes you from a list of options.
                     </Text>
                     <Button
-                        style={UploadOptionsStyles.startButton}
+                        style={UploadOptionsStyles.selectMoodButton}
                         uppercase={false}
                         mode="contained"
-                        labelStyle={UploadOptionsStyles.mainFont}
+                        labelStyle={UploadOptionsStyles.submitText}
                         onPress={() => navigation.navigate('SelectMood')}
                     >
-                        continue
+                        Continue
                     </Button>
                 </View>
             </View>

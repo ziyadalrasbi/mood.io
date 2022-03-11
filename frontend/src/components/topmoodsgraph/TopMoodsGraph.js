@@ -40,13 +40,13 @@ function TopMoodsGraph({ data }) {
             <View style={TopMoodsGraphStyles.topContainer}>
                 <ProgressChart
                     data={parsedData}
-                    width={width-60}
-                    height={200}
+                    width={width}
+                    height={height/4.48}
                     strokeWidth={5}
                     chartConfig={chartConfig}
                     radius={30}
                     withCustomBarColorFromData={true}
-                    style={{ marginLeft: Platform.OS == 'android' ? -20 : -5 }}
+                    style={{ marginLeft: width > 500 ? getRatio(-40) : -(width / 10.35) }}
                 />
             </View>
         </View>

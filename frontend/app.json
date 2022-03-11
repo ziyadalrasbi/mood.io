@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "moodio",
+    "name": "mood.io",
     "slug": "moodio",
     "scheme": "moodio",
     "version": "1.0.0",
@@ -14,21 +14,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "assets/icons/carousel/*",
-      "assets/icons/genreselect/*",
-      "assets/icons/home/*",
-      "assets/icons/login/*",
-      "assets/icons/selectmood/*",
-      "assets/icons/stats/*",
-      "assets/icons/upload/*",
-      "assets/icons/*",
-      "assets/fonts/Montserrat/*",
-      "assets/fonts/Montserrat/static/*"
-    ],
     "ios": {
       "bundleIdentifier": "com.app.moodio",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.2",
       "supportsTablet": true
     },
     "android": {

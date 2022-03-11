@@ -11,6 +11,7 @@ import LottieView from 'lottie-react-native';
 import { useDispatch } from 'react-redux';
 import HabitsGraph from '../../components/habitsgraph/HabitsGraph';
 import * as WebBrowser from 'expo-web-browser';
+const { width, height } = Dimensions.get('window');
 
 function Habits({ navigation }) {
 
@@ -168,7 +169,7 @@ function Habits({ navigation }) {
                                     source={require('./animations/27-loading.json')}
                                     autoPlay
                                     loop
-                                    style={HabitsStyles.loading}
+                                    style={HabitsStyles.loadingLottie}
                                 />
                                 :
                                 <Text style={HabitsStyles.habitDescription}>
@@ -198,7 +199,7 @@ function Habits({ navigation }) {
                                     source={require('./animations/27-loading.json')}
                                     autoPlay
                                     loop
-                                    style={{ width: 40, height: 40 }}
+                                    style={HabitsStyles.loadingLottie}
                                 />
                                 :
                                 <Text style={HabitsStyles.habitDescription}>
@@ -228,7 +229,7 @@ function Habits({ navigation }) {
                                     source={require('./animations/27-loading.json')}
                                     autoPlay
                                     loop
-                                    style={{ width: 40, height: 40 }}
+                                    style={HabitsStyles.loadingLottie}
                                 />
                                 :
                                 <Text style={HabitsStyles.habitDescription}>
@@ -258,7 +259,7 @@ function Habits({ navigation }) {
                                     source={require('./animations/27-loading.json')}
                                     autoPlay
                                     loop
-                                    style={{ width: 40, height: 40 }}
+                                    style={HabitsStyles.loadingLottie}
                                 />
                                 :
                                 <Text style={HabitsStyles.habitDescription}>
@@ -268,11 +269,11 @@ function Habits({ navigation }) {
                     </View>
                 </ScrollView>
             </View>
-            <View style={{ marginTop: 30 }}>
+            <View style={{ marginTop: height/29.8666667 }}>
                 {graphHabits != null ?
                     <View>
                         <HabitsGraph data={graphHabits} />
-                        <View style={{flexDirection:'row', marginLeft: Dimensions.get('window').width/20.7}}>
+                        <View style={{flexDirection:'row', marginLeft: width/20.7}}>
                             <Text style={HabitsStyles.learnText}>
                                 To learn more about these values,&nbsp;
                             </Text>
@@ -290,6 +291,7 @@ function Habits({ navigation }) {
                     </Text>
                 }
             </View>
+            <View style={{height: height/17.92}} />
             <StatusBar style="auto" />
         </ScrollView>
     );

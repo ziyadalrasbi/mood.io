@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Text, View, Image, ScrollView, TextInput, Button, StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
-import LottieView from 'lottie-react-native';
+import { Text, View, Image, ScrollView, TextInput, StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
+import { Button } from 'react-native-paper';
 import ContactStyles from './ContactStyles';
 import Navbar from '../../components/navbar/Navbar';
 import { useForm, Controller } from "react-hook-form";
 import { submitQuery } from '../../client/src/actions/dbActions';
 import { useDispatch } from 'react-redux';
+import LottieView from 'lottie-react-native';
 
 function Contact({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -22,6 +23,7 @@ function Contact({ navigation }) {
     });
 
     const onSubmit = async data => {
+        setLoading(true);
         const submitController = new AbortController();
         try {
             await dispatch(submitQuery(data, submitController.signal));
@@ -30,6 +32,7 @@ function Contact({ navigation }) {
         }
         submitController.abort();
         navigation.navigate('ContactConfirm');
+        setLoading(false);
     }
 
     return (
@@ -53,7 +56,7 @@ function Contact({ navigation }) {
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
-                            style={styles.input}
+                            style={ContactStyles.input}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
@@ -64,7 +67,7 @@ function Contact({ navigation }) {
                     )}
                     name="fullName"
                 />
-                {errors.fullName && <Text style={styles.error}>This is required.</Text>}
+                {errors.fullName && <Text style={ContactStyles.error}>This is required.</Text>}
 
                 <Controller
                     control={control}
@@ -80,7 +83,7 @@ function Contact({ navigation }) {
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
-                            style={styles.input}
+                            style={ContactStyles.input}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
@@ -91,7 +94,7 @@ function Contact({ navigation }) {
                     )}
                     name="email"
                 />
-                {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+                {errors.email && <Text style={ContactStyles.error}>{errors.email.message}</Text>}
                 <Controller
                     control={control}
                     rules={{
@@ -110,7 +113,7 @@ function Contact({ navigation }) {
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
-                            style={styles.messageBox}
+                            style={ContactStyles.messageBox}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
@@ -121,61 +124,28 @@ function Contact({ navigation }) {
                     )}
                     name="message"
                 />
-                {errors.message && <Text style={styles.error}>{errors.message.message}</Text>}
+                {errors.message && <Text style={ContactStyles.error}>{errors.message.message}</Text>}
             </TouchableOpacity>
-            <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+            {loading == false ?
+                <Button
+                    style={ContactStyles.submitButton}
+                    uppercase={false}
+                    mode="contained"
+                    labelStyle={ContactStyles.submitText}
+                    onPress={handleSubmit(onSubmit)}
+                >
+                    Submit
+                </Button>
+                :
+                <LottieView
+                    source={require('./animations/8707-loading.json')}
+                    style={ContactStyles.loading}
+                    autoPlay
+                    loop
+                />
+            }
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    label: {
-        color: 'white',
-        margin: 20,
-        marginLeft: 0,
-    },
-    button: {
-        marginTop: 40,
-        color: 'white',
-        height: 40,
-        backgroundColor: '#ec5990',
-        borderRadius: 4,
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingTop: 10,
-        padding: 8,
-        backgroundColor: '#0e101c',
-    },
-    input: {
-        backgroundColor: '#09263b',
-        borderWidth: 1,
-        borderColor: 'grey',
-        height: 40,
-        padding: 10,
-        color: 'white',
-        fontFamily: 'MontserratBold',
-        width: '100%',
-        marginTop: 20
-    },
-    messageBox: {
-        backgroundColor: '#09263b',
-        borderWidth: 1,
-        borderColor: 'grey',
-        height: 40,
-        padding: 10,
-        color: 'white',
-        fontFamily: 'MontserratBold',
-        width: '100%',
-        height: 200,
-        marginTop: 20
-    },
-    error: {
-        color: 'red',
-        fontFamily: 'MontserratBold',
-        marginTop: 10
-    }
-});
 
 export default Contact;

@@ -25,19 +25,6 @@ function SelectMood({ navigation }) {
 
     const [index, setIndex] = useState({ index: -1, mood: "" });
 
-    const [loaded] = useFonts({
-        InconsolataBold: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Bold.ttf'),
-        InconsolataLight: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Light.ttf'),
-        InconsolataMedium: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Medium.ttf'),
-        InconsolataBlack: require('../../../assets/fonts/Inconsolata/static/Inconsolata/Inconsolata-Black.ttf')
-    });
-
-    if (!loaded) {
-        return (
-            <View style={{ height: '100%', backgroundColor: '#0d324d' }} />
-        )
-    }
-
     const changeSelectedMood = (i, mood) => {
         setIndex({ index: i, mood: mood });
     }
