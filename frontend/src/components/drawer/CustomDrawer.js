@@ -20,6 +20,7 @@ const CustomDrawer = ({ props, navigation }) => {
     const [loading, setLoading] = useState(true);
 
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [deleted, setDeleted] = useState(false);
 
     const [loaded] = useFonts({
         MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
@@ -80,6 +81,7 @@ const CustomDrawer = ({ props, navigation }) => {
     }
 
     const deleteAccount = async () => {
+        setDeleted(true);
         const userId = await SecureStore.getItemAsync('user_id');
         const deleteController = new AbortController();
         try {
@@ -87,6 +89,7 @@ const CustomDrawer = ({ props, navigation }) => {
             deleteController.abort();
             await signOutUser();
             setConfirmDelete(false);
+            setDeleted(false);
         } catch (error) {
             console.log('Error deleting user, please try again. ' + error);
         }
@@ -169,12 +172,12 @@ const CustomDrawer = ({ props, navigation }) => {
                             Are you sure you want to delete your account?
                         </Text>
                         <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                        <TouchableOpacity onPress={() => setConfirmDelete(false)}>
+                        <TouchableOpacity disabled={deleted == true ? true : false} onPress={() => setConfirmDelete(false)}>
                             <Text style={CustomDrawerStyles.cancel}>
                                 Cancel
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => deleteAccount()}>
+                        <TouchableOpacity disabled={deleted == true ? true : false} onPress={() => deleteAccount()}>
                             <Text style={CustomDrawerStyles.confirmDelete}>
                                 Delete
                             </Text>
