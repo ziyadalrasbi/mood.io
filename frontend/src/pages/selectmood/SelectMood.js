@@ -32,8 +32,7 @@ function SelectMood({ navigation }) {
     const navigateResults = async () => {
         const mood = {
             "angry": index.mood == "angry" ? 1 : 0,
-            "disgusted": index.mood == "disgusted" ? 1 : 0,
-            "fearful": index.mood == "confused" ? 1 : 0,
+            "confused": index.mood == "confused" ? 1 : 0,
             "happy": index.mood == "happy" ? 1 : 0,
             "neutral": index.mood == "neutral" ? 1 : 0,
             "sad": index.mood == "sad" ? 1 : 0,
@@ -60,7 +59,7 @@ function SelectMood({ navigation }) {
                 name: getMoods[i],
                 percentage: getValues[i],
                 color: getMoods[i] === 'happy' ? 'yellow' : getMoods[i] === 'sad' ? 'grey' : getMoods[i] === 'angry' ? 'red' :
-                    getMoods[i] === 'fearful' ? 'blue' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'black',
+                    getMoods[i] === 'confused' ? 'white' : getMoods[i] === 'surprised' ? 'purple' : 'blue',
                 legendFontColor: 'white',
                 legendFontSize: 15,
             };

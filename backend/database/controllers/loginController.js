@@ -44,7 +44,9 @@ const addUser = async (req, res, next) => {
                             sad: 0,
                             angry: 0,
                             confused: 0,
-                            surprised: 0
+                            surprised: 0,
+                            disgusted: 0,
+                            fearful: 0
                         }
                     }, { merge: true });
                 }

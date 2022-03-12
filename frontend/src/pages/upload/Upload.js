@@ -86,7 +86,7 @@ function Upload({ navigation }) {
         name: getMoods[i],
         percentage: getValues[i],
         color: getMoods[i] === 'happy' ? 'yellow' : getMoods[i] === 'sad' ? 'grey' : getMoods[i] === 'angry' ? 'red' :
-          getMoods[i] === 'fearful' ? 'blue' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'black',
+          getMoods[i] === 'fearful' ? 'white' : getMoods[i] === 'disgusted' ? 'purple' : getMoods[i] === 'surprised' ? 'orange' : 'blue',
         legendFontColor: 'white',
         legendFontSize: 15,
       };

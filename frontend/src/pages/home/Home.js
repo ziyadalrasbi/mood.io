@@ -207,7 +207,7 @@ function Home({ navigation }) {
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={HomeStyles.scroll} showsVerticalScrollIndicator={false}>
         <LinearGradient
           // Background Linear Gradient
-          colors={['#2b5876', '#4e4376']}
+          colors={['#13547a', '#074366']}
           style={HomeStyles.gradientContainer}
         />
         <View style={HomeStyles.mainContainer}>
@@ -420,7 +420,7 @@ function Home({ navigation }) {
           <View style={{ height: newUser.newUser == true ? 500 : 40 }} />
           <StatusBar style="auto" />
         </View>
-        <View style={{ height: '100%', backgroundColor: '#4e4376' }} />
+        <View style={{ height: '100%', backgroundColor: '#074366' }} />
       </ScrollView>
       <GenreModal newUser={newUser.newUser} navigation={navigation} />
     </View>

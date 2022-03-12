@@ -566,7 +566,7 @@ const mobile = StyleSheet.create({
   scroll: {
     flex: 1,
     height: '100%',
-    backgroundColor: '#2b5876'
+    backgroundColor: '#13547a'
   },
   noDataText: {
     marginTop: height / 179.2,

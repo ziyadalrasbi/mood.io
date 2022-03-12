@@ -47,7 +47,9 @@ const getMoodCount = async (req, res, next) => {
                     neutral: (moods.neutral / total),
                     angry: (moods.angry / total),
                     confused: (moods.confused / total),
-                    surprised: (moods.surprised / total)
+                    surprised: (moods.surprised / total),
+                    disgusted: (moods.disgusted / total),
+                    fearful: (moods.fearful / total)
                 };
 
                 var sortedList = Object.entries(averageMoods).sort((a,b) => a[1]-b[1]);
