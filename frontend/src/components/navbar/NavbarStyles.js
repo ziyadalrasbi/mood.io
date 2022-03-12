@@ -6,7 +6,7 @@ const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
     topBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -53,7 +53,7 @@ const ios = StyleSheet.create({
     }
 })
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
     topBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -100,4 +100,4 @@ const android = StyleSheet.create({
     }
 })
 
-export default Platform.OS == 'android' ? android : ios; 
+export default width > 500 ? tablet : mobile; 

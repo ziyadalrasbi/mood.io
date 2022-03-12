@@ -287,7 +287,7 @@ const mobile = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        marginBottom: height / 40.7272727,
+        marginBottom: height / 89.6,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -332,7 +332,6 @@ const mobile = StyleSheet.create({
         justifyContent: 'space-between',
         width: '80%',
         marginLeft: -width / 41.4,
-        marginTop: height / 179.2,
     },
     selectButtonContainer: {
         flexDirection: 'row',

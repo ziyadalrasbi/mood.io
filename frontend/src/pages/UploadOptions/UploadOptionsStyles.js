@@ -153,12 +153,10 @@ const mobile = StyleSheet.create({
         backgroundColor: '#0d324d'
     },
     submitButton: {
-        width: width / 4.14,
         alignSelf: 'center',
         backgroundColor: '#348AC7'
     },
     selectMoodButton: {
-        width: width / 4.14,
         alignSelf: 'center',
         backgroundColor: '#7474BF'
     },
