@@ -6,7 +6,7 @@ const getRatio = (value) => {
   return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
   mainContainer: {
     position: 'relative',
     flex: 1,
@@ -115,7 +115,7 @@ const ios = StyleSheet.create({
   }
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
   mainContainer: {
     position: 'relative',
     flex: 1,
@@ -213,9 +213,9 @@ const android = StyleSheet.create({
     position: 'absolute'
   },
   lottieView: {
-    marginLeft: width / 27.6,
-    width: width / 4.87058824,
-    height: width / 4.87058824
+    marginLeft: -(width/27.6),
+    width: width/4.87058824,
+    height: width/4.87058824
   },
   noteText: {
     fontFamily: 'MontserratLight',
@@ -225,4 +225,4 @@ const android = StyleSheet.create({
   }
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;

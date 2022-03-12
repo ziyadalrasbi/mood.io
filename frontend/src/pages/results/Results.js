@@ -68,7 +68,7 @@ function Results({ navigation, route }) {
 
     const onPressTouch = () => {
         scrollRef.current.scrollTo({
-            y: height / 0.728455285,
+            y: height,
             animated: true,
             behavior: 'smooth'
         });
@@ -226,7 +226,7 @@ function Results({ navigation, route }) {
     return (
         error == false ?
             <ScrollView scrollEnabled={false} ref={scrollRef} style={ResultsStyles.scroll}>
-                <View style={{ flexDirection: 'column', justifyContent: 'center', height: height / 0.689230769 }}>
+                <View style={{ flexDirection: 'column', justifyContent: 'center', height: height }}>
                     <View style={ResultsStyles.topContainer}>
                         <Navbar page={'results'} navigation={navigation} />
                     </View>
@@ -244,7 +244,7 @@ function Results({ navigation, route }) {
                             {<MoodGraph data={route.params.averages} />}
                         </View>
                     </View>
-                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={onPressTouch}>
+                    <TouchableOpacity onPress={onPressTouch}>
                         <LottieView
                             source={require('./animations/90278-arrow-down.json')}
                             autoPlay
@@ -252,11 +252,7 @@ function Results({ navigation, route }) {
                             style={ResultsStyles.continueLottie}
                         />
                     </TouchableOpacity>
-                    <View style={ResultsStyles.spacer} />
                 </View>
-                {Platform.OS == 'android' &&
-                    <View style={{ height: 60 }} />
-                }
                 <View style={ResultsStyles.secondTopContainer}>
                     <Navbar page={'results'} navigation={navigation} />
                 </View>

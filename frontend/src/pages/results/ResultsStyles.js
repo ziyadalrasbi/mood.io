@@ -46,7 +46,6 @@ const tablet = StyleSheet.create({
     right: 0,
     top: 0,
     height: getRatio(87),
-    marginTop: -getRatio(200),
     width: '100%',
     justifyContent: 'flex-start',
     backgroundColor: 'transparent',
@@ -201,8 +200,7 @@ const tablet = StyleSheet.create({
   continueLottie: {
     width: getRatio(170),
     height: getRatio(170),
-
-    alignSelf: 'center'
+    alignSelf: 'flex-end'
   },
   buttonContainer: {
     position: 'relative',
@@ -268,8 +266,7 @@ const mobile = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: height / 10.2988506,
-    marginTop: -(height / 4.48),
+    height: height/ 10.2988506,
     width: '100%',
     justifyContent: 'flex-start',
     backgroundColor: 'transparent',

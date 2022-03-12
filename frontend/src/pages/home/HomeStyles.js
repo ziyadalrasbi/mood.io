@@ -1,4 +1,4 @@
-import { PixelRatio, Platform, StyleSheet } from 'react-native';
+import { PixelRatio, StyleSheet } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
@@ -6,7 +6,7 @@ const getRatio = (value) => {
   return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
   topContainer: {
     position: 'relative',
     left: 0,
@@ -311,7 +311,7 @@ const ios = StyleSheet.create({
   },
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
   topContainer: {
     position: 'relative',
     left: 0,
@@ -364,11 +364,16 @@ const android = StyleSheet.create({
     color: '#dbdbdb'
   },
   startButton: {
-    backgroundColor: '#4ca1af',
+    backgroundColor: '#0d324d',
     marginLeft: width / 41.4,
     marginTop: height / 59.7333333,
     padding: width / 82.8,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      elevation: 5
   },
   secondContainer: {
     position: 'relative',
@@ -609,7 +614,6 @@ const android = StyleSheet.create({
     right: 0,
     top: 0,
     width: '100%',
-    marginBottom: height / 35.84,
     justifyContent: 'flex-start',
   },
   sixthHeader: {
@@ -619,6 +623,14 @@ const android = StyleSheet.create({
     padding: width / 41.4,
     marginTop: height / 89.6
   },
+  fifthHeader: {
+    marginTop: getRatio(20),
+    marginBottom: getRatio(20),
+    fontFamily: 'MontserratBold',
+    color: 'white',
+    fontSize: getRatio(15),
+    padding: getRatio(10),
+  },
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;

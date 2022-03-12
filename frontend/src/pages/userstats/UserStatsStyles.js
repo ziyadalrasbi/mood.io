@@ -111,7 +111,7 @@ const tablet = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         height: '100%',
-        marginBottom: -(getRatio(300))
+        marginBottom: -(getRatio(450))
     },
     topArtistsContainer: {
         marginHorizontal: getRatio(10),

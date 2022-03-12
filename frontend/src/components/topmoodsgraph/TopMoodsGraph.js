@@ -19,7 +19,7 @@ function TopMoodsGraph({ data }) {
         fillShadowGradientOpacity: 1,
         barPercentage: width / 591.428571,
         propsForLabels: {
-            fontSize: width / 37.6363636
+            fontSize: width > 500 ? getRatio(12) : width / 37.6363636
         },
     };
     const parsedData = {
@@ -40,8 +40,8 @@ function TopMoodsGraph({ data }) {
             <View style={TopMoodsGraphStyles.topContainer}>
                 <ProgressChart
                     data={parsedData}
-                    width={width}
-                    height={height/4.48}
+                    width={width > 500 ? getRatio(700) : width}
+                    height={width > 500 ? getRatio(340) : height/4.48}
                     strokeWidth={5}
                     chartConfig={chartConfig}
                     radius={30}

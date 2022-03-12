@@ -20,7 +20,7 @@ function HabitsGraph({ data }) {
         fillShadowGradientOpacity: 1,
         barPercentage: width / 591.428571,
         propsForLabels: {
-            fontSize: width / 37.6363636
+            fontSize: width > 500 ? getRatio(12) : width / 37.6363636
         },
     };
     const parsedData = {
@@ -44,8 +44,8 @@ function HabitsGraph({ data }) {
             <View style={HabitsGraphStyles.topContainer}>
                 <BarChart
                     data={parsedData}
-                    width={width}
-                    height={width > 500 ? getRatio(340) : height / 2.63529412}
+                    width={width > 500 ? getRatio(700) : width}
+                    height={width > 500 ? getRatio(400) : height / 2.63529412}
                     chartConfig={chartConfig}
                     fromZero={true}
                     withCustomBarColorFromData={true}
