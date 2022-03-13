@@ -1,11 +1,7 @@
-import React, { useRef, } from 'react'
-import { View, Text, FlatList, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React from 'react'
+import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import { Button } from 'react-native-paper';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 import GenreSelectStyles from './GenreSelectStyles';
-import { useFonts } from 'expo-font';
 import { searchForArtists, refreshAccessToken } from '../../client/src/actions/spotifyActions';
 import { saveUserArtists } from '../../client/src/actions/dbActions';
 import * as SecureStore from 'expo-secure-store';
@@ -14,13 +10,11 @@ import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
 import addimg from '../../../assets/icons/genreselect/add.png';
 import removeimg from '../../../assets/icons/genreselect/remove.png';
-import { connect, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const GenreSelect = ({ navigation }) => {
-
 
   const dispatch = useDispatch();
 
@@ -141,7 +135,7 @@ const GenreSelect = ({ navigation }) => {
           />
           :
           <LottieView
-            source={require('./animations/142-loading-animation.json')}
+            source={require('./animations/loading.json')}
             autoPlay
             loop={true}
             style={{ marginTop: height / 29.8666667, width: width / 4.14, height: width / 4.14, alignSelf: 'center' }}

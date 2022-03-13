@@ -38,7 +38,7 @@ const tablet = StyleSheet.create({
     subWelcome: {
         marginLeft: getRatio(10),
         marginTop: getRatio(29),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: getRatio(16.56)
     },
@@ -50,7 +50,7 @@ const tablet = StyleSheet.create({
         fontSize: getRatio(16)
     },
     headerSubText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         paddingHorizontal: getRatio(10),
         fontSize: getRatio(14),
         marginTop: getRatio(10),
@@ -107,7 +107,7 @@ const mobile = StyleSheet.create({
     subWelcome: {
         marginLeft: width / 41.4,
         marginTop: height / 30.8965517,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: width / 25
     },
@@ -119,7 +119,7 @@ const mobile = StyleSheet.create({
         fontSize: width / 25.875
     },
     headerSubText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         paddingHorizontal: width / 41.4,
         fontSize: width / 29.5714286,
         marginTop: height / 89.6,

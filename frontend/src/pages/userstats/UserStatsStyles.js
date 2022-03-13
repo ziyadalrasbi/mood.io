@@ -26,7 +26,7 @@ const tablet = StyleSheet.create({
     },
     subWelcome: {
         padding: getRatio(10),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: getRatio(18)
     },
@@ -70,7 +70,7 @@ const tablet = StyleSheet.create({
         borderRadius: 100
     },
     firstSubHeader: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(14),
         padding: getRatio(10),
         color: '#dbdbdb'
@@ -98,7 +98,7 @@ const tablet = StyleSheet.create({
     },
     selectText: {
         color: 'white',
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(14),
         paddingHorizontal: getRatio(10)
     },
@@ -121,7 +121,7 @@ const tablet = StyleSheet.create({
         borderRadius: getRatio(10)
     },
     topArtistText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: 'white',
         alignSelf: 'center',
         textAlign: 'center',
@@ -147,7 +147,7 @@ const tablet = StyleSheet.create({
         alignItems: 'center',
     },
     topTrackText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: 'white',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -162,7 +162,7 @@ const tablet = StyleSheet.create({
         alignSelf: 'center'
     },
     topTrackArtistText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: '#dbdbdb',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -183,7 +183,7 @@ const tablet = StyleSheet.create({
         height: getRatio(22)
     },
     mainFont: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(16)
     },
     scroll: {
@@ -278,7 +278,7 @@ const mobile = StyleSheet.create({
     },
     subWelcome: {
         padding: width / 41.4,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: width / 23
     },
@@ -322,7 +322,7 @@ const mobile = StyleSheet.create({
         borderRadius: 100
     },
     firstSubHeader: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 29.5714286,
         padding: width / 41.4,
         color: '#dbdbdb'
@@ -349,7 +349,7 @@ const mobile = StyleSheet.create({
     },
     selectText: {
         color: 'white',
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 29.5714286,
         paddingHorizontal: width / 41.4
     },
@@ -372,7 +372,7 @@ const mobile = StyleSheet.create({
         borderRadius: 10
     },
     topArtistText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: 'white',
         alignSelf: 'center',
         textAlign: 'center',
@@ -398,7 +398,7 @@ const mobile = StyleSheet.create({
         alignItems: 'center',
     },
     topTrackText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: 'white',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -413,7 +413,7 @@ const mobile = StyleSheet.create({
         alignSelf: 'center'
     },
     topTrackArtistText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: '#dbdbdb',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -434,7 +434,7 @@ const mobile = StyleSheet.create({
         height: width / 18.8181818
     },
     mainFont: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 25.875
     },
     scroll: {

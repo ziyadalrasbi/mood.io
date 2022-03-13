@@ -44,7 +44,7 @@ function UserStats({ navigation, route }) {
                     rloading == true ?
                         <View>
                             <LottieView
-                                source={require('./animations/8707-loading.json')}
+                                source={require('./animations/loading.json')}
                                 autoPlay
                                 loop={true}
                                 style={UserStatsStyles.lottieView}
@@ -96,7 +96,7 @@ function UserStats({ navigation, route }) {
                 :
                 rloading == true ?
                     <LottieView
-                        source={require('./animations/8707-loading.json')}
+                        source={require('./animations/loading.json')}
                         autoPlay
                         loop={true}
                         style={UserStatsStyles.lottieView}

@@ -34,7 +34,7 @@ function ContactConfirm({ navigation }) {
                     Thank You!
                 </Text>
                 <LottieView
-                    source={require('./animations/2309-check-animation.json')}
+                    source={require('./animations/confirm.json')}
                     autoPlay
                     loop={false}
                     style={ContactStyles.lottie}

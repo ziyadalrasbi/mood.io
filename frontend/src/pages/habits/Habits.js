@@ -149,7 +149,7 @@ function Habits({ navigation }) {
                     <View style={HabitsStyles.habitContainer}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
-                                source={require('./animations/60897-line-sound-icon-animations.json')}
+                                source={require('./animations/loudness.json')}
                                 autoPlay
                                 loop={false}
                                 style={HabitsStyles.habitAnimation}
@@ -166,7 +166,7 @@ function Habits({ navigation }) {
                             :
                             rloading == true ?
                                 <LottieView
-                                    source={require('./animations/27-loading.json')}
+                                    source={require('./animations/loading.json')}
                                     autoPlay
                                     loop
                                     style={HabitsStyles.loadingLottie}
@@ -180,7 +180,7 @@ function Habits({ navigation }) {
                     <View style={[HabitsStyles.habitContainer, { backgroundColor: '#5311d6' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
-                                source={require('./animations/12730-sound-wave.json')}
+                                source={require('./animations/tempo.json')}
                                 autoPlay
                                 loop={false}
                                 style={HabitsStyles.habitAnimation}
@@ -196,7 +196,7 @@ function Habits({ navigation }) {
                             :
                             rloading == true ?
                                 <LottieView
-                                    source={require('./animations/27-loading.json')}
+                                    source={require('./animations/loading.json')}
                                     autoPlay
                                     loop
                                     style={HabitsStyles.loadingLottie}
@@ -210,7 +210,7 @@ function Habits({ navigation }) {
                     <View style={[HabitsStyles.habitContainer, { backgroundColor: '#16b5c9' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
-                                source={require('./animations/71410-speech-bubbles.json')}
+                                source={require('./animations/speechiness.json')}
                                 autoPlay
                                 loop={false}
                                 style={HabitsStyles.habitAnimation}
@@ -226,7 +226,7 @@ function Habits({ navigation }) {
                             :
                             rloading == true ?
                                 <LottieView
-                                    source={require('./animations/27-loading.json')}
+                                    source={require('./animations/loading.json')}
                                     autoPlay
                                     loop
                                     style={HabitsStyles.loadingLottie}
@@ -240,7 +240,7 @@ function Habits({ navigation }) {
                     <View style={[HabitsStyles.habitContainer, { backgroundColor: '#20bd52' }]}>
                         <View style={{ flexDirection: 'row' }}>
                             <LottieView
-                                source={require('./animations/lf30_editor_eskm9u1h.json')}
+                                source={require('./animations/acousticness.json')}
                                 autoPlay
                                 loop={false}
                                 style={HabitsStyles.habitAnimation}
@@ -256,7 +256,7 @@ function Habits({ navigation }) {
                             :
                             rloading == true ?
                                 <LottieView
-                                    source={require('./animations/27-loading.json')}
+                                    source={require('./animations/loading.json')}
                                     autoPlay
                                     loop
                                     style={HabitsStyles.loadingLottie}

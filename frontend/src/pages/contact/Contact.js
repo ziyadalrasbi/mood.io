@@ -138,7 +138,7 @@ function Contact({ navigation }) {
                 </Button>
                 :
                 <LottieView
-                    source={require('./animations/8707-loading.json')}
+                    source={require('./animations/loading.json')}
                     style={ContactStyles.loading}
                     autoPlay
                     loop

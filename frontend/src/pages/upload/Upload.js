@@ -1,19 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font'
 import UploadStyles from './UploadStyles';
 import Navbar from '../../components/navbar/Navbar';
 import * as ImagePicker from 'expo-image-picker';
-import { LinearGradient } from 'expo-linear-gradient';
 import { detectFace } from '../../client/src/actions/detectActions';
 import { incrementMoodCount, saveRecentMood } from '../../client/src/actions/dbActions';
 import uploadimg from '../../../assets/icons/upload/upload.png';
 import LottieView from 'lottie-react-native';
 import * as SecureStore from 'expo-secure-store';
-import { connect, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 
 function Upload({ navigation }) {
 
@@ -171,7 +168,7 @@ function Upload({ navigation }) {
           }
           {loading &&
             <LottieView
-              source={require('./animations/8707-loading.json')}
+              source={require('./animations/loading.json')}
               autoPlay
               loop
               style={UploadStyles.lottieView}

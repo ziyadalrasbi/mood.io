@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView } from 'react-native';
-import { DrawerContentScrollView, useDrawerStatus } from '@react-navigation/drawer';
-import { LinearGradient } from 'expo-linear-gradient';
 import CustomDrawerStyles from './CustomDrawerStyles';
 import * as SecureStore from 'expo-secure-store';
 import { deleteUser, signOut } from '../../client/src/actions/dbActions';
 import { refreshAccessToken, getUserProfile, spotifySignOut } from '../../client/src/actions/spotifyActions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useFonts } from 'expo-font';
 import defaultimg from '../../../assets/icons/stats/default.png';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const CustomDrawer = ({ props, navigation }) => {
 
@@ -21,14 +17,6 @@ const CustomDrawer = ({ props, navigation }) => {
 
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [deleted, setDeleted] = useState(false);
-
-    const [loaded] = useFonts({
-        MontserratBold: require('../../../assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-        InconsolataLight: require('../../../assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
-        InconsolataMedium: require('../../../assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
-        InconsolataBlack: require('../../../assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
-        InconsolataSemiExpanded: require('../../../assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-    });
 
     useEffect(() => {
         const tokenController = new AbortController();
@@ -60,7 +48,7 @@ const CustomDrawer = ({ props, navigation }) => {
         }
     }, [loading, dispatch]);
 
-    if (!loaded || loading) {
+    if (loading) {
         return null;
     }
 
@@ -192,20 +180,4 @@ const CustomDrawer = ({ props, navigation }) => {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        refreshAccessToken: state.spotifyReducer.refreshAccessToken,
-        getUserProfile: state.spotifyReducer.getUserProfile,
-        spotifySignOut: state.spotifyReducer.spotifySignOut,
-        signOut: state.dbReducer.signOut
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    refreshAccessToken,
-    getUserProfile,
-    spotifySignOut,
-    signOut
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer);
+export default CustomDrawer;

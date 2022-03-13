@@ -1,23 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useFonts } from 'expo-font'
 import SelectMoodStyles from './SelectMoodStyles';
 import Navbar from '../../components/navbar/Navbar';
-import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
-import { LinearGradient } from 'expo-linear-gradient';
 import happy from '../../../assets/icons/selectmood/happy.png';
 import angry from '../../../assets/icons/selectmood/angry.png';
 import sad from '../../../assets/icons/selectmood/sad.png';
 import neutral from '../../../assets/icons/selectmood/neutral.png';
 import confused from '../../../assets/icons/selectmood/thinking.png';
 import surprised from '../../../assets/icons/selectmood/surprised.png';
-import LottieView from 'lottie-react-native';
 import { incrementMoodCount, saveRecentMood } from '../../client/src/actions/dbActions';
-import { connect, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 
 function SelectMood({ navigation }) {
 

@@ -149,7 +149,7 @@ const mobile = StyleSheet.create({
     marginTop: height / 30.89230769,
     marginBottom: height / 89.6,
     maxWidth: width / 1.01764706,
-    fontFamily: 'InconsolataLight',
+    fontFamily: 'MontserratLight',
     color: 'white',
     fontSize: width / 25
   },
@@ -189,7 +189,7 @@ const mobile = StyleSheet.create({
     backgroundColor: '#461ad6',
   },
   mainFont: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286
   },
   gradientContainer: {

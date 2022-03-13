@@ -9,10 +9,8 @@ import statsicon from '../../../assets/icons/carousel/statsicon.png';
 import playlisticon from '../../../assets/icons/carousel/playlisticon.png';
 import CustomCarouselStyles from './CustomCarouselStyles';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { useFonts } from 'expo-font';
 import { Dimensions } from 'react-native';
-import * as Linking from 'expo-linking';
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 
 const CustomCarousel = ({ onPressLogin }) => {

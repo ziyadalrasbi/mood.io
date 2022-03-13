@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Platform, BackHandler } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Text, View, Image, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
 import ResultsStyles from './ResultsStyles';
 import Navbar from '../../components/navbar/Navbar';
 import MoodGraph from '../../components/moodgraph/MoodGraph';
@@ -26,8 +25,7 @@ import {
     incrementPlaylistsAmount,
     setPlaylisted
 } from '../../client/src/actions/dbActions';
-import { connect, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 import StarRating from 'react-native-star-rating';
 import playimg from '../../../assets/icons/home/play.png';
 import spotifylogo from '../../../assets/icons/login/spotifylogo.png';
@@ -246,7 +244,7 @@ function Results({ navigation, route }) {
                     </View>
                     <TouchableOpacity onPress={onPressTouch}>
                         <LottieView
-                            source={require('./animations/90278-arrow-down.json')}
+                            source={require('./animations/continue.json')}
                             autoPlay
                             loop={true}
                             style={ResultsStyles.continueLottie}
@@ -318,7 +316,7 @@ function Results({ navigation, route }) {
                             }
                             {saving == true &&
                                 <LottieView
-                                    source={require('./animations/8707-loading.json')}
+                                    source={require('./animations/loading.json')}
                                     autoPlay
                                     loop={true}
                                     style={ResultsStyles.lottieView}

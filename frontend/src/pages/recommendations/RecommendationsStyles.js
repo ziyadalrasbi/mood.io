@@ -26,7 +26,7 @@ const tablet = StyleSheet.create({
     },
     subWelcome: {
         padding: getRatio(10),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: getRatio(18)
     },
@@ -57,7 +57,7 @@ const tablet = StyleSheet.create({
         paddingVertical: 5
     },
     firstSubHeader: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(14),
         paddingHorizontal: getRatio(10),
         paddingVertical: 5,
@@ -95,7 +95,7 @@ const tablet = StyleSheet.create({
         justifyContent: 'space-between'
     },
     topTrackText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: 'white',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -110,7 +110,7 @@ const tablet = StyleSheet.create({
         alignSelf: 'center'
     },
     topTrackArtistText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: '#dbdbdb',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -186,7 +186,7 @@ const mobile = StyleSheet.create({
     },
     subWelcome: {
         padding: width / 41.4,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: width / 23
     },
@@ -217,7 +217,7 @@ const mobile = StyleSheet.create({
         paddingVertical: 5
     },
     firstSubHeader: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 29.5714286,
         paddingHorizontal: width / 41.4,
         paddingVertical: 5,
@@ -255,7 +255,7 @@ const mobile = StyleSheet.create({
         justifyContent: 'space-between'
     },
     topTrackText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: 'white',
         alignSelf: 'flex-start',
         textAlign: 'left',
@@ -270,7 +270,7 @@ const mobile = StyleSheet.create({
         alignSelf: 'center'
     },
     topTrackArtistText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         color: '#dbdbdb',
         alignSelf: 'flex-start',
         textAlign: 'left',

@@ -1,10 +1,61 @@
 import { StyleSheet } from 'react-native';
-import { Dimensions } from 'react-native';
+import { Dimensions, PixelRatio } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
-export default StyleSheet.create({
+const getRatio = (value) => {
+    return Math.min(PixelRatio.getFontScale() * value, value);
+}
+
+const tablet = StyleSheet.create({
     selectText: {
-        fontFamily: 'InconsolataBold',
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(13),
+    },
+    selectButton: {
+        backgroundColor: '#4494da',
+        marginHorizontal: getRatio(70),
+        marginBottom: -(getRatio(20)),
+    },
+    clearButton: {
+        backgroundColor: 'red',
+        minWidth: getRatio(90),
+        marginRight: getRatio(50)
+    },
+    continueButton: {
+        backgroundColor: 'purple'
+    },
+    artistText: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(13),
+        maxWidth: getRatio(183),
+        textAlign: 'left',
+        marginLeft: getRatio(5)
+    },
+    removeArtistText: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(13),
+        maxWidth: getRatio(183),
+        textAlign: 'left',
+        paddingHorizontal: getRatio(5)
+    },
+    artistImage: {
+        width: getRatio(50),
+        height: getRatio(50),
+        borderRadius: 5
+    },
+    addImage: {
+        width: getRatio(30),
+        height: getRatio(30)
+    },
+    removeImage: {
+        width: getRatio(23),
+        height: getRatio(23)
+    }
+});
+
+const mobile = StyleSheet.create({
+    selectText: {
+        fontFamily: 'MontserratBold',
         fontSize: width / 31.8461538,
     },
     selectButton: {
@@ -48,3 +99,5 @@ export default StyleSheet.create({
         height: width / 18
     }
 });
+
+export default width > 500 ? tablet : mobile;

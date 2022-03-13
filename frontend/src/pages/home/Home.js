@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl, BackHandler } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Button } from 'react-native-paper';
 import HomeStyles from './HomeStyles';
 import * as SecureStore from 'expo-secure-store';

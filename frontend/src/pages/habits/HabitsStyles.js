@@ -26,7 +26,7 @@ const tablet = StyleSheet.create({
     subWelcome: {
         marginTop: getRatio(20),
         paddingHorizontal: getRatio(10),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: getRatio(18)
     },
@@ -75,13 +75,13 @@ const tablet = StyleSheet.create({
     },
     selectText: {
         color: 'white',
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(14),
         paddingHorizontal: getRatio(10)
     },
     habitName: {
         paddingHorizontal: getRatio(10),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: getRatio(14)
     },
@@ -189,7 +189,7 @@ const mobile = StyleSheet.create({
     subWelcome: {
         marginTop: height / 44.8,
         paddingHorizontal: width / 41.4,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: width / 23
     },
@@ -238,7 +238,7 @@ const mobile = StyleSheet.create({
     },
     selectText: {
         color: 'white',
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 29.5714286,
         paddingHorizontal: width / 41.4
     },
@@ -253,7 +253,7 @@ const mobile = StyleSheet.create({
     },
     habitName: {
         paddingHorizontal: width / 41.4,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: width / 29.5714286
     },
@@ -275,7 +275,7 @@ const mobile = StyleSheet.create({
         backgroundColor: '#0d324d'
     },
     mainFont: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 25.875
     },
     tabView: {

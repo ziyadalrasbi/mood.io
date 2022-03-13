@@ -26,7 +26,7 @@ function UploadOptions({ navigation }) {
                     1. Upload Image
                 </Text>
                 <LottieView
-                    source={require('./animations/lf30_editor_3xr8ifgo.json')}
+                    source={require('./animations/upload.json')}
                     autoPlay
                     loop={false}
                     style={UploadOptionsStyles.lottie}
@@ -50,7 +50,7 @@ function UploadOptions({ navigation }) {
                     2. Select Mood
                 </Text>
                 <LottieView
-                    source={require('./animations/lf30_editor_r2rkclcy.json')}
+                    source={require('./animations/select.json')}
                     autoPlay
                     loop={false}
                     style={UploadOptionsStyles.lottie}

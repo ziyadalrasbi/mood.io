@@ -22,7 +22,7 @@ export default StyleSheet.create({
         backgroundColor: 'transparent',
     },
     mainFont: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: 22
     },
     scroll: {

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, Pressable } from 'react-native';
-import { Button, Modal } from 'react-native-paper';
-import { useFonts } from 'expo-font'
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import { Modal } from 'react-native-paper';
 import GenreModalStyles from './GenreModalStyles';
 import GenreSelect from '../genreselect/GenreSelect';
-import { StatusBar } from 'expo-status-bar';
 
 function GenreModal({ newUser, navigation }) {
 

@@ -6,7 +6,7 @@ const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         flex: 1,
@@ -38,7 +38,7 @@ const ios = StyleSheet.create({
     subWelcome: {
         marginLeft: getRatio(10),
         marginTop: getRatio(29),
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: getRatio(16.56)
     },
@@ -112,7 +112,7 @@ const ios = StyleSheet.create({
         marginBottom: getRatio(10),
     },
     selectedMoodText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: getRatio(14),
         color: 'white'
     },
@@ -123,7 +123,7 @@ const ios = StyleSheet.create({
     }
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
     mainContainer: {
         position: 'relative',
         flex: 1,
@@ -157,7 +157,7 @@ const android = StyleSheet.create({
         marginTop: height / 30.89230769,
         marginBottom: height / 89.6,
         maxWidth: width / 1.01764706,
-        fontFamily: 'InconsolataLight',
+        fontFamily: 'MontserratLight',
         color: 'white',
         fontSize: width / 25
     },
@@ -231,7 +231,7 @@ const android = StyleSheet.create({
         marginBottom: height / 89.6,
     },
     selectedMoodText: {
-        fontFamily: 'InconsolataMedium',
+        fontFamily: 'MontserratMedium',
         fontSize: width / 29.5714286,
         color: 'white'
     },
@@ -242,4 +242,4 @@ const android = StyleSheet.create({
     }
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;

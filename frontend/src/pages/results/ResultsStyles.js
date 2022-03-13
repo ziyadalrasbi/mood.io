@@ -81,7 +81,7 @@ const tablet = StyleSheet.create({
     marginBottom: getRatio(10)
   },
   firstSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(16),
     padding: getRatio(10),
     color: '#dbdbdb'
@@ -143,7 +143,7 @@ const tablet = StyleSheet.create({
     borderRadius: 5
   },
   trackArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: '#dbdbdb',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -153,7 +153,7 @@ const tablet = StyleSheet.create({
     maxWidth: getRatio(245)
   },
   trackText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -173,7 +173,7 @@ const tablet = StyleSheet.create({
     alignSelf: 'center'
   },
   saveText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14),
     padding: getRatio(10),
     color: '#dbdbdb',
@@ -187,7 +187,7 @@ const tablet = StyleSheet.create({
     height: getRatio(22)
   },
   saveButtonText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: getRatio(14),
     color: 'white',
   },
@@ -302,7 +302,7 @@ const mobile = StyleSheet.create({
     marginBottom: width / 41.4
   },
   firstSubHeader: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 25.875,
     padding: width / 41.4,
     color: '#dbdbdb'
@@ -364,7 +364,7 @@ const mobile = StyleSheet.create({
     borderRadius: 5
   },
   trackArtistText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: '#dbdbdb',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -374,7 +374,7 @@ const mobile = StyleSheet.create({
     maxWidth: width / 1.68979592
   },
   trackText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     color: 'white',
     alignSelf: 'flex-start',
     textAlign: 'left',
@@ -394,7 +394,7 @@ const mobile = StyleSheet.create({
     alignSelf: 'center'
   },
   saveText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286,
     padding: width / 41.4,
     color: '#dbdbdb',
@@ -408,7 +408,7 @@ const mobile = StyleSheet.create({
     height: width / 18.8181818
   },
   saveButtonText: {
-    fontFamily: 'InconsolataMedium',
+    fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286,
     color: 'white',
   },

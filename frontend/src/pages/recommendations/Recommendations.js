@@ -226,7 +226,7 @@ function Recommendations({ navigation, route }) {
                                     }
                                     {recommendation.playlisted == false && notSaved[recommendation.id].saving &&
                                         <LottieView
-                                            source={require('./animations/8707-loading.json')}
+                                            source={require('./animations/loading.json')}
                                             autoPlay
                                             loop={true}
                                             style={RecommendationsStyles.lottieView}

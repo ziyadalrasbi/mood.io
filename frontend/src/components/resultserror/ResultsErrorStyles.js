@@ -6,7 +6,7 @@ const getRatio = (value) => {
     return Math.min(PixelRatio.get() * value, value);
 }
 
-const ios = StyleSheet.create({
+const tablet = StyleSheet.create({
     welcome: {
         marginLeft: getRatio(32),
         fontFamily: 'MontserratBold',
@@ -38,7 +38,7 @@ const ios = StyleSheet.create({
     },
 });
 
-const android = StyleSheet.create({
+const mobile = StyleSheet.create({
     welcome: {
         marginLeft: width / 12.9375,
         fontFamily: 'MontserratBold',
@@ -70,5 +70,5 @@ const android = StyleSheet.create({
     },
 });
 
-export default Platform.OS == 'android' ? android : ios;
+export default width > 500 ? tablet : mobile;
 

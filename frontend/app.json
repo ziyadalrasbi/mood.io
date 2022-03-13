@@ -16,7 +16,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.app.moodio",
-      "buildNumber": "1.0.2",
+      "buildNumber": "1.0.3",
       "supportsTablet": true
     },
     "android": {
