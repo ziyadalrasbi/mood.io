@@ -43,9 +43,9 @@ const createLibrary = async (req, res, next) => {
                         var currentFeatures = [
                             // data.body.audio_features[i].key,
                             data.body.audio_features[i].valence,
-                            data.body.audio_features[i].energy
+                            data.body.audio_features[i].energy,
                             // data.body.audio_features[i].loudness,
-                            // data.body.audio_features[i].tempo
+                            data.body.audio_features[i].tempo
                         ];
                         var dotproduct = 0;
                         var mA = 0;
@@ -67,7 +67,6 @@ const createLibrary = async (req, res, next) => {
                     }
                 }
             });
-        console.log(cosineSimTracks);
 
         for (let i = 0; i < req.body.artists.length; i++) {
             let similarArtists = [];
@@ -114,9 +113,9 @@ const createLibrary = async (req, res, next) => {
                             var currentFeatures = [
                                 // data.body.audio_features[i].key,
                                 data.body.audio_features[i].valence,
-                                data.body.audio_features[i].energy
+                                data.body.audio_features[i].energy,
                                 // data.body.audio_features[i].loudness,
-                                // data.body.audio_features[i].tempo
+                                data.body.audio_features[i].tempo
                             ];
                             var dotproduct = 0;
                             var mA = 0;
@@ -191,7 +190,7 @@ const getRecommendations = async (req, res, next) => {
                                 data.body.audio_features[i].valence,
                                 data.body.audio_features[i].energy,
                                 // data.body.audio_features[i].loudness,
-                                // data.body.audio_features[i].tempo
+                                data.body.audio_features[i].tempo
                             ];
                             var dotproduct = 0;
                             var mA = 0;

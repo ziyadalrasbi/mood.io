@@ -36,19 +36,19 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
     //                 (maxEmotion == 'surprised' ? 6 :
     //                     (maxEmotion == 'confused' && 6)))));
 
-    // const tempo = maxEmotion == 'happy' ? 125 :
-    //     (maxEmotion == 'sad' ? 75 :
-    //         (maxEmotion == 'angry' ? 90 :
-    //             (maxEmotion == 'neutral' ? 100 :
-    //                 (maxEmotion == 'surprised' ? 100 :
-    //                     (maxEmotion == 'confused' && 80)))));
+    const tempo = maxEmotion == 'happy' ? 125 :
+        (maxEmotion == 'sad' ? 75 :
+            (maxEmotion == 'angry' ? 90 :
+                (maxEmotion == 'neutral' ? 100 :
+                    (maxEmotion == 'surprised' ? 100 :
+                        (maxEmotion == 'confused' && 80)))));
 
-    var arrayOfFeatures = [valence, energy];
+    var arrayOfFeatures = [valence, energy, tempo];
     var objectOfFeatures = {
         // target_key: key,
-        max_energy: energy,
-        // target_tempo: tempo,
-        max_valence: valence,
+        target_energy: energy,
+        target_tempo: tempo,
+        target_valence: valence,
         // target_loudness: loudness
     }
 

@@ -98,19 +98,19 @@ function Results({ navigation, route }) {
         const artists = getArtists.getUserDatabaseArtists;
         const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
-        const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, librarySignal));
-        const trackIds = getLibrary.createLibrary;
+        const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, features.array, librarySignal));
+        const trackIds = getLibrary.createLibrary.trackIds;
         if (trackIds != null) {
             const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
             const amount = getAmount.getPlaylistsAmount + 1;
             setPlaylistsAmount(amount);
             await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal));
             const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
-            console.log(getRec.getRecommendations.similarity);
+            console.log(getLibrary.createLibrary.similarity);
             setLength(getRec.getRecommendations.recommendations.length + 1);
-            setRecommendations(getRec.getRecommendations.recommendations);
+            setRecommendations(getLibrary.createLibrary.similarityRecommendations);
             setUris(getRec.getRecommendations.uris);
-            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getRec.getRecommendations.recommendations), getRec.getRecommendations.uris, amount, saveRecommendationsSignal));
+            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getLibrary.createLibrary.similarityRecommendations), getRec.getRecommendations.uris, amount, saveRecommendationsSignal));
         } else {
             setError(true);
         }
