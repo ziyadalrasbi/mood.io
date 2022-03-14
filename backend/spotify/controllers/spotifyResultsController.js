@@ -68,7 +68,6 @@ const createLibrary = async (req, res, next) => {
                 });
         }
         if (recommendations.length > 0) {
-            console.log(recommendations.length);
             return res.json({ status: 200, recommendations: recommendations, trackIds: trackIds });
         }
     } catch (error) {
@@ -81,10 +80,12 @@ const getRecommendations = async (req, res, next) => {
     var recommendations = [];
     var cosineSimTracks = [];
     var requestedFeatures = req.body.features;
+    var tracks = req.body.tracks;
+    tracks = tracks.slice(0, 100);
     await api.setAccessToken(req.body.token);
     if (req.body.tracks != null) {
         try {
-            await api.getAudioFeaturesForTracks(req.body.tracks)
+            await api.getAudioFeaturesForTracks(tracks)
                 .then((data) => {
                     if (data != null) {
                         for (var i = 0; i < data.body.audio_features.length; i++) {
