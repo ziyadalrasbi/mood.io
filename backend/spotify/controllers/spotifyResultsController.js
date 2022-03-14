@@ -59,8 +59,8 @@ const createLibrary = async (req, res, next) => {
                                 recommendation.push(data.body.tracks[k]['album'].images[0].url);
                                 recommendation.push(data.body.tracks[k].external_urls.spotify);
                                 recommendations.push(recommendation);
-                                if (!trackIds.includes(data.body.tracks[i].id)) {
-                                    trackIds.push(data.body.tracks[i].id);
+                                if (!trackIds.includes(data.body.tracks[k].id)) {
+                                    trackIds.push(data.body.tracks[k].id);
                                 }
                             }
                         }
