@@ -2,17 +2,17 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
     const maxEmotion = emotion;
 
     const valence = maxEmotion == 'happy' ? 0.9 :
-        (maxEmotion == 'sad' ? 0.4 :
+        (maxEmotion == 'sad' ? 0.3 :
             (maxEmotion == 'angry' ? 0.4 :
                 (maxEmotion == 'neutral' ? 0.7 :
                     (maxEmotion == 'surprised' ? 0.7 :
                         (maxEmotion == 'confused' && 0.6)))));
 
-    const energy = maxEmotion == 'happy' ? 0.8 :
-        (maxEmotion == 'sad' ? 0.3 :
-            (maxEmotion == 'angry' ? 0.3 :
+    const energy = maxEmotion == 'happy' ? 0.7 :
+        (maxEmotion == 'sad' ? 0.07 :
+            (maxEmotion == 'angry' ? 0.1 :
                 (maxEmotion == 'neutral' ? 0.4 :
-                    (maxEmotion == 'surprised' ? 0.5 :
+                    (maxEmotion == 'surprised' ? 0.1 :
                         (maxEmotion == 'confused' && 0.3)))));
 
     // const danceability = maxEmotion == 'happy' ? 0.7 :
@@ -22,35 +22,34 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
     //                 (maxEmotion == 'surprised' ? 0.5 :
     //                     (maxEmotion == 'confused' && 0.3)))));
 
-    const loudness = maxEmotion == 'happy' ? -5 :
-        (maxEmotion == 'sad' ? -15 :
-            (maxEmotion == 'angry' ? -15 :
-                (maxEmotion == 'neutral' ? -10 :
-                    (maxEmotion == 'surprised' ? -10 :
-                        (maxEmotion == 'confused' && -10)))));
+    // const loudness = maxEmotion == 'happy' ? -5 :
+    //     (maxEmotion == 'sad' ? -15 :
+    //         (maxEmotion == 'angry' ? -15 :
+    //             (maxEmotion == 'neutral' ? -10 :
+    //                 (maxEmotion == 'surprised' ? -10 :
+    //                     (maxEmotion == 'confused' && -10)))));
 
-    const key = maxEmotion == 'happy' ? 9 :
-        (maxEmotion == 'sad' ? 4 :
-            (maxEmotion == 'angry' ? 5 :
-                (maxEmotion == 'neutral' ? 7 :
-                    (maxEmotion == 'surprised' ? 6 :
-                        (maxEmotion == 'confused' && 6)))));
+    // const key = maxEmotion == 'happy' ? 9 :
+    //     (maxEmotion == 'sad' ? 4 :
+    //         (maxEmotion == 'angry' ? 5 :
+    //             (maxEmotion == 'neutral' ? 7 :
+    //                 (maxEmotion == 'surprised' ? 6 :
+    //                     (maxEmotion == 'confused' && 6)))));
 
-    const tempo = maxEmotion == 'happy' ? 125 :
-        (maxEmotion == 'sad' ? 75 :
-            (maxEmotion == 'angry' ? 90 :
-                (maxEmotion == 'neutral' ? 100 :
-                    (maxEmotion == 'surprised' ? 100 :
-                        (maxEmotion == 'confused' && 80)))));
+    // const tempo = maxEmotion == 'happy' ? 125 :
+    //     (maxEmotion == 'sad' ? 75 :
+    //         (maxEmotion == 'angry' ? 90 :
+    //             (maxEmotion == 'neutral' ? 100 :
+    //                 (maxEmotion == 'surprised' ? 100 :
+    //                     (maxEmotion == 'confused' && 80)))));
 
-    var arrayOfFeatures = [key, valence, energy, loudness, tempo];
-
+    var arrayOfFeatures = [valence, energy];
     var objectOfFeatures = {
-        target_key: key,
+        // target_key: key,
         target_energy: energy,
-        target_tempo: tempo,
+        // target_tempo: tempo,
         target_valence: valence,
-        target_loudness: loudness
+        // target_loudness: loudness
     }
 
     const features = {

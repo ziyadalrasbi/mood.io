@@ -105,8 +105,8 @@ function Results({ navigation, route }) {
             const amount = getAmount.getPlaylistsAmount + 1;
             setPlaylistsAmount(amount);
             await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal));
-
             const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
+            console.log(JSON.stringify(getRec.getRecommendations.message));
             setLength(getRec.getRecommendations.recommendations.length + 1);
             setRecommendations(getRec.getRecommendations.recommendations);
             setUris(getRec.getRecommendations.uris);

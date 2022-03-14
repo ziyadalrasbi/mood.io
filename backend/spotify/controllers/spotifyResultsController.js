@@ -116,7 +116,7 @@ const getRecommendations = async (req, res, next) => {
                     }
                 });
         } catch (error) {
-            const message = 'Error generating recommendations from audio features, please try again. \n' + error;
+            const message = 'Error generating recommendations from audio features, please try again. \n' + JSON.stringify(error);
             return res.json({ status: 400, message: message });
         }
         if (cosineSimTracks.length > 0) {
