@@ -7,11 +7,13 @@ const createLibrary = async (req, res, next) => {
     var similarityRecommendations = [];
     var trackIds = [];
     var cosineSimTracks = [];
-    const requestedFeatures = req.body.features;
+    const requestedFeatures = req.body.requestedFeatures;
+    const features = req.body.features;
     try {
         await api.setAccessToken(req.body.token);
         await api.getRecommendations({
             seed_artists: req.body.artists,
+            features,
             limit: 100
         })
             .then((data) => {
@@ -81,6 +83,7 @@ const createLibrary = async (req, res, next) => {
 
             await api.getRecommendations({
                 seed_artists: similarArtists,
+                features,
                 limit: 100
             })
                 .then((data) => {
