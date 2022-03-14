@@ -46,9 +46,9 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
     var arrayOfFeatures = [valence, energy];
     var objectOfFeatures = {
         // target_key: key,
-        target_energy: energy,
+        max_energy: energy,
         // target_tempo: tempo,
-        target_valence: valence,
+        max_valence: valence,
         // target_loudness: loudness
     }
 
