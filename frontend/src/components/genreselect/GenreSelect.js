@@ -25,6 +25,7 @@ const GenreSelect = ({ navigation }) => {
   const [searchTimer, setSearchTimer] = React.useState(null);
 
   const [selectedItems, setSelectedItems] = React.useState([]);
+  const [selectedPictures, setSelectedPicutres] = React.useState([]);
 
   const [loading, setLoading] = React.useState(false);
 
@@ -42,6 +43,8 @@ const GenreSelect = ({ navigation }) => {
       SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
       const searchQuery = await dispatch(searchForArtists(accessToken, query, searchController.signal));
+      console.log(searchQuery.searchForArtists);
+      console.log(selectedItems);
       setItems(searchQuery.searchForArtists);
     } catch (error) {
       console.log('Error searching for artists, please try again. ' + error);
@@ -52,22 +55,30 @@ const GenreSelect = ({ navigation }) => {
 
   const selectItem = async (item) => {
     const prevItem = [...selectedItems];
-    if (!prevItem.includes(item)) {
+    const prevPicture = [...selectedPictures];
+    if (!prevPicture.includes(item.picture)) {
       prevItem.unshift(item);
+      prevPicture.unshift(item.picture);
     }
     setSelectedItems(prevItem);
+    setSelectedPicutres(prevPicture);
   }
 
   const removeItem = async (item) => {
     const prevItem = [...selectedItems];
+    const prevPicture = [...selectedPictures];
     var index = prevItem.indexOf(item);
+    var picIndex = prevPicture.indexOf(item.picture);
     prevItem.splice(index, 1);
+    prevPicture.splice(picIndex, 1);
     setSelectedItems(prevItem);
+    setSelectedPicutres(prevPicture);
   }
 
   const clearItems = async () => {
     const currItems = [];
     setSelectedItems(currItems);
+    setSelectedPicutres(currItems);
   }
 
   const saveSelected = async () => {
@@ -122,14 +133,15 @@ const GenreSelect = ({ navigation }) => {
                     {item.title}
                   </Text>
                 </View>
-                <TouchableOpacity onPress={() => selectItem(item)}>
-                  <Image
-                    style={[GenreSelectStyles.addImage, { display: selectedItems.length < 5 ? 'flex' : 'none' }]}
-                    source={addimg}
-                  >
-                  </Image>
-                </TouchableOpacity>
-
+                {!selectedPictures.includes(item.picture) &&
+                  <TouchableOpacity onPress={() => selectItem(item)}>
+                    <Image
+                      style={[GenreSelectStyles.addImage, { display: selectedItems.length < 5 ? 'flex' : 'none' }]}
+                      source={addimg}
+                    >
+                    </Image>
+                  </TouchableOpacity>
+                }
               </View>
             )}
           />

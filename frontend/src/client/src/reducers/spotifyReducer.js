@@ -11,7 +11,6 @@ export const initialState = {
     getTopArtistsStats: {},
     getTopTracksStats: {},
     createLibrary: {},
-    getRecommendations: {},
     createPlaylist: {},
     addTracksToPlaylist: {},
     searchForArtists: {},
@@ -79,11 +78,6 @@ export const spotifyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 createLibrary: action.createLibrary
-            }
-        case 'GET_RECOMMENDATIONS':
-            return {
-                ...state,
-                getRecommendations: action.getRecommendations
             }
         case 'CREATE_PLAYLIST':
             return {

@@ -13,7 +13,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import {
     refreshAccessToken,
     createLibrary,
-    getRecommendations,
     createPlaylist,
     addTracksToPlaylist,
 } from '../../client/src/actions/spotifyActions';
@@ -55,8 +54,6 @@ function Results({ navigation, route }) {
     const [saving, setSaving] = useState(false);
     const [complete, setComplete] = useState(false);
 
-    const [scrolled, setScrolled] = useState(false);
-
     const [playlistsAmount, setPlaylistsAmount] = useState(0);
 
     const scrollRef = useRef();
@@ -69,16 +66,12 @@ function Results({ navigation, route }) {
             animated: true,
             behavior: 'smooth'
         });
-        setTimeout(() => {
-            setScrolled(true);
-        }, 1000);
     }
 
     const fetchData = async (
         tokenSignal,
         dbArtistsSignal,
         librarySignal,
-        getRecommendationsSignal,
         saveRecommendationsSignal,
         incrementPlaylistsAmountSignal,
         getPlaylistsAmountSignal
@@ -97,17 +90,22 @@ function Results({ navigation, route }) {
         const artists = getArtists.getUserDatabaseArtists;
         const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
-        const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, features.array, librarySignal));
-        // const trackIds = getLibrary.createLibrary.trackIds;
+        const getLibrary = await dispatch(createLibrary(
+            accessToken,
+            artists,
+            features.object.target_valence,
+            features.object.target_tempo,
+            features.object.target_energy,
+            features.array,
+            librarySignal
+        ));
         if (getLibrary.createLibrary.status == 200 && getLibrary.createLibrary.recommendations != null) {
             const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
             const amount = getAmount.getPlaylistsAmount + 1;
             setPlaylistsAmount(amount);
             await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal));
-            // const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
-            // console.log(getLibrary.createLibrary.similarity);
             setRecommendations(getLibrary.createLibrary.recommendations);
-            setUris(getRec.getRecommendations.uris);
+            setUris(getLibrary.createLibrary.uris);
             await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getLibrary.createLibrary.recommendations), getLibrary.createLibrary.uris, amount, saveRecommendationsSignal));
         } else {
             setError(true);
@@ -119,7 +117,6 @@ function Results({ navigation, route }) {
         const tokenController = new AbortController();
         const getArtistsController = new AbortController();
         const createLibraryController = new AbortController();
-        const getRecommendationsController = new AbortController();
         const saveRecommendationsController = new AbortController();
         const getPlaylistsAmountController = new AbortController();
         const incrementPlaylistsAmountController = new AbortController();
@@ -128,7 +125,6 @@ function Results({ navigation, route }) {
                 tokenController.signal,
                 getArtistsController.signal,
                 createLibraryController.signal,
-                getRecommendationsController.signal,
                 saveRecommendationsController.signal,
                 incrementPlaylistsAmountController.signal,
                 getPlaylistsAmountController.signal
@@ -144,7 +140,6 @@ function Results({ navigation, route }) {
             tokenController.abort();
             getArtistsController.abort();
             createLibraryController.abort();
-            getRecommendationsController.abort();
             saveRecommendationsController.abort();
             getPlaylistsAmountController.abort();
             incrementPlaylistsAmountController.abort();

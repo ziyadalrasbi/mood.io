@@ -248,10 +248,12 @@ export const getTopTracksStats = (token, range, signal) => (dispatch, getState) 
         })
 })
 
-export const createLibrary = (token, artists, features, requested, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+export const createLibrary = (token, artists, valence, tempo, energy, requested, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     const initialArtists = { artists };
-    const initialFeatures = { features };
+    const initialValence = { valence };
+    const initialTempo = { tempo };
+    const initialEnergy = { energy };
     const initialRequested = { requested };
     return fetch(`${baseUrl}/spotify/results/createLibrary`, {
         signal: signal,
@@ -263,36 +265,15 @@ export const createLibrary = (token, artists, features, requested, signal) => (d
         body: JSON.stringify({
             token: initialToken.token,
             artists: initialArtists.artists,
-            features: initialFeatures.features,
+            valence: initialValence.valence, 
+            tempo: initialTempo.tempo,
+            energy: initialEnergy.energy,
             requestedFeatures: initialRequested.requested
         })
     })
         .then(res => res.json())
         .then((data) => {
             return dispatch({ type: 'CREATE_LIBRARY', createLibrary: data });
-        })
-})
-
-export const getRecommendations = (token, tracks, features, signal) => (dispatch, getState) => Promise.resolve().then(() => {
-    const initialToken = { token };
-    const initialTracks = { tracks };
-    const initialFeatures = { features };
-    return fetch(`${baseUrl}/spotify/results/getRecommendations`, {
-        signal: signal,
-        method: 'post',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            token: initialToken.token,
-            tracks: initialTracks.tracks,
-            features: initialFeatures.features
-        })
-    })
-        .then(res => res.json())
-        .then((data) => {
-            return dispatch({ type: 'GET_RECOMMENDATIONS', getRecommendations: data });
         })
 })
 
