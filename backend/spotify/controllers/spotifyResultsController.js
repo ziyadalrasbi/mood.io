@@ -7,12 +7,16 @@ const createLibrary = async (req, res, next) => {
     var trackIds = [];
     var cosineSimTracks = [];
     const requestedFeatures = req.body.requestedFeatures;
-    const features = req.body.features;
+    const valence = req.body.valence;
+    const tempo = req.body.tempo;
+    const energy = req.body.energy;
     try {
         await api.setAccessToken(req.body.token);
-        await api.getRecommendations(features, {
+        await api.getRecommendations({
             seed_artists: req.body.artists,
-            features,
+            target_valence: valence,
+            target_tempo: tempo,
+            target_energy: energy,
             limit: 100
         })
             .then((data) => {
@@ -58,9 +62,11 @@ const createLibrary = async (req, res, next) => {
                     }
                 });
 
-            await api.getRecommendations(features, {
+            await api.getRecommendations({
                 seed_artists: similarArtists,
-                features,
+                target_valence: valence,
+                target_tempo: tempo,
+                target_energy: energy,
                 limit: 100
             })
                 .then((data) => {
