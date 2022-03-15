@@ -4,14 +4,13 @@ const api = require('../api.js');
 
 const createLibrary = async (req, res, next) => {
     var recommendations = [];
-    var similarityRecommendations = [];
     var trackIds = [];
     var cosineSimTracks = [];
     const requestedFeatures = req.body.requestedFeatures;
     const features = req.body.features;
     try {
         await api.setAccessToken(req.body.token);
-        await api.getRecommendations({
+        await api.getRecommendations(features, {
             seed_artists: req.body.artists,
             features,
             limit: 100
@@ -23,45 +22,24 @@ const createLibrary = async (req, res, next) => {
                     let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                     if (yearsDiff <= 4) {
                         if (data.body.tracks[i]['album'].images[0]) {
-                            let recommendation = [];
-                            recommendation.push(data.body.tracks[i].name);
-                            recommendation.push(data.body.tracks[i].artists[0].name);
-                            recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                            recommendation.push(data.body.tracks[i].external_urls.spotify);
-                            recommendations.push(recommendation);
                             trackIds.push(data.body.tracks[i].id);
                         }
                     }
                 }
             });
-
-        console.log('trackids are ' + trackIds);
         await api.getAudioFeaturesForTracks(trackIds)
             .then((data) => {
                 if (data != null) {
                     for (var i = 0; i < data.body.audio_features.length; i++) {
                         var currentFeatures = [
-                            // data.body.audio_features[i].key,
                             data.body.audio_features[i].valence,
                             data.body.audio_features[i].energy,
-                            // data.body.audio_features[i].loudness,
                             data.body.audio_features[i].tempo
                         ];
-                        var dotproduct = 0;
-                        var mA = 0;
-                        var mB = 0;
-                        for (var j = 0; j < currentFeatures.length; j++) {
-                            dotproduct += (currentFeatures[j] * requestedFeatures[j]);
-                            mA += (currentFeatures[j] * currentFeatures[j]);
-                            mB += (requestedFeatures[j] * requestedFeatures[j]);
-                        }
-                        mA = Math.sqrt(mA);
-                        mB = Math.sqrt(mB);
-                        var similarity = (dotproduct) / ((mA) * (mB));
                         const currentSimilarity = {
                             id: data.body.audio_features[i].id,
                             uri: data.body.audio_features[i].uri,
-                            similarity: similarity
+                            similarity: cosineSimilarity(currentFeatures, requestedFeatures)
                         }
                         cosineSimTracks.push(currentSimilarity);
                     }
@@ -69,7 +47,7 @@ const createLibrary = async (req, res, next) => {
             });
 
         for (let i = 0; i < req.body.artists.length; i++) {
-            let similarArtists = [];
+            var similarArtists = [];
             var currentTrackIds = [];
             await api.getArtistRelatedArtists(req.body.artists[i])
                 .then((data) => {
@@ -80,7 +58,7 @@ const createLibrary = async (req, res, next) => {
                     }
                 });
 
-            await api.getRecommendations({
+            await api.getRecommendations(features, {
                 seed_artists: similarArtists,
                 features,
                 limit: 100
@@ -92,16 +70,7 @@ const createLibrary = async (req, res, next) => {
                         let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                         if (yearsDiff <= 4) {
                             if (data.body.tracks[k]['album'].images[0]) {
-                                let recommendation = [];
-                                recommendation.push(data.body.tracks[k].name);
-                                recommendation.push(data.body.tracks[k].artists[0].name);
-                                recommendation.push(data.body.tracks[k]['album'].images[0].url);
-                                recommendation.push(data.body.tracks[k].external_urls.spotify);
-                                recommendations.push(recommendation);
-                                if (!trackIds.includes(data.body.tracks[k].id)) {
-                                    trackIds.push(data.body.tracks[k].id);
-                                    currentTrackIds.push(data.body.tracks[k].id);
-                                }
+                                currentTrackIds.push(data.body.tracks[k].id);
                             }
                         }
                     }
@@ -111,27 +80,14 @@ const createLibrary = async (req, res, next) => {
                     if (data != null) {
                         for (var i = 0; i < data.body.audio_features.length; i++) {
                             var currentFeatures = [
-                                // data.body.audio_features[i].key,
                                 data.body.audio_features[i].valence,
                                 data.body.audio_features[i].energy,
-                                // data.body.audio_features[i].loudness,
                                 data.body.audio_features[i].tempo
                             ];
-                            var dotproduct = 0;
-                            var mA = 0;
-                            var mB = 0;
-                            for (var j = 0; j < currentFeatures.length; j++) {
-                                dotproduct += (currentFeatures[j] * requestedFeatures[j]);
-                                mA += (currentFeatures[j] * currentFeatures[j]);
-                                mB += (requestedFeatures[j] * requestedFeatures[j]);
-                            }
-                            mA = Math.sqrt(mA);
-                            mB = Math.sqrt(mB);
-                            var similarity = (dotproduct) / ((mA) * (mB));
                             const currentSimilarity = {
                                 id: data.body.audio_features[i].id,
                                 uri: data.body.audio_features[i].uri,
-                                similarity: similarity
+                                similarity: cosineSimilarity(currentFeatures, requestedFeatures)
                             }
                             cosineSimTracks.push(currentSimilarity);
                         }
@@ -156,7 +112,7 @@ const createLibrary = async (req, res, next) => {
                                 recommendation.push(data.body.tracks[i].artists[0].name);
                                 recommendation.push(data.body.tracks[i]['album'].images[0].url);
                                 recommendation.push(data.body.tracks[i].external_urls.spotify);
-                                similarityRecommendations.push(recommendation);
+                                recommendations.push(recommendation);
                             }
                         }
                     });
@@ -164,12 +120,27 @@ const createLibrary = async (req, res, next) => {
                 const message = 'Error getting cosine similarity tracks, please try again. \n' + error;
                 return res.json({ status: 400, message: message });
             }
-            return res.json({ status: 200, recommendations: recommendations, trackIds: trackIds, similarity: cosineSimTracks, similarityRecommendations: similarityRecommendations });
+            return res.json({ status: 200, recommendations: recommendations, uris: uniqueUris, similarity: cosineSimTracks });
         }
     } catch (error) {
         const message = 'Error creating the library, please try again. \n' + error;
         return res.json({ status: 400, message: message });
     }
+}
+
+function cosineSimilarity(a, b) {
+    var product = 0;
+    var sumA = 0;
+    var sumB = 0;
+    for (var i = 0; i < a.length; i++) {
+        product += (a[i] * b[i]);
+        sumA += (a[i] * a[i]);
+        sumB += (b[i] * b[i]);
+    }
+    sumA = Math.sqrt(sumA);
+    sumB = Math.sqrt(sumB);
+    var similarity = (product) / ((sumA) * (sumB));
+    return similarity;
 }
 
 const getRecommendations = async (req, res, next) => {
@@ -186,10 +157,8 @@ const getRecommendations = async (req, res, next) => {
                     if (data != null) {
                         for (var i = 0; i < data.body.audio_features.length; i++) {
                             var currentFeatures = [
-                                // data.body.audio_features[i].key,
                                 data.body.audio_features[i].valence,
                                 data.body.audio_features[i].energy,
-                                // data.body.audio_features[i].loudness,
                                 data.body.audio_features[i].tempo
                             ];
                             var dotproduct = 0;

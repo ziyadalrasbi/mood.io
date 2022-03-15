@@ -42,7 +42,6 @@ function Results({ navigation, route }) {
     const [moodDescription, setMoodDescription] = useState({ moodDescription: "" });
 
     const [recommendations, setRecommendations] = useState([]);
-    const [length, setLength] = useState(0);
     const [uris, setUris] = useState([]);
 
     const [count, setCount] = useState(0);
@@ -99,18 +98,17 @@ function Results({ navigation, route }) {
         const features = filterFeaturesByMaxEmotion(route.params.maxMood);
 
         const getLibrary = await dispatch(createLibrary(accessToken, artists, features.object, features.array, librarySignal));
-        const trackIds = getLibrary.createLibrary.trackIds;
-        if (trackIds != null) {
+        // const trackIds = getLibrary.createLibrary.trackIds;
+        if (getLibrary.createLibrary.status == 200 && getLibrary.createLibrary.recommendations != null) {
             const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
             const amount = getAmount.getPlaylistsAmount + 1;
             setPlaylistsAmount(amount);
             await dispatch(incrementPlaylistsAmount(id, incrementPlaylistsAmountSignal));
-            const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
-            console.log(getLibrary.createLibrary.similarity);
-            setLength(getRec.getRecommendations.recommendations.length + 1);
-            setRecommendations(getLibrary.createLibrary.similarityRecommendations);
+            // const getRec = await dispatch(getRecommendations(accessToken, trackIds, features.array, getRecommendationsSignal));
+            // console.log(getLibrary.createLibrary.similarity);
+            setRecommendations(getLibrary.createLibrary.recommendations);
             setUris(getRec.getRecommendations.uris);
-            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getLibrary.createLibrary.similarityRecommendations), getRec.getRecommendations.uris, amount, saveRecommendationsSignal));
+            await dispatch(saveRecommendations(id, route.params.maxMood, JSON.stringify(getLibrary.createLibrary.recommendations), getLibrary.createLibrary.uris, amount, saveRecommendationsSignal));
         } else {
             setError(true);
         }
