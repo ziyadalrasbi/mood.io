@@ -79,11 +79,21 @@ const tablet = StyleSheet.create({
     selectMoodButton: {
         width: getRatio(100),
         alignSelf: 'center',
-        backgroundColor: '#7474BF'
+        backgroundColor: '#7474BF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
     submitText: {
         fontFamily: 'MontserratBold',
-        fontSize: getRatio(12)
+        fontSize: getRatio(12),
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
 });
 
@@ -154,11 +164,21 @@ const mobile = StyleSheet.create({
     },
     submitButton: {
         alignSelf: 'center',
-        backgroundColor: '#348AC7'
+        backgroundColor: '#348AC7',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
     selectMoodButton: {
         alignSelf: 'center',
-        backgroundColor: '#7474BF'
+        backgroundColor: '#7474BF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
     submitText: {
         fontFamily: 'MontserratBold',

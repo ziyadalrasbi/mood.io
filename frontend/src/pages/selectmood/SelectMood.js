@@ -20,11 +20,14 @@ function SelectMood({ navigation }) {
 
     const [index, setIndex] = useState({ index: -1, mood: "" });
 
+    const [pressed, setPressed] = useState(false);
+
     const changeSelectedMood = (i, mood) => {
         setIndex({ index: i, mood: mood });
     }
 
     const navigateResults = async () => {
+        setPressed(true);
         const mood = {
             "angry": index.mood == "angry" ? 1 : 0,
             "confused": index.mood == "confused" ? 1 : 0,
@@ -72,7 +75,8 @@ function SelectMood({ navigation }) {
         }
         saveMoodController.abort();
         incrementMoodController.abort();
-        
+        setPressed(false);
+
         navigation.navigate('Results', {
             results: mood,
             maxMood: index.mood,
@@ -174,13 +178,14 @@ function SelectMood({ navigation }) {
                             Selected mood: {index.mood}
                         </Text>
                         <Button
-                            style={SelectMoodStyles.startButton}
+                            disabled={pressed}
+                            style={[SelectMoodStyles.continueButton]}
                             uppercase={false}
                             mode="contained"
-                            labelStyle={SelectMoodStyles.mainFont}
+                            labelStyle={SelectMoodStyles.continueText}
                             onPress={() => navigateResults()}
                         >
-                            continue
+                            Continue
                         </Button>
 
                     </View>

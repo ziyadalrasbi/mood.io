@@ -125,19 +125,31 @@ function Habits({ navigation }) {
                     Habits are averaged using your top 15 tracks from the given time range.
                 </Text>
                 <View style={HabitsStyles.selectContainer}>
-                    <TouchableOpacity style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
+                    <TouchableOpacity
+                        style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]}
+                        onPress={() => changeRange('short_term', 1)}
+                        disabled={selectedIndex == 1 ? true : false}
+                    >
                         <Text style={[HabitsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
                             4 weeks
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('medium_term', 2)}>
+                    <TouchableOpacity
+                        style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]}
+                        onPress={() => changeRange('medium_term', 2)}
+                        disabled={selectedIndex == 2 ? true : false}
+                    >
                         <View style={HabitsStyles.selectButtonContainer}>
                             <Text style={[HabitsStyles.selectText, { color: selectedIndex == 2 ? 'white' : 'grey' }]}>
                                 6 months
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('long_term', 3)}>
+                    <TouchableOpacity
+                        style={[HabitsStyles.opacityContainer, { backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]}
+                        onPress={() => changeRange('long_term', 3)}
+                        disabled={selectedIndex == 3 ? true : false}
+                    >
                         <View style={HabitsStyles.selectButtonContainer}>
                             <Text style={[HabitsStyles.selectText, { color: selectedIndex == 3 ? 'white' : 'grey' }]}>
                                 All time
@@ -269,18 +281,18 @@ function Habits({ navigation }) {
                     </View>
                 </ScrollView>
             </View>
-            <View style={{ marginTop: height/29.8666667 }}>
+            <View style={{ marginTop: height / 29.8666667 }}>
                 {graphHabits != null ?
                     <View>
                         <HabitsGraph data={graphHabits} />
-                        <View style={{flexDirection:'row', marginLeft: width/20.7}}>
+                        <View style={{ flexDirection: 'row', marginLeft: width / 20.7 }}>
                             <Text style={HabitsStyles.learnText}>
                                 To learn more about these values,&nbsp;
                             </Text>
                             <TouchableOpacity onPress={() => WebBrowser.openBrowserAsync('https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features')}>
-                            <Text style={HabitsStyles.learnLink}>
-                                visit the Spotify website.
-                            </Text>
+                                <Text style={HabitsStyles.learnLink}>
+                                    visit the Spotify website.
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -291,7 +303,7 @@ function Habits({ navigation }) {
                     </Text>
                 }
             </View>
-            <View style={{height: height/17.92}} />
+            <View style={{ height: height / 17.92 }} />
             <StatusBar style="auto" />
         </ScrollView>
     );

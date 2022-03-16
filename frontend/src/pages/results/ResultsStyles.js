@@ -213,7 +213,6 @@ const tablet = StyleSheet.create({
     backgroundColor: '#1DB954',
     borderWidth: 0.5,
     borderColor: '#fff',
-    height: getRatio(40),
     borderRadius: 5,
   },
   spotifyLogo: {
@@ -434,7 +433,6 @@ const mobile = StyleSheet.create({
     backgroundColor: '#1DB954',
     borderWidth: 0.5,
     borderColor: '#fff',
-    height: height / 22.4,
     borderRadius: 5,
   },
   spotifyLogo: {

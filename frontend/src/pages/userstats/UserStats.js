@@ -247,19 +247,31 @@ function UserStats({ navigation, route }) {
                     </Text>
                 </View>
                 <View style={UserStatsStyles.selectContainer}>
-                    <TouchableOpacity style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('short_term', 1)}>
+                    <TouchableOpacity
+                        style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 1 ? '#1d2ea1' : 'transparent' }]}
+                        onPress={() => changeRange('short_term', 1)}
+                        disabled={selectedIndex == 1 ? true : false}
+                    >
                         <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 1 ? 'white' : 'grey' }]}>
                             4 weeks
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('medium_term', 2)}>
+                    <TouchableOpacity
+                        style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 2 ? '#1d2ea1' : 'transparent' }]}
+                        onPress={() => changeRange('medium_term', 2)}
+                        disabled={selectedIndex == 2 ? true : false}
+                    >
                         <View style={UserStatsStyles.selectButtonContainer}>
                             <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 2 ? 'white' : 'grey' }]}>
                                 6 months
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]} onPress={() => changeRange('long_term', 3)}>
+                    <TouchableOpacity
+                        style={[UserStatsStyles.opacityContainer, { backgroundColor: selectedIndex == 3 ? '#1d2ea1' : 'transparent' }]}
+                        onPress={() => changeRange('long_term', 3)}
+                        disabled={selectedIndex == 3 ? true : false}
+                    >
                         <View style={UserStatsStyles.selectButtonContainer}>
                             <Text style={[UserStatsStyles.selectText, { color: selectedIndex == 3 ? 'white' : 'grey' }]}>
                                 All time

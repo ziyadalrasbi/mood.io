@@ -80,7 +80,17 @@ const tablet = StyleSheet.create({
         marginTop: 10
     },
     continueButton: {
-        backgroundColor: '#461ad6',
+        alignSelf: 'center',
+        backgroundColor: '#7474BF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
+    },
+    continueText: {
+        fontFamily: 'MontserratBold',
+        fontSize: getRatio(12)
     },
     moodText: {
         fontFamily: 'MontserratBold',
@@ -199,7 +209,17 @@ const mobile = StyleSheet.create({
         marginTop: 10
     },
     continueButton: {
-        backgroundColor: '#461ad6',
+        alignSelf: 'center',
+        backgroundColor: '#7474BF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
+    },
+    continueText: {
+        fontFamily: 'MontserratBold',
+        fontSize: width / 34.5
     },
     moodText: {
         fontFamily: 'MontserratBold',

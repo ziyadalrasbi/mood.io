@@ -10,7 +10,7 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
 
     const energy = maxEmotion == 'happy' ? 0.7 :
         (maxEmotion == 'sad' ? 0.07 :
-            (maxEmotion == 'angry' ? 0.1 :
+            (maxEmotion == 'angry' ? 0.2 :
                 (maxEmotion == 'neutral' ? 0.4 :
                     (maxEmotion == 'surprised' ? 0.1 :
                         (maxEmotion == 'confused' && 0.3)))));

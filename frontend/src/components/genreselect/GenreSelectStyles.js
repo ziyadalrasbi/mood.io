@@ -17,12 +17,20 @@ const tablet = StyleSheet.create({
         marginBottom: -(getRatio(20)),
     },
     clearButton: {
-        backgroundColor: 'red',
-        minWidth: getRatio(90),
-        marginRight: getRatio(50)
+        backgroundColor: '#d11a2a',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
     continueButton: {
-        backgroundColor: 'purple'
+        backgroundColor: '#7474BF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
     artistText: {
         fontFamily: 'MontserratBold',
@@ -64,12 +72,24 @@ const mobile = StyleSheet.create({
         marginBottom: -(height / 44.8),
     },
     clearButton: {
-        backgroundColor: 'red',
-        minWidth: width / 4.6,
-        marginRight: width / 8.28
+        backgroundColor: '#d11a2a',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
     },
     continueButton: {
-        backgroundColor: 'purple'
+        backgroundColor: '#7474BF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 5
+    },
+    continueText: {
+        fontFamily: 'MontserratBold',
+        fontSize: width / 34.5
     },
     artistText: {
         fontFamily: 'MontserratBold',

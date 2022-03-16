@@ -3,13 +3,10 @@ import * as React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
-import HomeStyles from './src/pages/home/HomeStyles';
-import { Text, View } from 'react-native';
 import { refreshAccessToken, getUserId, getUserTopArtistsLogin, saveUserArtists } from './fetch';
 import DrawerStack from './src/components/drawer/DrawerStack';
 import store from './src/client/src/store';
 import { Provider } from 'react-redux';
-import { LinearGradient } from 'expo-linear-gradient';
 import Loading from './src/components/loading/Loading';
 import cacheAssests from './cacheAssets';
 
@@ -28,8 +25,8 @@ function App({ navigation }) {
             try {
                 const token = await SecureStore.getItemAsync('spotify_access_token');
                 const refreshToken = await SecureStore.getItemAsync('spotify_refresh_token');
-                if (token != null) {
-                    const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+                const tokenExpiry = await SecureStore.getItemAsync('token_expiry');
+                if (token != null && tokenExpiry != null) {
                     const getToken = await refreshAccessToken(token, refreshToken, tokenExpiry, tokenController.signal);
                     const accessToken = getToken.token;
                     const time = getToken.time;

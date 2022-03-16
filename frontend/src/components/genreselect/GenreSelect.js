@@ -150,18 +150,19 @@ const GenreSelect = ({ navigation }) => {
             source={require('./animations/loading.json')}
             autoPlay
             loop={true}
-            style={{ marginTop: height / 29.8666667, width: width / 4.14, height: width / 4.14, alignSelf: 'center' }}
+            style={{ marginTop: height / 89.6, width: width / 4.14, height: width / 4.14, alignSelf: 'center' }}
           />
         }
 
         <FlatList
           data={selectedItems}
           horizontal={true}
+          showsHorizontalScrollIndicator={false}
           numColumns={1}
           style={{ paddingVertical: height / 89.6 }}
           renderItem={({ item }) => (
             <TouchableOpacity style={{ marginBottom: height / 89.6 }} onPress={() => removeItem(item)}>
-              <View style={{ borderRadius: 5, padding: width / 41.4, marginRight: width / 41.4, height: height / 14.9333333, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
+              <View style={{ borderRadius: 5, padding: width / 41.4, marginRight: width / 41.4,  backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
                 <Text style={GenreSelectStyles.removeArtistText}>
                   {item.title}
                 </Text>
@@ -177,23 +178,23 @@ const GenreSelect = ({ navigation }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: height / 89.6, marginBottom: height / 44.8 }}>
           <Button
             disabled={selectedItems.length > 0 ? false : true}
-            // style={GenreSelectStyles.startButton}
+            style={[GenreSelectStyles.clearButton, selectedItems.length > 0 ? {} : { backgroundColor: '#D3D3D3' }]}
             uppercase={false}
             mode="contained"
-            // labelStyle={HomeStyles.mainFont}
+            labelStyle={GenreSelectStyles.continueText}
             onPress={clearItems}
           >
-            clear
+            Clear
           </Button>
           <Button
             disabled={selectedItems.length < 5 ? true : false}
-            // style={GenreSelectStyles.startButton}
+            style={[GenreSelectStyles.continueButton, selectedItems.length < 5 ? { backgroundColor: '#D3D3D3' } : {}]}
             uppercase={false}
             mode="contained"
-            // labelStyle={HomeStyles.mainFont}
+            labelStyle={GenreSelectStyles.continueText}
             onPress={saveSelected}
           >
-            continue
+            Continue
           </Button>
         </View>
       </View>

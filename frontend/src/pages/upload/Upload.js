@@ -20,6 +20,8 @@ function Upload({ navigation }) {
   const [moodAnalysis, setMoodAnalysis] = useState({ moodAnalysis: [] });
   const [loading, setLoading] = useState(false);
 
+  const [continuePressed, setContinuePressed] = useState(false);
+
   const openImagePicker = async () => {
     let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -62,6 +64,7 @@ function Upload({ navigation }) {
   }
 
   const navigateResults = async () => {
+    setContinuePressed(true);
     var jsonText = JSON.stringify(moodAnalysis.moodAnalysis);
     var data = JSON.parse(jsonText);
     var getValues = [];
@@ -101,6 +104,7 @@ function Upload({ navigation }) {
     }
     saveMoodController.abort();
     incrementMoodController.abort();
+    setContinuePressed(false);
     navigation.navigate('Results', {
       results: moodAnalysis.moodAnalysis,
       maxMood: tempProp,
@@ -146,6 +150,7 @@ function Upload({ navigation }) {
             uppercase={false}
             mode="contained"
             labelStyle={UploadStyles.mainFont}
+            disabled={continuePressed == true ? true : false}
             onPress={() => analyseImage()}
           >
             Reupload
@@ -156,7 +161,7 @@ function Upload({ navigation }) {
               uppercase={false}
               mode="contained"
               labelStyle={UploadStyles.mainFont}
-              disabled={Object.keys(moodAnalysis.moodAnalysis).length > 0 ? false : true}
+              disabled={continuePressed == true ? true : false}
               onPress={() => navigateResults()}
             >
               Continue

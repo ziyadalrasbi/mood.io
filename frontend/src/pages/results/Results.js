@@ -327,7 +327,6 @@ function Results({ navigation, route }) {
                                     How would you rate the accuracy of this recommendation?
                                 </Text>
                             }
-
                             {count == 0 &&
                                 <View style={{ alignSelf: 'center' }}>
                                     <StarRating
@@ -347,7 +346,6 @@ function Results({ navigation, route }) {
                             }
                             <View style={{ height: 40 }} />
                         </View>
-
                         <StatusBar style="auto" />
                     </View>
                 </ScrollView>

@@ -17,7 +17,6 @@ function TopMoodsGraph({ data }) {
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         fillShadowGradientOpacity: 1,
-        barPercentage: width / 591.428571,
         propsForLabels: {
             fontSize: width > 500 ? getRatio(12) : width / 37.6363636
         },
@@ -43,10 +42,10 @@ function TopMoodsGraph({ data }) {
                 <ProgressChart
                     data={parsedData}
                     width={width > 500 ? getRatio(700) : width}
-                    height={width > 500 ? getRatio(340) : height/4.48}
+                    height={width > 500 ? getRatio(340) : width/2.07}
                     strokeWidth={5}
                     chartConfig={chartConfig}
-                    radius={30}
+                    radius={width > 500 ? getRatio(30) : width/13.8}
                     withCustomBarColorFromData={true}
                     style={{ marginLeft: width > 500 ? getRatio(-40) : -(width / 10.35) }}
                 />

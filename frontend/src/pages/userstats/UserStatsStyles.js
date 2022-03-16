@@ -331,7 +331,7 @@ const mobile = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '80%',
-        marginLeft: -width / 41.4,
+        marginLeft: -width / 41.4
     },
     selectButtonContainer: {
         flexDirection: 'row',
@@ -406,7 +406,7 @@ const mobile = StyleSheet.create({
         marginBottom: height / 179.2,
         fontSize: width / 34.5,
         fontStyle: 'italic',
-        maxWidth: width / 1.38,
+        maxWidth: width / 1.47857143,
         marginRight: width / 20.7
     },
     topTrackTextContainer: {
@@ -420,7 +420,7 @@ const mobile = StyleSheet.create({
         fontSize: width / 34.5,
         fontStyle: 'italic',
         marginRight: width / 20.7,
-        maxWidth: width / 1.38
+        maxWidth: width / 1.47857143
     },
     topTrackImage: {
         width: width / 6.9,
@@ -488,7 +488,7 @@ const mobile = StyleSheet.create({
         fontSize: width / 29.5714286
     },
     tabContainer: {
-        marginTop: 2
+        marginTop: Platform.OS == 'android' ? height/9.8 : height / 448
     },
     lottieView: {
         marginTop: height / 17.92,
