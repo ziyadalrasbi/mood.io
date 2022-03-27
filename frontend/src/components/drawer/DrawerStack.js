@@ -21,12 +21,12 @@ const Stack = createNativeStackNavigator();
 const LoginStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='Login' component={Login} options={{unmountOnBlur:true}} />
+            <Stack.Screen name='Login' component={Login} options={{ unmountOnBlur: true }} />
         </Stack.Navigator>
     )
 }
 
-const DrawerStack = ({loading, verified}) => {
+const DrawerStack = ({ loading, verified }) => {
     return (
         <Drawer.Navigator
             drawerContent={props => <CustomDrawer {...props} />}
@@ -36,18 +36,18 @@ const DrawerStack = ({loading, verified}) => {
             backBehavior='history'
             defaultStatus='closed'
         >
-            <Drawer.Screen name='LoginStack' component={LoginStack} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='UserStats' component={UserStats} initialParams={{ index: 0 }} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='LoginStack' component={LoginStack} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='UserStats' component={UserStats} initialParams={{ index: 0 }} options={{ unmountOnBlur: true }} />
             <Drawer.Screen name='Home' component={Home} />
-            <Drawer.Screen name='UploadOptions' component={UploadOptions} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='Upload' component={Upload} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='SelectMood' component={SelectMood} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='Results' component={Results} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='Recommendations' component={Recommendations} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='Habits' component={Habits} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='Contact' component={Contact} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='ContactConfirm' component={ContactConfirm} options={{unmountOnBlur:true}} />
-            <Drawer.Screen name='About' component={About} options={{unmountOnBlur:true}} />
+            <Drawer.Screen name='UploadOptions' component={UploadOptions} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='Upload' component={Upload} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='SelectMood' component={SelectMood} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='Results' component={Results} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='Recommendations' component={Recommendations} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='Habits' component={Habits} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='Contact' component={Contact} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='ContactConfirm' component={ContactConfirm} options={{ unmountOnBlur: true }} />
+            <Drawer.Screen name='About' component={About} options={{ unmountOnBlur: true }} />
         </Drawer.Navigator>
     );
 }

@@ -28,8 +28,8 @@ const mobile = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-    width: width/1.18285714,
-    height: width/1.18285714
+    width: width/1.38,
+    height: width/1.38
   },  
   gradientContainer: {
     height: '100%', 
@@ -62,8 +62,8 @@ const tablet = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-    width: getRatio(350),
-    height:getRatio(350)
+    width: getRatio(300),
+    height:getRatio(300)
   }, 
   gradientContainer: {
     height: '100%', 

@@ -10,6 +10,7 @@ const createLibrary = async (req, res, next) => {
     const valence = req.body.valence;
     const tempo = req.body.tempo;
     const energy = req.body.energy;
+    const danceability = req.body.danceability;
     try {
         await api.setAccessToken(req.body.token);
         await api.getRecommendations({
@@ -17,6 +18,7 @@ const createLibrary = async (req, res, next) => {
             target_valence: valence,
             target_tempo: tempo,
             target_energy: energy,
+            target_danceability: danceability,
             limit: 100
         })
             .then((data) => {
@@ -38,7 +40,8 @@ const createLibrary = async (req, res, next) => {
                         var currentFeatures = [
                             data.body.audio_features[i].valence,
                             data.body.audio_features[i].energy,
-                            data.body.audio_features[i].tempo
+                            data.body.audio_features[i].tempo,
+                            data.body.audio_features[i].danceability
                         ];
                         const currentSimilarity = {
                             id: data.body.audio_features[i].id,
@@ -67,6 +70,7 @@ const createLibrary = async (req, res, next) => {
                 target_valence: valence,
                 target_tempo: tempo,
                 target_energy: energy,
+                target_danceability: danceability,
                 limit: 100
             })
                 .then((data) => {
@@ -88,7 +92,8 @@ const createLibrary = async (req, res, next) => {
                             var currentFeatures = [
                                 data.body.audio_features[i].valence,
                                 data.body.audio_features[i].energy,
-                                data.body.audio_features[i].tempo
+                                data.body.audio_features[i].tempo,
+                                data.body.audio_features[i].danceability
                             ];
                             const currentSimilarity = {
                                 id: data.body.audio_features[i].id,

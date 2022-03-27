@@ -245,7 +245,7 @@ const tablet = StyleSheet.create({
   scroll: {
     flex: 1,
     height: '100%',
-    backgroundColor: '#2b5876'
+    backgroundColor: '#005f96'
   },
   noDataText: {
     marginTop: getRatio(5),
@@ -370,10 +370,10 @@ const mobile = StyleSheet.create({
     padding: width / 82.8,
     alignSelf: 'flex-start',
     shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.5,
-      shadowRadius: 2,
-      elevation: 5
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5
   },
   secondContainer: {
     position: 'relative',
@@ -566,7 +566,7 @@ const mobile = StyleSheet.create({
   scroll: {
     flex: 1,
     height: '100%',
-    backgroundColor: '#13547a'
+    backgroundColor: '#005f96'
   },
   noDataText: {
     marginTop: height / 179.2,
@@ -598,15 +598,14 @@ const mobile = StyleSheet.create({
     marginTop: height / 358.4
   },
   playImage: {
-    width: 20,
+    width: width / 18.8181818,
     height: width / 18.8181818
   },
   allContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: width / 41.4,
-
+    marginRight: width / 41.4
   },
   fifthContainer: {
     position: 'relative',
@@ -624,12 +623,12 @@ const mobile = StyleSheet.create({
     marginTop: height / 89.6
   },
   fifthHeader: {
-    marginTop: getRatio(20),
-    marginBottom: getRatio(20),
+    marginTop: height / 44.8,
+    marginBottom: height / 44.8,
     fontFamily: 'MontserratBold',
     color: 'white',
-    fontSize: getRatio(15),
-    padding: getRatio(10),
+    fontSize: width / 27.6,
+    padding: width / 41.4
   },
 });
 

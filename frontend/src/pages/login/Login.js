@@ -11,7 +11,7 @@ import { initUser, loginUser, saveUserArtists } from '../../client/src/actions/d
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as WebBrowser from 'expo-web-browser';
-import logo from '../../../assets/icons/testlogo.png';
+import logo from '../../../assets/logo.png';
 import Loading from '../../components/loading/Loading';
 import * as Constants from '../../Constants';
 
@@ -123,7 +123,7 @@ function Login({ navigation }) {
     return (
         <View style={LoginStyles.mainContainer}>
             <LinearGradient
-                colors={['#7474BF', '#348AC7']}
+                colors={['#005f96', '#104b6e', '#182848']}
                 style={LoginStyles.gradientContainer}
             />
             <View style={LoginStyles.logoContainer}>

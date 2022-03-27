@@ -43,8 +43,6 @@ const GenreSelect = ({ navigation }) => {
       SecureStore.setItemAsync('token_expiry', time, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
       const searchQuery = await dispatch(searchForArtists(accessToken, query, searchController.signal));
-      console.log(searchQuery.searchForArtists);
-      console.log(selectedItems);
       setItems(searchQuery.searchForArtists);
     } catch (error) {
       console.log('Error searching for artists, please try again. ' + error);

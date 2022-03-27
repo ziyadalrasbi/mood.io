@@ -71,13 +71,6 @@ const tablet = StyleSheet.create({
     alignSelf: 'center',
     marginTop: getRatio(10)
   },
-  uploadButton: {
-    backgroundColor: '#159ea3',
-    marginTop: 10
-  },
-  continueButton: {
-    backgroundColor: '#461ad6',
-  },
   mainFont: {
     fontFamily: 'MontserratMedium',
     fontSize: getRatio(14)
@@ -112,7 +105,30 @@ const tablet = StyleSheet.create({
     fontSize: getRatio(13),
     color: 'white',
     marginTop: getRatio(30)
-  }
+  },
+  continueButton: {
+    alignSelf: 'center',
+    backgroundColor: '#7474BF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5
+  },
+  continueText: {
+    fontFamily: 'MontserratBold',
+    fontSize: getRatio(12)
+  },
+  uploadButton: {
+    alignSelf: 'center',
+    backgroundColor: '#159ea3',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5,
+    marginTop: getRatio(10)
+  },
 });
 
 const mobile = StyleSheet.create({
@@ -181,13 +197,6 @@ const mobile = StyleSheet.create({
     alignSelf: 'center',
     marginTop: height / 89.6
   },
-  uploadButton: {
-    backgroundColor: '#159ea3',
-    marginTop: 10
-  },
-  continueButton: {
-    backgroundColor: '#461ad6',
-  },
   mainFont: {
     fontFamily: 'MontserratMedium',
     fontSize: width / 29.5714286
@@ -213,16 +222,39 @@ const mobile = StyleSheet.create({
     position: 'absolute'
   },
   lottieView: {
-    marginLeft: -(width/27.6),
-    width: width/4.87058824,
-    height: width/4.87058824
+    marginLeft: -(width / 27.6),
+    width: width / 4.87058824,
+    height: width / 4.87058824
   },
   noteText: {
     fontFamily: 'MontserratLight',
     fontSize: width / 31.8461538,
     color: 'white',
     marginTop: height / 29.8666667
-  }
+  },
+  continueButton: {
+    alignSelf: 'center',
+    backgroundColor: '#7474BF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5
+  },
+  continueText: {
+    fontFamily: 'MontserratBold',
+    fontSize: width / 34.5
+  },
+  uploadButton: {
+    alignSelf: 'center',
+    backgroundColor: '#159ea3',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5,
+    marginTop: height / 89.6
+  },
 });
 
 export default width > 500 ? tablet : mobile;

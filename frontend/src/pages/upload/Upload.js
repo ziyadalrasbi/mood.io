@@ -149,7 +149,7 @@ function Upload({ navigation }) {
             style={[UploadStyles.uploadButton, loading || (selectedImage.uri == "") ? { display: 'none' } : {}]}
             uppercase={false}
             mode="contained"
-            labelStyle={UploadStyles.mainFont}
+            labelStyle={UploadStyles.continueText}
             disabled={continuePressed == true ? true : false}
             onPress={() => analyseImage()}
           >
@@ -157,10 +157,10 @@ function Upload({ navigation }) {
           </Button>
           {moodAnalysis.moodAnalysis != null ?
             <Button
-              style={{ display: !loading && selectedImage.uri != "" ? "flex" : "none", marginTop: 10, marginLeft: 50 }}
+              style={[UploadStyles.continueButton, { display: !loading && selectedImage.uri != "" ? "flex" : "none", marginTop: 10, marginLeft: 50 }]}
               uppercase={false}
               mode="contained"
-              labelStyle={UploadStyles.mainFont}
+              labelStyle={UploadStyles.continueText}
               disabled={continuePressed == true ? true : false}
               onPress={() => navigateResults()}
             >

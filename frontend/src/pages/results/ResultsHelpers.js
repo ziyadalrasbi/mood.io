@@ -2,15 +2,15 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
     const maxEmotion = emotion;
 
     const valence = maxEmotion == 'happy' ? 0.9 :
-        (maxEmotion == 'sad' ? 0.3 :
-            (maxEmotion == 'angry' ? 0.4 :
-                (maxEmotion == 'neutral' ? 0.7 :
+        (maxEmotion == 'sad' ? 0.5 :
+            (maxEmotion == 'angry' ? 0.6 :
+                (maxEmotion == 'neutral' ? 0.8 :
                     (maxEmotion == 'surprised' ? 0.7 :
                         (maxEmotion == 'confused' && 0.6)))));
 
     const energy = maxEmotion == 'happy' ? 0.7 :
         (maxEmotion == 'sad' ? 0.07 :
-            (maxEmotion == 'angry' ? 0.2 :
+            (maxEmotion == 'angry' ? 0.3 :
                 (maxEmotion == 'neutral' ? 0.4 :
                     (maxEmotion == 'surprised' ? 0.1 :
                         (maxEmotion == 'confused' && 0.3)))));
@@ -37,7 +37,7 @@ export const filterFeaturesByMaxEmotion = (emotion) => {
     //                     (maxEmotion == 'confused' && 6)))));
 
     const tempo = maxEmotion == 'happy' ? 125 :
-        (maxEmotion == 'sad' ? 75 :
+        (maxEmotion == 'sad' ? 70 :
             (maxEmotion == 'angry' ? 90 :
                 (maxEmotion == 'neutral' ? 100 :
                     (maxEmotion == 'surprised' ? 100 :
