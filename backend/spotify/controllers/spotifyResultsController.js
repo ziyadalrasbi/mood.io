@@ -27,7 +27,9 @@ const createLibrary = async (req, res, next) => {
                     let trackDate = new Date(data.body.tracks[i]['album'].release_date);
                     let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                     if (yearsDiff <= 4) {
-                        trackIds.push(data.body.tracks[i].id);
+                        if (data.body.tracks[i]['album'].images[0]) {
+                            trackIds.push(data.body.tracks[i].id);
+                        }
                     }
                 }
             });
@@ -77,7 +79,9 @@ const createLibrary = async (req, res, next) => {
                         let trackDate = new Date(data.body.tracks[k]['album'].release_date);
                         let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                         if (yearsDiff <= 4) {
-                            currentTrackIds.push(data.body.tracks[k].id);
+                            if (data.body.tracks[k]['album'].images[0]) {
+                                currentTrackIds.push(data.body.tracks[k].id);
+                            }
                         }
                     }
                 });
@@ -113,16 +117,14 @@ const createLibrary = async (req, res, next) => {
                 await api.getTracks(uniqueTracks)
                     .then((data) => {
                         for (var i = 0; i < data.body.tracks.length; i++) {
-                            let recommendation = [];
-                            recommendation.push(data.body.tracks[i].name);
-                            recommendation.push(data.body.tracks[i].artists[0].name);
                             if (data.body.tracks[i]['album'].images[0]) {
+                                let recommendation = [];
+                                recommendation.push(data.body.tracks[i].name);
+                                recommendation.push(data.body.tracks[i].artists[0].name);
                                 recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                            } else {
-                                recommendation.push(404);
+                                recommendation.push(data.body.tracks[i].external_urls.spotify);
+                                recommendations.push(recommendation);
                             }
-                            recommendation.push(data.body.tracks[i].external_urls.spotify);
-                            recommendations.push(recommendation);
                         }
                     });
             } catch (error) {
