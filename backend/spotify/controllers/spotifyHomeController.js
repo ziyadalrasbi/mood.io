@@ -29,11 +29,7 @@ const getTopArtists = async (req, res, next) => {
                     for (let i = 0; i < data.body.items.length; i++) {
                         let tempArtist = [];
                         tempArtist.push(data.body.items[i].name);
-                        if (data.body.items[i].images[0]) {
-                            tempArtist.push(data.body.items[i].images[0].url);
-                        } else {
-                            tempArtist.push(404);
-                        }
+                        tempArtist.push(data.body.items[i].images[0].url);
                         tempArtist.push(data.body.items[i].external_urls.spotify);
                         artistNames.push(tempArtist);
                     }
@@ -58,11 +54,7 @@ const getTopTracks = async (req, res, next) => {
                         let tempTrack = [];
                         tempTrack.push(data.body.items[i].name);
                         tempTrack.push(data.body.items[i].artists[0].name);
-                        if (data.body.items[i].images[0]) {
-                            tempTrack.push(data.body.items[i].images[0].url);
-                        } else {
-                            tempTrack.push(404);
-                        }
+                        tempTrack.push(data.body.items[i].album.images[0].url);
                         tempTrack.push(data.body.items[i].external_urls.spotify);
                         trackIds.push(data.body.items[i].id);
                         topTracks.push(tempTrack);
