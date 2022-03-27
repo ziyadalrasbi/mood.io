@@ -195,7 +195,6 @@ const addTracksToPlaylist = async (req, res, next) => {
 
 module.exports = {
     createLibrary,
-    getRecommendations,
     createPlaylist,
     addTracksToPlaylist
 }
