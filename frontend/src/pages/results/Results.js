@@ -96,9 +96,11 @@ function Results({ navigation, route }) {
             features.object.target_valence,
             features.object.target_tempo,
             features.object.target_energy,
+            features.object.target_danceability,
             features.array,
             librarySignal
         ));
+        console.log(getLibrary.createLibrary.similarity);
         if (getLibrary.createLibrary.status == 200 && getLibrary.createLibrary.recommendations != null) {
             const getAmount = await dispatch(getPlaylistsAmount(id, getPlaylistsAmountSignal));
             const amount = getAmount.getPlaylistsAmount + 1;

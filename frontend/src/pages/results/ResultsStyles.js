@@ -148,7 +148,7 @@ const tablet = StyleSheet.create({
     alignSelf: 'flex-start',
     textAlign: 'left',
     fontSize: getRatio(12),
-    fontStyle: 'italic',
+    
     marginRight: getRatio(20),
     maxWidth: getRatio(245)
   },
@@ -160,7 +160,7 @@ const tablet = StyleSheet.create({
     marginTop: getRatio(8),
     marginBottom: getRatio(5),
     fontSize: getRatio(12),
-    fontStyle: 'italic',
+    
     maxWidth: getRatio(245),
     marginRight: getRatio(20)
   },
@@ -368,7 +368,7 @@ const mobile = StyleSheet.create({
     alignSelf: 'flex-start',
     textAlign: 'left',
     fontSize: width / 34.5,
-    fontStyle: 'italic',
+    
     marginRight: width / 20.7,
     maxWidth: width / 1.68979592
   },
@@ -380,7 +380,7 @@ const mobile = StyleSheet.create({
     marginTop: height / 112,
     marginBottom: height / 179.2,
     fontSize: width / 34.5,
-    fontStyle: 'italic',
+    
     maxWidth: width / 1.68979592,
     marginRight: width / 20.7
   },

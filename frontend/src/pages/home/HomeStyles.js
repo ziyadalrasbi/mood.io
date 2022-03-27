@@ -176,7 +176,7 @@ const tablet = StyleSheet.create({
     marginTop: getRatio(8),
     marginBottom: getRatio(5),
     fontSize: getRatio(12),
-    fontStyle: 'italic',
+
     maxWidth: width / 1.38,
     marginRight: getRatio(20)
   },
@@ -188,7 +188,7 @@ const tablet = StyleSheet.create({
     marginTop: getRatio(10),
     marginBottom: getRatio(5),
     fontSize: getRatio(12),
-    fontStyle: 'italic',
+
     maxWidth: getRatio(120),
     marginRight: getRatio(25),
   },
@@ -198,7 +198,7 @@ const tablet = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: getRatio(12),
-    fontStyle: 'italic',
+
     maxWidth: getRatio(100),
     marginRight: getRatio(25),
   },
@@ -211,7 +211,7 @@ const tablet = StyleSheet.create({
     alignSelf: 'flex-start',
     textAlign: 'left',
     fontSize: getRatio(12),
-    fontStyle: 'italic',
+
     marginRight: getRatio(20),
     maxWidth: width / 1.38
   },
@@ -445,7 +445,7 @@ const mobile = StyleSheet.create({
     marginTop: height / 89.6,
     marginBottom: height / 179.2,
     fontSize: width / 34.5,
-    fontStyle: 'italic',
+
     maxWidth: width / 4.14,
     marginRight: width / 20.7,
   },
@@ -495,7 +495,6 @@ const mobile = StyleSheet.create({
     marginTop: height / 112,
     marginBottom: height / 179.2,
     fontSize: width / 34.5,
-    fontStyle: 'italic',
     maxWidth: width / 1.38,
     marginRight: width / 20.7
   },
@@ -507,7 +506,6 @@ const mobile = StyleSheet.create({
     marginTop: height / 89.6,
     marginBottom: height / 179.2,
     fontSize: width / 34.5,
-    fontStyle: 'italic',
     maxWidth: width / 3.45,
     marginRight: width / 16.56,
   },
@@ -517,7 +515,6 @@ const mobile = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: width / 34.5,
-    fontStyle: 'italic',
     maxWidth: width / 4.14,
     marginRight: width / 16.56,
   },
@@ -530,7 +527,6 @@ const mobile = StyleSheet.create({
     alignSelf: 'flex-start',
     textAlign: 'left',
     fontSize: width / 34.5,
-    fontStyle: 'italic',
     marginRight: width / 20.7,
     maxWidth: width / 1.38
   },

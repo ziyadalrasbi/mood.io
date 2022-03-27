@@ -27,9 +27,7 @@ const createLibrary = async (req, res, next) => {
                     let trackDate = new Date(data.body.tracks[i]['album'].release_date);
                     let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                     if (yearsDiff <= 4) {
-                        if (data.body.tracks[i]['album'].images[0]) {
-                            trackIds.push(data.body.tracks[i].id);
-                        }
+                        trackIds.push(data.body.tracks[i].id);
                     }
                 }
             });
@@ -79,9 +77,7 @@ const createLibrary = async (req, res, next) => {
                         let trackDate = new Date(data.body.tracks[k]['album'].release_date);
                         let yearsDiff = currentDate.getFullYear() - trackDate.getFullYear();
                         if (yearsDiff <= 4) {
-                            if (data.body.tracks[k]['album'].images[0]) {
-                                currentTrackIds.push(data.body.tracks[k].id);
-                            }
+                            currentTrackIds.push(data.body.tracks[k].id);
                         }
                     }
                 });
@@ -117,14 +113,15 @@ const createLibrary = async (req, res, next) => {
                 await api.getTracks(uniqueTracks)
                     .then((data) => {
                         for (var i = 0; i < data.body.tracks.length; i++) {
-                            if (data.body.tracks[i]['album'].images[0]) {
-                                let recommendation = [];
-                                recommendation.push(data.body.tracks[i].name);
-                                recommendation.push(data.body.tracks[i].artists[0].name);
-                                recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                                recommendation.push(data.body.tracks[i].external_urls.spotify);
-                                recommendations.push(recommendation);
+                            let recommendation = [];
+                            recommendation.push(data.body.tracks[i].name);
+                            recommendation.push(data.body.tracks[i].artists[0].name);
+                            if (data.body.items[i].images[0]) {
+                                recommendation.push(data.body.items[i].images[0].url);
+                            } else {
+                                recommendation.push(404);
                             }
+                            recommendation.push(data.body.tracks[i].external_urls.spotify);
                         }
                     });
             } catch (error) {
@@ -152,79 +149,6 @@ function cosineSimilarity(a, b) {
     sumB = Math.sqrt(sumB);
     var similarity = (product) / ((sumA) * (sumB));
     return similarity;
-}
-
-const getRecommendations = async (req, res, next) => {
-    var recommendations = [];
-    var cosineSimTracks = [];
-    var requestedFeatures = req.body.features;
-    var tracks = req.body.tracks;
-    tracks = tracks.slice(0, 100);
-    await api.setAccessToken(req.body.token);
-    if (req.body.tracks != null) {
-        try {
-            await api.getAudioFeaturesForTracks(tracks)
-                .then((data) => {
-                    if (data != null) {
-                        for (var i = 0; i < data.body.audio_features.length; i++) {
-                            var currentFeatures = [
-                                data.body.audio_features[i].valence,
-                                data.body.audio_features[i].energy,
-                                data.body.audio_features[i].tempo
-                            ];
-                            var dotproduct = 0;
-                            var mA = 0;
-                            var mB = 0;
-                            for (var j = 0; j < currentFeatures.length; j++) {
-                                dotproduct += (currentFeatures[j] * requestedFeatures[j]);
-                                mA += (currentFeatures[j] * currentFeatures[j]);
-                                mB += (requestedFeatures[j] * requestedFeatures[j]);
-                            }
-                            mA = Math.sqrt(mA);
-                            mB = Math.sqrt(mB);
-                            var similarity = (dotproduct) / ((mA) * (mB));
-                            const currentSimilarity = {
-                                id: data.body.audio_features[i].id,
-                                uri: data.body.audio_features[i].uri,
-                                similarity: similarity
-                            }
-                            cosineSimTracks.push(currentSimilarity);
-                        }
-                    }
-                });
-        } catch (error) {
-            const message = 'Error generating recommendations from audio features, please try again. \n' + JSON.stringify(error);
-            return res.json({ status: 400, message: message });
-        }
-        if (cosineSimTracks.length > 0) {
-            cosineSimTracks.sort((a, b) => b.similarity - a.similarity);
-            var tracksOnly = cosineSimTracks.map(track => track.id);
-            var urisOnly = cosineSimTracks.map(track => track.uri);
-            var uniqueTracks = tracksOnly.filter(onlyUnique);
-            var uniqueUris = urisOnly.filter(onlyUnique);
-            uniqueTracks = uniqueTracks.length > 20 ? uniqueTracks.slice(0, 20) : uniqueTracks;
-            uniqueUris = uniqueUris.length > 20 ? uniqueUris.slice(0, 20) : uniqueUris;
-            try {
-                await api.getTracks(uniqueTracks)
-                    .then((data) => {
-                        for (var i = 0; i < data.body.tracks.length; i++) {
-                            if (data.body.tracks[i]['album'].images[0]) {
-                                let recommendation = [];
-                                recommendation.push(data.body.tracks[i].name);
-                                recommendation.push(data.body.tracks[i].artists[0].name);
-                                recommendation.push(data.body.tracks[i]['album'].images[0].url);
-                                recommendation.push(data.body.tracks[i].external_urls.spotify);
-                                recommendations.push(recommendation);
-                            }
-                        }
-                        return res.json({ status: 200, similarity: cosineSimTracks, recommendations: recommendations, uris: uniqueUris });
-                    });
-            } catch (error) {
-                const message = 'Error getting cosine similarity tracks, please try again. \n' + error;
-                return res.json({ status: 400, message: message });
-            }
-        }
-    }
 }
 
 // Helper function

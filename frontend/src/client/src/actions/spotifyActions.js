@@ -248,12 +248,13 @@ export const getTopTracksStats = (token, range, signal) => (dispatch, getState) 
         })
 })
 
-export const createLibrary = (token, artists, valence, tempo, energy, requested, signal) => (dispatch, getState) => Promise.resolve().then(() => {
+export const createLibrary = (token, artists, valence, tempo, energy, danceability, requested, signal) => (dispatch, getState) => Promise.resolve().then(() => {
     const initialToken = { token };
     const initialArtists = { artists };
     const initialValence = { valence };
     const initialTempo = { tempo };
     const initialEnergy = { energy };
+    const initialDanceability = { danceability };
     const initialRequested = { requested };
     return fetch(`${baseUrl}/spotify/results/createLibrary`, {
         signal: signal,
@@ -268,6 +269,7 @@ export const createLibrary = (token, artists, valence, tempo, energy, requested,
             valence: initialValence.valence, 
             tempo: initialTempo.tempo,
             energy: initialEnergy.energy,
+            danceability: initialDanceability.danceability,
             requestedFeatures: initialRequested.requested
         })
     })

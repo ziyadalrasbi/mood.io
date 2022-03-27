@@ -1,4 +1,4 @@
-import { StyleSheet, PixelRatio } from 'react-native';
+import { StyleSheet, PixelRatio, Platform } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
@@ -101,7 +101,8 @@ const mobile = StyleSheet.create({
         fontFamily: 'MontserratBold',
         fontSize: width / 29.5714286,
         color: 'red',
-        paddingHorizontal: width / 41.4
+        paddingHorizontal: width / 41.4,
+        marginBottom: Platform.OS == 'android' ? height / 17.92 : 0
     },
     cancel: {
         fontFamily: 'MontserratBold',
