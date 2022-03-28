@@ -15,9 +15,15 @@ function Navbar({ navigation, name, page }) {
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Image style={NavbarStyles.hamburger} source={hamburger} />
           </TouchableOpacity>
-          <Text style={NavbarStyles.welcome}>
-            Welcome, {name}!
-          </Text>
+          {name.length <= 30 ?
+            <Text style={NavbarStyles.welcome}>
+              Welcome, {name}!
+            </Text>
+            :
+            <Text style={NavbarStyles.welcome}>
+              Welcome, User!
+            </Text>
+          }
           <TouchableOpacity onPress={() => navigation.navigate('About')}>
             <Image style={NavbarStyles.about} source={aboutimg} />
           </TouchableOpacity>

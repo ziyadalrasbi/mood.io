@@ -16,6 +16,8 @@ import { useDispatch } from 'react-redux';
 import nextimg from '../../../assets/icons/home/next.png'
 import playimg from '../../../assets/icons/home/play.png';
 import TopMoodsGraph from '../../components/topmoodsgraph/TopMoodsGraph';
+import defaultartist from '../../../assets/defaultartist.jpg';
+import defaulttrack from '../../../assets/defaulttrack.png';
 
 function Home({ navigation }) {
 
@@ -299,13 +301,13 @@ function Home({ navigation }) {
                       shadowColor: '#000',
                       shadowOffset: { width: 0, height: 2 },
                       shadowOpacity: 0.5,
-                      shadowRadius: 2, 
+                      shadowRadius: 2,
                       elevation: 5
                     }}
                     onPress={() => Linking.openURL(artist[2])}>
                     <Image
                       style={HomeStyles.topTrackArtistImage}
-                      source={{ uri: artist[1] }}
+                      source={artist[1] != 404 ? { uri: artist[1] } : defaultartist}
                     />
                   </TouchableOpacity>
                   <Text style={HomeStyles.topArtistText}>{artist[0]}</Text>
@@ -349,7 +351,7 @@ function Home({ navigation }) {
                     onPress={() => Linking.openURL(track[3])}>
                     <Image
                       style={HomeStyles.topTrackImage}
-                      source={{ uri: track[2] }}
+                      source={track[2] != 404 ? { uri: track[2] } : defaulttrack}
                     />
                   </TouchableOpacity>
                   <View style={HomeStyles.topTrackTextContainer}>

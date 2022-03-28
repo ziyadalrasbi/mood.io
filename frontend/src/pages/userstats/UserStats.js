@@ -13,6 +13,8 @@ import defaultimg from '../../../assets/icons/stats/default.png';
 import LottieView from 'lottie-react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dimensions } from 'react-native';
+import defaultartist from '../../../assets/defaultartist.jpg';
+import defaulttrack from '../../../assets/defaulttrack.png';
 const { width, height } = Dimensions.get('window');
 
 function UserStats({ navigation, route }) {
@@ -29,12 +31,13 @@ function UserStats({ navigation, route }) {
                                 shadowColor: '#000',
                                 shadowOffset: { width: 0, height: 2 },
                                 shadowOpacity: 0.5,
-                                shadowRadius: 2, elevation: 5
+                                shadowRadius: 2, 
+                                elevation: 5
                             }}
                             onPress={() => Linking.openURL(artist[2])}>
                             <Image
                                 style={UserStatsStyles.topTrackArtistImage}
-                                source={{ uri: artist[1] }}
+                                source={artist[1] != 404 ? { uri: artist[1] } : defaultartist}
                             />
                         </TouchableOpacity>
                         <Text style={UserStatsStyles.topArtistText}>{artist[0]}</Text>
@@ -76,7 +79,7 @@ function UserStats({ navigation, route }) {
                         onPress={() => Linking.openURL(track[3])}>
                         <Image
                             style={UserStatsStyles.topTrackImage}
-                            source={{ uri: track[2] }}
+                            source={track[2] != 404 ? { uri: track[2] } : defaulttrack}
                         />
                     </TouchableOpacity>
                     <View style={UserStatsStyles.topTrackTextContainer}>
